@@ -47,13 +47,11 @@ function getHtml({ scripts, content, stylesheets }) {
 }
 
 export default async function serverRender(req, res) {
-  // const file = path.join(process.cwd(), 'dist/loadable-stats.json');
-  // const stats = await retryPromise(() => getFile({ file }));
   const extractor = new ChunkExtractor({ stats, entrypoints: ['main'] });
   const context = { };
   const content = renderToString(
     <ChunkExtractorManager extractor={extractor}>
-      <App context={context} location={req.path} />
+      <App context={context} location={req.url} />
     </ChunkExtractorManager>,
   );
   const result = getHtml({
@@ -62,7 +60,4 @@ export default async function serverRender(req, res) {
     stylesheets: extractor.getStyleTags(),
   })
   res.send(result)
-  // res.writeHeader(200, { 'Content-Type': 'text/html' });
-  // res.write(result);
-  // res.end();
 }
