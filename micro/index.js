@@ -4,10 +4,6 @@ import { renderToString } from 'react-dom/server';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import path from 'path';
 import fs from 'fs';
-import template from 'lodash/template';
-import templateSettings from 'lodash/templateSettings';
-
-templateSettings.interpolate = / <!--{{([\s\S]+?)}}-->/g;
 
 function getFile({ file, isObject = true }) {
   const response = isObject ? {} : '';
