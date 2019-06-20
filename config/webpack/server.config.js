@@ -1,29 +1,24 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+// const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const DIST_PATH = path.join(process.cwd(), 'server.bundle/');
+const DIST_PATH = path.join(process.cwd(), 'micro.bundle/');
 
 module.exports = (mode) => {
   const plugins = [
-    new CleanWebpackPlugin([DIST_PATH], {
-      root: process.cwd(),
-      verbose: true,
-      dry: false,
-    }),
+    // new CleanWebpackPlugin([DIST_PATH], {
+    //   root: process.cwd(),
+    //   verbose: true,
+    //   dry: false,
+    // }),
   ];
   const entry = [];
   const externals = ['@loadable/component', nodeExternals()];
   plugins.push(
-    // new webpack.BannerPlugin({
-    //   banner: 'require(\'source-map-support\').install({environment: \'node\'});\n\n',
-    //   raw: true,
-    //   entryOnly: true,
-    // }),
     new webpack.NoEmitOnErrorsPlugin(),
   );
-  entry.push(require.resolve('@babel/polyfill'), './server');
+  entry.push('./micro');
   return {
     bail: true,
     target: 'node',

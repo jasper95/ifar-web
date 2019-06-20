@@ -6,7 +6,17 @@ module.exports = (api) => {
   const isWeb = api.caller(isWebTarget);
   return {
     presets: [
-      '@babel/preset-env',
+      [
+
+        '@babel/preset-env',
+        {
+          loose: true,
+          targets: !isWeb ? { node: 'current' } : {
+            esmodules: true,
+          },
+          modules: 'commonjs',
+        },
+      ],
       '@babel/preset-react',
     ],
     plugins: [
@@ -18,7 +28,7 @@ module.exports = (api) => {
           corejs: false,
           helpers: true,
           regenerator: true,
-          useESModules: true,
+          useESModules: isWeb,
         },
       ],
     ].filter(Boolean),

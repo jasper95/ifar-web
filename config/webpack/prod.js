@@ -1,4 +1,4 @@
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -6,6 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
 const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
 const { baseConfig } = require('./base');
 
 module.exports = baseConfig({
@@ -71,7 +72,8 @@ module.exports = baseConfig({
       },
       chunks: ['manifest', 'main', 'vendors~main'],
     }),
-    new CleanWebpackPlugin(['build'], {
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [path.join(process.cwd(), 'build')],
       root: process.cwd(),
       verbose: true,
       dry: false,

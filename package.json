@@ -2,20 +2,24 @@
   "name": "firebase-react",
   "version": "0.1.0",
   "private": true,
+  "main": "micro.bundle/index.js",
   "scripts": {
     "dev": "nodemon --watch config --exec \"yarn dev:server\"",
     "dev:server": "webpack-dev-server --config=config/webpack/dev.js",
     "build": "webpack --config=config/webpack/prod.js",
+    "build:server": "NODE_ENV=production webpack --mode=production --config config/webpack/server.config.js",
     "serve": "NODE_ENV=production node server.js",
     "heroku-prebuild": "export NPM_CONFIG_PRODUCTION=false",
     "heroku-postbuild": "export NPM_CONFIG_PRODUCTION=true",
     "heroku:deploy": "yarn heroku-prebuild && yarn build && yarn heroku-postbuild && yarn serve",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "micro": "micro"
   },
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "@hot-loader/react-dom": "^16.8.2",
     "@loadable/component": "^5.6.0",
+    "@loadable/server": "^5.9.0",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-link": "^1.2.12",
@@ -36,6 +40,7 @@
     "immer": "^1.7.2",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
+    "micro": "^9.3.4",
     "node-fetch": "^2.6.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.2",
@@ -63,7 +68,7 @@
     "@loadable/webpack-plugin": "^5.5.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
-    "clean-webpack-plugin": "^1.0.1",
+    "clean-webpack-plugin": "^3.0.0",
     "compression-webpack-plugin": "^2.0.0",
     "copy-webpack-plugin": "^5.0.2",
     "css-loader": "^2.1.0",
@@ -75,6 +80,7 @@
     "eslint-plugin-react": "^7.12.4",
     "file-loader": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",
+    "ignore-loader": "^0.1.2",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.10",
@@ -88,9 +94,10 @@
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.2",
     "url-loader": "^1.1.2",
-    "webpack": "^4.29.3",
+    "webpack": "^4.35.0",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "webpack-node-externals": "^1.7.2"
   }
 }

@@ -69,7 +69,7 @@ function baseConfig(options) {
     },
     plugins: [
       new webpack.DefinePlugin(getEnv()),
-      new LoadableWebpackPlugin(),
+      new LoadableWebpackPlugin({ writeToDisk: true }),
     ],
     resolve: {
       modules: ['node_modules', 'src'],
