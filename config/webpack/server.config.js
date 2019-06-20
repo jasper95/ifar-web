@@ -1,24 +1,21 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
-
-const DIST_PATH = path.join(process.cwd(), 'micro.bundle/');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const DIST_PATH = path.join(process.cwd(), 'dist');
 
 module.exports = (mode) => {
   const plugins = [
-    // new CleanWebpackPlugin([DIST_PATH], {
-    //   root: process.cwd(),
-    //   verbose: true,
-    //   dry: false,
-    // }),
-  ];
-  const entry = [];
-  const externals = ['@loadable/component', nodeExternals()];
-  plugins.push(
     new webpack.NoEmitOnErrorsPlugin(),
-  );
-  entry.push('./micro');
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [DIST_PATH],
+      root: process.cwd(),
+      verbose: true,
+      dry: false,
+    })
+  ];
+  const entry = ['./ssr'];
+  const externals = ['@loadable/component', nodeExternals()];
   return {
     bail: true,
     target: 'node',

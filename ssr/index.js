@@ -2,28 +2,7 @@ import { App } from 'App';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-import path from 'path';
-import fs from 'fs';
-
-function getFile({ file, isObject = true }) {
-  const response = isObject ? {} : '';
-  return new Promise((resolve, reject) => {
-    fs.readFile(file, 'utf-8', (err, data = response) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(isObject ? JSON.parse(data) : data);
-    });
-  });
-}
-
-function retryPromise(cb, delay = 250) {
-  return cb().catch(() => new Promise(() => {
-    setTimeout(() => {
-      retryPromise(cb);
-    }, delay);
-  }));
-}
+import stats from '../build/loadable-stats.json'
 
 function getHtml({ scripts, content, stylesheets }) {
   return `<!DOCTYPE html>
@@ -56,13 +35,10 @@ function getHtml({ scripts, content, stylesheets }) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="theme-color" content="#000000">
         <title>Shopping Cart Fresh Tees</title>
-        <link rel="stylesheet" href="css/wataphak.css">
+        <link rel="stylesheet" href="/css/wataphak.css">
         ${stylesheets}
       </head>
       <body>
-        <noscript>
-          You need to enable JavaScript to run this app.
-        </noscript>
         <div id="root">${content}</div>
         ${scripts}
       </body>
@@ -71,8 +47,8 @@ function getHtml({ scripts, content, stylesheets }) {
 }
 
 export default async function serverRender(req, res) {
-  const file = path.join(process.cwd(), 'build/loadable-stats.json');
-  const stats = await retryPromise(() => getFile({ file }));
+  // const file = path.join(process.cwd(), 'dist/loadable-stats.json');
+  // const stats = await retryPromise(() => getFile({ file }));
   const extractor = new ChunkExtractor({ stats, entrypoints: ['main'] });
   const context = { };
   const content = renderToString(
@@ -84,8 +60,9 @@ export default async function serverRender(req, res) {
     content,
     scripts: extractor.getScriptTags(),
     stylesheets: extractor.getStyleTags(),
-  });
-  res.writeHeader(200, { 'Content-Type': 'text/html' });
-  res.write(result);
-  res.end();
+  })
+  res.send(result)
+  // res.writeHeader(200, { 'Content-Type': 'text/html' });
+  // res.write(result);
+  // res.end();
 }

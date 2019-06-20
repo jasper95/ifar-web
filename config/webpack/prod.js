@@ -1,11 +1,10 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
-const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const { baseConfig } = require('./base');
 
@@ -56,22 +55,22 @@ module.exports = baseConfig({
     },
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: 'views/index.html',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
-      chunks: ['manifest', 'main', 'vendors~main'],
-    }),
+    // new HtmlWebpackPlugin({
+    //   template: 'views/index.html',
+    //   minify: {
+    //     removeComments: true,
+    //     collapseWhitespace: true,
+    //     removeRedundantAttributes: true,
+    //     useShortDoctype: true,
+    //     removeEmptyAttributes: true,
+    //     removeStyleLinkTypeAttributes: true,
+    //     keepClosingSlash: true,
+    //     minifyJS: true,
+    //     minifyCSS: true,
+    //     minifyURLs: true,
+    //   },
+    //   chunks: ['manifest', 'main', 'vendors~main'],
+    // }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [path.join(process.cwd(), 'build')],
       root: process.cwd(),
@@ -87,9 +86,6 @@ module.exports = baseConfig({
       test: /\.js$|\.css$/,
       cache: true,
       deleteOriginalAssets: false,
-    }),
-    new CopyPlugin([
-      { from: 'public', to: '' },
-    ]),
+    })
   ],
 });

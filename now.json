@@ -1,0 +1,32 @@
+{
+  "name": "graph-spike",
+  "version": 2,
+  "builds": [
+    { "src": "public/**/*", "use": "@now/static" },
+    { "src": "build/**/*", "use": "@now/static" },
+    { "src": "dist/index.js", "use": "@now/node" }
+  ],
+  "routes": [
+    {
+      "src": "/css/(.*.build.css)",
+      "headers": {
+        "Cache-Control": "public, max-age=31557600"
+      },
+      "dest": "/build/css/$1"
+    },
+    {
+      "src": "/((css|fonts|icons|images)\/.*)",
+      "dest": "/public/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "headers": {
+        "Content-Type": "text/javascript",
+        "Cache-Control": "public, max-age=31557600",
+        "Content-Encoding": "gzip"
+      },
+      "dest": "/build/js/$1.gz"
+    },
+    { "src": "/(.*)", "dest": "/dist/index.js" }
+  ]
+}
