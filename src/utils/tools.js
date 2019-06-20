@@ -1,3 +1,5 @@
+import cookie from 'cookie';
+
 export const makeCancelable = (promise) => {
   let hasCanceled = false;
 
@@ -68,3 +70,8 @@ export const getOrderTotalCount = orderItems => orderItems.reduce((acc, curr) =>
   const { quantity } = curr;
   return acc + Number(quantity);
 }, 0);
+
+
+export function parseCookies(req, options = {}) {
+  return cookie.parse(req ? req.headers.cookie || '' : document.cookie, options);
+}

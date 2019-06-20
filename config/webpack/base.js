@@ -38,6 +38,11 @@ function baseConfig(options) {
               test: /\.(js|jsx)$/,
               exclude: /node_modules|bower_components/,
               loader: require.resolve('babel-loader'),
+              options: {
+                caller: {
+                  target: 'web',
+                },
+              },
             },
             {
               test: /\.css$/,
