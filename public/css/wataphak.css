@@ -4621,12 +4621,12 @@ readers do not read off random characters that represent icons */
     font-family: 'wataphak icons Brands';
     font-style: normal;
     font-weight: normal;
-    src: url("../fonts/wtf/wtf-brands-400.eot");
-    src: url("../fonts/wtf/wtf-brands-400.eot?#iefix") format("embedded-opentype"),
-         url("../fonts/wtf/wtf-brands-400.woff2") format("woff2"),
-         url("../fonts/wtf/wtf-brands-400.woff") format("woff"),
-         url("../fonts/wtf/wtf-brands-400.ttf") format("truetype"),
-         url("../fonts/wtf/wtf-brands-400.svg#wataphak") format("svg"); }
+    src: url("/static/fonts/wtf/wtf-brands-400.eot");
+    src: url("/static/fonts/wtf/wtf-brands-400.eot?#iefix") format("embedded-opentype"),
+         url("/static/fonts/wtf/wtf-brands-400.woff2") format("woff2"),
+         url("/static/fonts/wtf/wtf-brands-400.woff") format("woff"),
+         url("/static/fonts/wtf/wtf-brands-400.ttf") format("truetype"),
+         url("/static/fonts/wtf/wtf-brands-400.svg#wataphak") format("svg"); }
   .wtfb {
     font-family: 'wataphak icons Brands'; 
   }
@@ -4634,12 +4634,12 @@ readers do not read off random characters that represent icons */
     font-family: 'wataphak icons';
     font-style: normal;
     font-weight: 400;
-    src: url("../fonts/wtf/wtf-regular-400.eot");
-    src: url("../fonts/wtf/wtf-regular-400.eot?#iefix") format("embedded-opentype"),
-         url("../fonts/wtf/wtf-regular-400.woff2") format("woff2"),
-         url("../fonts/wtf/wtf-regular-400.woff") format("woff"),
-         url("../fonts/wtf/wtf-regular-400.ttf") format("truetype"),
-         url("../fonts/wtf/wtf-regular-400.svg#wataphak") format("svg"); 
+    src: url("/static/fonts/wtf/wtf-regular-400.eot");
+    src: url("/static/fonts/wtf/wtf-regular-400.eot?#iefix") format("embedded-opentype"),
+         url("/static/fonts/wtf/wtf-regular-400.woff2") format("woff2"),
+         url("/static/fonts/wtf/wtf-regular-400.woff") format("woff"),
+         url("/static/fonts/wtf/wtf-regular-400.ttf") format("truetype"),
+         url("/static/fonts/wtf/wtf-regular-400.svg#wataphak") format("svg"); 
   }
   .wtfr {
     font-family: 'wataphak icons';
@@ -4649,12 +4649,12 @@ readers do not read off random characters that represent icons */
     font-family: 'wataphak icons';
     font-style: normal;
     font-weight: 900;
-    src: url("../fonts/wtf/wtf-solid-900.eot");
-    src: url("../fonts/wtf/wtf-solid-900.eot?#iefix") format("embedded-opentype"),
-         url("../fonts/wtf/wtf-solid-900.woff2") format("woff2"),
-         url("../fonts/wtf/wtf-solid-900.woff") format("woff"),
-         url("../fonts/wtf/wtf-solid-900.ttf") format("truetype"),
-         url("../fonts/wtf/wtf-solid-900.svg#wataphak") format("svg"); }
+    src: url("/static/fonts/wtf/wtf-solid-900.eot");
+    src: url("/static/fonts/wtf/wtf-solid-900.eot?#iefix") format("embedded-opentype"),
+         url("/static/fonts/wtf/wtf-solid-900.woff2") format("woff2"),
+         url("/static/fonts/wtf/wtf-solid-900.woff") format("woff"),
+         url("/static/fonts/wtf/wtf-solid-900.ttf") format("truetype"),
+         url("/static/fonts/wtf/wtf-solid-900.svg#wataphak") format("svg"); }
   .wtf,
   .wtfs {
     font-family: 'wataphak icons';
@@ -4663,12 +4663,12 @@ readers do not read off random characters that represent icons */
     font-family: 'wataphak icons';
     font-style: normal;
     font-weight: 300;
-    src: url("../fonts/wtf/wtf-light-300.eot");
-    src: url("../fonts/wtf/wtf-light-300.eot?#iefix") format("embedded-opentype"),
-         url("../fonts/wtf/wtf-light-300.woff2") format("woff2"),
-         url("../fonts/wtf/wtf-light-300.woff") format("woff"),
-         url("../fonts/wtf/wtf-light-300.ttf") format("truetype"),
-         url("../fonts/wtf/wtf-light-300.svg#wataphak") format("svg"); }
+    src: url("/static/fonts/wtf/wtf-light-300.eot");
+    src: url("/static/fonts/wtf/wtf-light-300.eot?#iefix") format("embedded-opentype"),
+         url("/static/fonts/wtf/wtf-light-300.woff2") format("woff2"),
+         url("/static/fonts/wtf/wtf-light-300.woff") format("woff"),
+         url("/static/fonts/wtf/wtf-light-300.ttf") format("truetype"),
+         url("/static/fonts/wtf/wtf-light-300.svg#wataphak") format("svg"); }
   .wtfl {
     font-family: 'wataphak icons';
     font-weight: 300; }

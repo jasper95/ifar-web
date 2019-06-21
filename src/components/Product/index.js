@@ -15,7 +15,7 @@ const Product = (props) => {
     <div className={`product ${className}`}>
       <div className="product_hero">
         <Image
-          src="/images/hero.jpg"
+          src="/static/images/hero.jpg"
           alt="Product Hero"
         />
       </div>

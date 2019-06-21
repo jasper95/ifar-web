@@ -22,7 +22,7 @@ const Navigation = (props) => {
         to="/"
       >
         <Image
-          src="/images/logo.png"
+          src="/static/images/logo.png"
           alt="Logo"
         />
       </NavLink>

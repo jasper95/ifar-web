@@ -6,7 +6,7 @@ const developers = [
   {
     name: 'Josaphat Tutor',
     position: 'Web Developer',
-    img: '/images/jojo.jpg',
+    img: '/static/images/jojo.jpg',
     company: 'DNAMICRO',
     links: {
       github: '',
@@ -17,7 +17,7 @@ const developers = [
   {
     name: 'Jasper Bernales',
     position: 'Web Developer',
-    img: '/images/jasper.jpg',
+    img: '/static/images/jasper.jpg',
     company: 'DNAMICRO',
     links: {
       github: '',
@@ -28,7 +28,7 @@ const developers = [
   {
     name: 'Bon Joseph Lazaga',
     position: 'Lead DevOps',
-    img: '/images/bon.jpg',
+    img: '/static/images/bon.jpg',
     company: 'DNAMICRO',
     links: {
       github: '',
@@ -39,7 +39,7 @@ const developers = [
   {
     name: 'Jose Adrian Buctuanon',
     position: 'Front End Developer',
-    img: '/images/jab.jpg',
+    img: '/static/images/jab.jpg',
     company: 'DNAMICRO',
     links: {
       github: '',
@@ -102,8 +102,8 @@ const About = () => (
       <div className="container">
         <div className="row row-center row_header">
           <div className="logos">
-            <img src="/images/react_logo.png" alt="" className="logo" />
-            <img src="/images/cebujs_logo.png" alt="" className="logo cebujs" />
+            <img src="/static/images/react_logo.png" alt="" className="logo" />
+            <img src="/static/images/cebujs_logo.png" alt="" className="logo cebujs" />
           </div>
           <h1 className="title">
             The Project

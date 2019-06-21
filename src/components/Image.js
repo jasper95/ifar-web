@@ -25,7 +25,7 @@ const Image = (props) => {
 
 Image.defaultProps = {
   unloader: <span>Image failed to load.</span>,
-  loader: <img src="/images/image_placeholder.gif" alt="" />,
+  loader: <img src="/static/images/image_placeholder.gif" alt="" />,
   className: '',
 };
 

@@ -9,7 +9,7 @@ const Logo = ({ src, alt }) => (
 );
 
 Logo.defaultProps = {
-  src: '/images/logo.png',
+  src: '/static/images/logo.png',
   alt: 'Branding Logo',
 };
 

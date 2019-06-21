@@ -2,14 +2,17 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const { baseConfig } = require('./base');
 
 module.exports = baseConfig({
   mode: 'production',
+  output: {
+    publicPath: '/static/',
+  },
   optimization: {
     minimize: true,
     minimizer: [
@@ -62,20 +65,13 @@ module.exports = baseConfig({
       dry: false,
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash:8].build.css',
-      chunkFilename: 'css/[name].[contenthash:8].chunk.build.css',
-    }),
-    new CompressionPlugin({
-      algorithm: 'gzip',
-      test: /\.js$|\.css$/,
-      cache: true,
-      deleteOriginalAssets: false,
+      filename: 'css/[name].[contenthash:8].css',
+      chunkFilename: 'css/[name].[contenthash:8].chunk.css',
     }),
     new WorkboxWebpackPlugin.GenerateSW({
       clientsClaim: true,
       exclude: [/\.map$/, /asset-manifest\.json$/],
       importWorkboxFrom: 'cdn',
-      navigateFallback: '/',
       navigateFallbackBlacklist: [
         // Exclude URLs starting with /_, as they're likely an API call
         new RegExp('^/_'),
@@ -84,5 +80,8 @@ module.exports = baseConfig({
         new RegExp('/[^/]+\\.[^/]+$'),
       ],
     }),
+    new CopyPlugin([
+      { from: 'public', to: '' },
+    ]),
   ],
 });
