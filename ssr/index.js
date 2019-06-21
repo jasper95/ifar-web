@@ -1,10 +1,17 @@
 import { App } from 'App';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import { getMarkupFromTree } from 'react-apollo-hooks';
+import initialState from 'apollo/initialState';
+import initApollo from 'apollo/initApollo';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-import stats from '../build/loadable-stats.json'
+import { parseCookies } from 'utils/tools';
+import serialize from 'serialize-javascript';
+import stats from '../build/loadable-stats.json';
 
-function getHtml({ scripts, content, stylesheets }) {
+function getHtml({
+  scripts, content, stylesheets, initialData,
+}) {
   return `<!DOCTYPE html>
     <html lang="en">
       <head>
@@ -37,6 +44,7 @@ function getHtml({ scripts, content, stylesheets }) {
         <title>Shopping Cart Fresh Tees</title>
         <link rel="stylesheet" href="/css/wataphak.css">
         ${stylesheets}
+        ${initialData}
       </head>
       <body>
         <div id="root">${content}</div>
@@ -49,15 +57,31 @@ function getHtml({ scripts, content, stylesheets }) {
 export default async function serverRender(req, res) {
   const extractor = new ChunkExtractor({ stats, entrypoints: ['main'] });
   const context = { };
-  const content = renderToString(
-    <ChunkExtractorManager extractor={extractor}>
-      <App context={context} location={req.url} />
-    </ChunkExtractorManager>,
+  const apollo = initApollo(
+    initialState,
+    {
+      getToken: () => parseCookies(req).token,
+    },
   );
+  const content = await getMarkupFromTree({
+    renderFunction: renderToString,
+    tree: (
+      <ChunkExtractorManager extractor={extractor}>
+        <App context={context} location={req.url} apolloClient={apollo} />
+      </ChunkExtractorManager>
+    ),
+  });
+  const initialData = `
+    <script>
+      window.__APOLLO_STATE__ = ${serialize(apollo.cache.extract(), { isJSON: true })}
+    </script>
+  `;
   const result = getHtml({
     content,
     scripts: extractor.getScriptTags(),
     stylesheets: extractor.getStyleTags(),
-  })
-  res.send(result)
+    initialData,
+  });
+  res.setHeader('Content-Type', 'text/html');
+  res.send(result);
 }

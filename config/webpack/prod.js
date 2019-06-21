@@ -1,10 +1,10 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const path = require('path');
 const { baseConfig } = require('./base');
 
@@ -55,22 +55,6 @@ module.exports = baseConfig({
     },
   },
   plugins: [
-    // new HtmlWebpackPlugin({
-    //   template: 'views/index.html',
-    //   minify: {
-    //     removeComments: true,
-    //     collapseWhitespace: true,
-    //     removeRedundantAttributes: true,
-    //     useShortDoctype: true,
-    //     removeEmptyAttributes: true,
-    //     removeStyleLinkTypeAttributes: true,
-    //     keepClosingSlash: true,
-    //     minifyJS: true,
-    //     minifyCSS: true,
-    //     minifyURLs: true,
-    //   },
-    //   chunks: ['manifest', 'main', 'vendors~main'],
-    // }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [path.join(process.cwd(), 'build')],
       root: process.cwd(),
@@ -86,6 +70,19 @@ module.exports = baseConfig({
       test: /\.js$|\.css$/,
       cache: true,
       deleteOriginalAssets: false,
-    })
+    }),
+    new WorkboxWebpackPlugin.GenerateSW({
+      clientsClaim: true,
+      exclude: [/\.map$/, /asset-manifest\.json$/],
+      importWorkboxFrom: 'cdn',
+      navigateFallback: '/',
+      navigateFallbackBlacklist: [
+        // Exclude URLs starting with /_, as they're likely an API call
+        new RegExp('^/_'),
+        // Exclude URLs containing a dot, as they're likely a resource in
+        // public/ and not a SPA route
+        new RegExp('/[^/]+\\.[^/]+$'),
+      ],
+    }),
   ],
 });

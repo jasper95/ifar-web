@@ -22,7 +22,8 @@ module.exports = {
     "rules": {
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/forbid-prop-types": [0, { "forbid": ["object"] }],
-        "no-param-reassign": 0
+        "no-param-reassign": 0,
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
     },
     "settings": { "import/resolver": { "node": { "paths": ["src"] } } }
 };

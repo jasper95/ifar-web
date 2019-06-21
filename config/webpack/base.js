@@ -71,6 +71,16 @@ function baseConfig(options) {
       new webpack.DefinePlugin(getEnv()),
       new LoadableWebpackPlugin({ writeToDisk: true }),
     ],
+    node: {
+      module: 'empty',
+      dgram: 'empty',
+      dns: 'mock',
+      fs: 'empty',
+      http2: 'empty',
+      net: 'empty',
+      tls: 'empty',
+      child_process: 'empty',
+    },
     resolve: {
       modules: ['node_modules', 'src'],
       extensions: ['.mjs', '.js', '.json', '.jsx', '.css', '.scss'],
