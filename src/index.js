@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { hydrate, render } from 'react-dom';
 import initApollo from 'apollo/initApollo';
 import initialApolloState from 'apollo/initialState';
 import { parseCookies } from 'utils/tools';
@@ -13,10 +13,14 @@ if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
   });
 }
 
+
+console.log('wew');
 const { __APOLLO_STATE__: apolloState = initialApolloState } = window;
 
 const apolloClient = initApollo(apolloState, { getToken: () => parseCookies().token });
 
-ReactDOM.hydrate(
+const renderFn = process.env.NODE_ENV === 'production' ? hydrate : render;
+
+renderFn(
   <Root apolloClient={apolloClient} />, document.getElementById('root'),
 );

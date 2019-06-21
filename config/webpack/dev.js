@@ -31,7 +31,7 @@ const result = baseConfig({
     overlay: true,
     historyApiFallback: true,
     before(app) {
-      app.use(express.static(resolvePath('public')));
+      app.use('/static', express.static(resolvePath('public')));
     },
   },
 });
