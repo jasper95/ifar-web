@@ -1,56 +1,19 @@
 import loadable from '@loadable/component';
 
-const Login = loadable(() => import('./pages/Login'));
-const Test = loadable(() => import('./pages/Test'));
-// const Signup = loadable(() => import('./pages/Signup'));
-// const Main = loadable(() => import('./Main'));
-// const Home = loadable(() => import('./pages/Home'));
-// const About = loadable(() => import('./pages/About'));
-const NotFound = loadable(() => import('./pages/NotFound'));
+const Login = loadable(() => import('pages/Login'));
+const Signup = loadable(() => import('pages/Signup'));
 
 export default [
   {
-    component: Login,
     key: 'app-login',
+    component: Login,
     path: '/login',
     exact: true,
   },
   {
-    component: Test,
-    key: 'app-test',
-    path: '/test',
+    key: 'app-signup',
+    component: Signup,
+    path: '/signup',
     exact: true,
-  },
-  // {
-  //   key: 'app-signup',
-  //   component: Signup,
-  //   path: '/signup',
-  //   exact: true,
-  // },
-  // {
-  //   component: Main,
-  //   path: '/',
-  //   key: 'app',
-  //   routes: [
-  //     {
-  //       component: Home,
-  //       path: '/',
-  //       key: 'home',
-  //       exact: true,
-  //     },
-  //     {
-  //       component: About,
-  //       path: '/about',
-  //       exact: true,
-  //     },
-  //     {
-  //       component: NotFound,
-  //       path: '*',
-  //     },
-  //   ],
-  // },
-  {
-    component: NotFound,
-    path: '*',
   },
 ];

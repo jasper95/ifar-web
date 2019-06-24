@@ -6,6 +6,8 @@ const safePostCssParser = require('postcss-safe-parser');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
+const CompressionPlugin = require('compression-webpack-plugin');
+
 const { baseConfig } = require('./base');
 
 module.exports = baseConfig({
@@ -79,6 +81,12 @@ module.exports = baseConfig({
         // public/ and not a SPA route
         new RegExp('/[^/]+\\.[^/]+$'),
       ],
+    }),
+    new CompressionPlugin({
+      algorithm: 'gzip',
+      test: /\.js$/,
+      cache: true,
+      deleteOriginalAssets: true,
     }),
     new CopyPlugin([
       { from: 'public', to: '' },

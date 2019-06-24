@@ -15,7 +15,7 @@ module.exports = (api) => {
           } : {
             esmodules: true,
           },
-          modules: isWeb ? 'auto' : 'commonjs',
+          modules: isWeb ? false : 'commonjs',
         },
       ],
       '@babel/preset-react',

@@ -7,7 +7,7 @@ import ApolloClient from 'apollo-client';
 import { onError } from 'apollo-link-error';
 import fetch from 'node-fetch';
 import jwt from 'jsonwebtoken';
-import { setNotification } from 'apollo/mutation';
+import { setToast, setData } from 'apollo/mutation';
 
 let apolloClient = null;
 const isBrowser = typeof window === 'object';
@@ -26,14 +26,12 @@ function create(initialState, { getToken, fetchOptions }) {
     }
 
     if (networkError) {
-      console.log(
-        `[Network error ${operation.operationName}]: ${networkError.message}`,
-      );
-    }
-
-    if (networkError.statusCode === 400) {
-      const { message } = networkError.result;
-      setNotification(message, 'error')(cache);
+      console.log(`[Network error ${operation.operationName}]: ${networkError.message}`);
+      if (networkError.statusCode === 400) {
+        const { message } = networkError.result;
+        setToast(message, 'error')(cache);
+        setData('dialogProcessing', false)(cache);
+      }
     }
   });
   const restAuthLink = setContext((_, { headers }) => {
@@ -62,7 +60,7 @@ function create(initialState, { getToken, fetchOptions }) {
     };
   });
   const restLink = new RestLink({
-    uri: 'http://localhost:5000',
+    uri: 'https://jobhunt-api.herokuapp.com',
     credentials: 'same-origin',
     customFetch: fetch,
   });
@@ -84,7 +82,7 @@ function create(initialState, { getToken, fetchOptions }) {
     ]),
     resolvers: {
       Mutation: {
-        resetKey(param, variables, { cache }) {
+        resetKey(_, variables, { cache }) {
           const { query, key } = variables;
           cache.writeQuery({
             query,

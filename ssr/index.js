@@ -5,7 +5,7 @@ import { getMarkupFromTree } from 'react-apollo-hooks';
 import initialState from 'apollo/initialState';
 import initApollo from 'apollo/initApollo';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-import { parseCookies } from 'utils/tools';
+import { parseCookies } from 'lib/tools';
 import serialize from 'serialize-javascript';
 import stats from '../build/loadable-stats.json';
 
@@ -15,34 +15,28 @@ function getHtml({
   return `<!DOCTYPE html>
     <html lang="en">
       <head>
-        <meta name="title" content="Shopping Cart Fresh Tees">
-        <meta name="description" content="Shopping Cart App is an app where you can buy fresh tees by simple drag and dropping items you want!">
-        <meta name="keywords" content="shopping cart, drag and drop, fresh tees, t-shirt shopping">
-        <meta name="robots" content="index, follow">
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="language" content="English">
+        <meta charSet='utf-8' />
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
+        />
+        <meta property='og:image' content='/static/img/logo.png'/>
+        <meta property='og:site_name' content='Internlink'/>
+        <meta property='og:description' content='Internlink by Jasper Bernales' />
+        <meta property='og:locale' content='en_US' />
+        <meta name='robots' content='index, follow' />
     
-        <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="/static/icons/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="/static/icons/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="/static/icons/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="/static/icons/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192"  href="/static/icons/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/static/icons/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
-        <link rel="manifest" href="/static/icons/manifest.json">
-        <meta name="msapplication-TileColor" content="#ffffff">
-        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="theme-color" content="#000000">
-        <title>Shopping Cart Fresh Tees</title>
-        <link rel="stylesheet" href="/static/css/wataphak.css">
+        <meta name='theme-color' content='#000000' />
+    
+        <link rel='manifest' href='/static/manifest.json'/>
+        <link rel='shortcut icon' href='/static/icons/favicon.ico'/>
+    
+        <link rel='stylesheet' type='text/css' href='/static/css/react-md.indigo-pink.min.css' />
+        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' />
+        <link rel='stylesheet' type='text/css' href='/static/css/materialIcons.css' />
+        <link rel='stylesheet' type='text/css' href='/static/css/proxima.css' />
+        <link rel='stylesheet' type='text/css' href='/static/css/react-draft-wysiwyg.css' />
+        <link rel='stylesheet' type='text/css' href='/static/css/rangeslider.css' />
         ${stylesheets}
         ${initialData}
       </head>
@@ -63,14 +57,19 @@ export default async function serverRender(req, res) {
       getToken: () => parseCookies(req).token,
     },
   );
-  const content = await getMarkupFromTree({
-    renderFunction: renderToString,
-    tree: (
-      <ChunkExtractorManager extractor={extractor}>
-        <App context={context} location={req.url} apolloClient={apollo} />
-      </ChunkExtractorManager>
-    ),
-  });
+  let content;
+  try {
+    content = await getMarkupFromTree({
+      renderFunction: renderToString,
+      tree: (
+        <ChunkExtractorManager extractor={extractor}>
+          <App context={context} location={req.url} apolloClient={apollo} />
+        </ChunkExtractorManager>
+      ),
+    });
+  } catch (err) {
+    console.log('err', err);
+  }
   const initialData = `
     <script>
       window.__APOLLO_STATE__ = ${serialize(apollo.cache.extract(), { isJSON: true })}

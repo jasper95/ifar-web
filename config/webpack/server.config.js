@@ -3,6 +3,7 @@ const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const DotEnv = require('dotenv-webpack');
+const { resolvePath } = require('./base')
 
 const DIST_PATH = path.join(process.cwd(), 'dist');
 
@@ -16,11 +17,19 @@ module.exports = (mode) => {
       dry: false,
     }),
     new DotEnv({
+      path: resolvePath('config/.env'),
+      safe: true,
+      defaults: false,
       systemvars: true,
     }),
   ];
   const entry = ['./ssr'];
-  const externals = ['@loadable/component', nodeExternals()];
+  const externals = [
+    '@loadable/component',
+    nodeExternals({
+      whitelist: [/\.css/]
+    })
+  ];
   return {
     bail: true,
     target: 'node',
@@ -37,7 +46,7 @@ module.exports = (mode) => {
       rules: [
         {
           test: /\.(scss|sass|css)$/,
-          exclude: /node_modules/,
+          // exclude: /node_modules/,
           loader: require.resolve('ignore-loader'),
         },
         {

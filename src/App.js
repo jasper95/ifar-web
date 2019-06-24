@@ -5,8 +5,8 @@ import { BrowserRouter, StaticRouter } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { hot } from 'react-hot-loader/root';
 import flow from 'lodash/flow';
+import 'sass/common.scss';
 import routes from './routes';
-import 'scss/base.scss';
 
 const Root = ({ context, location, apolloClient }) => (
   <ApolloProvider client={apolloClient}>

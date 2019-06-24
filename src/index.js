@@ -2,7 +2,7 @@ import React from 'react';
 import { hydrate, render } from 'react-dom';
 import initApollo from 'apollo/initApollo';
 import initialApolloState from 'apollo/initialState';
-import { parseCookies } from 'utils/tools';
+import { parseCookies } from 'lib/tools';
 import { loadableReady } from '@loadable/component';
 
 import Root from './App';
