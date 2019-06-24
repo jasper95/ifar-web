@@ -3,9 +3,13 @@ import { hydrate, render } from 'react-dom';
 import initApollo from 'apollo/initApollo';
 import initialApolloState from 'apollo/initialState';
 import { parseCookies } from 'utils/tools';
+import { loadableReady } from '@loadable/component';
+
 import Root from './App';
 
-if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction && 'serviceWorker' in navigator) {
   navigator.serviceWorker.register('/service-worker.js').then((registration) => {
     console.log('SW registered: ', registration);
   }).catch((registrationError) => {
@@ -14,13 +18,13 @@ if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
 }
 
 
-console.log('wew');
 const { __APOLLO_STATE__: apolloState = initialApolloState } = window;
 
 const apolloClient = initApollo(apolloState, { getToken: () => parseCookies().token });
 
-const renderFn = process.env.NODE_ENV === 'production' ? hydrate : render;
+const renderFn = isProduction ? hydrate : render;
+const preLoadFn = isProduction ? loadableReady : cb => cb();
 
-renderFn(
+preLoadFn(() => renderFn(
   <Root apolloClient={apolloClient} />, document.getElementById('root'),
-);
+));

@@ -1,9 +1,8 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const merge = require('webpack-merge');
-const webpack = require('webpack');
 const LoadableWebpackPlugin = require('@loadable/webpack-plugin');
-require('dotenv').config({ path: resolvePath('config/.env') });
+const DotEnv = require('dotenv-webpack');
 
 const configs = {
   development: {
@@ -39,6 +38,7 @@ function baseConfig(options) {
               exclude: /node_modules|bower_components/,
               loader: require.resolve('babel-loader'),
               options: {
+                cacheDirectory: true,
                 caller: {
                   target: 'web',
                 },
@@ -68,7 +68,12 @@ function baseConfig(options) {
       filename: 'js/[name].js',
     },
     plugins: [
-      new webpack.DefinePlugin(getEnv()),
+      new DotEnv({
+        path: resolvePath('config/.env'),
+        safe: true,
+        defaults: false,
+        systemvars: mode === 'production',
+      }),
       new LoadableWebpackPlugin({ writeToDisk: true }),
     ],
     node: {
@@ -86,20 +91,6 @@ function baseConfig(options) {
       extensions: ['.mjs', '.js', '.json', '.jsx', '.css', '.scss'],
     },
   });
-}
-
-function getEnv() {
-  const REACT_APP = /^APP_/i;
-  const env = Object
-    .entries(process.env)
-    .filter(([key]) => REACT_APP.test(key))
-    .reduce((result, [key, val]) => {
-      result[key.replace(REACT_APP, '')] = JSON.stringify(val);
-      return result;
-    }, {});
-  return {
-    'process.env': env,
-  };
 }
 
 function resolvePath(relativePath) {

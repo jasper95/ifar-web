@@ -7,14 +7,15 @@ module.exports = (api) => {
   return {
     presets: [
       [
-
         '@babel/preset-env',
         {
           loose: true,
-          targets: !isWeb ? { node: 'current' } : {
+          targets: !isWeb ? {
+            node: 'current',
+          } : {
             esmodules: true,
           },
-          modules: 'commonjs',
+          modules: isWeb ? 'auto' : 'commonjs',
         },
       ],
       '@babel/preset-react',

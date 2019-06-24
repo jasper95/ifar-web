@@ -24,12 +24,14 @@ const Root = ({ context, location, apolloClient }) => (
 
 Root.defaultProps = {
   context: {},
+  location: '',
+  apolloClient: {},
 };
 
 Root.propTypes = {
   context: PropTypes.object,
-  location: PropTypes.string.isRequired,
-  apolloClient: PropTypes.object.isRequired,
+  location: PropTypes.string,
+  apolloClient: PropTypes.object,
 };
 
 export { Root as App };

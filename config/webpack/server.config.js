@@ -2,6 +2,8 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const DotEnv = require('dotenv-webpack');
+
 const DIST_PATH = path.join(process.cwd(), 'dist');
 
 module.exports = (mode) => {
@@ -12,7 +14,10 @@ module.exports = (mode) => {
       root: process.cwd(),
       verbose: true,
       dry: false,
-    })
+    }),
+    new DotEnv({
+      systemvars: true,
+    }),
   ];
   const entry = ['./ssr'];
   const externals = ['@loadable/component', nodeExternals()];

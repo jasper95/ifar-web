@@ -1,6 +1,7 @@
 import loadable from '@loadable/component';
 
 const Login = loadable(() => import('./pages/Login'));
+const Test = loadable(() => import('./pages/Test'));
 // const Signup = loadable(() => import('./pages/Signup'));
 // const Main = loadable(() => import('./Main'));
 // const Home = loadable(() => import('./pages/Home'));
@@ -12,6 +13,12 @@ export default [
     component: Login,
     key: 'app-login',
     path: '/login',
+    exact: true,
+  },
+  {
+    component: Test,
+    key: 'app-test',
+    path: '/test',
     exact: true,
   },
   // {
