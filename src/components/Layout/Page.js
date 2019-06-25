@@ -15,7 +15,8 @@ function Page(props) {
     hasNavigation, hasFooter,
     pageId, className, pageDescription, router,
   } = props;
-  const [appData, setAppData] = useAppData();
+  // const [appData, setAppData] = useAppData();
+  const appData = {};
   const { toast, dialog } = appData;
   let { pageTitle } = props;
   if (pageTitle) {

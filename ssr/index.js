@@ -13,7 +13,7 @@ function getHtml({
   scripts, content, stylesheets, initialData,
 }) {
   return `<!DOCTYPE html>
-    <html lang="en">
+    <html lang='en' dir='ltr' class='interlink'>
       <head>
         <meta charSet='utf-8' />
         <meta

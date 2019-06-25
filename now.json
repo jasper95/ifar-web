@@ -7,6 +7,12 @@
     { "src": "dist/index.js", "use": "@now/node" }
   ],
   "routes": [
+    { "src": "/static/js/(.*)", "dest": "/build/js/$1.gz",
+      "headers": {
+        "Content-Type": "text/javascript",
+        "Content-Encoding": "gzip"
+      }
+    },
     { "src": "/static/(.*)", "dest": "/build/$1" },
     { "src": "/service-worker.js", "dest": "/build/service-worker.js" },
     { "src": "/(.*)", "dest": "/dist/index.js" }

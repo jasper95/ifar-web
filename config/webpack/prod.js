@@ -86,7 +86,7 @@ module.exports = baseConfig({
       algorithm: 'gzip',
       test: /\.js$/,
       cache: true,
-      deleteOriginalAssets: true,
+      deleteOriginalAssets: false,
     }),
     new CopyPlugin([
       { from: 'public', to: '' },
