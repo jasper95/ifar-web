@@ -7,13 +7,25 @@
     { "src": "dist/index.js", "use": "@now/node" }
   ],
   "routes": [
-    { "src": "/static/js/(.*)", "dest": "/build/js/$1.gz",
+    { "src": "/static/js/(.*)", "dest": "/build/js/$1.br",
       "headers": {
         "Content-Type": "text/javascript",
-        "Content-Encoding": "gzip"
+        "Content-Encoding": "br",
+        "Cache-Control": "public, max-age=31557600"
       }
     },
-    { "src": "/static/(.*)", "dest": "/build/$1" },
+    { "src": "/static/css/(.*)", "dest": "/build/css/$1.br",
+      "headers": {
+        "Content-Type": "text/css; charset=utf-8",
+        "Content-Encoding": "br",
+        "Cache-Control": "public, max-age=31557600"
+      }
+    },
+    { "src": "/static/(.*)", "dest": "/build/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31557600"
+      }
+    },
     { "src": "/service-worker.js", "dest": "/build/service-worker.js" },
     { "src": "/(.*)", "dest": "/dist/index.js" }
   ]

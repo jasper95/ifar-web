@@ -82,14 +82,16 @@ module.exports = baseConfig({
         new RegExp('/[^/]+\\.[^/]+$'),
       ],
     }),
-    new CompressionPlugin({
-      algorithm: 'gzip',
-      test: /\.js$/,
-      cache: true,
-      deleteOriginalAssets: false,
-    }),
     new CopyPlugin([
       { from: 'public', to: '' },
     ]),
+    new CompressionPlugin({
+      filename: '[path].br[query]',
+      algorithm: 'brotliCompress',
+      test: /\.js$|\.css$/,
+      compressionOptions: { level: 11 },
+      cache: true,
+      deleteOriginalAssets: false,
+    }),
   ],
 });

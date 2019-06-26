@@ -1,13 +1,15 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import React from 'react';
+import loadable from '@loadable/component';
 import { Helmet as Head } from 'react-helmet';
 import { withRouter } from 'react-router';
 import flow from 'lodash/flow';
-import Dialogs from 'components/Dialogs';
 import Snackbar from 'components/Snackbar';
 import { useAppData } from 'apollo/appData';
 import Footer from './Footer';
 import Header from './Header';
+
+const AsyncDialog = loadable(props => import(`components/Dialogs/${props.path}`));
 
 function Page(props) {
   const {
@@ -23,10 +25,6 @@ function Page(props) {
     pageTitle = `InternLink - ${pageTitle}`;
   } else {
     pageTitle = 'Internlink';
-  }
-  let Dialog;
-  if (dialog && dialog.path) {
-    Dialog = Dialogs[dialog.path];
   }
   return (
     <>
@@ -48,9 +46,12 @@ function Page(props) {
           {...toast}
         />
       )}
-      {Dialog && (
-        <Dialog {...dialog.props} />
+      {dialog && dialog.path && (
+        <AsyncDialog path={dialog.path} {...dialog.prpps} />
       )}
+      {/* {Dialog && (
+        <Dialog {...dialog.props} />
+      )} */}
 
       <main className={`page page-${pageId} ${className}`}>
         {children}
