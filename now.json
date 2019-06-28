@@ -6,19 +6,11 @@
     { "src": "build/**/*", "use": "@now/static" },
     { "src": "dist/index.js", "use": "@now/node" }
   ],
-  "routes": [
-    { "src": "/static/js/(.*)", "dest": "/build/js/$1.br",
+  "routes": [    
+    { "src": "/static/((css|js)\/.*)", "dest": "/build/$1.br",
       "headers": {
-        "Content-Type": "text/javascript",
         "Content-Encoding": "br",
-        "Cache-Control": "public, max-age=31557600"
-      }
-    },
-    { "src": "/static/css/(.*)", "dest": "/build/css/$1.br",
-      "headers": {
-        "Content-Type": "text/css; charset=utf-8",
-        "Content-Encoding": "br",
-        "Cache-Control": "public, max-age=31557600"
+        "cache-control": "s-maxage=31536000,immutable"
       }
     },
     { "src": "/static/(.*)", "dest": "/build/$1",

@@ -7,7 +7,7 @@ import withDialog from 'lib/hocs/dialog';
 import { getValidationResult, getAddressValue, getAddressOptions } from 'lib/tools';
 import DatePicker from 'react-datepicker';
 
-import joi from 'joi';
+import yup from 'yup';
 import {
   customChangeHandler,
 } from './Job';
@@ -152,18 +152,18 @@ function AboutMe(props) {
 }
 
 function validator(data) {
-  const schema = joi.object().keys({
-    first_name: joi.string().required().error(() => 'Firstname is required'),
-    last_name: joi.string().required().error(() => 'Lastname is required'),
-    email: joi.string().email().required().error(() => 'Email is required'),
-    // address: joi.string().required().error(() => 'Address is required'),
-    // nationality: joi.string().required().error(() => 'Nationality is required'),
+  const schema = yup.object().keys({
+    first_name: yup.string().required().error(() => 'Firstname is required'),
+    last_name: yup.string().required().error(() => 'Lastname is required'),
+    email: yup.string().email().required().error(() => 'Email is required'),
+    // address: yup.string().required().error(() => 'Address is required'),
+    // nationality: yup.string().required().error(() => 'Nationality is required'),
     // contact_number: joi
     //   .string()
     //   .regex(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)
     //   // .required()
     //   .error(() => 'Invalid Phone Number'),
-    // birth_date: joi.date().required().error(() => 'Birth Date is required')
+    // birth_date: yup.date().required().error(() => 'Birth Date is required')
   });
   return getValidationResult(data, schema);
 }

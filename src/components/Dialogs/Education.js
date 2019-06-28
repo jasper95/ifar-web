@@ -4,7 +4,7 @@ import TextField from 'react-md/lib/TextFields/TextField';
 import TextFieldMessage from 'react-md/lib/TextFields/TextFieldMessage';
 import withDialog from 'lib/hocs/dialog';
 import { getValidationResult } from 'lib/tools';
-import joi from 'joi';
+import yup from 'yup';
 import Select from 'react-select';
 import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
@@ -101,11 +101,11 @@ function EducationDialog(props) {
 }
 
 function validator(data) {
-  const schema = joi.object().keys({
-    job_category_id: joi.string().required().error(() => 'Field of Study is required'),
-    start_date: joi.date().required().error(() => 'Admission Date is required'),
-    qualification: joi.string().required().error(() => 'Qualification is required'),
-    school: joi.string().required().error(() => 'University/Institute is required'),
+  const schema = yup.object().keys({
+    job_category_id: yup.string().required().error(() => 'Field of Study is required'),
+    start_date: yup.date().required().error(() => 'Admission Date is required'),
+    qualification: yup.string().required().error(() => 'Qualification is required'),
+    school: yup.string().required().error(() => 'University/Institute is required'),
   });
   return getValidationResult(data, schema);
 }

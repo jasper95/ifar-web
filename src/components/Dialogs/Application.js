@@ -3,7 +3,7 @@ import flowRight from 'lodash/flowRight';
 import TextField from 'react-md/lib/TextFields/TextField';
 import withDialog from 'lib/hocs/dialog';
 import { getValidationResult } from 'lib/tools';
-import joi from 'joi';
+import yup from 'yup';
 import { DialogActions as ConfirmActions } from './Confirm';
 
 function ApplicationDialog(props) {
@@ -24,8 +24,8 @@ function ApplicationDialog(props) {
 }
 
 function validator(data) {
-  const schema = joi.object().keys({
-    pitch: joi.string().required().error(() => 'Pitch is required'),
+  const schema = yup.object().keys({
+    pitch: yup.string().required().error(() => 'Pitch is required'),
   });
   return getValidationResult(data, schema);
 }

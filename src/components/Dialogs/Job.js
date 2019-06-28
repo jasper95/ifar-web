@@ -6,6 +6,7 @@ import TextField from 'react-md/lib/TextFields/TextField';
 import TextFieldMessage from 'react-md/lib/TextFields/TextFieldMessage';
 import CreatableInput from 'components/CreatableInput';
 import withDialog from 'lib/hocs/dialog';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // import Select from 'react-select';
 // import { connect } from 'react-redux';
 import DatePicker from 'react-datepicker';
@@ -13,7 +14,7 @@ import DatePicker from 'react-datepicker';
 import {
   getValidationResult, validateDescription, getAddressOptions, getAddressValue,
 } from 'lib/tools';
-import joi from 'joi';
+import yup from 'yup';
 
 function Job(props) {
   const {
@@ -169,13 +170,13 @@ const Dialog = flowRight(
 )(Job);
 
 function validator(data) {
-  const schema = joi.object().keys({
-    province: joi.string().required().error(() => 'Province is required'),
-    name: joi.string().required().error(() => 'Job Title is required'),
-    job_category_id: joi.string().required().error(() => 'Job Category is required'),
-    barangay: joi.string().required().error(() => 'Barangay is required'),
-    municipality: joi.string().required().error(() => 'Municipality is required'),
-    skills: joi.array().min(1).required().error(() => 'At least 1 skill is required'),
+  const schema = yup.object().keys({
+    province: yup.string().required().error(() => 'Province is required'),
+    name: yup.string().required().error(() => 'Job Title is required'),
+    job_category_id: yup.string().required().error(() => 'Job Category is required'),
+    barangay: yup.string().required().error(() => 'Barangay is required'),
+    municipality: yup.string().required().error(() => 'Municipality is required'),
+    skills: yup.array().min(1).required().error(() => 'At least 1 skill is required'),
   });
   let { errors } = getValidationResult(data, schema);
   errors = {

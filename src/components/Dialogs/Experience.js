@@ -4,7 +4,7 @@ import TextField from 'react-md/lib/TextFields/TextField';
 import TextFieldMessage from 'react-md/lib/TextFields/TextFieldMessage';
 import withDialog from 'lib/hocs/dialog';
 import { getValidationResult } from 'lib/tools';
-import joi from 'joi';
+import yup from 'yup';
 import DatePicker from 'react-datepicker';
 
 function ExperienceDialog(props) {
@@ -69,11 +69,11 @@ function ExperienceDialog(props) {
 }
 
 function validator(data) {
-  const schema = joi.object().keys({
-    position: joi.string().required().error(() => 'Position is required'),
-    company: joi.string().required().error(() => 'Company is required'),
-    start_date: joi.date().required().error(() => 'Start Date is required'),
-    // end_date: joi.date().required().error(() => 'End Date is required')
+  const schema = yup.object().keys({
+    position: yup.string().required().error(() => 'Position is required'),
+    company: yup.string().required().error(() => 'Company is required'),
+    start_date: yup.date().required().error(() => 'Start Date is required'),
+    // end_date: yup.date().required().error(() => 'End Date is required')
   });
   return getValidationResult(data, schema);
 }

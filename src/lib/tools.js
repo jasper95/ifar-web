@@ -4,7 +4,7 @@ import municipality from 'lib/constants/address/municipality';
 import province from 'lib/constants/address/province';
 import orderBy from 'lodash/orderBy';
 import cookie from 'cookie';
-import joi from 'joi';
+import yup from 'yup';
 import day from 'dayjs';
 // import queryString from 'query-string';
 
@@ -58,7 +58,7 @@ export function getAddressValue(field, fields) {
 }
 
 export function getValidationResult(data, schema) {
-  const validationResult = joi.validate(data, schema, { abortEarly: false, allowUnknown: true });
+  const validationResult = yup.validate(data, schema, { abortEarly: false, allowUnknown: true });
   let errors = {};
   if (validationResult.error) {
     errors = validationResult.error.details

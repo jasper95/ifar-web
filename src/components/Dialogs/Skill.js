@@ -1,10 +1,11 @@
 import React from 'react';
 import flowRight from 'lodash/flowRight';
 import Slider from 'react-rangeslider';
+import 'react-rangeslider/lib/index.css'
 import TextField from 'react-md/lib/TextFields/TextField';
 import withDialog from 'lib/hocs/dialog';
 import { getValidationResult } from 'lib/tools';
-import joi from 'joi';
+import yup from 'yup';
 
 function SkillDialog(props) {
   const { formState, formHandlers } = props;
@@ -32,9 +33,9 @@ function SkillDialog(props) {
 }
 
 function validator(data) {
-  const schema = joi.object().keys({
-    name: joi.string().required().error(() => 'Skill Heading is required'),
-    level: joi.number().required().error(() => 'Level is required'),
+  const schema = yup.object().keys({
+    name: yup.string().required().error(() => 'Skill Heading is required'),
+    level: yup.number().required().error(() => 'Level is required'),
   });
   return getValidationResult(data, schema);
 }

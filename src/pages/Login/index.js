@@ -7,7 +7,7 @@ import Link from 'react-router-dom/Link';
 import useForm from 'lib/hooks/useForm';
 import { getValidationResult } from 'lib/tools';
 import Page from 'components/Layout/Page';
-import joi from 'joi';
+import yup from 'yup';
 import { generateMutation } from 'apollo/mutation';
 import 'sass/pages/login.scss';
 
@@ -144,9 +144,9 @@ export default function LoginPage(props) {
   }
 }
 function validator(data) {
-  const schema = joi.object().keys({
-    email: joi.string().email().required().error(() => 'Invalid Email'),
-    password: joi.string().required().error(() => 'Password is required'),
+  const schema = yup.object().keys({
+    email: yup.string().email().required().error(() => 'Invalid Email'),
+    password: yup.string().required().error(() => 'Password is required'),
   });
   return getValidationResult(data, schema);
 }

@@ -3,9 +3,10 @@ import flowRight from 'lodash/flowRight';
 import TextField from 'react-md/lib/TextFields/TextField';
 import withDialog from 'lib/hocs/dialog';
 import { getValidationResult, validateDescription } from 'lib/tools';
-import joi from 'joi';
+import yup from 'yup';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function AboutMe(props) {
   const { formState, formHandlers } = props;
@@ -74,16 +75,16 @@ function AboutMe(props) {
 }
 
 function validator(data) {
-  const schema = joi.object().keys({
-    name: joi.string().required().error(() => 'Firstname is required'),
-    description: joi.object().keys({
-      blocks: joi.array().min(1).items(
-        joi.object({
-          text: joi.string().required(),
+  const schema = yup.object().keys({
+    name: yup.string().required().error(() => 'Firstname is required'),
+    description: yup.object().keys({
+      blocks: yup.array().min(1).items(
+        yup.object({
+          text: yup.string().required(),
         }),
       ),
     }).required().error(() => 'Description is required'),
-    email: joi.string().email().required().error(() => 'Email is required'),
+    email: yup.string().email().required().error(() => 'Email is required'),
   });
   let { errors } = getValidationResult(data, schema);
   errors = {

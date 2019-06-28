@@ -68,7 +68,7 @@ module.exports = baseConfig({
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:8].css',
-      chunkFilename: 'css/[name].[contenthash:8].chunk.css',
+      chunkFilename: 'css/[name].[contenthash:8].css',
     }),
     new WorkboxWebpackPlugin.GenerateSW({
       clientsClaim: true,

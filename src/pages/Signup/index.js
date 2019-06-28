@@ -7,7 +7,7 @@ import { generateMutation, setToast, applyUpdates } from 'apollo/mutation';
 import { useMutation } from 'react-apollo-hooks';
 import useForm from 'lib/hooks/useForm';
 import { getValidationResult, delay } from 'lib/tools';
-import joi from 'joi';
+import yup from 'yup';
 import cn from 'classnames';
 import 'sass/pages/signup.scss';
 
@@ -188,22 +188,22 @@ export default function SignupPage() {
 }
 
 function validator(data) {
-  const schema = joi.object().keys({
+  const schema = yup.object().keys({
     company_name: joi
       .alternatives()
-      .when('role', { is: 'ADMIN', then: joi.string().required(), otherwise: joi.optional() })
+      .when('role', { is: 'ADMIN', then: yup.string().required(), otherwise: yup.optional() })
       .error(() => 'Company Name is required'),
     first_name: joi
       .alternatives()
-      .when('role', { is: 'USER', then: joi.string().required(), otherwise: joi.optional() })
+      .when('role', { is: 'USER', then: yup.string().required(), otherwise: yup.optional() })
       .error(() => 'First Name is required'),
     last_name: joi
       .alternatives()
-      .when('role', { is: 'USER', then: joi.string().required(), otherwise: joi.optional() })
+      .when('role', { is: 'USER', then: yup.string().required(), otherwise: yup.optional() })
       .error(() => 'Last Name is required'),
-    email: joi.string().email().required()
+    email: yup.string().email().required()
       .error(() => 'Invalid Email'),
-    password: joi.string().required()
+    password: yup.string().required()
       .error(() => 'Password is required'),
   });
   return getValidationResult(data, schema);

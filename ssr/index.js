@@ -12,7 +12,8 @@ import stats from '../build/loadable-stats.json';
 function getHtml({
   scripts, content, stylesheets, initialData,
 }) {
-  return `<!DOCTYPE html>
+  return `
+    <!DOCTYPE html>
     <html lang='en' dir='ltr' class='interlink'>
       <head>
         <meta charSet='utf-8' />
@@ -32,11 +33,6 @@ function getHtml({
         <link rel='shortcut icon' href='/static/icons/favicon.ico'/>
     
         <link rel='stylesheet' type='text/css' href='/static/css/react-md.indigo-pink.min.css' />
-        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' />
-        <link rel='stylesheet' type='text/css' href='/static/css/materialIcons.css' />
-        <link rel='stylesheet' type='text/css' href='/static/css/proxima.css' />
-        <link rel='stylesheet' type='text/css' href='/static/css/react-draft-wysiwyg.css' />
-        <link rel='stylesheet' type='text/css' href='/static/css/rangeslider.css' />
         ${stylesheets}
         ${initialData}
       </head>
