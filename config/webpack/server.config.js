@@ -3,7 +3,7 @@ const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const DotEnv = require('dotenv-webpack');
-const { resolvePath } = require('./base')
+const { resolvePath } = require('./base');
 
 const DIST_PATH = path.join(process.cwd(), 'dist');
 
@@ -27,8 +27,9 @@ module.exports = (mode) => {
   const externals = [
     '@loadable/component',
     nodeExternals({
-      whitelist: [/\.css/]
-    })
+      whitelist: [/\.css/],
+    }),
+    'react-helmet',
   ];
   return {
     bail: true,

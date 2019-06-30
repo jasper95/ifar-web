@@ -32,6 +32,23 @@ function Page(props) {
         <title>{pageTitle}</title>
         <meta property="og:title" content={pageTitle} />
         <meta name="og:description" content={pageDescription || 'Description here'} />
+        <meta charSet="utf-8" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+        />
+        <meta property="og:image" content="/static/img/logo.png" />
+        <meta property="og:site_name" content="Internlink" />
+        <meta property="og:description" content="Internlink by Jasper Bernales" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="robots" content="index, follow" />
+
+        <meta name="theme-color" content="#000000" />
+
+        <link rel="manifest" href="/static/manifest.json" />
+        <link rel="shortcut icon" href="/static/icons/favicon.ico" />
+
+        <link rel="stylesheet" type="text/css" href="/static/css/react-md.indigo-pink.min.css" />
         {/* {router.asPath !== '/' && (
           <link rel="canonical" href={`${process.env.HOSTNAME}/${router.asPath}`} />
         )} */}

@@ -117,7 +117,7 @@ export default function LoginPage(props) {
               <div className="row">
                 <p>
                   <Link to="/forgot-password">
-                    <a>Forgot Password? </a>
+                    Forgot Password?
                   </Link>
                 </p>
               </div>

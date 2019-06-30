@@ -1,6 +1,7 @@
 import { App } from 'App';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import { Helmet } from 'react-helmet';
 import { getMarkupFromTree } from 'react-apollo-hooks';
 import initialState from 'apollo/initialState';
 import initApollo from 'apollo/initApollo';
@@ -10,29 +11,15 @@ import serialize from 'serialize-javascript';
 import stats from '../build/loadable-stats.json';
 
 function getHtml({
-  scripts, content, stylesheets, initialData,
+  scripts, content, stylesheets, initialData, helmet,
 }) {
   return `
     <!DOCTYPE html>
     <html lang='en' dir='ltr' class='interlink'>
       <head>
-        <meta charSet='utf-8' />
-        <meta
-          name='viewport'
-          content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
-        />
-        <meta property='og:image' content='/static/img/logo.png'/>
-        <meta property='og:site_name' content='Internlink'/>
-        <meta property='og:description' content='Internlink by Jasper Bernales' />
-        <meta property='og:locale' content='en_US' />
-        <meta name='robots' content='index, follow' />
-    
-        <meta name='theme-color' content='#000000' />
-    
-        <link rel='manifest' href='/static/manifest.json'/>
-        <link rel='shortcut icon' href='/static/icons/favicon.ico'/>
-    
-        <link rel='stylesheet' type='text/css' href='/static/css/react-md.indigo-pink.min.css' />
+        ${helmet.title.toString()}
+        ${helmet.meta.toString()}
+        ${helmet.link.toString()}
         ${stylesheets}
         ${initialData}
       </head>
@@ -76,6 +63,7 @@ export default async function serverRender(req, res) {
     scripts: extractor.getScriptTags(),
     stylesheets: extractor.getStyleTags(),
     initialData,
+    helmet: Helmet.renderStatic(),
   });
   res.setHeader('Content-Type', 'text/html');
   res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
