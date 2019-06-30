@@ -14,6 +14,8 @@ module.exports = baseConfig({
   mode: 'production',
   output: {
     publicPath: '/static/',
+    filename: 'js/[name].[chunkhash].js',
+    chunkFilename: 'js/[name].[chunkhash].js',
   },
   optimization: {
     minimize: true,

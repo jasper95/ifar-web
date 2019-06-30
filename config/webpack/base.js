@@ -65,8 +65,6 @@ function baseConfig(options) {
     },
     output: {
       path: path.join(process.cwd(), 'build'),
-      filename: 'js/[name].[chunkhash].js',
-      chunkFilename: 'js/[name].[chunkhash].js',
     },
     plugins: [
       new DotEnv({

@@ -31,6 +31,7 @@ function Page(props) {
       <Head>
         <title>{pageTitle}</title>
         <meta property="og:title" content={pageTitle} />
+        <meta name="Description" content={pageDescription || 'Description here'} />
         <meta name="og:description" content={pageDescription || 'Description here'} />
         <meta charSet="utf-8" />
         <meta
@@ -39,7 +40,6 @@ function Page(props) {
         />
         <meta property="og:image" content="/static/img/logo.png" />
         <meta property="og:site_name" content="Internlink" />
-        <meta property="og:description" content="Internlink by Jasper Bernales" />
         <meta property="og:locale" content="en_US" />
         <meta name="robots" content="index, follow" />
 

@@ -21,10 +21,10 @@ function getHtml({
         ${helmet.meta.toString()}
         ${helmet.link.toString()}
         ${stylesheets}
-        ${initialData}
       </head>
       <body>
         <div id="root">${content}</div>
+        ${initialData}
         ${scripts}
       </body>
     </html>
