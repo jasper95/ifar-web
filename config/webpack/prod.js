@@ -6,7 +6,7 @@ const safePostCssParser = require('postcss-safe-parser');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
-const CompressionPlugin = require('compression-webpack-plugin');
+// const CompressionPlugin = require('compression-webpack-plugin');
 
 const { baseConfig } = require('./base');
 
@@ -85,13 +85,13 @@ module.exports = baseConfig({
     new CopyPlugin([
       { from: 'public', to: '' },
     ]),
-    new CompressionPlugin({
-      filename: '[path].br[query]',
-      algorithm: 'brotliCompress',
-      test: /\.js$|\.css$/,
-      compressionOptions: { level: 11 },
-      cache: true,
-      deleteOriginalAssets: false,
-    }),
+    // new CompressionPlugin({
+    //   filename: '[path].br[query]',
+    //   algorithm: 'brotliCompress',
+    //   test: /\.js$|\.css$/,
+    //   compressionOptions: { level: 11 },
+    //   cache: true,
+    //   deleteOriginalAssets: true,
+    // }),
   ],
 });

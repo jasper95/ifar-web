@@ -10,7 +10,8 @@
     "build:server": "NODE_ENV=production webpack --mode=production --config config/webpack/server.config.js",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "build": "yarn build:client && yarn build:server"
+    "build": "yarn build:client && yarn build:server",
+    "deploy:aws": "yarn build && aws s3 sync build/ s3://graph-spike"
   },
   "dependencies": {
     "@babel/runtime": "^7.3.1",

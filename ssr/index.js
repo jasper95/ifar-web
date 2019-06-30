@@ -78,5 +78,6 @@ export default async function serverRender(req, res) {
     initialData,
   });
   res.setHeader('Content-Type', 'text/html');
+  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
   res.send(result);
 }
