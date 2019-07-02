@@ -2,16 +2,9 @@ import React, { useMemo } from 'react';
 import useForm from 'lib/hooks/useForm';
 import Button from 'react-md/lib/Buttons/Button';
 import Card from 'react-md/lib/Cards/Card';
-import useFormOptions, { formOptionsSelector } from 'lib/hooks/useFormOptions';
 import TextField from 'react-md/lib/TextFields/TextField';
-import { createSelector } from 'reselect';
-import authSelector from 'redux/auth/selector';
 import Select from 'react-select';
-import {
-  GetJobData,
-} from 'redux/job/actions';
 import { getAddressOptions, getAddressValue } from 'lib/tools';
-import { connect } from 'react-redux';
 
 import 'sass/components/searchCard/index.scss';
 

@@ -8,7 +8,7 @@ import 'sass/components/footer/index.scss';
 
 
 export default function Footer() {
-  const information_menu = [
+  const informationMenu = [
     {
       name: 'About Us',
       link: '/#',
@@ -27,7 +27,7 @@ export default function Footer() {
     },
   ];
 
-  const interns_menu = [
+  const internMenu = [
     {
       name: 'Create Account',
       link: '/signup',
@@ -39,7 +39,7 @@ export default function Footer() {
   ];
 
 
-  const renderMenu = () => information_menu.map(({ name, link }, index) => (
+  const renderMenu = () => informationMenu.map(({ name, link }, index) => (
     <li key={index} className="footer_colItem_menu_item">
       <Link to={link}>
         <a>
@@ -49,12 +49,10 @@ export default function Footer() {
     </li>
   ));
 
-  const renderInterns = () => interns_menu.map(({ name, link }, index) => (
+  const renderInterns = () => internMenu.map(({ name, link }, index) => (
     <li key={index} className="footer_colItem_menu_item">
       <Link to={link}>
-        <a>
-          {name}
-        </a>
+        {name}
       </Link>
     </li>
   ));
