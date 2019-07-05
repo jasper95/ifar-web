@@ -70,7 +70,7 @@ function create(initialState, { getToken, fetchOptions }) {
     customFetch: fetch,
   });
   const httpLink = new HttpLink({
-    uri: 'http://jobhunt-graphql.herokuapp.com/v1/graphql',
+    uri: 'https://jobhunt-graphql.herokuapp.com/v1/graphql',
     credentials: 'same-origin',
     fetchOptions,
   });
