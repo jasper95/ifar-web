@@ -4,7 +4,7 @@ import municipality from 'lib/constants/address/municipality';
 import province from 'lib/constants/address/province';
 import orderBy from 'lodash/orderBy';
 import cookie from 'cookie';
-import yup from 'yup';
+// import yup from 'yup';
 import day from 'dayjs';
 // import queryString from 'query-string';
 
@@ -58,21 +58,21 @@ export function getAddressValue(field, fields) {
 }
 
 export function getValidationResult(data, schema) {
-  const validationResult = yup.validate(data, schema, { abortEarly: false, allowUnknown: true });
-  let errors = {};
-  if (validationResult.error) {
-    errors = validationResult.error.details
+  try {
+    schema.validateSync(data, { abortEarly: false, allowUnknown: true });
+    return {
+      errors: {},
+      isValid: true,
+    };
+  } catch (err) {
+    const errors = err.inner
       .reduce((acc, el) => {
         const { path, message } = el;
-        const [key] = path;
-        acc[key] = message;
+        acc[path] = message;
         return acc;
-      }, errors);
+      }, {});
+    return { isValid: false, errors };
   }
-  return {
-    isValid: validationResult.error === null,
-    errors,
-  };
 }
 
 export function validateDescription(description) {

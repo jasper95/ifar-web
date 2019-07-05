@@ -54,9 +54,14 @@ export function useNodeMutation(metadata = {}, options) {
   const [, setAppData] = useAppData();
   const defaultOptions = {
     update: (cache) => {
-      setData('dialog', null)(cache);
-      setToast(message)(cache);
-      setData('dialogProcessing', false)(cache);
+      setData({
+        dialog: null,
+        toast: message,
+        dialogProcessing: false,
+      })(cache);
+      // setData('dialog', null)(cache);
+      // setToast(message)(cache);
+      // setData('dialogProcessing', false)(cache);
       callback();
     },
   };

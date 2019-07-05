@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { useApolloClient, useQuery } from 'react-apollo-hooks';
+import pick from 'lodash/pick';
 import initialState from './initialState';
 
 export const QUERY = Object.keys(initialState)
@@ -12,25 +13,31 @@ export const QUERY = Object.keys(initialState)
     return acc;
   }, {});
 
+const q = gql`
+  {
+    toast @client
+    auth @client
+    dialog @client
+  }
+`;
+
 export function useAppData() {
-  const { data: notification } = useQuery(QUERY.GET_TOAST, { ssr: false });
-  const { data: auth } = useQuery(QUERY.GET_AUTH);
-  const { data: dialog } = useQuery(QUERY.GET_DIALOG, { ssr: false });
-  const { data: dialogProcessing } = useQuery(QUERY.GET_DIALOGPROCESSING, { ssr: false });
+  const { data: appData = {} } = useQuery(q);
   const client = useApolloClient();
-  return [{
-    ...notification, ...auth, ...dialog, ...dialogProcessing,
-  }, setAppData];
-  function setAppData(key, val) {
-    setData(key, val)(client);
+  return [appData, setAppData];
+  function setAppData(data) {
+    setData(data)(client);
   }
 }
 
-export function setData(key, value) {
-  return cache => cache.writeQuery({
-    data: {
-      [key]: value,
-    },
-    query: QUERY[`GET_${key.toUpperCase()}`],
+export function setData(data) {
+  data = pick(data, Object.keys(initialState));
+  return apolloClient => apolloClient.writeQuery({
+    data,
+    query: gql`
+        {
+          ${Object.keys(data).map(e => `${e} @client`).join('\n')}
+        }
+      `,
   });
 }

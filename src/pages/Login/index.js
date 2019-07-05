@@ -7,7 +7,7 @@ import Link from 'react-router-dom/Link';
 import useForm from 'lib/hooks/useForm';
 import { getValidationResult } from 'lib/tools';
 import Page from 'components/Layout/Page';
-import yup from 'yup';
+import * as yup from 'yup';
 import { generateMutation } from 'apollo/mutation';
 import 'sass/pages/login.scss';
 
@@ -33,13 +33,7 @@ export default function LoginPage(props) {
     // }
   }, [1]);
   return (
-    <Page
-      pageId="login"
-      hasNavigation={false}
-      hasFooter={false}
-      pageTitle="Internlink - Login"
-      pageDescription="Login to Internlik. Search and apply for internship jobs"
-    >
+    <Page>
       <div className="authContainer">
         <div className="authContainer_content">
           <div className="authContainer_contentHeader">
@@ -144,9 +138,9 @@ export default function LoginPage(props) {
   }
 }
 function validator(data) {
-  const schema = yup.object().keys({
-    email: yup.string().email().required().error(() => 'Invalid Email'),
-    password: yup.string().required().error(() => 'Password is required'),
+  const schema = yup.object().shape({
+    email: yup.string().email('Invalid Email').required('Email is required'),
+    password: yup.string().required('Password is required'),
   });
   return getValidationResult(data, schema);
 }

@@ -17,8 +17,7 @@ function Page(props) {
     hasNavigation, hasFooter,
     pageId, className, pageDescription, router,
   } = props;
-  // const [appData, setAppData] = useAppData();
-  const appData = {};
+  const [appData, setAppData] = useAppData();
   const { toast, dialog } = appData;
   let { pageTitle } = props;
   if (pageTitle) {
@@ -58,7 +57,7 @@ function Page(props) {
       )}
       {toast && (
         <Snackbar
-          onClose={() => setAppData('toast', null)}
+          onClose={() => setAppData({ toast: null })}
           open={!!toast}
           {...toast}
         />
@@ -66,10 +65,6 @@ function Page(props) {
       {dialog && dialog.path && (
         <AsyncDialog path={dialog.path} {...dialog.prpps} />
       )}
-      {/* {Dialog && (
-        <Dialog {...dialog.props} />
-      )} */}
-
       <main className={`page page-${pageId} ${className}`}>
         {children}
       </main>

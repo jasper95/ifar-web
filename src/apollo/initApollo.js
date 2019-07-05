@@ -7,7 +7,7 @@ import ApolloClient from 'apollo-client';
 import { onError } from 'apollo-link-error';
 import fetch from 'node-fetch';
 import jwt from 'jsonwebtoken';
-import { setToast, setData } from 'apollo/mutation';
+import { setData } from 'apollo/mutation';
 
 let apolloClient = null;
 const isBrowser = typeof window === 'object';
@@ -29,8 +29,13 @@ function create(initialState, { getToken, fetchOptions }) {
       console.log(`[Network error ${operation.operationName}]: ${networkError.message}`);
       if (networkError.statusCode === 400) {
         const { message } = networkError.result;
-        setToast(message, 'error')(cache);
-        setData('dialogProcessing', false)(cache);
+        setData({
+          toast: {
+            message,
+            type: 'error',
+          },
+          dialogProcessing: false,
+        })(cache);
       }
     }
   });
@@ -69,10 +74,14 @@ function create(initialState, { getToken, fetchOptions }) {
     credentials: 'same-origin',
     fetchOptions,
   });
+  const cache = new InMemoryCache();
+  cache.writeData({
+    data: initialState,
+  });
   return new ApolloClient({
     connectToDevTools: isBrowser,
     ssrMode: !isBrowser,
-    cache: new InMemoryCache().restore(initialState || {}),
+    cache,
     link: ApolloLink.from([
       errorLink,
       restAuthLink,
@@ -81,17 +90,7 @@ function create(initialState, { getToken, fetchOptions }) {
       httpLink,
     ]),
     resolvers: {
-      Mutation: {
-        resetKey(_, variables, { cache }) {
-          const { query, key } = variables;
-          cache.writeQuery({
-            query,
-            data: {
-              [key]: null,
-            },
-          });
-        },
-      },
+
     },
   });
 }
