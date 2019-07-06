@@ -21,7 +21,7 @@ import { useAppData } from 'apollo/query';
 import { useUpdateNode } from 'apollo/mutation';
 
 function AboutMe(props) {
-  const [appData, setAppData] = useAppData();
+  const [{ appData }, setAppData] = useAppData();
   const [updateNode] = useUpdateNode({
     node: 'system_user',
     message: 'Profile details successfull updated',

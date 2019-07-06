@@ -17,7 +17,7 @@ function Page(props) {
     hasNavigation, hasFooter,
     pageId, className, pageDescription, router,
   } = props;
-  const [appData, setAppData] = useAppData();
+  const [{ appData }, setAppData] = useAppData();
   const { toast, dialog } = appData;
   let { pageTitle } = props;
   if (pageTitle) {
@@ -48,9 +48,6 @@ function Page(props) {
         <link rel="shortcut icon" href="/static/icons/favicon.ico" />
 
         <link rel="stylesheet" type="text/css" href="/static/css/react-md.indigo-pink.min.css" />
-        {/* {router.asPath !== '/' && (
-          <link rel="canonical" href={`${process.env.HOSTNAME}/${router.asPath}`} />
-        )} */}
       </Head>
       {hasNavigation && (
         <Header />
@@ -63,7 +60,7 @@ function Page(props) {
         />
       )}
       {dialog && dialog.path && (
-        <AsyncDialog path={dialog.path} {...dialog.prpps} />
+        <AsyncDialog path={dialog.path} {...dialog.props} />
       )}
       <main className={`page page-${pageId} ${className}`}>
         {children}

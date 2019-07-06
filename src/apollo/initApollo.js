@@ -76,7 +76,10 @@ function create(initialState, { getToken, fetchOptions }) {
   });
   const cache = new InMemoryCache();
   cache.writeData({
-    data: initialState,
+    data: {
+      ...initialState,
+      token: getToken() || '',
+    },
   });
   return new ApolloClient({
     connectToDevTools: isBrowser,
@@ -89,9 +92,7 @@ function create(initialState, { getToken, fetchOptions }) {
       httpAuthLink,
       httpLink,
     ]),
-    resolvers: {
-
-    },
+    resolvers: {},
   });
 }
 

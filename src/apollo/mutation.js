@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-// import mapSeries from 'bluebird/mapSeries';
 import useMutation from 'lib/hooks/useMutation';
 import { useAppData, setData } from 'apollo/appData';
 import capitalize from 'lodash/capitalize';
@@ -53,24 +52,17 @@ export function useNodeMutation(metadata = {}, options) {
   const query = mutationGenerator({ url: `/${node}`, method });
   const [, setAppData] = useAppData();
   const defaultOptions = {
-    update: (cache) => {
-      setData({
+    update: () => {
+      setAppData({
         dialog: null,
         toast: message,
         dialogProcessing: false,
-      })(cache);
-      // setData('dialog', null)(cache);
-      // setToast(message)(cache);
-      // setData('dialogProcessing', false)(cache);
+      });
       callback();
     },
   };
   const [mutation, state] = useMutation(query, { ...defaultOptions, ...options });
-  return [onMutate, state];
-  function onMutate(params) {
-    setAppData('dialogProcessing', true);
-    return mutation(params);
-  }
+  return [mutation, state];
 }
 
 export function deleteMutation({ keys = ['NoResponse'], url }) {
@@ -99,12 +91,4 @@ export function generateMutation({ keys = ['NoResponse'], method = 'POST', url }
 
 export function applyUpdates(...fns) {
   return (cache, result) => Promise.mapSeries(fns, fn => fn(cache, result));
-}
-
-
-export function setToast(message, type = 'success') {
-  return cache => setData('toast', message ? {
-    message,
-    type,
-  } : null)(cache);
 }

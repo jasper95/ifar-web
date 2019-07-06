@@ -9,13 +9,16 @@ const dialogProps = ['dialogId', 'dialogActionsRenderer', 'dialogTitleRenderer',
 const formProps = ['initialFields', 'validator', 'customChangeHandler', 'onValid'];
 export default () => (WrappedComponent) => {
   function Dialog(props) {
-    const [appData, setAppData] = useAppData();
-    const [formState, formHandlers] = useForm(pick(props, formProps));
+    const [{ appData }, setAppData] = useAppData();
+    console.log('dialog appData: ', appData);
+    const [formState, formHandlers] = useForm(pick({ ...props, onValid }, formProps));
     return (
       <DialogLayout
         onContinue={() => formHandlers.onValidate(formState.fields)}
         onCancel={() => {
-          setAppData('dialog', null);
+          setAppData({
+            dialog: null,
+          });
         }}
         isProcessing={appData.dialogProcessing}
         {...pick(props, dialogProps)}
@@ -27,6 +30,13 @@ export default () => (WrappedComponent) => {
         />
       </DialogLayout>
     );
+
+    function onValid(...args) {
+      setAppData({
+        dialogProcessing: true,
+      });
+      props.onValid(...args);
+    }
   }
   Dialog.displayName = `withDialog(${WrappedComponent.displayName
       || WrappedComponent.name

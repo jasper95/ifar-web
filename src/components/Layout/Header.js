@@ -2,8 +2,6 @@ import React from 'react';
 import Link from 'react-router-dom/Link';
 import Button from 'react-md/lib/Buttons/Button';
 import ImageLoader from 'react-image';
-// import { Logout } from 'redux/auth/actions';
-// import { ShowDialog } from 'redux/app/actions';
 import DropdownMenu from 'react-md/lib/Menus/DropdownMenu';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Avatar from 'react-md/lib/Avatars/Avatar';
@@ -14,6 +12,11 @@ import Badge from 'react-md/lib/Badges/Badge';
 import { format as formatTime } from 'timeago.js';
 import gql from 'graphql-tag';
 import { useManualQuery, useAppData } from 'apollo/query';
+import { generateMutation } from 'apollo/mutation';
+import useMutation from 'lib/hooks/useMutation';
+import initialState from 'apollo/initialState';
+import cookie from 'js-cookie';
+import withRouter from 'react-router-dom/withRouter';
 
 import 'sass/components/nav/index.scss';
 
@@ -28,12 +31,16 @@ const NOTIFICATION_QUERY = gql`
   }
 `;
 
+const LOGOUT_MUTATION = generateMutation({ url: '/logout' });
+
 function Header(props) {
   const {
     avatarLink = '',
   } = props;
-  const [appData] = useAppData();
+  const [{ appData }, setAppData] = useAppData();
+  console.log('header appData: ', appData);
   const { auth: user } = appData;
+  const [onLogout] = useMutation(LOGOUT_MUTATION);
   const [notifStates, notifHandlers] = useManualQuery(
     NOTIFICATION_QUERY,
     {
@@ -59,9 +66,7 @@ function Header(props) {
           <div className="nav_menu">
             <ul className="nav_menu_list">
               <li className="nav_menu_list_item">
-                <Link to="/">
-                  <a>Home</a>
-                </Link>
+                <Link to="/">Home</Link>
               </li>
             </ul>
           </div>
@@ -76,9 +81,9 @@ function Header(props) {
   function renderProfileNav() {
     let profileNav = (
       <Link to="/login">
-        <Button flat className="iBttn iBttn-primary nav_profile_login">
+        <div className="iBttn iBttn-primary nav_profile_login">
           Login
-        </Button>
+        </div>
       </Link>
     );
     if (isAuthenticated) {
@@ -101,9 +106,8 @@ function Header(props) {
               className="name"
             >
               <Link to={profileLink}>
-                <a>
-                  {displayName}
-                </a>
+                {displayName}
+
               </Link>
             </p>
             <p
@@ -127,7 +131,7 @@ function Header(props) {
             }}
           >
             <Badge
-              badgeContent={Number(user.unread_notifications)}
+              badgeContent={Number(user.notifications_aggregate.aggregate.count)}
               invisibleOnZero
               secondary
               badgeId="notifications-2"
@@ -145,19 +149,6 @@ function Header(props) {
     return profileNav;
   }
 
-  function handleClickLogout() {
-    dispatch(ShowDialog({
-      path: 'Confirm',
-      props: {
-        title: 'Confirm Logout',
-        message: 'Do you really want to logout?',
-        onValid: () => {
-          dispatch(Logout());
-        },
-      },
-    }));
-  }
-
   function renderNotifications() {
     const { notification: notifications = [] } = notifStates.data;
     const unreadNotifications = notifications.filter(e => e.status === 'unread');
@@ -171,34 +162,46 @@ function Header(props) {
     ].filter(Boolean);
   }
 
-  function itemMapper(item) {
-    const { id, body: { icon, type, message }, created_date: createdDate } = item;
-    return (
-      <ListItem
-        key={id}
-        leftAvatar={(
-          <Avatar
-            suffix={type === 'success' ? 'green' : 'yellow'}
-            icon={<FontIcon>{icon}</FontIcon>}
-          />
-)}
-        primaryText={message}
-        secondaryText={formatTime(createdDate)}
-      />
-    );
+  function handleClickLogout() {
+    setAppData({
+      dialog: {
+        path: 'Confirm',
+        props: {
+          title: 'Confirm Logout',
+          message: 'Do you really want to logout?',
+          onValid: () => onLogout({
+            variables: {
+              input: {},
+            },
+            update: onLogoutSucess,
+          }),
+        },
+      },
+    });
   }
 
-  function handleGetNotification() {
-    // notifHandlers.onQuery()
-    // dispatch(SetUserAuth({
-    //   ...user,
-    //   unread_notifications: 0
-    // }))
-    // dispatch(GetProfileData({
-    //   key: 'notifications',
-    //   url: '/user/notification'
-    // }))
+  function onLogoutSucess() {
+    setAppData(initialState);
+    cookie.remove('token');
   }
 }
 
-export default Header;
+
+function itemMapper(item) {
+  const { id, body: { icon, type, message }, created_date: createdDate } = item;
+  return (
+    <ListItem
+      key={id}
+      leftAvatar={(
+        <Avatar
+          suffix={type === 'success' ? 'green' : 'yellow'}
+          icon={<FontIcon>{icon}</FontIcon>}
+        />
+      )}
+      primaryText={message}
+      secondaryText={formatTime(createdDate)}
+    />
+  );
+}
+
+export default withRouter(Header);

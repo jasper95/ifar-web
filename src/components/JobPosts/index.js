@@ -69,9 +69,10 @@ function Posts(props) {
   if (error) {
     return 'Error';
   }
+  const { job = [] } = data;
   return (
     <>
-      {data.job.map(post => (
+      {job.map(post => (
         <PostComponent key={post.id} post={post} />
       ))}
     </>

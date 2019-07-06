@@ -17,8 +17,8 @@ function generateQueryByFilter({
 }
 
 export function generateQueryById({ node, keys = ['id', 'name'] }) {
-  const filters = 'where: {id: {_eq: $id }}';
-  const variables = '$id: uuid';
+  const filters = 'id: $id';
+  const variables = '$id: uuid!';
   return generateQueryByFilter({
     node, variables, filters, keys,
   });

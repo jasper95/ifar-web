@@ -75,7 +75,7 @@ const ROLE_NAV = {
 
 function ProfileNavigation(props) {
   const { router, avatarLink, profileLink } = props;
-  const [appData] = useAppData();
+  const [{ appData }] = useAppData();
   const { auth: user } = appData;
   if (!user) {
     return null;

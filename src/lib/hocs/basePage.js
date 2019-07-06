@@ -15,7 +15,7 @@ const withBasePage = params => (WrappedComponent) => {
     dialogProps = {},
   } = params;
   function BasePage(props) {
-    const [appData, setAppData] = useAppData();
+    const [{ appData }, setAppData] = useAppData();
     const { auth } = appData;
     const { data: listData, refetch } = useQuery(listQuery, { variables: { user_id: auth && auth.id } });
     const [, detailsHandler] = useManualQuery(detailsQuery);

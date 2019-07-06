@@ -3,11 +3,13 @@ import Page from 'components/Layout/Page';
 import Button from 'react-md/lib/Buttons/Button';
 import TextField from 'react-md/lib/TextFields/TextField';
 import Link from 'react-router-dom/Link';
-import { generateMutation, setToast, applyUpdates } from 'apollo/mutation';
+import { generateMutation } from 'apollo/mutation';
 import { useMutation } from 'react-apollo-hooks';
 import useForm from 'lib/hooks/useForm';
+import { useAppData } from 'apollo/appData';
+import withRouter from 'react-router-dom/withRouter';
 import { getValidationResult, delay } from 'lib/tools';
-import yup from 'yup';
+import * as yup from 'yup';
 import cn from 'classnames';
 import 'sass/pages/signup.scss';
 
@@ -22,8 +24,9 @@ const initialFields = {
 };
 const SIGNUP_MUTATION = generateMutation({ url: '/signup' });
 
-export default function SignupPage() {
+function SignupPage(props) {
   const [onSignup, signupState] = useMutation(SIGNUP_MUTATION);
+  const [, setAppData] = useAppData();
   const [formState, formHandlers] = useForm({ initialFields, validator, onValid });
   const {
     onElementChange,
@@ -38,7 +41,6 @@ export default function SignupPage() {
       hasNavigation={false}
       hasFooter={false}
     >
-
       <div className="authContainer">
         <div className="authContainer_content">
 
@@ -172,39 +174,43 @@ export default function SignupPage() {
     </Page>
   );
 
-  function onValid(data) {
-    onSignup({
+  async function onValid(data) {
+    const { history } = props;
+    await onSignup({
       variables: {
         input: data,
       },
-      update: applyUpdates(
-        setToast('Account successfully registered. Please verify your email to login'),
-        () => delay(3000),
-        setToast(null),
-        () => Router.push('/login'),
-      ),
+    });
+    setAppData({
+      toast: {
+        message: 'Account successfully registered. Please verify your email to login',
+        type: 'success',
+      },
+    });
+    await delay(3000);
+    history.push('/login');
+    setAppData({
+      toast: null,
     });
   }
 }
 
+export default withRouter(SignupPage);
+
 function validator(data) {
-  const schema = yup.object().keys({
-    company_name: joi
-      .alternatives()
-      .when('role', { is: 'ADMIN', then: yup.string().required(), otherwise: yup.optional() })
-      .error(() => 'Company Name is required'),
-    first_name: joi
-      .alternatives()
-      .when('role', { is: 'USER', then: yup.string().required(), otherwise: yup.optional() })
-      .error(() => 'First Name is required'),
-    last_name: joi
-      .alternatives()
-      .when('role', { is: 'USER', then: yup.string().required(), otherwise: yup.optional() })
-      .error(() => 'Last Name is required'),
-    email: yup.string().email().required()
-      .error(() => 'Invalid Email'),
-    password: yup.string().required()
-      .error(() => 'Password is required'),
+  const schema = yup.object({
+    role: yup.string().oneOf(['USER', 'ADMIN']).required(),
+    company_name: yup
+      .string()
+      .when('role', { is: 'ADMIN', then: yup.string().required('Company name is required') }),
+    first_name: yup
+      .string()
+      .when('role', { is: 'USER', then: yup.string().required('First name is required') }),
+    last_name: yup
+      .string()
+      .when('role', { is: 'USER', then: yup.string().required('Last name is required') }),
+    email: yup.string().email('Invalid Email').required('Email is required'),
+    password: yup.string().required('Password is required'),
   });
   return getValidationResult(data, schema);
 }
