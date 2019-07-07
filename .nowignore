@@ -10,3 +10,9 @@ dockerfile
 Procfile
 README.md
 build
+public
+ssr
+server.js
+.eslintrc.js
+LICENSE
+package.json

@@ -1,9 +1,55 @@
+import { useState } from 'react';
 import gql from 'graphql-tag';
-import useMutation from 'lib/hooks/useMutation';
-import { useAppData, setData } from 'apollo/appData';
 import capitalize from 'lodash/capitalize';
+import fetch from 'isomorphic-unfetch';
+import { useSelector, useDispatch } from 'react-redux';
 
-export { setData };
+const simpleFn = () => {};
+const basicAuth = Buffer.from(`${process.env.API_USERNAME}:${process.env.API_PASSWORD}`).toString('base64');
+
+export default function useMutation(params) {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.app.token);
+  const [data, setData] = useState();
+  const [error, setError] = useState();
+
+  const state = {
+    loading,
+    data,
+    error,
+  };
+
+  return [state, mutate];
+  async function mutate(params2) {
+    setLoading(true);
+    const {
+      data: body = {}, url, method = 'POST', onSuccess = simpleFn, onError = simpleFn,
+    } = { ...params, ...params2 };
+    const options = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token ? `Bearer ${token}` : `Basic ${basicAuth}`,
+      },
+      body: JSON.stringify(body),
+    };
+    let response = await fetch(`${process.env.API_URL}${url}`, options);
+    const { status } = response;
+    response = await response.json();
+    setLoading(false);
+    if (status === 200) {
+      setData(response);
+      onSuccess(response);
+      return;
+    }
+    const err = {
+      message: status === 400 ? response.message : 'Something went wrong',
+    };
+    dispatch({ type: 'ERROR', payload: err });
+    setError(err);
+  }
+}
 
 export function useCreateNode(metadata = {}, options) {
   const {
@@ -41,28 +87,14 @@ export function useDeleteNode(metadata = {}, options) {
   }, options);
 }
 
-export function useNodeMutation(metadata = {}, options) {
-  const {
-    node,
-    message,
-    callback = () => {},
-    method,
-  } = metadata;
-  const mutationGenerator = method === 'DELETE' ? deleteMutation : generateMutation;
-  const query = mutationGenerator({ url: `/${node}`, method });
-  const [, setAppData] = useAppData();
-  const defaultOptions = {
-    update: () => {
-      setAppData({
-        dialog: null,
-        toast: message,
-        dialogProcessing: false,
-      });
-      callback();
-    },
+export function useNodeMutation(params) {
+  const dispatch = useDispatch();
+  const { callback = () => {}, message } = params;
+  const onSuccess = (data) => {
+    dispatch({ type: 'SUCCESS', payload: { message } });
+    callback(data);
   };
-  const [mutation, state] = useMutation(query, { ...defaultOptions, ...options });
-  return [mutation, state];
+  return useMutation({ ...params, onSuccess });
 }
 
 export function deleteMutation({ keys = ['NoResponse'], url }) {

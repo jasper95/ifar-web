@@ -2,25 +2,22 @@ import React from 'react';
 import DialogLayout from 'components/Layout/Dialog';
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
-import { useAppData } from 'apollo/query';
 import useForm from 'lib/hooks/useForm';
+import { useSelector, useDispatch } from 'react-redux';
 
 const dialogProps = ['dialogId', 'dialogActionsRenderer', 'dialogTitleRenderer', 'title', 'dialogClass'];
 const formProps = ['initialFields', 'validator', 'customChangeHandler', 'onValid'];
+
 export default () => (WrappedComponent) => {
   function Dialog(props) {
-    const [{ appData }, setAppData] = useAppData();
-    console.log('dialog appData: ', appData);
-    const [formState, formHandlers] = useForm(pick({ ...props, onValid }, formProps));
+    const dispatch = useDispatch();
+    const dialogProcessing = useSelector(state => state.app.dialogProcessing);
+    const [formState, formHandlers] = useForm(pick(props, formProps));
     return (
       <DialogLayout
         onContinue={() => formHandlers.onValidate(formState.fields)}
-        onCancel={() => {
-          setAppData({
-            dialog: null,
-          });
-        }}
-        isProcessing={appData.dialogProcessing}
+        onCancel={() => dispatch({ type: 'HIDE_DIALOG' })}
+        isProcessing={dialogProcessing}
         {...pick(props, dialogProps)}
       >
         <WrappedComponent
@@ -30,13 +27,6 @@ export default () => (WrappedComponent) => {
         />
       </DialogLayout>
     );
-
-    function onValid(...args) {
-      setAppData({
-        dialogProcessing: true,
-      });
-      props.onValid(...args);
-    }
   }
   Dialog.displayName = `withDialog(${WrappedComponent.displayName
       || WrappedComponent.name

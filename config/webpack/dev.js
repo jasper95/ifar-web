@@ -24,6 +24,9 @@ const result = baseConfig({
       'react-dom': '@hot-loader/react-dom',
     },
   },
+  output: {
+    publicPath: '/',
+  },
   devServer: {
     open: true,
     port: process.env.PORT || 3000,

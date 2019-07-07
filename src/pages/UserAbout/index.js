@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Paper from 'react-md/lib/Papers/Paper';
 import flowRight from 'lodash/flowRight';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Profile from 'components/Profile';
-import withAuth from 'lib/hocs/apolloAuth';
+import { withAuth } from 'apollo/auth';
 import Button from 'react-md/lib/Buttons/Button';
-import {
-  ShowDialog,
-  Upload,
-} from 'redux/app/actions';
-import {
-  SetUserAuth,
-} from 'redux/auth/actions';
+import AuthContext from 'apollo/AuthContext';
+// import {
+//   ShowDialog,
+//   Upload,
+// } from 'redux/app/actions';
+// import {
+//   SetUserAuth,
+// } from 'redux/auth/actions';
 import day from 'dayjs';
 import {
   formatDateToISO, formatISOToDate, getAddressDescription,
@@ -20,13 +21,13 @@ import { formatAddress } from 'components/Profile/User';
 import { useAppData } from 'apollo/query';
 import { useUpdateNode } from 'apollo/mutation';
 
-function AboutMe(props) {
-  const [{ appData }, setAppData] = useAppData();
+function AboutMe() {
+  const { data: user } = useContext(AuthContext);
+  const [, setAppData] = useAppData();
   const [updateNode] = useUpdateNode({
     node: 'system_user',
     message: 'Profile details successfull updated',
   });
-  const { auth: user } = appData;
   if (!user) {
     return null;
   }
@@ -91,30 +92,30 @@ function AboutMe(props) {
   }
 
   function handleUploadResume() {
-    dispatch(ShowDialog({
-      path: 'Upload',
-      props: {
-        title: 'Upload Resume',
-        onValid: (data) => {
-          dispatch(Upload({
-            data: {
-              ...data,
-              node: 'user',
-              id: user.id,
-              type: 'resume',
-            },
-            callback: handleUpdateCallback,
-          }));
-        },
-      },
-    }));
+    // dispatch(ShowDialog({
+    //   path: 'Upload',
+    //   props: {
+    //     title: 'Upload Resume',
+    //     onValid: (data) => {
+    //       dispatch(Upload({
+    //         data: {
+    //           ...data,
+    //           node: 'user',
+    //           id: user.id,
+    //           type: 'resume',
+    //         },
+    //         callback: handleUpdateCallback,
+    //       }));
+    //     },
+    //   },
+    // }));
   }
 
   function handleUpdateCallback(data) {
-    dispatch(SetUserAuth({
-      ...user,
-      ...data,
-    }));
+    // dispatch(SetUserAuth({
+    //   ...user,
+    //   ...data,
+    // }));
   }
 }
 

@@ -1,28 +1,12 @@
 import React from 'react';
 import flowRight from 'lodash/flowRight';
-import withAuth from 'lib/hocs/apolloAuth';
+import { withAuth } from 'apollo/auth';
 import DateCell from 'components/DateCell';
 import ProfilePage, { profilePropsKeys, dataFormatter } from 'components/Profile/ProfilePage';
 import withBasePage from 'lib/hocs/basePage';
 import pick from 'lodash/pick';
 import { generateQueryById } from 'apollo/query';
 import gql from 'graphql-tag';
-
-const EDUCATION_QUERY = gql`
-  query getEducation($user_id: uuid) {
-    education(where: {user_id: {_eq: $user_id}}) {
-      id,
-      school
-      job_category {
-        id
-        name
-      }
-      start_date
-      end_date
-      qualification
-    }
-  }
-`;
 
 function Education(props) {
   const { onDelete, onEdit } = props;
@@ -68,6 +52,22 @@ function Education(props) {
     ];
   }
 }
+
+const EDUCATION_QUERY = gql`
+  query getEducation($user_id: uuid) {
+    education(where: {user_id: {_eq: $user_id}}) {
+      id,
+      school
+      job_category {
+        id
+        name
+      }
+      start_date
+      end_date
+      qualification
+    }
+  }
+`;
 
 const fields = ['id', 'job_category { id name }', 'start_date', 'end_date', 'qualification', 'school'];
 

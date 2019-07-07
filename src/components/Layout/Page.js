@@ -5,19 +5,25 @@ import { Helmet as Head } from 'react-helmet';
 import { withRouter } from 'react-router';
 import flow from 'lodash/flow';
 import Snackbar from 'components/Snackbar';
-import { useAppData } from 'apollo/appData';
+import pick from 'lodash/pick';
+import { createSelector } from 'reselect';
+import { useSelector, useDispatch } from 'react-redux';
 import Footer from './Footer';
 import Header from './Header';
 
 const AsyncDialog = loadable(props => import(`components/Dialogs/${props.path}`));
-
+const pageSelector = createSelector(
+  state => pick(state.app, 'toast', 'dialog'),
+  e => e,
+);
 function Page(props) {
   const {
     children,
     hasNavigation, hasFooter,
     pageId, className, pageDescription, router,
   } = props;
-  const [{ appData }, setAppData] = useAppData();
+  const appData = useSelector(pageSelector);
+  const dispatch = useDispatch();
   const { toast, dialog } = appData;
   let { pageTitle } = props;
   if (pageTitle) {
@@ -54,7 +60,7 @@ function Page(props) {
       )}
       {toast && (
         <Snackbar
-          onClose={() => setAppData({ toast: null })}
+          onClose={() => dispatch({ type: 'HIDE_NOTIFICATION' })}
           open={!!toast}
           {...toast}
         />

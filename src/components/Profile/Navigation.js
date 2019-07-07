@@ -1,18 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { withRouter } from 'react-router';
 import List from 'react-md/lib/Lists/List';
 import ListItem from 'react-md/lib/Lists/ListItem';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Button from 'react-md/lib/Buttons/Button';
 import ImageLoader from 'react-image';
-// import {
-//   ShowDialog,
-//   Upload,
-// } from 'redux/app/actions';
-// import {
-//   SetUserAuth,
-// } from 'redux/auth/actions';
-import { useAppData } from 'apollo/query';
+import flowRight from 'lodash/flowRight';
+import AuthContext from 'apollo/AuthContext';
+import history from 'lib/history';
 
 function MenuItem(props) {
   const {
@@ -20,9 +15,7 @@ function MenuItem(props) {
   } = props;
   return (
     <ListItem
-      onClick={() => {
-        // Router.push(link);
-      }}
+      onClick={() => history.push(link)}
       className="profileNavCard_menu_item"
       active={active}
       primaryText={label}
@@ -36,7 +29,7 @@ const ROLE_NAV = {
     {
       icon: 'work',
       label: 'Work Experience',
-      link: '/profile/experience',
+      link: '/profile/experiences',
     },
     {
       icon: 'school',
@@ -46,7 +39,7 @@ const ROLE_NAV = {
     {
       icon: 'account_box',
       label: 'Skills',
-      link: '/profile/skill',
+      link: '/profile/skills',
     },
     {
       icon: 'account_box',
@@ -74,9 +67,11 @@ const ROLE_NAV = {
 };
 
 function ProfileNavigation(props) {
-  const { router, avatarLink, profileLink } = props;
-  const [{ appData }] = useAppData();
-  const { auth: user } = appData;
+  const { location, avatarLink, profileLink } = props;
+  const { data: user, loading: authIsLoading } = useContext(AuthContext);
+  if (authIsLoading) {
+    return (<div>Loading...</div>);
+  }
   if (!user) {
     return null;
   }
@@ -125,7 +120,7 @@ function ProfileNavigation(props) {
         <List className="profileNavCard_menu">
           {navItems.map(({ icon, label, link }) => (
             <MenuItem
-              active={router.pathname === link}
+              active={location.pathname.includes(link)}
               icon={icon}
               label={label}
               link={link}
@@ -138,37 +133,37 @@ function ProfileNavigation(props) {
   );
 
   function handleEditAvatar() {
-    const { dispatch, isAdmin } = props;
-    const payload = isAdmin ? {
-      node: 'company',
-      id: user.company_id,
-    } : {
-      node: 'user',
-      id: user.id,
-    };
-    dispatch(ShowDialog({
-      path: 'Upload',
-      props: {
-        title: 'Upload Avatar',
-        onValid: (data) => {
-          dispatch(Upload({
-            data: {
-              ...data,
-              ...payload,
-              type: 'avatar',
-            },
-            callback: ({ updated_date }) => {
-              if (isAdmin) {
-                const { company } = user;
-                dispatch(SetUserAuth({ ...user, company: { ...company, updated_date } }));
-              } else {
-                dispatch(SetUserAuth({ ...user, updated_date }));
-              }
-            },
-          }));
-        },
-      },
-    }));
+    // const { dispatch, isAdmin } = props;
+    // const payload = isAdmin ? {
+    //   node: 'company',
+    //   id: user.company_id,
+    // } : {
+    //   node: 'user',
+    //   id: user.id,
+    // };
+    // dispatch(ShowDialog({
+    //   path: 'Upload',
+    //   props: {
+    //     title: 'Upload Avatar',
+    //     onValid: (data) => {
+    //       dispatch(Upload({
+    //         data: {
+    //           ...data,
+    //           ...payload,
+    //           type: 'avatar',
+    //         },
+    //         callback: ({ updated_date }) => {
+    //           if (isAdmin) {
+    //             const { company } = user;
+    //             dispatch(SetUserAuth({ ...user, company: { ...company, updated_date } }));
+    //           } else {
+    //             dispatch(SetUserAuth({ ...user, updated_date }));
+    //           }
+    //         },
+    //       }));
+    //     },
+    //   },
+    // }));
   }
 }
 

@@ -5,17 +5,17 @@ import { RestLink } from 'apollo-link-rest';
 import { setContext } from 'apollo-link-context';
 import ApolloClient from 'apollo-client';
 import { onError } from 'apollo-link-error';
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 import jwt from 'jsonwebtoken';
 import { setData } from 'apollo/mutation';
 
 let apolloClient = null;
 const isBrowser = typeof window === 'object';
 
-if (!isBrowser) {
-  global.fetch = fetch;
-  global.Headers = fetch.Headers;
-}
+// if (!isBrowser) {
+//   global.fetch = fetch;
+//   global.Headers = fetch.Headers;
+// }
 
 function create(initialState, { getToken, fetchOptions }) {
   const errorLink = onError((err) => {
@@ -39,16 +39,16 @@ function create(initialState, { getToken, fetchOptions }) {
       }
     }
   });
-  const restAuthLink = setContext((_, { headers }) => {
-    const token = getToken();
-    const basicAuth = Buffer.from(`${process.env.API_USERNAME}:${process.env.API_PASSWORD}`).toString('base64');
-    return {
-      headers: {
-        ...headers,
-        Authorization: token ? `Bearer ${token}` : `Basic ${basicAuth}`,
-      },
-    };
-  });
+  // const restAuthLink = setContext((_, { headers }) => {
+  //   const token = getToken();
+  //   const basicAuth = Buffer.from(`${process.env.API_USERNAME}:${process.env.API_PASSWORD}`).toString('base64');
+  //   return {
+  //     headers: {
+  //       ...headers,
+  //       Authorization: token ? `Bearer ${token}` : `Basic ${basicAuth}`,
+  //     },
+  //   };
+  // });
   const httpAuthLink = setContext((_, { headers }) => {
     const token = getToken() || jwt.sign({
       hasura_claims: {
@@ -64,11 +64,11 @@ function create(initialState, { getToken, fetchOptions }) {
       },
     };
   });
-  const restLink = new RestLink({
-    uri: 'https://jobhunt-api.herokuapp.com',
-    credentials: 'same-origin',
-    customFetch: fetch,
-  });
+  // const restLink = new RestLink({
+  //   uri: 'https://jobhunt-api.herokuapp.com',
+  //   credentials: 'same-origin',
+  //   customFetch: fetch,
+  // });
   const httpLink = new HttpLink({
     uri: 'https://jobhunt-graphql.herokuapp.com/v1/graphql',
     credentials: 'same-origin',
@@ -87,8 +87,8 @@ function create(initialState, { getToken, fetchOptions }) {
     cache,
     link: ApolloLink.from([
       errorLink,
-      restAuthLink,
-      restLink,
+      // restAuthLink,
+      // restLink,
       httpAuthLink,
       httpLink,
     ]),

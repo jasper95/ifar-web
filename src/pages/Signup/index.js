@@ -3,8 +3,7 @@ import Page from 'components/Layout/Page';
 import Button from 'react-md/lib/Buttons/Button';
 import TextField from 'react-md/lib/TextFields/TextField';
 import Link from 'react-router-dom/Link';
-import { generateMutation } from 'apollo/mutation';
-import { useMutation } from 'react-apollo-hooks';
+import useMutation, { generateMutation } from 'apollo/mutation';
 import useForm from 'lib/hooks/useForm';
 import { useAppData } from 'apollo/appData';
 import withRouter from 'react-router-dom/withRouter';
@@ -25,7 +24,7 @@ const initialFields = {
 const SIGNUP_MUTATION = generateMutation({ url: '/signup' });
 
 function SignupPage(props) {
-  const [onSignup, signupState] = useMutation(SIGNUP_MUTATION);
+  const [signupState, onSignup] = useMutation(SIGNUP_MUTATION);
   const [, setAppData] = useAppData();
   const [formState, formHandlers] = useForm({ initialFields, validator, onValid });
   const {

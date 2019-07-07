@@ -1,13 +1,18 @@
 
-import React, { createContext, useContext, useMemo } from 'react';
+import React, {
+  useContext, useMemo, useEffect, useRef,
+} from 'react';
+import { useSelector } from 'react-redux';
 import { useQuery } from 'react-apollo-hooks';
 import { Redirect } from 'react-router';
 import jwt from 'jsonwebtoken';
 import gql from 'graphql-tag';
+import AuthContext from 'apollo/AuthContext';
+import history from 'lib/history';
 import { generateQueryById } from './query';
 
 const sessionQuery = generateQueryById({
-  node: 'user_session_by_pk',
+  node: 'user_session',
   keys: [
     'id',
     `system_user {
@@ -22,12 +27,13 @@ const sessionQuery = generateQueryById({
       resume
       nationality
       birth_date
+      slug
       company {
         id
         name
         slug
       }
-      notifications_aggregate(where: {status: {_eq: "unread"}}, order_by: {created_date: desc}) {
+      notifications_aggregate(where: {status: {_eq: "unread"}}) {
         aggregate {
           count
         }
@@ -35,8 +41,6 @@ const sessionQuery = generateQueryById({
     }`,
   ],
 });
-
-export const AuthContext = createContext();
 
 const tokenQuery = gql`
   {
@@ -55,12 +59,19 @@ function getSessionId(token) {
 
 export default function AppWithAuth(props) {
   const { children } = props;
-  const { data: { token = '' } } = useQuery(tokenQuery);
+  const token = useSelector(state => state.app.token);
   const sessionId = useMemo(() => getSessionId(token), [token]);
   const authResponse = useQuery(sessionQuery, { skip: !sessionId, variables: { id: sessionId } });
-  console.log('AppWithAuth render');
+  const { data: authData = {}, loading, error } = authResponse;
+  const { user_session_by_pk: session = {} } = authData;
+  const { system_user: auth = null } = session;
   return (
-    <AuthContext.Provider value={authResponse}>
+    <AuthContext.Provider value={{
+      loading,
+      error,
+      data: auth,
+    }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -69,13 +80,12 @@ export default function AppWithAuth(props) {
 export const withAuth = (params = { }) => (WrappedComponent) => {
   const { requireAuth = true } = params;
   function Auth(props) {
-    console.log('render', requireAuth);
-
-    const authResponse = useContext(AuthContext);
-    const { data: authData = {}, loading, error } = authResponse;
-    const { user_session_by_pk: session = {} } = authData;
-    const { system_user: auth = null } = session;
-    if (loading && requireAuth !== 'optional') {
+    const isMounted = useRef(false);
+    const { data: auth, loading, error } = useContext(AuthContext);
+    useEffect(() => {
+      isMounted.current = true;
+    }, []);
+    if (!isMounted.current && loading && requireAuth !== 'optional') {
       return (<span>Loading...</span>);
     }
     if ((!auth || error) && requireAuth === true) {
@@ -83,7 +93,6 @@ export const withAuth = (params = { }) => (WrappedComponent) => {
     } if (auth && requireAuth === false) {
       return (<Redirect to="/" />);
     }
-    console.log('lahos');
     return (
       <WrappedComponent {...props} />
     );

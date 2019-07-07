@@ -118,16 +118,15 @@ function ForgotPassword() {
   function onValid(data) {
     if (!captcha) {
       setCaptchaErr('Please check the captcha');
-      return;
     }
-    dispatch(Create({
-      data,
-      node: 'forgot-password',
-      successMessage: 'Reset Password Link successfully sent to email',
-      formType: 'default',
-      callbackDelay: 2000,
-      callback: () => setShowSuccess(true),
-    }));
+    // dispatch(Create({
+    //   data,
+    //   node: 'forgot-password',
+    //   successMessage: 'Reset Password Link successfully sent to email',
+    //   formType: 'default',
+    //   callbackDelay: 2000,
+    //   callback: () => setShowSuccess(true),
+    // }));
     // dispatch(Login(data))
   }
 }

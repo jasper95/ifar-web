@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import CreatableSelect from 'react-select/lib/Creatable';
 
 const components = {

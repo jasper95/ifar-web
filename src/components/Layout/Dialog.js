@@ -68,7 +68,7 @@ function DialogLayout(props) {
       actions={(
         <DialogActions {...pick(props, ['onContinue', 'onCancel', 'isProcessing'])} />
       )}
-      {...pick(props, 'dialogClassName', 'footerClassName', 'titleClassName', 'contentClassName')}
+      {...pick(props, 'dialogClassName', 'footerClassName', 'titleClassName', 'contentClassName', 'onHide')}
     />
   );
 }

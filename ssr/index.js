@@ -53,6 +53,12 @@ export default async function serverRender(req, res) {
   } catch (err) {
     console.log('err', err);
   }
+  if (context.url) {
+    res.writeHead(302, {
+      Location: context.url,
+    });
+    return res.end();
+  }
   const initialData = `
     <script>
       window.__APOLLO_STATE__ = ${serialize(apollo.cache.extract(), { isJSON: true })}
@@ -67,5 +73,5 @@ export default async function serverRender(req, res) {
   });
   res.setHeader('Content-Type', 'text/html');
   res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
-  res.send(result);
+  return res.send(result);
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Link from 'react-router-dom/Link';
 import Button from 'react-md/lib/Buttons/Button';
 import ImageLoader from 'react-image';
@@ -12,8 +12,9 @@ import Badge from 'react-md/lib/Badges/Badge';
 import { format as formatTime } from 'timeago.js';
 import gql from 'graphql-tag';
 import { useManualQuery, useAppData } from 'apollo/query';
-import { generateMutation } from 'apollo/mutation';
-import useMutation from 'lib/hooks/useMutation';
+import AuthContext from 'apollo/AuthContext';
+import useMutation, { generateMutation } from 'apollo/mutation';
+
 import initialState from 'apollo/initialState';
 import cookie from 'js-cookie';
 import withRouter from 'react-router-dom/withRouter';
@@ -37,10 +38,9 @@ function Header(props) {
   const {
     avatarLink = '',
   } = props;
-  const [{ appData }, setAppData] = useAppData();
-  console.log('header appData: ', appData);
-  const { auth: user } = appData;
-  const [onLogout] = useMutation(LOGOUT_MUTATION);
+  const [, setAppData] = useAppData();
+  const { data: user, loading: authIsLoading } = useContext(AuthContext);
+  const [, onLogout] = useMutation(LOGOUT_MUTATION);
   const [notifStates, notifHandlers] = useManualQuery(
     NOTIFICATION_QUERY,
     {
@@ -79,74 +79,76 @@ function Header(props) {
   );
 
   function renderProfileNav() {
-    let profileNav = (
-      <Link to="/login">
-        <div className="iBttn iBttn-primary nav_profile_login">
-          Login
-        </div>
-      </Link>
-    );
-    if (isAuthenticated) {
-      const profileLink = user.company ? `/company/${user.company.slug}` : `/user/${user.slug}`;
-      const displayName = [
-        user.first_name,
-        user.last_name,
-        user.company && user.company.name,
-      ].filter(Boolean).join(' ');
-      profileNav = (
-        <>
-          <div className="nav_profile_avatar">
-            <ImageLoader
-              key={avatarLink}
-              src={[avatarLink, '/static/img/default-avatar.png']}
-            />
+    if (authIsLoading) {
+      return (<div>Loading...</div>);
+    }
+    if (!isAuthenticated) {
+      return (
+        <Link to="/login">
+          <div className="iBttn iBttn-primary nav_profile_login">
+            Login
           </div>
-          <div className="nav_profile_content">
-            <p
-              className="name"
-            >
-              <Link to={profileLink}>
-                {displayName}
-
-              </Link>
-            </p>
-            <p
-              className="logout"
-              onClick={handleClickLogout}
-            >
-              Logout
-            </p>
-          </div>
-          <DropdownMenu
-            id="notif"
-            menuItems={renderNotifications()}
-            onVisibilityChange={(visible) => {
-              if (visible) {
-                notifHandlers.onQuery();
-              }
-            }}
-            anchor={{
-              x: DropdownMenu.HorizontalAnchors.INNER_LEFT,
-              y: DropdownMenu.VerticalAnchors.BOTTOM,
-            }}
-          >
-            <Badge
-              badgeContent={Number(user.notifications_aggregate.aggregate.count)}
-              invisibleOnZero
-              secondary
-              badgeId="notifications-2"
-            >
-              <Button
-                icon
-                children="notifications"
-                className="nav_profile_notification"
-              />
-            </Badge>
-          </DropdownMenu>
-        </>
+        </Link>
       );
     }
-    return profileNav;
+    const profileLink = user.company ? `/companies/${user.company.slug}` : `/users/${user.slug}`;
+    const displayName = [
+      user.first_name,
+      user.last_name,
+      user.company && user.company.name,
+    ].filter(Boolean).join(' ');
+    return (
+      <>
+        <div className="nav_profile_avatar">
+          <ImageLoader
+            key={avatarLink}
+            src={[avatarLink, '/static/img/default-avatar.png']}
+          />
+        </div>
+        <div className="nav_profile_content">
+          <p
+            className="name"
+          >
+            <Link to={profileLink}>
+              {displayName}
+
+            </Link>
+          </p>
+          <p
+            className="logout"
+            onClick={handleClickLogout}
+          >
+            Logout
+          </p>
+        </div>
+        <DropdownMenu
+          id="notif"
+          menuItems={renderNotifications()}
+          onVisibilityChange={(visible) => {
+            if (visible) {
+              notifHandlers.onQuery();
+            }
+          }}
+          anchor={{
+            x: DropdownMenu.HorizontalAnchors.INNER_LEFT,
+            y: DropdownMenu.VerticalAnchors.BOTTOM,
+          }}
+        >
+          <Badge
+            badgeContent={Number(user.notifications_aggregate.aggregate.count)}
+            invisibleOnZero
+            secondary
+            badgeId="notifications-2"
+          >
+            <Button
+              icon
+              children="notifications"
+              className="nav_profile_notification"
+            />
+          </Badge>
+        </DropdownMenu>
+      </>
+    );
   }
 
   function renderNotifications() {

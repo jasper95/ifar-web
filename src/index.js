@@ -5,7 +5,7 @@ import initialApolloState from 'apollo/initialState';
 import { parseCookies } from 'lib/tools';
 import { loadableReady } from '@loadable/component';
 import WebFontLoader from 'webfontloader';
-
+import configureStore from 'redux/configureStore';
 import Root from './App';
 
 WebFontLoader.load({
@@ -36,9 +36,10 @@ const { __APOLLO_STATE__: apolloState = initialApolloState } = window;
 
 const apolloClient = initApollo(apolloState, { getToken: () => parseCookies().token });
 
+const store = configureStore({}, { getToken: () => parseCookies().token });
 const renderFn = isProduction ? hydrate : render;
 const preLoadFn = isProduction ? loadableReady : cb => cb();
 
 preLoadFn(() => renderFn(
-  <Root apolloClient={apolloClient} />, document.getElementById('root'),
+  <Root store={store} apolloClient={apolloClient} />, document.getElementById('root'),
 ));

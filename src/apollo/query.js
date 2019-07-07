@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useApolloClient } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
-import { QUERY, useAppData } from './appData';
+import { useAppData } from './appData';
 
-export { QUERY, useAppData };
+export { useAppData };
 function generateQueryByFilter({
   node, keys, variables, filters,
 }) {
@@ -20,7 +20,7 @@ export function generateQueryById({ node, keys = ['id', 'name'] }) {
   const filters = 'id: $id';
   const variables = '$id: uuid!';
   return generateQueryByFilter({
-    node, variables, filters, keys,
+    node: `${node}_by_pk`, variables, filters, keys,
   });
 }
 

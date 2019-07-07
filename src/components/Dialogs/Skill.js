@@ -1,7 +1,7 @@
 import React from 'react';
 import flowRight from 'lodash/flowRight';
 import Slider from 'react-rangeslider';
-import 'react-rangeslider/lib/index.css'
+import 'react-rangeslider/lib/index.css';
 import TextField from 'react-md/lib/TextFields/TextField';
 import withDialog from 'lib/hocs/dialog';
 import { getValidationResult } from 'lib/tools';

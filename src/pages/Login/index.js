@@ -2,18 +2,15 @@ import React from 'react';
 import Button from 'react-md/lib/Buttons/Button';
 import cn from 'classnames';
 import TextField from 'react-md/lib/TextFields/TextField';
-import useMutation from 'lib/hooks/useMutation';
 import Link from 'react-router-dom/Link';
 import useForm from 'lib/hooks/useForm';
 import cookie from 'js-cookie';
 import { getValidationResult } from 'lib/tools';
 import Page from 'components/Layout/Page';
 import * as yup from 'yup';
-import { generateMutation } from 'apollo/mutation';
+import useMutation from 'apollo/mutation';
 import { withAuth } from 'apollo/auth';
 import flowRight from 'lodash/flowRight';
-import { useAppData } from 'apollo/appData';
-import history from 'lib/history';
 import 'sass/pages/login.scss';
 
 const initialFields = {
@@ -21,12 +18,10 @@ const initialFields = {
   email: '',
   isShowPassword: false,
 };
-const LOGIN_MUTATION = generateMutation({ keys: ['id', 'token'], url: '/login' });
 
 function LoginPage() {
   const [formState, formHandlers] = useForm({ initialFields, validator, onValid });
-  const [onLogin, loginState] = useMutation(LOGIN_MUTATION);
-  const [, setAppData] = useAppData();
+  const [loginState, onLogin] = useMutation({ url: '/login' });
   const {
     onElementChange,
     onValidate,
@@ -131,17 +126,13 @@ function LoginPage() {
 
   function onValid(data) {
     onLogin({
-      variables: {
-        input: data,
-      },
-      update: setToken,
+      data,
+      callback: setToken,
     });
   }
 
   function setToken(_, { data: { nodeMutation } }) {
     cookie.set('token', nodeMutation.token, { expires: 360000 });
-    setAppData({ token: nodeMutation.token });
-    history.push('/');
   }
 }
 export default flowRight(

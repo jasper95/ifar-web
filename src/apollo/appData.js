@@ -1,38 +1,28 @@
-import { useContext, useEffect } from 'react';
+import { useMemo } from 'react';
 import gql from 'graphql-tag';
 import { useApolloClient, useQuery } from 'react-apollo-hooks';
-import initialState from './initialState';
-import { AuthContext } from './auth';
 
-export const QUERY = Object.keys(initialState)
-  .reduce((acc, el) => {
-    acc[`GET_${el.toUpperCase()}`] = gql`
+function subcribeToAppData(selector) {
+  if (selector.length === 0) {
+    return gql`
       query {
-        ${el} @client
+        NoResponse
       }
     `;
-    return acc;
-  }, {});
-
-const localStateKeys = Object.keys(initialState);
-
-const q = gql`
+  }
+  return gql`
   {
-    ${localStateKeys.map(e => `${e} @client`).join('\n')}
+    ${selector.map(e => `${e} @client`).join('\n')}
   }
 `;
+}
 
-export function useAppData() {
-  const authResponse = useContext(AuthContext);
-  const { data: authData = {} } = authResponse;
-  const { user_session_by_pk: session = {} } = authData;
-  const { system_user: auth = null } = session;
-  const { data: appData = {} } = useQuery(q);
+export function useAppData(selector = []) {
+  const { data: appData = {} } = useQuery(
+    useMemo(() => subcribeToAppData(selector), [selector]), { skip: selector.length === 0 },
+  );
   const apolloClient = useApolloClient();
-  // useEffect(() => {
-  //   authResponse.refetch();
-  // }, [appData.token]);
-  return [{ appData: { ...appData, auth }, apolloClient }, setAppData];
+  return [{ appData, apolloClient }, setAppData];
   function setAppData(data) {
     setData(data)(apolloClient);
   }

@@ -1,26 +1,11 @@
 import React from 'react';
 import flowRight from 'lodash/flowRight';
-import withAuth from 'lib/hocs/apolloAuth';
+import { withAuth } from 'apollo/auth';
 import withBasePage from 'lib/hocs/basePage';
 import pick from 'lodash/pick';
 import { capitalizeCell, formatDate } from 'components/DataTable/CellFormatter';
 import ProfilePage, { profilePropsKeys } from 'components/Profile/ProfilePage';
 import gql from 'graphql-tag';
-
-const APPLICATION_QUERY = gql`
-  query getApplication($user_id: uuid) {
-    application(where: {id: {_eq: $user_id}}) {
-      id
-      status
-      company {
-        name
-      }
-      job {
-        name
-      }
-    }
-  }
-`;
 
 function Applications(props) {
   return (
@@ -56,6 +41,21 @@ function Applications(props) {
     ];
   }
 }
+
+const APPLICATION_QUERY = gql`
+  query getApplication($user_id: uuid) {
+    application(where: {id: {_eq: $user_id}}) {
+      id
+      status
+      company {
+        name
+      }
+      job {
+        name
+      }
+    }
+  }
+`;
 
 const basePageProps = {
   node: 'application',
