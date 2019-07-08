@@ -2,7 +2,7 @@ import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo-hooks';
+import useQuery from 'apollo/query';
 import Post from './Post';
 import ProfilePost from './ProfilePost';
 import Search from '../Search';

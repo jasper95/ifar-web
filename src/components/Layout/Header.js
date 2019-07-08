@@ -11,11 +11,11 @@ import Divider from 'react-md/lib/Dividers/Divider';
 import Badge from 'react-md/lib/Badges/Badge';
 import { format as formatTime } from 'timeago.js';
 import gql from 'graphql-tag';
-import { useManualQuery, useAppData } from 'apollo/query';
+import { useManualQuery } from 'apollo/query';
+import { useDispatch } from 'react-redux';
 import AuthContext from 'apollo/AuthContext';
-import useMutation, { generateMutation } from 'apollo/mutation';
+import useMutation from 'apollo/mutation';
 
-import initialState from 'apollo/initialState';
 import cookie from 'js-cookie';
 import withRouter from 'react-router-dom/withRouter';
 
@@ -32,15 +32,14 @@ const NOTIFICATION_QUERY = gql`
   }
 `;
 
-const LOGOUT_MUTATION = generateMutation({ url: '/logout' });
 
 function Header(props) {
   const {
     avatarLink = '',
   } = props;
-  const [, setAppData] = useAppData();
+  const dispatch = useDispatch();
   const { data: user, loading: authIsLoading } = useContext(AuthContext);
-  const [, onLogout] = useMutation(LOGOUT_MUTATION);
+  const [, onLogout] = useMutation({ url: '/logout', onSuccess: onLogoutSucess });
   const [notifStates, notifHandlers] = useManualQuery(
     NOTIFICATION_QUERY,
     {
@@ -165,25 +164,21 @@ function Header(props) {
   }
 
   function handleClickLogout() {
-    setAppData({
-      dialog: {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
         path: 'Confirm',
         props: {
           title: 'Confirm Logout',
           message: 'Do you really want to logout?',
-          onValid: () => onLogout({
-            variables: {
-              input: {},
-            },
-            update: onLogoutSucess,
-          }),
+          onValid: onLogout,
         },
       },
     });
   }
 
   function onLogoutSucess() {
-    setAppData(initialState);
+    dispatch({ type: 'SET_STATE', payload: { token: '' } });
     cookie.remove('token');
   }
 }

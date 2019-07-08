@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import gql from 'graphql-tag';
 import capitalize from 'lodash/capitalize';
 import fetch from 'isomorphic-unfetch';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 const simpleFn = () => {};
 const basicAuth = Buffer.from(`${process.env.API_USERNAME}:${process.env.API_PASSWORD}`).toString('base64');
 
-export default function useMutation(params) {
+export default function useMutation(params = {}) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector(state => state.token);
@@ -21,10 +20,10 @@ export default function useMutation(params) {
   };
 
   return [state, mutate];
-  async function mutate(params2) {
+  async function mutate(params2 = {}) {
     setLoading(true);
     const {
-      data: body = {}, url, method = 'POST', onSuccess = simpleFn, onError = simpleFn,
+      data: body = {}, url, method = 'POST', onSuccess = simpleFn,
     } = { ...params, ...params2 };
     const options = {
       method,
@@ -60,6 +59,7 @@ export function useCreateNode(params) {
     ...params,
     message,
     method: 'POST',
+    url: `/${node}`,
   });
 }
 
@@ -72,6 +72,7 @@ export function useUpdateNode(params) {
     ...params,
     message,
     method: 'PUT',
+    url: `/${node}`,
   });
 }
 
@@ -79,11 +80,13 @@ export function useDeleteNode(params) {
   const {
     node,
     message = `${capitalize(node)} successfully deleted`,
+    data,
   } = params;
   return useNodeMutation({
     ...params,
     message,
     method: 'DELETE',
+    url: `/${node}/${data.id}`,
   });
 }
 
@@ -95,28 +98,4 @@ export function useNodeMutation(params) {
     callback(data);
   };
   return useMutation({ ...params, onSuccess });
-}
-
-export function deleteMutation({ keys = ['NoResponse'], url }) {
-  return gql`
-    mutation DeleteMutation($id: String) {
-      deleteNode(id: $id) 
-        @rest(type: "any" path: "${url}/{args.id}" method: "DELETE") {
-          ${keys.join(', ')}
-        }
-    }
-  `;
-}
-
-export function generateMutation({ keys = ['NoResponse'], method = 'POST', url }) {
-  return gql`
-    mutation NodeMutation(
-      $input: any!,
-    ) {
-      nodeMutation(url: $url, method: $method, input: $input)
-        @rest(type: "any", path: "${url}", method: "${method}") {
-          ${keys.join(', ')}
-        }
-    }
-  `;
 }

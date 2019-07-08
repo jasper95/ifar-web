@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import pick from 'lodash/pick';
-import { useAppData, useManualQuery } from 'apollo/query';
+import useQuery, { useManualQuery } from 'apollo/query';
 import AuthContext from 'apollo/AuthContext';
+import { useDispatch } from 'react-redux';
 import { useCreateNode, useUpdateNode, useDeleteNode } from 'apollo/mutation';
-import { useQuery } from 'react-apollo-hooks';
+
 
 const withBasePage = params => (WrappedComponent) => {
   const {
@@ -16,7 +17,7 @@ const withBasePage = params => (WrappedComponent) => {
     dialogProps = {},
   } = params;
   function BasePage(props) {
-    const [, setAppData] = useAppData();
+    const dispatch = useDispatch();
     const { data: auth } = useContext(AuthContext);
     const { data: listData, refetch } = useQuery(listQuery,
       { variables: { user_id: auth && auth.id } });
@@ -37,8 +38,9 @@ const withBasePage = params => (WrappedComponent) => {
     );
 
     function handleNew() {
-      setAppData({
-        dialog: {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
           path: dialogPath,
           props: {
             ...dialogProps,
@@ -46,7 +48,7 @@ const withBasePage = params => (WrappedComponent) => {
             title: `New ${pageName}`,
             onValid: (data) => {
               createNode({
-                variables: { input: dataFormatter(data, 'SAVE_CREATE', { user: auth }) },
+                data: dataFormatter(data, 'SAVE_CREATE', { user: auth }),
               });
             },
           },
@@ -58,8 +60,9 @@ const withBasePage = params => (WrappedComponent) => {
       const response = await detailsHandler.onQuery({ variables: { id: row.id } });
       const data = response[`${node}_by_pk`];
       if (data) {
-        setAppData({
-          dialog: {
+        dispatch({
+          type: 'SHOW_DIALOG',
+          payload: {
             path: dialogPath,
             props: {
               ...dialogProps,
@@ -67,7 +70,7 @@ const withBasePage = params => (WrappedComponent) => {
               initialFields: dataFormatter(data, 'EDIT', props),
               onValid: (updatedData) => {
                 updateNode({
-                  variables: { input: dataFormatter(updatedData, 'SAVE_EDIT', { user: auth }) },
+                  data: dataFormatter(updatedData, 'SAVE_EDIT', { user: auth }),
                 });
               },
             },
@@ -77,15 +80,16 @@ const withBasePage = params => (WrappedComponent) => {
     }
 
     function handleDelete(data) {
-      setAppData({
-        dialog: {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
           path: 'Confirm',
           props: {
             title: 'Confirm Delete',
             message: 'Do you want to delete this item?',
             onValid: () => {
               deleteNode({
-                variables: { id: data.id },
+                data,
               });
             },
           },

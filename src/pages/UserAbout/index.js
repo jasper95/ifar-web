@@ -6,25 +6,18 @@ import Profile from 'components/Profile';
 import { withAuth } from 'apollo/auth';
 import Button from 'react-md/lib/Buttons/Button';
 import AuthContext from 'apollo/AuthContext';
-// import {
-//   ShowDialog,
-//   Upload,
-// } from 'redux/app/actions';
-// import {
-//   SetUserAuth,
-// } from 'redux/auth/actions';
 import day from 'dayjs';
 import {
   formatDateToISO, formatISOToDate, getAddressDescription,
 } from 'lib/tools';
 import { formatAddress } from 'components/Profile/User';
-import { useAppData } from 'apollo/query';
 import { useUpdateNode } from 'apollo/mutation';
+import { useDispatch } from 'react-redux';
 
 function AboutMe() {
   const { data: user } = useContext(AuthContext);
-  const [, setAppData] = useAppData();
-  const [updateNode] = useUpdateNode({
+  const dispatch = useDispatch();
+  const [, updateNode] = useUpdateNode({
     node: 'system_user',
     message: 'Profile details successfull updated',
   });
@@ -72,20 +65,21 @@ function AboutMe() {
   );
 
   function handleUpdate() {
-    setAppData('dialog', {
-      path: 'AboutMe',
-      props: {
-        initialFields: formatISOToDate(user, ['birth_date'], 'YYYY-MM-DD'),
-        title: 'Edit About Me',
-        onValid: (data) => {
-          updateNode({
-            variables: {
-              input: {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'AboutMe',
+        props: {
+          initialFields: formatISOToDate(user, ['birth_date'], 'YYYY-MM-DD'),
+          title: 'Edit About Me',
+          onValid: (data) => {
+            updateNode({
+              data: {
                 ...formatDateToISO(data, ['birth_date'], 'YYYY-MM-DD'),
                 address_description: getAddressDescription(data),
               },
-            },
-          });
+            });
+          },
         },
       },
     });

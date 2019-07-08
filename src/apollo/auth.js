@@ -3,7 +3,7 @@ import React, {
   useContext, useMemo, useEffect, useRef,
 } from 'react';
 import { useSelector } from 'react-redux';
-import { useQuery } from 'react-apollo-hooks';
+import useQuery from 'apollo/query';
 import { Redirect } from 'react-router';
 import jwt from 'jsonwebtoken';
 import gql from 'graphql-tag';

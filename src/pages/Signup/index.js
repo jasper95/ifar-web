@@ -3,9 +3,9 @@ import Page from 'components/Layout/Page';
 import Button from 'react-md/lib/Buttons/Button';
 import TextField from 'react-md/lib/TextFields/TextField';
 import Link from 'react-router-dom/Link';
-import useMutation, { generateMutation } from 'apollo/mutation';
 import useForm from 'lib/hooks/useForm';
-import { useAppData } from 'apollo/appData';
+import { useDispatch } from 'react-redux';
+import useMutation from 'apollo/mutation';
 import withRouter from 'react-router-dom/withRouter';
 import { getValidationResult, delay } from 'lib/tools';
 import * as yup from 'yup';
@@ -21,11 +21,10 @@ const initialFields = {
   role: 'USER',
   company_name: '',
 };
-const SIGNUP_MUTATION = generateMutation({ url: '/signup' });
 
 function SignupPage(props) {
-  const [signupState, onSignup] = useMutation(SIGNUP_MUTATION);
-  const [, setAppData] = useAppData();
+  const [signupState, onSignup] = useMutation({ url: '/signup' });
+  const dispatch = useDispatch();
   const [formState, formHandlers] = useForm({ initialFields, validator, onValid });
   const {
     onElementChange,
@@ -174,23 +173,12 @@ function SignupPage(props) {
   );
 
   async function onValid(data) {
-    const { history } = props;
     await onSignup({
-      variables: {
-        input: data,
-      },
+      data,
     });
-    setAppData({
-      toast: {
-        message: 'Account successfully registered. Please verify your email to login',
-        type: 'success',
-      },
-    });
+    dispatch({ type: 'SUCCESS', payload: { message: 'Account successfully registered. Please verify your email to login' } });
     await delay(3000);
-    history.push('/login');
-    setAppData({
-      toast: null,
-    });
+    dispatch({ type: 'HIDE_NOTIFICATION' });
   }
 }
 

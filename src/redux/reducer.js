@@ -1,4 +1,7 @@
 export default {
+  SET_STATE(state, { payload }) {
+    return { ...state, ...payload };
+  },
   SHOW_DIALOG(state, { payload }) {
     return { ...state, dialog: payload };
   },

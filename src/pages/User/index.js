@@ -2,7 +2,7 @@ import React from 'react';
 import { withAuth } from 'apollo/auth';
 import Profile from 'components/Profile';
 import UserDetails from 'components/Profile/User';
-import { useQuery } from 'react-apollo-hooks';
+import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
@@ -11,36 +11,36 @@ import withRouter from 'react-router-dom/withRouter';
 import flowRight from 'lodash/flowRight';
 
 const USER_QUERY = gql`
-query GetUser($slug: String) {
-  system_user(where: {slug: {_eq: $slug }}) {
-      id
-      first_name
-      last_name
-      address_description
-      address
-      skills {
+  query GetUser($slug: String) {
+    system_user(where: {slug: {_eq: $slug }}) {
         id
-        name
-        level
-      }
-      experiences {
-        id
-        position
-        start_date
-        end_date
-      }
-      educations {
-        id,
-        job_category {
+        first_name
+        last_name
+        address_description
+        address
+        skills {
+          id
           name
+          level
         }
-        start_date
-        end_date
-        qualification
-        school
+        experiences {
+          id
+          position
+          start_date
+          end_date
+        }
+        educations {
+          id,
+          job_category {
+            name
+          }
+          start_date
+          end_date
+          qualification
+          school
+        }
       }
     }
-  }
 `;
 
 function UserProfile(props) {

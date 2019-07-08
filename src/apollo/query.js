@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useApolloClient } from 'react-apollo-hooks';
+import useQuery from 'apollo/query';
+import { useDispatch } from 'react-redux';
 import gql from 'graphql-tag';
-import { useAppData } from './appData';
 
-export { useAppData };
 function generateQueryByFilter({
   node, keys, variables, filters,
 }) {
@@ -22,6 +22,24 @@ export function generateQueryById({ node, keys = ['id', 'name'] }) {
   return generateQueryByFilter({
     node: `${node}_by_pk`, variables, filters, keys,
   });
+}
+
+export default function customUseQuery(query, params) {
+  const dispatch = useDispatch();
+  return useQuery(query, {
+    ...params,
+    onError,
+  });
+  function onError() {
+    if (typeof window !== 'object') {
+      dispatch({
+        type: 'ERROR',
+        payload: {
+          message: 'Something went wrong',
+        },
+      });
+    }
+  }
 }
 
 export function useManualQuery(query, options = {}, initialData = {}) {

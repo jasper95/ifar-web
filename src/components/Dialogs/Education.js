@@ -6,7 +6,7 @@ import withDialog from 'lib/hocs/dialog';
 import { getValidationResult } from 'lib/tools';
 import yup from 'yup';
 import Select from 'react-select';
-import { useQuery } from 'react-apollo-hooks';
+import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 import DatePicker from 'react-datepicker';
 
