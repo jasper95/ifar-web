@@ -36,7 +36,7 @@ const { __APOLLO_STATE__: apolloState = initialApolloState } = window;
 
 const apolloClient = initApollo(apolloState, { getToken: () => parseCookies().token });
 
-const store = configureStore({}, { getToken: () => parseCookies().token });
+const store = configureStore({ getToken: () => parseCookies().token || '' });
 const renderFn = isProduction ? hydrate : render;
 const preLoadFn = isProduction ? loadableReady : cb => cb();
 

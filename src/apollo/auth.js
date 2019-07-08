@@ -59,7 +59,7 @@ function getSessionId(token) {
 
 export default function AppWithAuth(props) {
   const { children } = props;
-  const token = useSelector(state => state.app.token);
+  const token = useSelector(state => state.token);
   const sessionId = useMemo(() => getSessionId(token), [token]);
   const authResponse = useQuery(sessionQuery, { skip: !sessionId, variables: { id: sessionId } });
   const { data: authData = {}, loading, error } = authResponse;

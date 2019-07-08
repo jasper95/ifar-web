@@ -13,8 +13,7 @@ import Header from './Header';
 
 const AsyncDialog = loadable(props => import(`components/Dialogs/${props.path}`));
 const pageSelector = createSelector(
-  state => pick(state.app, 'toast', 'dialog'),
-  e => e,
+  state => pick(state, 'toast', 'dialog'),
 );
 function Page(props) {
   const {

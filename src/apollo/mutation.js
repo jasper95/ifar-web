@@ -10,7 +10,7 @@ const basicAuth = Buffer.from(`${process.env.API_USERNAME}:${process.env.API_PAS
 export default function useMutation(params) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const token = useSelector(state => state.app.token);
+  const token = useSelector(state => state.token);
   const [data, setData] = useState();
   const [error, setError] = useState();
 
@@ -51,40 +51,40 @@ export default function useMutation(params) {
   }
 }
 
-export function useCreateNode(metadata = {}, options) {
+export function useCreateNode(params) {
   const {
     node,
     message = `${capitalize(node)} successfully created`,
-  } = metadata;
+  } = params;
   return useNodeMutation({
-    ...metadata,
+    ...params,
     message,
     method: 'POST',
-  }, options);
+  });
 }
 
-export function useUpdateNode(metadata = {}, options) {
+export function useUpdateNode(params) {
   const {
     node,
     message = `${capitalize(node)} successfully updated`,
-  } = metadata;
+  } = params;
   return useNodeMutation({
-    ...metadata,
+    ...params,
     message,
     method: 'PUT',
-  }, options);
+  });
 }
 
-export function useDeleteNode(metadata = {}, options) {
+export function useDeleteNode(params) {
   const {
     node,
     message = `${capitalize(node)} successfully deleted`,
-  } = metadata;
+  } = params;
   return useNodeMutation({
-    ...metadata,
+    ...params,
     message,
     method: 'DELETE',
-  }, options);
+  });
 }
 
 export function useNodeMutation(params) {
@@ -119,8 +119,4 @@ export function generateMutation({ keys = ['NoResponse'], method = 'POST', url }
         }
     }
   `;
-}
-
-export function applyUpdates(...fns) {
-  return (cache, result) => Promise.mapSeries(fns, fn => fn(cache, result));
 }
