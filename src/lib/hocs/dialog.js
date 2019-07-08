@@ -12,7 +12,7 @@ export default () => (WrappedComponent) => {
   function Dialog(props) {
     const dispatch = useDispatch();
     const dialogProcessing = useSelector(state => state.dialogProcessing);
-    const [formState, formHandlers] = useForm(pick(props, formProps));
+    const [formState, formHandlers] = useForm({ ...pick(props, formProps), onValid });
     return (
       <DialogLayout
         onContinue={() => formHandlers.onValidate(formState.fields)}
@@ -27,6 +27,10 @@ export default () => (WrappedComponent) => {
         />
       </DialogLayout>
     );
+    function onValid(...args) {
+      dispatch({ type: 'SET_STATE', payload: { dialogProcessing: true } });
+      props.onValid(...args);
+    }
   }
   Dialog.displayName = `withDialog(${WrappedComponent.displayName
       || WrappedComponent.name

@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router';
 import loadable from '@loadable/component';
 
 const Login = loadable(() => import('pages/Login'));
-// const Signup = loadable(() => import('pages/Signup'));
+const Signup = loadable(() => import('pages/Signup'));
 const Home = loadable(() => import('pages/Home'));
 // const User = loadable(() => import('pages/User'));
 // const Education = loadable(() => import('pages/Education'));
@@ -26,12 +26,12 @@ export default [
     path: '/login',
     exact: true,
   },
-  // {
-  //   key: 'signup',
-  //   component: Signup,
-  //   path: '/signup',
-  //   exact: true,
-  // },
+  {
+    key: 'signup',
+    component: Signup,
+    path: '/signup',
+    exact: true,
+  },
   // {
   //   key: 'forgotpw',
   //   component: ForgotPassword,
@@ -74,12 +74,12 @@ export default [
   //   path: '/profile/about-me',
   //   exact: true,
   // },
-  {
-    key: 'not-found',
-    path: '*',
-    component: () => (<div>Not Found</div>),
-    exact: true,
-  },
+  // {
+  //   key: 'not-found',
+  //   path: '*',
+  //   component: () => (<div>Not Found</div>),
+  //   exact: true,
+  // },
 ];
 
 

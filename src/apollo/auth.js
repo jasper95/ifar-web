@@ -42,11 +42,6 @@ const sessionQuery = generateQueryById({
   ],
 });
 
-const tokenQuery = gql`
-  {
-    token @client
-  }
-`;
 
 function getSessionId(token) {
   try {
@@ -62,7 +57,9 @@ export default function AppWithAuth(props) {
   const token = useSelector(state => state.token);
   const sessionId = useMemo(() => getSessionId(token), [token]);
   const authResponse = useQuery(sessionQuery, { skip: !sessionId, variables: { id: sessionId } });
-  const { data: authData = {}, loading, error } = authResponse;
+  const {
+    data: authData = {}, loading, error, refetch,
+  } = authResponse;
   const { user_session_by_pk: session = {} } = authData;
   const { system_user: auth = null } = session;
   return (
@@ -70,6 +67,7 @@ export default function AppWithAuth(props) {
       loading,
       error,
       data: auth,
+      refetch,
     }}
     >
       {children}

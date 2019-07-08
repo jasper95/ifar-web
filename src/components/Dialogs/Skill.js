@@ -5,7 +5,7 @@ import 'react-rangeslider/lib/index.css';
 import TextField from 'react-md/lib/TextFields/TextField';
 import withDialog from 'lib/hocs/dialog';
 import { getValidationResult } from 'lib/tools';
-import yup from 'yup';
+import * as yup from 'yup';
 
 function SkillDialog(props) {
   const { formState, formHandlers } = props;

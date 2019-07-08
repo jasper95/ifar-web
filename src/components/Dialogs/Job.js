@@ -14,7 +14,7 @@ import DatePicker from 'react-datepicker';
 import {
   getValidationResult, validateDescription, getAddressOptions, getAddressValue,
 } from 'lib/tools';
-import yup from 'yup';
+import * as yup from 'yup';
 
 function Job(props) {
   const {

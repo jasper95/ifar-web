@@ -12,13 +12,6 @@ export default {
       dialogProcessing: false,
     };
   },
-  DIALOG_PROCESSING(state, { payload }) {
-    const { dialog } = state;
-    if (dialog && payload) {
-      return { ...state, dialogProcessing: payload };
-    }
-    return state;
-  },
   HIDE_NOTIFICATION(state) {
     return { ...state, toast: null };
   },
@@ -41,12 +34,6 @@ export default {
         type: 'success',
         ...payload,
       },
-    };
-  },
-  CLEAR_LOADING_STATES(state) {
-    return {
-      ...state,
-      dialogProcessing: false,
     };
   },
 };

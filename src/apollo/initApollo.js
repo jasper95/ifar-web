@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 let apolloClient = null;
 const isBrowser = typeof window === 'object';
 
-function create(initialState, { getToken, fetchOptions }) {
+function create(initialState = {}, { getToken, fetchOptions }) {
   const errorLink = onError((err) => {
     const { graphQLErrors, networkError, operation } = err;
     if (graphQLErrors) {
@@ -43,7 +43,7 @@ function create(initialState, { getToken, fetchOptions }) {
   return new ApolloClient({
     connectToDevTools: isBrowser,
     ssrMode: !isBrowser,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache().restore(initialState),
     link: ApolloLink.from([
       errorLink,
       httpAuthLink,

@@ -15,11 +15,12 @@ import { useUpdateNode } from 'apollo/mutation';
 import { useDispatch } from 'react-redux';
 
 function AboutMe() {
-  const { data: user } = useContext(AuthContext);
+  const { data: user, refetch: refetchAuth } = useContext(AuthContext);
   const dispatch = useDispatch();
   const [, updateNode] = useUpdateNode({
     node: 'system_user',
     message: 'Profile details successfull updated',
+    callback: refetchAuth,
   });
   if (!user) {
     return null;
@@ -102,13 +103,6 @@ function AboutMe() {
     //       }));
     //     },
     //   },
-    // }));
-  }
-
-  function handleUpdateCallback(data) {
-    // dispatch(SetUserAuth({
-    //   ...user,
-    //   ...data,
     // }));
   }
 }

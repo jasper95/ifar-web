@@ -3,7 +3,7 @@ import flowRight from 'lodash/flowRight';
 import TextField from 'react-md/lib/TextFields/TextField';
 import withDialog from 'lib/hocs/dialog';
 import { getValidationResult, validateDescription } from 'lib/tools';
-import yup from 'yup';
+import * as yup from 'yup';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';

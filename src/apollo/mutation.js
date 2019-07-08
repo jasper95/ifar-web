@@ -80,22 +80,20 @@ export function useDeleteNode(params) {
   const {
     node,
     message = `${capitalize(node)} successfully deleted`,
-    data,
   } = params;
   return useNodeMutation({
     ...params,
     message,
     method: 'DELETE',
-    url: `/${node}/${data.id}`,
   });
 }
 
 export function useNodeMutation(params) {
   const dispatch = useDispatch();
   const { callback = () => {}, message } = params;
-  const onSuccess = (data) => {
+  const onSuccess = () => {
     dispatch({ type: 'SUCCESS', payload: { message } });
-    callback(data);
+    callback();
   };
   return useMutation({ ...params, onSuccess });
 }

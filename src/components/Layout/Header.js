@@ -178,7 +178,7 @@ function Header(props) {
   }
 
   function onLogoutSucess() {
-    dispatch({ type: 'SET_STATE', payload: { token: '' } });
+    dispatch({ type: 'SET_STATE', payload: { token: '', dialog: null, dialogProcessing: false } });
     cookie.remove('token');
   }
 }

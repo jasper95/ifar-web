@@ -7,7 +7,7 @@ import withDialog from 'lib/hocs/dialog';
 import { getValidationResult, getAddressValue, getAddressOptions } from 'lib/tools';
 import DatePicker from 'react-datepicker';
 
-import yup from 'yup';
+import * as yup from 'yup';
 import {
   customChangeHandler,
 } from './Job';
@@ -15,6 +15,7 @@ import {
 function AboutMe(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
+  console.log('fields: ', fields);
   const { onElementChange, onChange } = formHandlers;
   return (
     <>
@@ -43,7 +44,7 @@ function AboutMe(props) {
           <label>Date of Birth</label>
           <DatePicker
             placeholderText="Select Date"
-            selected={fields.birth_date || ''}
+            selected={new Date(fields.birth_date) || ''}
             onChange={value => onChange('birth_date', value)}
             peekNextMonth
             showMonthDropdown
@@ -152,10 +153,10 @@ function AboutMe(props) {
 }
 
 function validator(data) {
-  const schema = yup.object().keys({
-    first_name: yup.string().required().error(() => 'Firstname is required'),
-    last_name: yup.string().required().error(() => 'Lastname is required'),
-    email: yup.string().email().required().error(() => 'Email is required'),
+  const schema = yup.object({
+    first_name: yup.string().required('Firstname is required'),
+    last_name: yup.string().required('Lastname is required'),
+    email: yup.string().email().required('Email is required'),
     // address: yup.string().required().error(() => 'Address is required'),
     // nationality: yup.string().required().error(() => 'Nationality is required'),
     // contact_number: joi

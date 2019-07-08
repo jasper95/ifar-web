@@ -69,7 +69,7 @@ function ExperienceDialog(props) {
 }
 
 function validator(data) {
-  const schema = yup.object().shape({
+  const schema = yup.object({
     position: yup.string().required('Position is required'),
     company: yup.string().required('Company is required'),
     start_date: yup.date().required('Start Date is required'),

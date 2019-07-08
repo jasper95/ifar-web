@@ -5,7 +5,6 @@ import { Helmet as Head } from 'react-helmet';
 import { withRouter } from 'react-router';
 import flow from 'lodash/flow';
 import Snackbar from 'components/Snackbar';
-import pick from 'lodash/pick';
 import { createSelector } from 'reselect';
 import { useSelector, useDispatch } from 'react-redux';
 import Footer from './Footer';
@@ -13,7 +12,9 @@ import Header from './Header';
 
 const AsyncDialog = loadable(props => import(`components/Dialogs/${props.path}`));
 const pageSelector = createSelector(
-  state => pick(state, 'toast', 'dialog'),
+  state => state.toast,
+  state => state.dialog,
+  (toast, dialog) => ({ toast, dialog }),
 );
 function Page(props) {
   const {

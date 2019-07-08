@@ -11,6 +11,7 @@ import * as yup from 'yup';
 import useMutation from 'apollo/mutation';
 import { withAuth } from 'apollo/auth';
 import flowRight from 'lodash/flowRight';
+import { useDispatch } from 'react-redux';
 import 'sass/pages/login.scss';
 
 const initialFields = {
@@ -22,6 +23,7 @@ const initialFields = {
 function LoginPage() {
   const [formState, formHandlers] = useForm({ initialFields, validator, onValid });
   const [loginState, onLogin] = useMutation({ url: '/login' });
+  const dispatch = useDispatch();
   const {
     onElementChange,
     onValidate,
@@ -127,12 +129,13 @@ function LoginPage() {
   function onValid(data) {
     onLogin({
       data,
-      callback: setToken,
+      onSuccess: setToken,
     });
   }
 
-  function setToken(_, { data: { nodeMutation } }) {
-    cookie.set('token', nodeMutation.token, { expires: 360000 });
+  function setToken({ token }) {
+    dispatch({ type: 'SET_STATE', payload: { token } });
+    cookie.set('token', token, { expires: 360000 });
   }
 }
 export default flowRight(

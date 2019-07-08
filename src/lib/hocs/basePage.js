@@ -90,6 +90,7 @@ const withBasePage = params => (WrappedComponent) => {
             onValid: () => {
               deleteNode({
                 data,
+                url: `/${node}/${data.id}`,
               });
             },
           },
