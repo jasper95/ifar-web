@@ -10,7 +10,9 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "build": "yarn build:client && yarn build:server",
-    "deploy:aws": "yarn build && aws s3 sync build/ s3://graph-spike"
+    "deploy:assets": "aws s3 sync build/ s3://graph-spike",
+    "deploy:server": "now",
+    "deploy": "yarn build && yarn deploy:assets && yarn deploy:server"
   },
   "dependencies": {
     "@babel/runtime": "^7.3.1",

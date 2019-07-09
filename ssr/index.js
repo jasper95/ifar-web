@@ -39,7 +39,7 @@ export default async function serverRender(req, res) {
     getToken: () => parseCookies(req).token,
   };
   const apollo = initApollo(
-    initialState,
+    {},
     initOptions,
   );
   let content;
@@ -63,9 +63,7 @@ export default async function serverRender(req, res) {
     return res.end();
   }
   const initialData = `
-    <script>
-      window.__APOLLO_STATE__ = ${serialize(apollo.cache.extract(), { isJSON: true })}
-    </script>
+    <script>window.__APOLLO_STATE__ = ${serialize(apollo.cache.extract(), { isJSON: true })}</script>
   `;
   const result = getHtml({
     content,

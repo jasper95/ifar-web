@@ -5,6 +5,7 @@ import TextField from 'react-md/lib/TextFields/TextField';
 import Link from 'react-router-dom/Link';
 import useForm from 'lib/hooks/useForm';
 import { getValidationResult } from 'lib/tools';
+import { withAuth } from 'apollo/auth';
 import Page from 'components/Layout/Page';
 import joi from 'yup';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
@@ -138,4 +139,4 @@ function validator(data) {
   return getValidationResult(data, schema);
 }
 
-export default ForgotPassword;
+export default withAuth({ requireAuth: false })(ForgotPassword);

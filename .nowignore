@@ -9,3 +9,6 @@ dockerfile
 .gitlab-ci.yml
 Procfile
 README.md
+public
+build
+ssr
