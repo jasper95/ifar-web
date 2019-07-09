@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore, compose } from 'redux';
 import createReducer from 'lib/createReducer';
-import initialState from './initialState';
-import rootReducer from './reducer';
+import initialState from '../redux/initialState';
+import rootReducer from '../redux/reducer';
 
 function configureStore({ getToken }) {
   let composeEnhancers = compose;

@@ -9,7 +9,6 @@ dockerfile
 .gitlab-ci.yml
 Procfile
 README.md
-build
 public
 ssr
 server.js

@@ -4,7 +4,6 @@ import municipality from 'lib/constants/address/municipality';
 import province from 'lib/constants/address/province';
 import orderBy from 'lodash/orderBy';
 import cookie from 'cookie';
-// import yup from 'yup';
 import day from 'dayjs';
 // import queryString from 'query-string';
 

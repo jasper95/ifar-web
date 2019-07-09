@@ -7,6 +7,7 @@ import initialState from 'apollo/initialState';
 import initApollo from 'apollo/initApollo';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import { parseCookies } from 'lib/tools';
+import configureStore from 'lib/configureStore';
 import serialize from 'serialize-javascript';
 import stats from '../build/loadable-stats.json';
 
@@ -34,19 +35,21 @@ function getHtml({
 export default async function serverRender(req, res) {
   const extractor = new ChunkExtractor({ stats, entrypoints: ['main'] });
   const context = { };
+  const initOptions = {
+    getToken: () => parseCookies(req).token,
+  };
   const apollo = initApollo(
     initialState,
-    {
-      getToken: () => parseCookies(req).token,
-    },
+    initOptions,
   );
   let content;
+  const store = configureStore(initOptions);
   try {
     content = await getMarkupFromTree({
       renderFunction: renderToString,
       tree: (
         <ChunkExtractorManager extractor={extractor}>
-          <App context={context} location={req.url} apolloClient={apollo} />
+          <App context={context} store={store} location={req.url} apolloClient={apollo} />
         </ChunkExtractorManager>
       ),
     });

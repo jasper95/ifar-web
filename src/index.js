@@ -5,7 +5,7 @@ import initialApolloState from 'apollo/initialState';
 import { parseCookies } from 'lib/tools';
 import { loadableReady } from '@loadable/component';
 import WebFontLoader from 'webfontloader';
-import configureStore from 'redux/configureStore';
+import configureStore from 'lib/configureStore';
 import Root from './App';
 
 WebFontLoader.load({

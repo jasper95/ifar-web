@@ -5,6 +5,7 @@ import { setContext } from 'apollo-link-context';
 import ApolloClient from 'apollo-client';
 import { onError } from 'apollo-link-error';
 import jwt from 'jsonwebtoken';
+import fetch from 'isomorphic-unfetch';
 
 let apolloClient = null;
 const isBrowser = typeof window === 'object';
@@ -38,6 +39,7 @@ function create(initialState = {}, { getToken, fetchOptions }) {
   const httpLink = new HttpLink({
     uri: 'https://jobhunt-graphql.herokuapp.com/v1/graphql',
     credentials: 'same-origin',
+    fetch,
     fetchOptions,
   });
   return new ApolloClient({
