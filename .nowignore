@@ -9,9 +9,3 @@ dockerfile
 .gitlab-ci.yml
 Procfile
 README.md
-public
-ssr
-server.js
-.eslintrc.js
-LICENSE
-package.json
