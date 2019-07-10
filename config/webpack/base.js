@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const merge = require('webpack-merge');
 const LoadableWebpackPlugin = require('@loadable/webpack-plugin');
 const DotEnv = require('dotenv-webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const configs = {
   development: {
@@ -67,6 +68,24 @@ function baseConfig(options) {
       path: path.join(process.cwd(), 'build'),
     },
     plugins: [
+      new HtmlWebpackPlugin({
+        inject: true,
+        template: resolvePath('views/index.html'),
+        ...mode === 'production' && {
+          minify: {
+            removeComments: true,
+            collapseWhitespace: true,
+            removeRedundantAttributes: true,
+            useShortDoctype: true,
+            removeEmptyAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            keepClosingSlash: true,
+            minifyJS: true,
+            minifyCSS: true,
+            minifyURLs: true,
+          },
+        },
+      }),
       new DotEnv({
         path: resolvePath('config/.env'),
         safe: true,

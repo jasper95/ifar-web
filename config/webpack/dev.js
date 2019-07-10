@@ -1,14 +1,10 @@
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const express = require('express');
 const { baseConfig, resolvePath } = require('./base');
 
 const result = baseConfig({
   mode: 'development',
   plugins: [
-    new HtmlWebpackPlugin({
-      template: resolvePath('views/index.html'),
-    }),
     new webpack.HotModuleReplacementPlugin(),
   ],
   optimization: {
