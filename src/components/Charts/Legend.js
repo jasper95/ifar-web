@@ -4,13 +4,11 @@ import Button from 'react-md/lib/Buttons/Button';
 
 function Legend(props) {
   const {
-    onClick, classification, value,
+    onClick, label, value,
   } = props;
   return (
     <Button onClick={onClick} flat>
-      <span>
-        {classification}
-      </span>
+      <span>{label}</span>
       <span>{value}</span>
     </Button>
   );
@@ -18,7 +16,7 @@ function Legend(props) {
 
 Legend.propTypes = {
   onClick: PropTypes.func,
-  classification: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
 };
 

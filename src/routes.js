@@ -6,6 +6,7 @@ const Login = loadable(() => import('pages/Login'));
 const Signup = loadable(() => import('pages/Signup'));
 const Home = loadable(() => import('pages/Home'));
 const ForgotPassword = loadable(() => import('pages/ForgotPassword'));
+const ManageRisk = loadable(() => import('pages/ManageRisk'));
 
 export default [
   {
@@ -30,6 +31,12 @@ export default [
     key: 'forgotpw',
     component: ForgotPassword,
     path: '/forgot-password',
+    exact: true,
+  },
+  {
+    key: 'manage-risk',
+    component: ManageRisk,
+    path: '/risk-management',
     exact: true,
   },
   {
