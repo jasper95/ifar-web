@@ -146,7 +146,7 @@ function RiskDetails(props) {
             <h3>Future Risk Treatment</h3>
           </Cell>
           <Cell size={2}>
-            <Button>Add/Edit</Button>
+            <Button onClick={() => showDialog('Target')}>Add/Edit</Button>
           </Cell>
           <hr />
           <Cell size={12}>
