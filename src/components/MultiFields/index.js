@@ -9,7 +9,6 @@ function MultiFields(props) {
     onChange, id, label, required, fieldLabels, ...restProps
   } = props;
   const [value, setValue] = useState(valueProp);
-  console.log('value: ', value);
   return (
     <div>
       <span>

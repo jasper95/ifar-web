@@ -10,7 +10,6 @@ const formProps = ['initialFields', 'validator', 'customChangeHandler', 'onValid
 
 export default () => (WrappedComponent) => {
   function Dialog(props) {
-    console.log('props: ', props);
     const dispatch = useDispatch();
     const dialogProcessing = useSelector(state => state.dialogProcessing);
     const [formState, formHandlers] = useForm({ ...pick(props, formProps), onValid });

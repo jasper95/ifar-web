@@ -7,7 +7,7 @@ import RiskEvaluation from 'components/RiskEvaluation';
 
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
-  const { fields, errors } = formState;
+  const { fields } = formState;
   const { onElementChange } = formHandlers;
   return (
     <>
@@ -28,7 +28,12 @@ function InherentRisk(props) {
         fieldLabels={[{ label: 'Risk Treatment Strategy' }, { label: 'Future Plan' }, { label: 'Budget/Resource' }, { label: 'Business Unit' }, { label: 'KPI' }, { label: 'Start Date' }, { label: 'End Date' }]}
         onChange={onElementChange}
       />
-      <RiskEvaluation type="target" />
+      <RiskEvaluation
+        type="target"
+        onChange={onElementChange}
+        likelihood={fields.likelihood}
+        impact={fields.impact}
+      />
     </>
   );
 }

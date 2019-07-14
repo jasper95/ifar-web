@@ -15,7 +15,7 @@ const options = [
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
-  const { onElementChange, onChange } = formHandlers;
+  const { onElementChange } = formHandlers;
   return (
     <>
       <TextField
@@ -33,9 +33,9 @@ function InherentRisk(props) {
         label="Definition"
         onChange={onElementChange}
         value={fields.definition}
-        error={!!errors.name}
-        errorText={errors.name}
-        value={fields.name || ''}
+        error={!!errors.definition}
+        errorText={errors.definition}
+        value={fields.definition || ''}
       />
       <SelectAutocomplete
         id="classification"
@@ -48,7 +48,7 @@ function InherentRisk(props) {
       />
       <MultFields
         id="impacts"
-        fieldsRenderer={TextField}
+        fieldsRenderer={SingleTextField}
         value={fields.impacts || []}
         label="Impact"
         required
@@ -60,7 +60,7 @@ function InherentRisk(props) {
       />
       <MultFields
         id="stakeholders"
-        fieldsRenderer={TextField}
+        fieldsRenderer={SingleTextField}
         value={[]}
         label="Affected Stakeholders"
         defaultItem={{
@@ -73,6 +73,13 @@ function InherentRisk(props) {
       />
       <RiskEvaluation type="inherint" />
     </>
+  );
+}
+
+function SingleTextField(prop) {
+  const { value, id, onChange } = prop;
+  return (
+    <TextField value={value.name} onChange={newVal => onChange({ ...value, name: newVal }, id)} />
   );
 }
 
