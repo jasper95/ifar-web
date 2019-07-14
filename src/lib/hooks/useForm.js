@@ -11,10 +11,11 @@ export default function useForm(params) {
   const [fields, setFields] = useState(initialFields);
   const [errors, setErrors] = useState({});
   function onElementChange(value, e) {
-    const { id } = e.target;
+    const id = e.target ? e.target.id : e;
     onChange(id, value);
   }
   function onChange(key, value) {
+    console.log('key, value: ', key, value);
     const customHandler = customChangeHandler[key];
 
     if (customHandler) {

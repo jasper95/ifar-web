@@ -3,9 +3,10 @@ import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
+import { useDispatch } from 'react-redux';
 import RiskItem from './RiskItem';
 
-const businessUnits = [
+export const businessUnits = [
   {
     id: 1,
     name: 'RAFI',
@@ -43,6 +44,7 @@ const data = [{
   id: 1,
 }];
 export default function RiskList(props) {
+  const dispatch = useDispatch();
   return (
     <Grid>
       <Cell size={12}>
@@ -57,7 +59,7 @@ export default function RiskList(props) {
           <span>RAFI</span>
         </Cell>
         <Cell size={2}>
-          <Button>Add Risk</Button>
+          <Button flat onClick={showRiskDialog}>Add Risk</Button>
         </Cell>
       </Grid>
       {data.map(e => (
@@ -65,4 +67,18 @@ export default function RiskList(props) {
       ))}
     </Grid>
   );
+
+  function showRiskDialog() {
+    dispatch({
+      payload: {
+        path: 'InherentRisk',
+        props: {
+          dialogId: 'InherentRisk',
+          title: 'Inherent Risk',
+          onValid: () => {},
+        },
+      },
+      type: 'SHOW_DIALOG',
+    });
+  }
 }
