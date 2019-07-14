@@ -54,7 +54,7 @@ function RiskPreview(props) {
           </Cell>
         </Grid>
       </Cell>
-      <Cell>
+      <Cell size={12}>
         <h3>Definition</h3>
         <span>RAFI is subjected to negative communications from various sources</span>
       </Cell>
