@@ -9,6 +9,7 @@ function MultiFields(props) {
     onChange, id, label, required, fieldLabels, ...restProps
   } = props;
   const [value, setValue] = useState(valueProp);
+  console.log('value: ', value);
   return (
     <div>
       <span>
@@ -31,7 +32,7 @@ function MultiFields(props) {
         {value.map(e => (
           <div>
             {value.length > 1 && <Button onClick={() => handleRemove(e.id)} icon>remove</Button>}
-            <Component key={e.id} onChange={handleChange} {...restProps} />
+            <Component key={e.id} onChange={handleChange} value={e} />
           </div>
         ))}
       </div>

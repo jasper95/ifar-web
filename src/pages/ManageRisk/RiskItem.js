@@ -3,6 +3,7 @@ import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import DataTable from 'components/DataTable';
+import { useDispatch } from 'react-redux';
 
 export default function RiskItem() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -63,6 +64,7 @@ function RiskPreview(props) {
 }
 
 function RiskDetails(props) {
+  const dispatch = useDispatch();
   return (
     <Grid>
       <Cell size={4}>
@@ -94,7 +96,7 @@ function RiskDetails(props) {
             <h3>Current Risk Treatment</h3>
           </Cell>
           <Cell size={2}>
-            <Button>Add/Edit</Button>
+            <Button onClick={() => showDialog('Residual')}>Add/Edit</Button>
           </Cell>
           <hr />
           <Cell size={12}>
@@ -198,4 +200,16 @@ function RiskDetails(props) {
       </Cell>
     </Grid>
   );
+
+  function showDialog(type) {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: `${type}Risk`,
+        props: {
+          title: 'Residual Risk',
+        },
+      },
+    });
+  }
 }

@@ -18,11 +18,13 @@ function SelectAutocomplete(props) {
   [options]);
   return (
     <div className={className}>
-      <span>
-        {label}
-        {' '}
-        {required && '*'}
-      </span>
+      {label && (
+        <span>
+          {label}
+          {' '}
+          {required && '*'}
+        </span>
+      )}
       <Select
         id={id}
         value={selectOptions.find(e => e.value === value)}

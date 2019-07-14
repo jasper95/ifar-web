@@ -15,7 +15,6 @@ const options = [
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
-  console.log('fields: ', fields);
   const { onElementChange, onChange } = formHandlers;
   return (
     <>
@@ -24,8 +23,8 @@ function InherentRisk(props) {
         required
         label="Name"
         onChange={onElementChange}
-        // error={!!errors.name}
-        // errorText={errors.name}
+        error={!!errors.name}
+        errorText={errors.name}
         value={fields.name || ''}
       />
       <TextField
@@ -34,6 +33,9 @@ function InherentRisk(props) {
         label="Definition"
         onChange={onElementChange}
         value={fields.definition}
+        error={!!errors.name}
+        errorText={errors.name}
+        value={fields.name || ''}
       />
       <SelectAutocomplete
         id="classification"
