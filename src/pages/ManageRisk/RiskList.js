@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
@@ -40,10 +41,8 @@ export const businessUnits = [
     name: 'INFRA',
   },
 ];
-const data = [{
-  id: 1,
-}];
-export default function RiskList() {
+function RiskList(props) {
+  const { list } = props;
   const dispatch = useDispatch();
   return (
     <Grid>
@@ -62,7 +61,7 @@ export default function RiskList() {
           <Button flat onClick={showRiskDialog}>Add Risk</Button>
         </Cell>
       </Grid>
-      {data.map(e => (
+      {list.map(e => (
         <RiskItem key={e.id} />
       ))}
     </Grid>
@@ -82,3 +81,9 @@ export default function RiskList() {
     });
   }
 }
+
+RiskList.propTypes = {
+  list: PropTypes.array.isRequired,
+};
+
+export default RiskList;
