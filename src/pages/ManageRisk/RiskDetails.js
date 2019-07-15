@@ -1,35 +1,30 @@
-import React from 'react'
+import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
-import RiskInfo from './RiskInfo'
-import RiskTable from './RiskTable'
+import PropTypes from 'prop-types';
+import RiskInfo from './RiskInfo';
+import RiskTable from './RiskTable';
 
 function RiskDetails(props) {
-  const { risk } = props
+  const { risk } = props;
   return (
     <Grid>
-      <Cell size={4}>
-        <RiskInfo title='Causes' list={risk.causes}/>
-      </Cell>
-      <Cell size={4}>
-        <RiskInfo title='Impact' list={risk.impacts}/>
-      </Cell>
-      <Cell size={4}>
-        <RiskInfo title='Affected Stakeholders' list={risk.stakeholders}/>
-      </Cell>
+      <RiskInfo colspan={4} title="Causes" list={risk.causes} />
+      <RiskInfo colspan={4} title="Impact" list={risk.impacts} />
+      <RiskInfo colspan={4} title="Affected Stakeholders" list={risk.stakeholders} />
       <Cell size={12}>
         <RiskTable
-          riskType='Residual'
-          title='Current Risk Treatment'
+          riskType="Residual"
+          title="Current Risk Treatment"
           rows={[risk.current_treatments]}
           columns={getColumns('residual')}
         />
       </Cell>
       <Cell size={12}>
         <RiskTable
-          title='Future Risk Treatment'
+          title="Future Risk Treatment"
           rows={risk.future_treatments}
-          riskType='Target'
+          riskType="Target"
           columns={getColumns('target')}
         />
       </Cell>
@@ -101,9 +96,19 @@ function RiskDetails(props) {
             },
           ],
         },
-      ]
-    }[type] || []
+      ],
+    }[type] || [];
   }
 }
 
-export default RiskDetails
+RiskDetails.propTypes = {
+  risk: PropTypes.shape({
+    future_treatments: PropTypes.array.isRequired,
+    current_treatments: PropTypes.array.isRequired,
+    stakeholders: PropTypes.array.isRequired,
+    impacts: PropTypes.array.isRequired,
+    causes: PropTypes.array.isRequired,
+  }).isRequired,
+};
+
+export default RiskDetails;

@@ -43,7 +43,7 @@ export const businessUnits = [
 const data = [{
   id: 1,
 }];
-export default function RiskList(props) {
+export default function RiskList() {
   const dispatch = useDispatch();
   return (
     <Grid>

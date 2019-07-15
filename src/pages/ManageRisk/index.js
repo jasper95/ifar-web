@@ -4,7 +4,7 @@ import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import RiskStats from 'components/Charts/RiskStats';
-import RiskList from './RiskListList';
+import RiskList from './RiskList';
 
 const dashboardData = [
   {
@@ -19,40 +19,40 @@ const dashboardData = [
     causes: [
       {
         id: 1,
-        name: 'Uncorroborated stories'
+        name: 'Uncorroborated stories',
       },
       {
         id: 2,
-        name: 'Journalist attitude'
+        name: 'Journalist attitude',
       },
       {
         id: 3,
-        name: 'Negative relationship with media'
+        name: 'Negative relationship with media',
       },
       {
         id: 4,
-        name: 'Negative attitudes of Field Staff of RAFInians'
-      }
+        name: 'Negative attitudes of Field Staff of RAFInians',
+      },
     ],
     impacts: [
       {
         id: 1,
-        name: 'Damage to reputation'
+        name: 'Damage to reputation',
       },
       {
         id: 2,
-        name: 'Loss of partners'
+        name: 'Loss of partners',
       },
       {
         id: 3,
-        name: 'Opportunity losses'
+        name: 'Opportunity losses',
       },
     ],
     stakeholders: [
       {
         id: 1,
-        name: 'all'
-      }
+        name: 'all',
+      },
     ],
     current_treatments: [{
       id: 1,
@@ -67,7 +67,7 @@ const dashboardData = [
       action: 'Media Monitoring',
       kpi: '0 misinformation cases RAFI Apporoval rating of >90%',
       team: 'BD',
-    }]
+    }],
   },
   // {
   //   id: 1,

@@ -1,11 +1,16 @@
-import React from 'react'
+import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
-import { useDispatch } from 'react-redux'
+import Button from 'react-md/lib/Buttons/Button';
+import DataTable from 'components/DataTable';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
 function RiskTable(props) {
-  const dispatch = useDispatch()
-  const { title, rows, columns, riskType } = props
+  const dispatch = useDispatch();
+  const {
+    title, rows, columns, riskType,
+  } = props;
   return (
     <Grid>
       <Cell size={10}>
@@ -22,7 +27,7 @@ function RiskTable(props) {
         />
       </Cell>
     </Grid>
-  )
+  );
 
   function showDialog() {
     dispatch({
@@ -36,4 +41,11 @@ function RiskTable(props) {
     });
   }
 }
-export default RiskTable
+
+RiskTable.propTypes = {
+  title: PropTypes.string.isRequired,
+  rows: PropTypes.array.isRequired,
+  columns: PropTypes.array.isRequired,
+  riskType: PropTypes.string.isRequired,
+};
+export default RiskTable;
