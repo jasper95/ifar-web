@@ -53,22 +53,36 @@ function Header(props) {
   return (
     <nav className="nav">
       <div className="nav_container">
-        <Link to="/">
-          <img
-            src="/static/img/logo.png"
+        <Link to="/" className="nav_logo">
+          <img 
+            src="/static/img/logo-minimal.png"
             alt=""
-            className="nav_logo"
           />
         </Link>
-
+        <div className="nav_menu">
+          <ul className="nav_menu_list">
+            <li className="nav_menu_list_item active">
+              <Link to="/">Home</Link>
+            </li>
+            <li className="nav_menu_list_item">
+              <Link to="/">Dashboards</Link>
+            </li>
+            <li className="nav_menu_list_item">
+              <Link to="/">Discussion board</Link>
+            </li>
+            <li className="nav_menu_list_item">
+              <Link to="/">Audit observations</Link>
+            </li>
+            <li className="nav_menu_list_item">
+              <Link to="/">Management Actions</Link>
+            </li>
+            <li className="nav_menu_list_item">
+              <Link to="/">Risk Management</Link>
+            </li>
+          </ul>
+        </div>
         <div className="nav_actions">
-          <div className="nav_menu">
-            <ul className="nav_menu_list">
-              <li className="nav_menu_list_item">
-                <Link to="/">Home</Link>
-              </li>
-            </ul>
-          </div>
+
           <div className="nav_profile">
             {renderProfileNav()}
           </div>
@@ -83,10 +97,8 @@ function Header(props) {
     }
     if (!isAuthenticated) {
       return (
-        <Link to="/login">
-          <div className="iBttn iBttn-primary nav_profile_login">
-            Login
-          </div>
+        <Link to="/login" className="iBttn iBttn-primary nav_profile_login">>
+          Login
         </Link>
       );
     }
