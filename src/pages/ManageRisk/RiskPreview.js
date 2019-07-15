@@ -7,6 +7,7 @@ import RiskPreviewInfo from './RiskPreviewInfo';
 
 function RiskPreview(props) {
   const { risk } = props;
+  console.log('RiskPreview', risk)
   return (
     <Grid>
       <Cell size={6}>
