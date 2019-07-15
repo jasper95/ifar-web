@@ -62,7 +62,7 @@ function RiskList(props) {
         </Cell>
       </Grid>
       {list.map(e => (
-        <RiskItem key={e.id} />
+        <RiskItem key={e.id} risk={e} />
       ))}
     </Grid>
   );
