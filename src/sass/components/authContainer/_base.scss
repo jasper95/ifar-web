@@ -8,8 +8,8 @@
 
 	// .authContainer_content
 	&_content {
-		width: 50%;
-		background-color: $gray-100;
+		width: 40%;
+		background-color: $white;
 		padding: 1em 5em;
 
 		display: flex;
@@ -25,15 +25,23 @@
 
 			// .authContainer_contentHeader_logo
 			&_logo {
-				width: 20em;
-				height: auto;
-				margin-bottom: 5em;
+				width: auto;
+				height: 6
+				em;
+				display: flex;
+				margin-bottom: 5rem;
 				cursor: pointer;
+				img {
+					height: 100%;
+					width: auto;
+				}
 			}
 
 			// .authContainer_contentHeader_title
 			&_title {
 				font-size: 2em;
+				font-weight: bold;
+				color: $secondary-color;
 				margin-top: 0;
 				margin-bottom: .5em;
 			}
@@ -50,7 +58,7 @@
 
 	// .authContainer_bg
 	&_bg {
-		width: 50%;
+		width: 60%;
 		background-image: url('/static/img/auth_bg.png');
 		background-position: 50% 50%;
 		background-size: cover;
