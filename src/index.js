@@ -1,7 +1,6 @@
 import React from 'react';
 import { hydrate, render } from 'react-dom';
 import initApollo from 'apollo/initApollo';
-import initialApolloState from 'apollo/initialState';
 import { parseCookies } from 'lib/tools';
 import { loadableReady } from '@loadable/component';
 import WebFontLoader from 'webfontloader';
@@ -32,7 +31,7 @@ if (isProduction && 'serviceWorker' in navigator) {
 }
 
 
-const { __APOLLO_STATE__: apolloState = initialApolloState } = window;
+const { __APOLLO_STATE__: apolloState = {} } = window;
 
 const apolloClient = initApollo(apolloState, { getToken: () => parseCookies().token });
 
