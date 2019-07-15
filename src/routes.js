@@ -5,13 +5,9 @@ import loadable from '@loadable/component';
 const Login = loadable(() => import('pages/Login'));
 const Signup = loadable(() => import('pages/Signup'));
 const Home = loadable(() => import('pages/Home'));
-const User = loadable(() => import('pages/User'));
-const Education = loadable(() => import('pages/Education'));
-const Skill = loadable(() => import('pages/Skill'));
-const Experience = loadable(() => import('pages/Experience'));
-const UserAbout = loadable(() => import('pages/UserAbout'));
-const UserApplication = loadable(() => import('pages/UserApplication'));
 const ForgotPassword = loadable(() => import('pages/ForgotPassword'));
+const ManageRisk = loadable(() => import('pages/ManageRisk'));
+const RiskMap = loadable(() => import('pages/RiskMap'));
 
 export default [
   {
@@ -39,39 +35,15 @@ export default [
     exact: true,
   },
   {
-    key: 'user',
-    component: User,
-    path: '/users/:slug',
+    key: 'manage-risk',
+    component: ManageRisk,
+    path: '/risk-management',
     exact: true,
   },
   {
-    key: 'education',
-    component: Education,
-    path: '/profile/education',
-    exact: true,
-  },
-  {
-    key: 'experience',
-    component: Experience,
-    path: '/profile/experiences',
-    exact: true,
-  },
-  {
-    key: 'skill',
-    component: Skill,
-    path: '/profile/skills',
-    exact: true,
-  },
-  {
-    key: 'user-application',
-    component: UserApplication,
-    path: '/profile/applications',
-    exact: true,
-  },
-  {
-    key: 'user-about',
-    component: UserAbout,
-    path: '/profile/about-me',
+    key: 'risk-map',
+    component: RiskMap,
+    path: '/risk-map',
     exact: true,
   },
   {

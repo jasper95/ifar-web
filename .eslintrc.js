@@ -26,5 +26,5 @@ module.exports = {
         "no-use-before-define": 0,
         "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
     },
-    "settings": { "import/resolver": { "node": { "paths": ["src"] } } }
+    "settings": { "import/resolver": { "node": { "paths": ["./src"] } } }
 };

@@ -3,7 +3,6 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 import { getMarkupFromTree } from 'react-apollo-hooks';
-import initialState from 'apollo/initialState';
 import initApollo from 'apollo/initApollo';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import { parseCookies } from 'lib/tools';

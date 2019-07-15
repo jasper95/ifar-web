@@ -64,12 +64,13 @@ function DialogLayout(props) {
       title={(
         <DialogTitle {...pick(props, ['onCancel', 'title'])} />
       )}
-      children={children}
       actions={(
         <DialogActions {...pick(props, ['onContinue', 'onCancel', 'isProcessing'])} />
       )}
-      {...pick(props, 'dialogClassName', 'footerClassName', 'titleClassName', 'contentClassName', 'onHide')}
-    />
+      {...pick(props, 'dialogClassName', 'footerClassName', 'titleClassName', 'contentClassName', 'onHide', 'height', 'width')}
+    >
+      {children}
+    </DialogContainer>
   );
 }
 
