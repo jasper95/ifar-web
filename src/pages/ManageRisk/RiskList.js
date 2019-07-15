@@ -5,42 +5,10 @@ import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
+import businessUnits from 'lib/constants/riskManagement/businessUnits';
 import RiskItem from './RiskItem';
 
-export const businessUnits = [
-  {
-    id: 1,
-    name: 'RAFI',
-  },
-  {
-    id: 2,
-    name: 'RMF',
-  },
-  {
-    id: 3,
-    name: 'CHU',
-  },
-  {
-    id: 4,
-    name: 'EDU',
-  },
-  {
-    id: 5,
-    name: 'BIOCON',
-  },
-  {
-    id: 6,
-    name: 'KAC',
-  },
-  {
-    id: 7,
-    name: 'AFO',
-  },
-  {
-    id: 8,
-    name: 'INFRA',
-  },
-];
+
 function RiskList(props) {
   const { list } = props;
   const dispatch = useDispatch();

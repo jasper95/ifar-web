@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
 import SelectionControlGroup from 'react-md/lib/SelectionControls/SelectionControlGroup';
-import { businessUnits } from 'pages/ManageRisk/RiskList';
+import businessUnits from 'lib/constants/riskManagement/businessUnits';
 import {
   basisOptions,
   reputionOptions,
