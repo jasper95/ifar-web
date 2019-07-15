@@ -7,6 +7,7 @@ const Signup = loadable(() => import('pages/Signup'));
 const Home = loadable(() => import('pages/Home'));
 const ForgotPassword = loadable(() => import('pages/ForgotPassword'));
 const ManageRisk = loadable(() => import('pages/ManageRisk'));
+const RiskMap = loadable(() => import('pages/RiskMap'));
 
 export default [
   {
@@ -37,6 +38,12 @@ export default [
     key: 'manage-risk',
     component: ManageRisk,
     path: '/risk-management',
+    exact: true,
+  },
+  {
+    key: 'risk-map',
+    component: RiskMap,
+    path: '/risk-map',
     exact: true,
   },
   {
