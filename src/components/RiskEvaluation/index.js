@@ -40,6 +40,7 @@ const descriptionMapping = {
     </span>
   ),
 };
+
 function RiskEvaluation(props) {
   const {
     type,
@@ -137,15 +138,15 @@ function RiskEvaluation(props) {
 RiskEvaluation.defaultProps = {
   likelihood: {
     basis: 'Frequency',
-    rating: '1',
+    rating: 1,
   },
   impact: {
-    reputation: '1',
-    financial: '1',
-    legal_compliance: '1',
-    operational: '1',
-    health_safety_security: '1',
-    management_action: '1',
+    reputation: 1,
+    financial: 1,
+    legal_compliance: 1,
+    operational: 1,
+    health_safety_security: 1,
+    management_action: 1,
     affected: '',
   },
   onChange: () => {},
@@ -154,17 +155,17 @@ RiskEvaluation.defaultProps = {
 RiskEvaluation.propTypes = {
   type: PropTypes.oneOf(['inherent', 'residual', 'target']).isRequired,
   likelihood: PropTypes.shape({
-    basis: PropTypes.string,
-    rating: PropTypes.string,
+    basis: PropTypes.number,
+    rating: PropTypes.number,
   }),
   impact: PropTypes.shape({
     basis: PropTypes.string,
-    legal_compliance: PropTypes.string,
-    operational: PropTypes.string,
-    financial: PropTypes.string,
-    reputation: PropTypes.string,
-    health_safety_security: PropTypes.string,
-    management_action: PropTypes.string,
+    legal_compliance: PropTypes.number,
+    operational: PropTypes.number,
+    financial: PropTypes.number,
+    reputation: PropTypes.number,
+    health_safety_security: PropTypes.number,
+    management_action: PropTypes.number,
     affected: PropTypes.string,
   }),
   onChange: PropTypes.func,
