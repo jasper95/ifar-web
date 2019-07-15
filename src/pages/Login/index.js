@@ -40,11 +40,10 @@ function LoginPage() {
       <div className="authContainer">
         <div className="authContainer_content">
           <div className="authContainer_contentHeader">
-            <Link to="/">
+            <Link to="/" className="authContainer_contentHeader_logo">
               <img
                 src="/static/img/logo.png"
                 alt=""
-                className="authContainer_contentHeader_logo"
               />
             </Link>
 

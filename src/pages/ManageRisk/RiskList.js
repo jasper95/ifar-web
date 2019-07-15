@@ -29,7 +29,7 @@ function RiskList(props) {
           <Button flat onClick={showRiskDialog}>Add Risk</Button>
         </Cell>
       </Grid>
-      {list.map(e => (
+      {list && list.map(e => (
         <RiskItem key={e.id} risk={e} />
       ))}
     </Grid>

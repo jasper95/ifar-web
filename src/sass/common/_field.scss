@@ -9,19 +9,23 @@ $fieldBorder: 1px solid $gray-200;
 	width: 100%;
 	margin-top: 0;
 	margin-bottom: 0em;
-	border: $fieldBorder;
+	// border: $fieldBorder;
 
 	.md-floating-label {
 		position: relative;
 		top: 0;
 		left: 0;
-		font-size: 1em;
+		margin-bottom: .5em;
+		font-size: .8em;
 		font-family: inherit;
 		transform: none !important;
 		color: $gray-300;
 		width: 100%;
 		text-align: left;
 		display: block;
+		font-weight: bold;
+		letter-spacing: .15em;
+		text-transform: uppercase;
 
 		&:not([class*="--inactive"]) {
 			color: $primary-color;
@@ -33,37 +37,54 @@ $fieldBorder: 1px solid $gray-200;
 	}
 
 	.md-text-field {
-		padding: .5em 0;
+		padding: 1em;
 		font-size: 1em;
 		color: $black;
 		font-family: $font-family;
 		margin-top: 0;
+		border: $fieldBorder;
 	}
 
 	.md-divider {
-		position: absolute;
-		top: 0;
-		right: 100%;
-		width: 3px;
-		height: 100%;
-		margin-top: 0;
+		height: 3px;
+		width: 100%;
+		margin-top: -2px;
 		margin-bottom: 0;
+		position: relative;
 		z-index: 10;
-		background-color: $primary-color;
-		visibility: hidden;
+		// z-index: 10;
+		// background-color: $primary-color;
+		// visibility: hidden;
 
-		&:before ,
 		&:after {
-			display: none;
+			height: 100%;
+			background-color: $primary-color;
 		}
 
-		&[class*="active"] {
-			visibility: visible;
-		}
+		// &:before ,
+		// &:after {
+		// 	display: none;
+		// }
+
+		// &[class*="active"] {
+		// 	visibility: visible;
+		// }
+	}
+
+
+	// textfield with indicator
+	.md-text-field--inline-indicator {
+		width: 100%;
 	}
 
 	.md-text-field-inline-indicator {
-		right: 1em;
+		top: 3.5em;
+		right: 2em;
+	}
+
+	.md-text-field-message-container {
+		margin-top: .5em;
+		font-size: 1em;
 	}
 }
 
@@ -73,7 +94,7 @@ $fieldBorder: 1px solid $gray-200;
 
 .iFieldRow {
 	.iField + .iField {
-		border-top: $fieldBorder;
+		// border-top: $fieldBorder;
 		border-left: none;
 	}
 
