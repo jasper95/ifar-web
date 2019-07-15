@@ -2,8 +2,8 @@ import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import PropTypes from 'prop-types';
-import RiskInfo from './RiskInfo';
-import RiskTable from './RiskTable';
+import RiskInfo from './Info';
+import RiskTable from './Table';
 
 function RiskDetails(props) {
   const { risk } = props;

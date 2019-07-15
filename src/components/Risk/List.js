@@ -6,8 +6,7 @@ import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
 import businessUnits from 'lib/constants/riskManagement/businessUnits';
-import RiskItem from './RiskItem';
-
+import RiskItem from './Item';
 
 function RiskList(props) {
   const { list } = props;
@@ -15,9 +14,9 @@ function RiskList(props) {
   return (
     <Grid>
       <Cell size={12}>
-        <ul>
-          {businessUnits.map(e => (<li key={e.id}>{e.name}</li>))}
-        </ul>
+        <div>
+          {businessUnits.map(e => (<Button key={e.id}>{e.name}</Button>))}
+        </div>
       </Cell>
       <Grid>
         <Cell size={3}>

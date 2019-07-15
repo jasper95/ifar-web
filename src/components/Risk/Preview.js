@@ -3,11 +3,11 @@ import Grid from 'react-md/lib/Grids/Grid';
 import PropTypes from 'prop-types';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
-import RiskPreviewInfo from './RiskPreviewInfo';
+import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
   const { risk } = props;
-  console.log('RiskPreview', risk)
+  // console.log('RiskPreview', risk)
   return (
     <Grid>
       <Cell size={6}>
