@@ -1,0 +1,151 @@
+$gutter: 2em;
+$chart-width: 250px;
+
+.rafi .chartCard {
+	font-size: 1rem;
+	width: calc( 100% - #{$gutter} );
+	background-color: $white;
+	box-shadow: 0 0 1em 0 rgba(#000,.15);
+	border-radius: .5em;
+	padding: 1em;
+	margin: $gutter / 2;
+
+	// .chartCard_header
+	&_header {
+		width: 100%;
+		text-align: center;
+		font-size: 1em;
+		font-weight: bold;
+		color: $primary-color;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+
+	// .chartCard_content
+	&_content {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		// .chartCard_content_chart
+		&_chart {
+			width: $chart-width;
+			> svg {
+				width: 100%;
+			}
+		}
+
+		// .chartCard_content_stats
+		&_stats {
+			width: calc( 100% - #{$chart-width} );
+			display: flex;
+			justify-content: flex-start;
+			align-items: flex-start;
+			flex-direction: column;
+
+			// .chartCard_content_stats_item
+			&_item {
+				width: 100%;
+				text-align: left;
+				margin-bottom: .5em;
+				font-size: 1em;
+				font-weight: bold;
+				background-color: lighten($gray-100,1%);
+				padding: .5em;
+				height: auto;
+				position: relative;
+				padding-left: 1em;
+
+				&:before {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					display: flex !important;
+					visibility: visible !important;
+					z-index: 10;
+					width: .25em;
+					height: 100%;
+					display: block;
+				}
+
+				.md-icon-text {
+					font-weight: bold;
+					flex-shrink: 1;
+					word-break: break-all;
+				}
+
+				.md-icon-separator {
+					display: flex;
+					flex-wrap: nowrap;
+				}
+
+				// .chartCard_content_stats_item
+				&_badge {
+					background-color: rgba(#000,.15);
+					min-width: 3ch;
+					text-align: center;
+					border-radius: .25em;
+					padding: .25em;
+					line-height: 1;
+					flex-shrink: 0;
+				}
+
+				&:hover {
+					background-color: darken($gray-100,5%);
+				}
+			}
+		}
+	}
+}
+
+
+// ============================
+// unique chartCases
+// ============================
+.chartCard_content_stats_item {
+	// .chartCard_content_stats_item-strategic
+	&-strategic {
+		&:before {
+			background-color: $rafi-cat-management-action;
+		}
+		&:hover .chartCard_content_stats_item_badge {
+			color: $white;
+			background-color: $rafi-cat-management-action;
+		}
+	}
+
+	// .chartCard_content_stats_item-operational
+	&-operational {
+		&:before {
+			background-color: $rafi-cat-operations;
+		}
+		&:hover .chartCard_content_stats_item_badge {
+			color: $white;
+			background-color: $rafi-cat-operations;
+		}
+	}
+
+	// .chartCard_content_stats_item-financial
+	&-financial {
+		&:before {
+			background-color: $rafi-cat-finance;
+		}
+		&:hover .chartCard_content_stats_item_badge {
+			color: $white;
+			background-color: $rafi-cat-finance;
+		}
+	}
+
+	// .chartCard_content_stats_item-legal-and-compliance
+	&-legal-and-compliance {
+		&:before {
+			background-color: $rafi-cat-legal;
+		}
+		&:hover .chartCard_content_stats_item_badge {
+			color: $white;
+			background-color: $rafi-cat-legal;
+		}
+	}
+}

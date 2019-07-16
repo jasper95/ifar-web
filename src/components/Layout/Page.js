@@ -21,15 +21,16 @@ function Page(props) {
     children,
     hasNavigation, hasFooter,
     pageId, className, pageDescription, router,
+    isDashboard = false
   } = props;
   const appData = useSelector(pageSelector);
   const dispatch = useDispatch();
   const { toast, dialog } = appData;
   let { pageTitle } = props;
   if (pageTitle) {
-    pageTitle = `InternLink - ${pageTitle}`;
+    pageTitle = `RAFI - ${pageTitle}`;
   } else {
-    pageTitle = 'Internlink';
+    pageTitle = 'RAFI';
   }
   return (
     <>
@@ -69,7 +70,10 @@ function Page(props) {
         <AsyncDialog path={dialog.path} {...dialog.props} />
       )}
       <main className={`page page-${pageId} ${className}`}>
-        {children}
+        { isDashboard 
+          ? ( <div className='dbContainer'> {children} </div> )
+          : children
+        }
       </main>
 
 

@@ -50,7 +50,7 @@ $btn-colors: (
 
 .iBttn {
 	display: inline-block;
-	padding: .75em 2em;
+	padding: .5em 1em;
 	border-radius: .5em;
 	height: auto;
 	font-weight: 600;
@@ -159,6 +159,22 @@ $btn-colors: (
 	}
 }
 
+// ========================
+// BADGE COUNTER STYLE
+// ========================
+.iBttn-counterBadge {
+	.iBttn_badge {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+
+		background-color: rgba(#000,.1);
+		min-width: 3ch;
+		padding: .5em 0;
+		text-align: center;
+		border-radius: .5em;
+	}
+}
 
 // ========================
 // SPECIAL STYLE

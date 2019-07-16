@@ -8,6 +8,8 @@ import MdGrid from 'react-md/lib/Grids/Grid';
 import MdCell from 'react-md/lib/Grids/Cell';
 import Legend from './Legend';
 
+import 'sass/components/chartCard/index.scss';
+
 function RiskStats(props) {
   const {
     legend, data, title, filterFunc,
@@ -17,32 +19,43 @@ function RiskStats(props) {
     value: data.filter(ee => filterFunc(ee, e)).length,
     key: idx,
   }));
+
+  const svgSize = 250;
+  const pieSize = (svgSize / 2);
+  const pieGutter = 20;
+  const pieThickness = 20;
+
   return (
-    <div className="md-grid">
-      <div className="md-cell md-cell--12">{title}</div>
-      <div className="md-cell md-cell--6">
-        <PieChart width={300} height={400}>
-          <Pie
-            data={chartData}
-            cx={120}
-            cy={200}
-            innerRadius={60}
-            outerRadius={80}
-            fill="#8884d8"
-            paddingAngle={0}
-            dataKey="value"
-          >
-            {chartData.map(entry => (
-              <Cell key={entry.key} fill={entry.color} />
-            ))}
-            <Label value={data.length} position="center" />
-          </Pie>
-        </PieChart>
-      </div>
-      <div className="md-cell md-cell--6">
-        {chartData.map(e => (
-          <Legend {...e} />
-        ))}
+    <div className="chartCard">
+      <h1 className="chartCard_header">{title}</h1>
+      <div className="chartCard_content">
+        <div className="chartCard_content_chart">
+          <PieChart width={svgSize} height={svgSize}>
+            <Pie
+              data={chartData}
+              cx={(svgSize / 2) - 5}
+              cy={(svgSize / 2)}
+              outerRadius={(pieSize - pieGutter)}
+              innerRadius={((pieSize - pieGutter) - pieThickness)}
+              fill="#8884d8"
+              paddingAngle={0}
+              dataKey="value"
+            >
+              {chartData.map(entry => (
+                <Cell key={entry.key} fill={entry.color} />
+              ))}
+              <Label value={data.length} position="center" />
+            </Pie>
+          </PieChart>
+        </div>
+        <div className="chartCard_content_stats">
+          {chartData.map(e => (
+            <Legend 
+              itemClassName='chartCard_content_stats_item' 
+              {...e} 
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

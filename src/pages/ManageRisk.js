@@ -8,24 +8,50 @@ import RiskList from 'components/Risk/List';
 import dashboardData from 'lib/mock/dashboardData';
 import classificationLegend from 'lib/mock/classificationLegend';
 
+import 'sass/pages/manage-risk.scss';
+
 function ManageRisk(props) {
   return (
-    <Page>
-      <Grid>
-        <Cell offset={9} size={3}>
-          <Button>
-            Notifications
-            {' '}
-            <span>0</span>
-          </Button>
-          <Button>
-            View All Requests
-            {' '}
-            <span>0</span>
-          </Button>
-          <Button>
-            View Strategic Map
-          </Button>
+    <Page 
+      pageTitle='Manage Risk'
+      pageId='manage-risk'
+      isDashboard
+    >
+      <Grid className='row-ToolbarHeader'>
+        <Cell offset={6} size={6} className='col-actions'>
+          <Button
+            flat
+            className='iBttn iBttn-primary iBttn-counterBadge'
+            iconBefore={false}
+            children='Notifications'
+            iconEl={(
+              <span className='iBttn_badge'>
+                0
+              </span>
+            )}
+          />
+          <Button
+            flat
+            className='iBttn iBttn-primary iBttn-counterBadge'
+            iconBefore={false}
+            children='View All Requests'
+            iconEl={(
+              <span className='iBttn_badge'>
+                0
+              </span>
+            )}
+          />
+          <Button
+            flat
+            className='iBttn iBttn-primary iBttn-counterBadge'
+            iconBefore={false}
+            children='View Strategic Map'
+            iconEl={(
+              <span className='iBttn_badge'>
+                0
+              </span>
+            )}
+          />
         </Cell>
       </Grid>
       <Grid>
