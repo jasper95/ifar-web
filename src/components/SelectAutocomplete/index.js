@@ -33,8 +33,8 @@ function SelectAutocomplete(props) {
         {...restProps}
       />
       <TextFieldMessage
-        errorText={error[id]}
-        error={error[id]}
+        errorText={error}
+        error={error}
       />
     </div>
   );

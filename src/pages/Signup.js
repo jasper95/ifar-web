@@ -7,7 +7,9 @@ import useForm from 'lib/hooks/useForm';
 import { useDispatch } from 'react-redux';
 import useMutation from 'apollo/mutation';
 import { withAuth } from 'apollo/auth';
-import { getValidationResult, delay } from 'lib/tools';
+import {
+  getValidationResult, delay, fieldIsRequired, fieldIsInvalid,
+} from 'lib/tools';
 import * as yup from 'yup';
 import cn from 'classnames';
 import 'sass/pages/signup.scss';
@@ -188,15 +190,15 @@ function validator(data) {
     role: yup.string().oneOf(['USER', 'ADMIN']).required(),
     company_name: yup
       .string()
-      .when('role', { is: 'ADMIN', then: yup.string().required('Company name is required') }),
+      .when('role', { is: 'ADMIN', then: yup.string().required(fieldIsRequired) }),
     first_name: yup
       .string()
-      .when('role', { is: 'USER', then: yup.string().required('First name is required') }),
+      .when('role', { is: 'USER', then: yup.string().required(fieldIsRequired) }),
     last_name: yup
       .string()
-      .when('role', { is: 'USER', then: yup.string().required('Last name is required') }),
-    email: yup.string().email('Invalid Email').required('Email is required'),
-    password: yup.string().required('Password is required'),
+      .when('role', { is: 'USER', then: yup.string().required(fieldIsRequired) }),
+    email: yup.string().email(fieldIsInvalid).required(fieldIsRequired),
+    password: yup.string().required(fieldIsRequired),
   });
   return getValidationResult(data, schema);
 }

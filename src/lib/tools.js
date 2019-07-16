@@ -5,6 +5,8 @@ import province from 'lib/constants/address/province';
 import orderBy from 'lodash/orderBy';
 import cookie from 'cookie';
 import day from 'dayjs';
+import capitalize from 'lodash/capitalize';
+import camelCase from 'lodash/camelCase';
 // import queryString from 'query-string';
 
 const barangayOptions = barangay.RECORDS;
@@ -120,4 +122,24 @@ export async function delay(ms = 1000) {
 
 export function parseCookies(req, options = {}) {
   return cookie.parse(req ? req.headers.cookie || '' : document.cookie, options);
+}
+
+export function fieldIsRequired({ label, path }) {
+  const display = label || path
+    .split('.')
+    .pop()
+    .split('_')
+    .map(capitalize)
+    .join(' ');
+  return `${display} is required`;
+}
+
+export function fieldIsInvalid({ label, path }) {
+  const display = label || path
+    .split('.')
+    .pop()
+    .split('_')
+    .map(capitalize)
+    .join(' ');
+  return `${display} is required`;
 }
