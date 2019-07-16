@@ -13,6 +13,7 @@ import * as yup from 'yup';
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
+  console.log('errors: ', errors);
   const { onElementChange } = formHandlers;
   return (
     <>
@@ -36,7 +37,7 @@ function InherentRisk(props) {
         value={fields.definition || ''}
       />
       <SelectAutocomplete
-        id="classification"
+        id="classification_id"
         required
         placeholder="-Select-"
         label="Classification"
@@ -134,7 +135,7 @@ function validator(data) {
   const schema = yup.object({
     name: yup.string().required(fieldIsRequired),
     definition: yup.string().required(fieldIsRequired),
-    classification: yup.string().required(fieldIsRequired),
+    classification_id: yup.string().required(fieldIsRequired),
     stakeholders: yup.array().of(
       yup.object({
         name: yup.string().label('Stakeholder').required(fieldIsRequired),

@@ -129,6 +129,7 @@ export function fieldIsRequired({ label, path }) {
     .split('.')
     .pop()
     .split('_')
+    .filter(e => e !== 'id')
     .map(capitalize)
     .join(' ');
   return `${display} is required`;
@@ -139,6 +140,7 @@ export function fieldIsInvalid({ label, path }) {
     .split('.')
     .pop()
     .split('_')
+    .filter(e => e !== 'id')
     .map(capitalize)
     .join(' ');
   return `${display} is required`;

@@ -43,7 +43,13 @@ function RiskList(props) {
         props: {
           dialogId: 'InherentRisk',
           title: 'Inherent Risk',
-          onValid: onCreate,
+          onValid: data => onCreate({
+            data: {
+              ...data,
+              business_unit_id: '871637c4-5510-4500-8e78-984fce5001ff',
+              inherent_rating: 1,
+            },
+          }),
           initialFields: {
             likelihood: {
               basis: 'Frequency',
