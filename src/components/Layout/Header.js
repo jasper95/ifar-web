@@ -103,8 +103,14 @@ function Header(props) {
             id="nav_profile_settings"
             icon
             menuItems={[
-              <ListItem key={1} primaryText="Item One" />,
-              <ListItem key={2} primaryText="Item Two" />,
+              {
+                key: 1,
+                primaryText:'Item One'
+              },
+              {
+                key: 2,
+                primaryText:'Item Two'
+              }
             ]}
             className="nav_profile_settings"
             anchor={{
@@ -118,14 +124,14 @@ function Header(props) {
             id="nav_profile_avatar"
             className="nav_profile_avatar"
             menuItems={[
-              <ListItem key={1}>
-                <FontIcon>account_circle</FontIcon>
-                View profile
-              </ListItem>,
-              <ListItem key={2}>
-                <FontIcon>exit_to_app</FontIcon>
-                Logout
-              </ListItem>
+              {
+                primaryText: 'View profile',
+                leftIcon: <FontIcon>account_circle</FontIcon>
+              },
+              {
+                primaryText: 'Logout',
+                leftIcon: <FontIcon>exit_to_app</FontIcon>
+              }
             ]}
             anchor={{
               x: MenuButton.HorizontalAnchors.INNER_LEFT,

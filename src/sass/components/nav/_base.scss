@@ -135,54 +135,106 @@ $menu-text-color-active: $white;
 
 		// nav_profile_settings
 		&_settings {
-			&#nav_profile_settings-toggle {
-				background-color: transparent !important;
-				color: $menu-text-color;
-				&:hover {
-					color: $menu-text-color-hovered;
-				}
-			}
+
 		}
 
 
 		// nav_profile_avatar
 		&_avatar {
-			&#nav_profile_avatar-toggle {
-				display: flex !important;
-				align-items: center;
-				justify-content: flex-start;
-				flex-direction: row;
-				font-size: 1em;
-				background-color: transparent !important;
-			}
-
-			.name {
-				font-size: 1em;
-				color: $menu-text-color;
-				margin: 0 1em;
-			}
-
-			.avatar {
-				width: $nav-avatar-size;
-				height: $nav-avatar-size;
-				border-radius: 50%;
-				overflow: hidden;
-				img {
-					width: 100%;
-					height: 100%;
-					object-fit: cover;
-					object-positon: 50% 50%;
-				}
-			}
-
-			&:hover {
-				.name {
-					color: $menu-text-color-hovered;
-				}
-			}
 
 		}
 
+	}
+}
+
+// ==============================
+// AVATAR LIST SETTINGS
+// ==============================
+.nav_profile .md-list {
+	top: 100%;
+	right: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+
+	// .md-list-item
+	&-item {
+		width: 100%;
+		&:not(:last-child) {
+			border-bottom: 1px solid $gray-100;
+		}
+	}
+
+	// .md-list-tile
+	&-tile {
+		width: 100%;
+
+		.md-tile-content--left-icon {
+			font-size: 1em;
+			padding-left: 1em;
+		}
+		.md-text {
+			font-family: $font-family;
+			font-weight: 600;
+			font-size: 1em;
+		}
+		.md-icon {
+			color: $primary-color;
+		}
+	}
+}
+
+// ==============================
+// PROFILE SETTINGS
+// ==============================
+.nav #nav_profile_settings {
+	// #nav_profile_settings-toggle
+	&-toggle {
+		background-color: transparent !important;
+		color: $menu-text-color;
+		&:hover {
+			color: $primary-color;
+		}
+	}
+}
+
+// ==============================
+// AVATAR SETTINGS
+// ==============================
+.nav #nav_profile_avatar {
+
+	// #nav_profile_avatar-toggle
+	&-toggle {
+		display: flex !important;
+		align-items: center;
+		justify-content: flex-start;
+		flex-direction: row;
+		font-size: 1em;
+		background-color: transparent !important;
+	}
+
+	.name {
+		font-size: 1em;
+		color: $menu-text-color;
+		margin: 0 1em;
+	}
+
+	.avatar {
+		width: $nav-avatar-size;
+		height: $nav-avatar-size;
+		border-radius: 50%;
+		overflow: hidden;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-positon: 50% 50%;
+		}
+	}
+
+	&:hover {
+		.name {
+			color: $menu-text-color-hovered;
+		}
 	}
 }
 
