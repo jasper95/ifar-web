@@ -1,29 +1,7 @@
-@keyframes swing {
-  20% {
-    -webkit-transform: rotate3d(0, 0, 1, 15deg);
-    transform: rotate3d(0, 0, 1, 15deg);
-  }
 
-  40% {
-    -webkit-transform: rotate3d(0, 0, 1, -10deg);
-    transform: rotate3d(0, 0, 1, -10deg);
-  }
-
-  60% {
-    -webkit-transform: rotate3d(0, 0, 1, 5deg);
-    transform: rotate3d(0, 0, 1, 5deg);
-  }
-
-  80% {
-    -webkit-transform: rotate3d(0, 0, 1, -5deg);
-    transform: rotate3d(0, 0, 1, -5deg);
-  }
-
-  to {
-    -webkit-transform: rotate3d(0, 0, 1, 0deg);
-    transform: rotate3d(0, 0, 1, 0deg);
-  }
-}
+$menu-text-color: rgba($white,.5);
+$menu-text-color-hovered: $white;
+$menu-text-color-active: $white;
 
 .nav {
 	position: fixed;
@@ -34,6 +12,7 @@
 	height: $nav-height;
 	background-color: $nav-bg;
 	box-shadow: 0 0 .25em .5em rgba(#000,.05);
+	font-size: 1rem;
 
 	// .nav_container
 	&_container {
@@ -96,7 +75,7 @@
 			// nav_menu_list_item
 			&_item {
 				position: relative;
-				color: rgba($white,.5);
+				color: $menu-text-color;
 				padding: 0 1em;
 				background-color: transparent;
 
@@ -130,11 +109,11 @@
 				}
 
 				&:hover {
-					color: $white;
+					color: $menu-text-color-hovered;
 				}
 
 				&.active {
-					color: $white;
+					color: $menu-text-color-active;
 					&:before {
 						opacity: 1;
 					}
@@ -146,6 +125,7 @@
 
 	// .nav_profile
 	&_profile {
+		font-size: 1em;
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
@@ -153,78 +133,51 @@
 		position: relative;
 
 
-		// nav_profile_avatar
-		&_avatar {
-			width: $nav-avatar-size;
-			height: $nav-avatar-size;
-			border-radius: 50%;
-			overflow: hidden;
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				object-positon: 50% 50%;
+		// nav_profile_settings
+		&_settings {
+			&#nav_profile_settings-toggle {
+				background-color: transparent !important;
+				color: $menu-text-color;
+				&:hover {
+					color: $menu-text-color-hovered;
+				}
 			}
 		}
 
-		// nav_profile_content
-		&_content {
-			padding: 0 1em;
-			.name ,
-			.logout {
-				line-height: 1;
-				margin-top: 0;
-				margin-bottom: 0;
-				cursor: pointer;
+
+		// nav_profile_avatar
+		&_avatar {
+			&#nav_profile_avatar-toggle {
+				display: flex !important;
+				align-items: center;
+				justify-content: flex-start;
+				flex-direction: row;
+				font-size: 1em;
+				background-color: transparent !important;
 			}
 
 			.name {
-				font-size: 1.5em;
-				font-weight: 700;
-				color: $black;
-				margin-bottom: .5rem;
-
-				&:hover {
-					color: $primary-color;
-				}
+				font-size: 1em;
+				color: $menu-text-color;
+				margin: 0 1em;
 			}
 
-			.logout {
-				color: $gray-200;
-				font-weight: 600;
-				&:hover {
-					color: $error;
+			.avatar {
+				width: $nav-avatar-size;
+				height: $nav-avatar-size;
+				border-radius: 50%;
+				overflow: hidden;
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					object-positon: 50% 50%;
 				}
-			}
-		}
-
-		// .nav_profile_notification
-		&_notification {
-			width: auto;
-			height: auto;
-			line-height: 1em;
-			font-size: 1em;
-			padding: .5em;
-			flex-shrink: 0;
-			color: $black;
-
-			.md-icon {
-				height: 1em;
-				width: 1em;
-				text-align: center;
-				font-size: 1.75em;
-				line-height: 1;
-				color: inherit;
-				display: block;
-				transform-origin: top center;
 			}
 
 			&:hover {
-				color: $primary-color;
-				.md-icon {
-					animation-name: swing;
-					animation-fill-mode: both;
-					animation-duration: 1s
+				.name {
+					color: $menu-text-color-hovered;
 				}
 			}
 

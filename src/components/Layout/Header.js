@@ -3,6 +3,7 @@ import Link from 'react-router-dom/Link';
 import Button from 'react-md/lib/Buttons/Button';
 import ImageLoader from 'react-image';
 import DropdownMenu from 'react-md/lib/Menus/DropdownMenu';
+import MenuButton from 'react-md/lib/Menus/MenuButton';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Avatar from 'react-md/lib/Avatars/Avatar';
 import ListItem from 'react-md/lib/Lists/ListItem';
@@ -97,10 +98,57 @@ function Header(props) {
     }
     if (!isAuthenticated) {
       return (
-        <Link to="/login" className="iBttn iBttn-primary nav_profile_login">>
-          Login
-        </Link>
-      );
+        <>
+          <MenuButton
+            id="nav_profile_settings"
+            icon
+            menuItems={[
+              <ListItem key={1} primaryText="Item One" />,
+              <ListItem key={2} primaryText="Item Two" />,
+            ]}
+            className="nav_profile_settings"
+            anchor={{
+              x: MenuButton.HorizontalAnchors.INNER_LEFT,
+              y: MenuButton.VerticalAnchors.BOTTOM,
+            }}
+          >
+            build
+          </MenuButton>
+          <MenuButton
+            id="nav_profile_avatar"
+            className="nav_profile_avatar"
+            menuItems={[
+              <ListItem key={1}>
+                <FontIcon>account_circle</FontIcon>
+                View profile
+              </ListItem>,
+              <ListItem key={2}>
+                <FontIcon>exit_to_app</FontIcon>
+                Logout
+              </ListItem>
+            ]}
+            anchor={{
+              x: MenuButton.HorizontalAnchors.INNER_LEFT,
+              y: MenuButton.VerticalAnchors.BOTTOM,
+            }}
+          >
+            <>
+              <span className="name">
+                John
+              </span>
+              <div className="avatar">
+                <ImageLoader src='https://images.unsplash.com/photo-1500649297466-74794c70acfc?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=bfc3d05aa60acb5ef0e58c1ac5eb6463' />
+              </div>
+            </>
+          </MenuButton>
+        </>
+      )
+
+      // return (
+      //   <Link to="/login" className="iBttn iBttn-primary nav_profile_login">>
+      //     Login
+      //   </Link>
+      // );
     }
     const profileLink = user.company ? `/companies/${user.company.slug}` : `/users/${user.slug}`;
     const displayName = [
@@ -122,7 +170,6 @@ function Header(props) {
           >
             <Link to={profileLink}>
               {displayName}
-
             </Link>
           </p>
           <p

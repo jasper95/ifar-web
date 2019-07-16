@@ -1,8 +1,9 @@
-
 p,.h1,.h2,.h3,.h4,.h5,.h6,
-h1,h2,h3,h4,h5,h6 {
+h1,h2,h3,h4,h5,h6, 
+button, input, textarea, html {
 	font-family: $font-family;
 }
+
 p {
 	font-size: 1em;
 	font-weight: 400;
