@@ -37,16 +37,20 @@ function RiskList(props) {
         <div className="riskList_risk_header">
           <div className="crumb">
             <h1 className="crumb_main">
-              Strategic Risk Management Plan
+              <div className="text">
+                Strategic Risk Management Plan
+              </div>
             </h1>
             <h1 className="crumb_sub">
-              RAFI
+              <div className="text">
+                RAFI
+              </div>
             </h1>
           </div>
           <div className="actions">
             <Button
               flat
-              className='actions_addRisk'
+              className='actions_addRisk iBttn iBttn-teal'
               iconChildren="add_circle"
               onClick={showRiskDialog}
             >

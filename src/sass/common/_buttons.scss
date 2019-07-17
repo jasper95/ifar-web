@@ -54,7 +54,6 @@ $btn-colors: (
 	border-radius: .5em;
 	height: auto;
 	font-weight: 600;
-	min-width: 10em;
 	text-decoration: none !important;
 	border: none;
 	cursor: pointer;
@@ -73,10 +72,6 @@ $btn-colors: (
 		font-size: inherit;
 	}
 
-	// ripple
-	span:last-child {
-		display: none;
-	}
 
 	@each $name,$value in $btn-colors {
 		&-#{$name} {
