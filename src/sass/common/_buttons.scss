@@ -163,6 +163,7 @@ $btn-colors: (
 // BADGE COUNTER STYLE
 // ========================
 .iBttn-counterBadge {
+	padding-right: .5em;
 	.iBttn_badge {
 		display: flex !important;
 		align-items: center;
@@ -170,7 +171,9 @@ $btn-colors: (
 
 		background-color: rgba(#000,.1);
 		min-width: 3ch;
-		padding: .5em 0;
+		font-size: .9em;
+		line-height: 1em;
+		padding: .25em 0;
 		text-align: center;
 		border-radius: .5em;
 	}

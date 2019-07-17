@@ -9,25 +9,60 @@ import businessUnits from 'lib/constants/riskManagement/businessUnits';
 import { useCreateNode } from 'apollo/mutation';
 import RiskItem from './Item';
 
+import 'sass/components/risk/index.scss';
+
 function RiskList(props) {
   const { list } = props;
   const dispatch = useDispatch();
   const [, onCreate] = useCreateNode({ node: 'risk', callback: () => {} });
   return (
-    <Grid>
-      <Cell size={12}>
-        <div>
-          {businessUnits.map(e => (<Button key={e.id}>{e.name}</Button>))}
+    <Grid className="riskList">
+      <div className="riskList_unitList">
+        {businessUnits.map(e => (
+          <Button
+            flat
+            className="riskList_unitList_item"
+            iconBefore={false}
+            children={e.name}
+            iconEl={(
+              <span className="riskList_unitList_item_badge">
+                0
+              </span>
+            )}
+          />
+        ))}
+      </div>
+
+      <div className="riskList_risk">
+        <div className="riskList_risk_header">
+          <div className="crumb">
+            <h1 className="crumb_main">
+              Strategic Risk Management Plan
+            </h1>
+            <h1 className="crumb_sub">
+              RAFI
+            </h1>
+          </div>
+          <div className="actions">
+            <Button
+              flat
+              iconChildren="add_circle"
+              onClick={showRiskDialog}
+            >
+              Add Risk
+            </Button>
+          </div>
         </div>
-      </Cell>
-      <Grid>
+      </div>
+
+      <Grid className="riskList_risk">
         <Cell size={3}>
-          <span>Strategic Risk Management Plan</span>
+          <span></span>
           <FontIcon>keyboard_arrow_right</FontIcon>
           <span>RAFI</span>
         </Cell>
         <Cell size={2}>
-          <Button flat onClick={showRiskDialog}>Add Risk</Button>
+          
         </Cell>
       </Grid>
       {list && list.map(e => (
