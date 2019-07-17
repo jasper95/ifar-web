@@ -6,16 +6,14 @@ import { useSelector } from 'react-redux';
 import useQuery from 'apollo/query';
 import { Redirect } from 'react-router';
 import jwt from 'jsonwebtoken';
-import gql from 'graphql-tag';
 import AuthContext from 'apollo/AuthContext';
-import history from 'lib/history';
 import { generateQueryById } from './query';
 
 const sessionQuery = generateQueryById({
   node: 'user_session',
   keys: [
     'id',
-    `system_user {
+    `user {
       id
       first_name
       last_name
@@ -61,7 +59,7 @@ export default function AppWithAuth(props) {
     data: authData = {}, loading, error, refetch,
   } = authResponse;
   const { user_session_by_pk: session = {} } = authData;
-  const { system_user: auth = null } = session;
+  const { user: auth = null } = session;
   return (
     <AuthContext.Provider value={{
       loading,

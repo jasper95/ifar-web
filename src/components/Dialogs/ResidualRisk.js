@@ -4,10 +4,13 @@ import withDialog from 'lib/hocs/dialog';
 import flowRight from 'lodash/flowRight';
 import ResidualRiskFields from 'components/RiskEvaluation/ResidualRisk';
 import RiskEvaluation from 'components/RiskEvaluation';
+import { getValidationResult, fieldIsRequired } from 'lib/tools';
+import * as yup from 'yup';
+import { impact } from './InherentRisk';
 
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
-  const { fields } = formState;
+  const { fields, errors } = formState;
   const { onElementChange } = formHandlers;
   return (
     <>
@@ -25,6 +28,7 @@ function InherentRisk(props) {
         }}
         fieldLabels={[{ label: 'Risk Treatment Strategy' }, { label: 'Action Treatment' }, { label: 'Business Unit' }, { label: 'KPI' }]}
         onChange={onElementChange}
+        errors={errors}
       />
       <RiskEvaluation
         type="residual"
@@ -41,6 +45,22 @@ const Dialog = flowRight(
 )(InherentRisk);
 
 Dialog.defaultProps = {
-  validator: () => ({ isValid: true }),
+  validator,
 };
+
+function validator(data) {
+  const schema = yup.object({
+    current_treatments: yup.array().of(
+      yup.object({
+        strategy: yup.string().required(fieldIsRequired),
+        treatment: yup.string().required(fieldIsRequired),
+        business_unit: yup.string().required(fieldIsRequired),
+        kpi: yup.string().required(fieldIsRequired),
+      }),
+    ),
+    impact,
+  });
+  return getValidationResult(data, schema);
+}
+
 export default Dialog;

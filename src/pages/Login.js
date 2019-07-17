@@ -5,7 +5,7 @@ import TextField from 'react-md/lib/TextFields/TextField';
 import Link from 'react-router-dom/Link';
 import useForm from 'lib/hooks/useForm';
 import cookie from 'js-cookie';
-import { getValidationResult } from 'lib/tools';
+import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools';
 import Page from 'components/Layout/Page';
 import * as yup from 'yup';
 import useMutation from 'apollo/mutation';
@@ -143,8 +143,8 @@ export default flowRight(
 
 function validator(data) {
   const schema = yup.object().shape({
-    email: yup.string().email('Invalid Email').required('Email is required'),
-    password: yup.string().required('Password is required'),
+    email: yup.string().email(fieldIsInvalid).required(fieldIsRequired),
+    password: yup.string().required(fieldIsRequired),
   });
   return getValidationResult(data, schema);
 }

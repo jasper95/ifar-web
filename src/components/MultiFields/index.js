@@ -28,10 +28,17 @@ function MultiFields(props) {
         ))}
       </div>
       <div>
-        {value.map(e => (
+        {value.map((e, idx) => (
           <div>
             {value.length > 1 && <Button onClick={() => handleRemove(e.id)} icon>remove</Button>}
-            <Component key={e.id} onChange={handleChange} value={e} />
+            <Component
+              id={id}
+              index={idx}
+              key={e.id}
+              onChange={handleChange}
+              value={e}
+              {...restProps}
+            />
           </div>
         ))}
       </div>

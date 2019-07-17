@@ -37,7 +37,7 @@ function create(initialState = {}, { getToken, fetchOptions }) {
     };
   });
   const httpLink = new HttpLink({
-    uri: 'https://jobhunt-graphql.herokuapp.com/v1/graphql',
+    uri: process.env.GRAPHQL_URL,
     credentials: 'same-origin',
     fetch,
     fetchOptions,

@@ -69,7 +69,7 @@ function RiskEvaluation(props) {
         label="Likelihood *"
         controls={likelihood.basis === 'Frequency' ? frequencyOptions : probabilityOptions}
         type="radio"
-        onChange={newVal => onChange({ ...likelihood, rating: newVal }, 'likelihood')}
+        onChange={newVal => onChange({ ...likelihood, rating: Number(newVal) }, 'likelihood')}
         value={likelihood.rating}
       />
       <h2>Impact</h2>
@@ -78,7 +78,7 @@ function RiskEvaluation(props) {
         label="Management Action *"
         controls={managementActionOptions}
         value={impact.management_action}
-        onChange={newVal => onChange({ ...impact, management_action: newVal }, 'impact')}
+        onChange={newVal => onChange({ ...impact, management_action: Number(newVal) }, 'impact')}
         type="radio"
       />
       {type === 'inherent' && (
@@ -95,7 +95,7 @@ function RiskEvaluation(props) {
         required
         controls={reputionOptions}
         value={impact.reputation}
-        onChange={newVal => onChange({ ...impact, reputation: newVal }, 'impact')}
+        onChange={newVal => onChange({ ...impact, reputation: Number(newVal) }, 'impact')}
         type="radio"
       />
       <SelectionControlGroup
@@ -103,7 +103,7 @@ function RiskEvaluation(props) {
         id="impact.financial"
         controls={financialOptions}
         value={impact.financial}
-        onChange={newVal => onChange({ ...impact, financial: newVal }, 'impact')}
+        onChange={newVal => onChange({ ...impact, financial: Number(newVal) }, 'impact')}
         type="radio"
       />
       <SelectionControlGroup
@@ -111,7 +111,7 @@ function RiskEvaluation(props) {
         id="impact.health_safety_security"
         value={impact.health_safety_security}
         controls={healthSafetySecurityOptions}
-        onChange={newVal => onChange({ ...impact, health_safety_security: newVal }, 'impact')}
+        onChange={newVal => onChange({ ...impact, health_safety_security: Number(newVal) }, 'impact')}
         type="radio"
       />
       <SelectionControlGroup
@@ -119,7 +119,7 @@ function RiskEvaluation(props) {
         id="impact.operational"
         controls={operationalOptions}
         value={impact.operational}
-        onChange={newVal => onChange({ ...impact, operational: newVal }, 'impact')}
+        onChange={newVal => onChange({ ...impact, operational: Number(newVal) }, 'impact')}
         type="radio"
       />
       <SelectionControlGroup
@@ -128,7 +128,7 @@ function RiskEvaluation(props) {
         id="impact.legal_compliance"
         controls={legalComplianceOptions}
         value={impact.legal_compliance}
-        onChange={newVal => onChange({ ...impact, legal_compliance: newVal }, 'impact')}
+        onChange={newVal => onChange({ ...impact, legal_compliance: Number(newVal) }, 'impact')}
         type="radio"
       />
     </div>

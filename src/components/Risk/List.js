@@ -6,11 +6,13 @@ import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
 import businessUnits from 'lib/constants/riskManagement/businessUnits';
+import { useCreateNode } from 'apollo/mutation';
 import RiskItem from './Item';
 
 function RiskList(props) {
   const { list } = props;
   const dispatch = useDispatch();
+  const [, onCreate] = useCreateNode({ node: 'risk', callback: () => {} });
   return (
     <Grid>
       <Cell size={12}>
@@ -41,7 +43,27 @@ function RiskList(props) {
         props: {
           dialogId: 'InherentRisk',
           title: 'Inherent Risk',
-          onValid: () => {},
+          onValid: data => onCreate({
+            data: {
+              ...data,
+              business_unit_id: '871637c4-5510-4500-8e78-984fce5001ff',
+              inherent_rating: 1,
+            },
+          }),
+          initialFields: {
+            likelihood: {
+              basis: 'Frequency',
+              rating: 1,
+            },
+            impact: {
+              reputation: 1,
+              financial: 1,
+              legal_compliance: 1,
+              operational: 1,
+              health_safety_security: 1,
+              management_action: 1,
+            },
+          },
         },
       },
       type: 'SHOW_DIALOG',

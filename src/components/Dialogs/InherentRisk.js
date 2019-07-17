@@ -5,16 +5,15 @@ import MultFields from 'components/MultiFields';
 import withDialog from 'lib/hocs/dialog';
 import flowRight from 'lodash/flowRight';
 import RiskEvaluation from 'components/RiskEvaluation';
+import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools';
+import classifications from 'lib/constants/riskManagement/classifications';
+import * as yup from 'yup';
 
-const options = [
-  'Strategic',
-  'Operational',
-  'Financial',
-  'Legal or Compliance',
-];
+
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
+  console.log('errors: ', errors);
   const { onElementChange } = formHandlers;
   return (
     <>
@@ -38,13 +37,27 @@ function InherentRisk(props) {
         value={fields.definition || ''}
       />
       <SelectAutocomplete
-        id="classification"
+        id="classification_id"
         required
         placeholder="-Select-"
         label="Classification"
         onChange={onElementChange}
-        options={options}
+        options={classifications.map(e => ({ value: e.id, label: e.name }))}
         value={fields.classification}
+        error={errors.classification}
+      />
+      <MultFields
+        id="causes"
+        fieldsRenderer={SingleTextField}
+        value={fields.causes || []}
+        label="Cause"
+        required
+        defaultItem={{
+          name: '',
+        }}
+        fieldLabels={[{ label: 'Cause' }]}
+        onChange={onElementChange}
+        errors={errors}
       />
       <MultFields
         id="impacts"
@@ -57,11 +70,11 @@ function InherentRisk(props) {
         }}
         fieldLabels={[{ label: 'Impact' }]}
         onChange={onElementChange}
+        errors={errors}
       />
       <MultFields
         id="stakeholders"
         fieldsRenderer={SingleTextField}
-        value={[]}
         label="Affected Stakeholders"
         defaultItem={{
           name: '',
@@ -70,16 +83,29 @@ function InherentRisk(props) {
         onChange={onElementChange}
         value={fields.stakeholders || []}
         fieldLabels={[{ label: 'Stakeholder' }]}
+        errors={errors}
       />
-      <RiskEvaluation type="inherint" />
+      <RiskEvaluation
+        type="inherint"
+        onChange={onElementChange}
+        likelihood={fields.likelihood}
+        impact={fields.impact}
+      />
     </>
   );
 }
 
 function SingleTextField(prop) {
-  const { value, id, onChange } = prop;
+  const {
+    value, id, onChange, errors = {}, index,
+  } = prop;
   return (
-    <TextField value={value.name} onChange={newVal => onChange({ ...value, name: newVal }, id)} />
+    <TextField
+      value={value.name}
+      error={!!errors[`${id}[${index}].name`]}
+      errorText={errors[`${id}[${index}].name`]}
+      onChange={newVal => onChange({ ...value, name: newVal }, id)}
+    />
   );
 }
 
@@ -88,6 +114,46 @@ const Dialog = flowRight(
 )(InherentRisk);
 
 Dialog.defaultProps = {
-  validator: () => ({ isValid: true }),
+  validator,
 };
+
+export const impact = yup.object({
+  legal_compliance: yup.number().required(fieldIsRequired),
+  operational: yup.number().required(fieldIsRequired),
+  financial: yup.number().required(fieldIsRequired),
+  reputation: yup.number().required(fieldIsRequired),
+  health_safety_security: yup.number().required(fieldIsRequired),
+  management_action: yup.number().required(fieldIsRequired),
+});
+
+export const likelihood = yup.object({
+  basis: yup.string().oneOf(['Frequency', 'Probability'], fieldIsInvalid),
+  rating: yup.number().required(fieldIsRequired),
+});
+
+function validator(data) {
+  const schema = yup.object({
+    name: yup.string().required(fieldIsRequired),
+    definition: yup.string().required(fieldIsRequired),
+    classification_id: yup.string().required(fieldIsRequired),
+    stakeholders: yup.array().of(
+      yup.object({
+        name: yup.string().label('Stakeholder').required(fieldIsRequired),
+      }),
+    ),
+    causes: yup.array().of(
+      yup.object({
+        name: yup.string().label('Cause').required(fieldIsRequired),
+      }),
+    ),
+    impacts: yup.array().of(
+      yup.object({
+        name: yup.string().label('Impact').required(fieldIsRequired),
+      }),
+    ),
+    impact,
+  });
+  return getValidationResult(data, schema);
+}
+
 export default Dialog;
