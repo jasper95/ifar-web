@@ -1,15 +1,16 @@
 .footer {
 	padding: 1em 0;
-	background-color: darken($gray-100, 2%);
+	background-color: $black;
 
 	.footer_colItem {
 		padding: 0 1em;
 
 		// .footer_colItem_header
 		&_header {
-			color: $primary-color;
+			color: $white;
 			font-weight: 700;
-			font-size: 1.5em;
+			font-size: 1.25em;
+			border-bottom: 2px solid $primary-color;
 		}
 
 		// .footer_colItem_menu
@@ -37,9 +38,8 @@
 		// .footer_colItem-brand
 		&-brand {
 			img {
-				max-width: 10em;
-				width: calc( 100% - 2em );
-				height: auto;
+				height: 5em;
+				width: auto;
 				margin-bottom: 1em;
 			}
 
@@ -48,30 +48,33 @@
 			}
 		}
 
+		// .footer_colItem-contact
 		&-contact {
-			p {
+			> div {
+				width: 100%;
 				margin-top: 0;
 				margin-bottom: 1em;
 				display: flex;
 				align-items: flex-start;
 				justify-content: flex-start;
+			}
 
-				.md-icon {
-					font-size: 1em;
-					color: $primary-color;
-				}
+			.md-icon {
+				font-size: 1em;
+				color: $primary-color;
+			}
 
-				.value {
+			.value {
+				font-size: 1em;
+				line-height: 1;
+				padding: 0 1em;
+				p {
+					color: $gray-400;
 					font-size: 1em;
-					line-height: 1;
-					padding: 0 1em;
-					p {
-						color: $gray-400;
-						font-size: 1em;
-						margin-top: 0;
-						margin-bottom: 0;
-						line-height: 1.4;
-					}
+					font-weight: 600;
+					margin-top: 0;
+					margin-bottom: 0;
+					line-height: 1.4;
 				}
 			}
 		}
