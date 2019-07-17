@@ -73,10 +73,11 @@ export default function AppWithAuth(props) {
   );
 }
 
-export const withAuth = () => (WrappedComponent) => {
+export const withAuth = (WrappedComponent) => {
   function Auth(props) {
     const isMounted = useRef(false);
     const { requireAuth = true } = props;
+    console.log('props: ', props);
 
     const { data: auth, loading, error } = useContext(AuthContext);
     useEffect(() => {

@@ -78,8 +78,8 @@ export function renderRoutes(routes, extraProps = {}, switchProps = {}) {
             const {
               title, hasNavigation,
               hasFooter, requireAuth, key,
-              pageId, pageDescription, ...restProps
-            } = props;
+              pageId, pageDescription,
+            } = route;
             return (
               <PageLayout
                 key={key}
@@ -90,7 +90,7 @@ export function renderRoutes(routes, extraProps = {}, switchProps = {}) {
                 requireAuth={requireAuth}
                 pageDescription={pageDescription}
               >
-                <route.component {...restProps} {...extraProps} route={route} />
+                <route.component {...props} {...extraProps} route={route} />
               </PageLayout>
             );
           }}

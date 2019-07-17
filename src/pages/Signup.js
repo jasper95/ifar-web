@@ -5,7 +5,6 @@ import Link from 'react-router-dom/Link';
 import useForm from 'lib/hooks/useForm';
 import { useDispatch } from 'react-redux';
 import useMutation from 'apollo/mutation';
-import { withAuth } from 'apollo/auth';
 import {
   getValidationResult, delay, fieldIsRequired, fieldIsInvalid,
 } from 'lib/tools';
@@ -176,7 +175,7 @@ function SignupPage(props) {
   }
 }
 
-export default withAuth({ requireAuth: false })(SignupPage);
+export default SignupPage;
 
 function validator(data) {
   const schema = yup.object({

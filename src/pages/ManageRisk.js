@@ -1,5 +1,4 @@
 import React from 'react';
-import Page from 'components/Layout/Page';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';

@@ -128,9 +128,7 @@ function LoginPage() {
     cookie.set('token', token, { expires: 360000 });
   }
 }
-export default flowRight(
-  withAuth({ requireAuth: false }),
-)(LoginPage);
+export default LoginPage;
 
 function validator(data) {
   const schema = yup.object().shape({
