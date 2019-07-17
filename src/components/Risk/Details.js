@@ -6,9 +6,9 @@ import RiskInfo from './Info';
 import RiskTable from './Table';
 
 function RiskDetails(props) {
-  const { risk } = props;
+  const { risk, className } = props;
   return (
-    <Grid>
+    <Grid className={`RiskDetails ${className}`}>
       <RiskInfo colspan={4} title="Causes" list={risk.causes} />
       <RiskInfo colspan={4} title="Impact" list={risk.impacts} />
       <RiskInfo colspan={4} title="Affected Stakeholders" list={risk.stakeholders} />

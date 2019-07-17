@@ -6,10 +6,10 @@ import Button from 'react-md/lib/Buttons/Button';
 import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
-  const { risk } = props;
+  const { risk, className } = props;
   // console.log('RiskPreview', risk)
   return (
-    <Grid>
+    <Grid className={`RiskPreview ${className}`}>
       <Cell size={6}>
         <Grid>
           <RiskPreviewInfo colspan={6} title="Classification" info={risk.classification} />

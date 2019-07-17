@@ -1,5 +1,10 @@
 // $unitlist-bg: $primary-color-L600;
 $unitlist-bg: #b9e1f7;
+$risklist-header-height: 4em;
+$risklist-header-bg: $primary-color-200;
+
+$risklist-header-arrow: $risklist-header-height;
+$risklist-header-arrow-bg: $primary-color-400;
 
 .rafi .riskList {
 	width: 100%;
@@ -64,6 +69,102 @@ $unitlist-bg: #b9e1f7;
 				.riskList_unitList_item_badge {
 					color: $white;
 				}
+			}
+		}
+	}
+
+	// .riskList_risk
+	&_risk {
+		width: 100%;
+		font-size: 1em;
+		// .riskList_risk_header
+		&_header {
+			width: 100%;
+			height: $risklist-header-height;
+			font-size: 1em;
+			display: flex;
+			flex-wrap: nowrap;
+			background-color: $risklist-header-bg;
+
+			.crumb {
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+
+				// .crumb_sub
+				// .crumb_main
+				&_sub ,
+				&_main {
+					font-size: 1.15em;
+					margin: 0;
+					font-weight: 6old;
+					color: $white;
+					height: 100%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+
+				// .crumb_main
+				&_main {
+					position: relative;
+					overflow: hidden;
+					flex-shrink: 0;
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					.text {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						position: relative;
+						height: 100%;
+						background-color: $risklist-header-arrow-bg;
+						z-index: 10;
+						padding: .5em;
+					}
+					&:after {
+						content: '';
+						border-top: $risklist-header-arrow / 2  solid transparent;
+						border-left: $risklist-header-arrow - 2 solid $risklist-header-arrow-bg;
+						border-bottom: $risklist-header-arrow / 2  solid transparent;
+						height: 100%;
+					}
+				}
+
+				// .crumb_sub
+				&_sub {
+					padding: .5em;
+				}
+			}
+
+			.actions {
+				margin-left: auto;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 1em;
+
+				.iBttn {
+					.md-icon-text {
+						font-weight: 600;
+					}
+				}
+			}
+		}
+
+		// .riskList_risk_content
+		&_content {
+			background-color: rgba($primary-color-L600,.15);;
+			padding: 1em;
+
+			// .riskList_risk_content_item
+			&_item {
+				background-color: $white;
+				margin-bottom: 1em;
+				padding: 1em;
 			}
 		}
 	}
