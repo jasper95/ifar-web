@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FontIcon from 'react-md/lib/FontIcons/FontIcon';
+// import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Grid from 'react-md/lib/Grids/Grid';
-import Cell from 'react-md/lib/Grids/Cell';
+// import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
 import businessUnits from 'lib/constants/riskManagement/businessUnits';
@@ -46,6 +46,7 @@ function RiskList(props) {
           <div className="actions">
             <Button
               flat
+              className="actions_addRisk"
               iconChildren="add_circle"
               onClick={showRiskDialog}
             >
@@ -53,19 +54,16 @@ function RiskList(props) {
             </Button>
           </div>
         </div>
+        <div className="riskList_risk_content">
+          {list && list.map(e => (
+            <RiskItem
+              risk={e}
+              key={e.id}
+              className="riskList_risk_content_item"
+            />
+          ))}
+        </div>
       </div>
-
-      <Grid className="riskList_risk">
-        <Cell size={3}>
-          <span />
-          <FontIcon>keyboard_arrow_right</FontIcon>
-          <span>RAFI</span>
-        </Cell>
-        <Cell size={2} />
-      </Grid>
-      {list && list.map(e => (
-        <RiskItem key={e.id} risk={e} />
-      ))}
     </Grid>
   );
 

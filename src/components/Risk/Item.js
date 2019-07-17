@@ -10,18 +10,17 @@ import RiskPreview from './Preview';
 import RiskDetails from './Details';
 
 function RiskItem(props) {
-  const { risk } = props;
+  const { risk, className } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
   return (
-    <Grid>
-      <ExpansionPanel>
-        <RiskPreview risk={risk} />
-        <RiskDetails risk={risk} />
-      </ExpansionPanel>
-      {/* <Cell size={1}>
-        <Button onClick={() => setIsCollapsed(!isCollapsed)} icon>{isCollapsed ? 'arrow_down' : 'arrow_right'}</Button>
-      </Cell> */}
-    </Grid>
+    <ExpansionPanel
+      className={className}
+      expanded={isCollapsed}
+      onExpandToggle={() => setIsCollapsed(!isCollapsed)}
+    >
+      <RiskPreview risk={risk} />
+      <RiskDetails risk={risk} />
+    </ExpansionPanel>
   );
 }
 

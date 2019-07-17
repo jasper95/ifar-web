@@ -5,7 +5,7 @@ $chart-width: 250px;
 	font-size: 1rem;
 	width: calc( 100% - #{$gutter} );
 	background-color: $white;
-	box-shadow: 0 0 1em 0 rgba(#000,.15);
+	box-shadow: 0 0 1.5em 0 rgba(#000,.15);
 	border-radius: .5em;
 	padding: 1em;
 	margin: $gutter / 2;

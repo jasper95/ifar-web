@@ -26,7 +26,17 @@ $highlight-color-4: #E6FC10;
 // THEME COLORS MODIFIED
 // ========================
 
-$primary-color-100: #F2F8FC;
+$primary-color-L600: lighten($primary-color,30%);
+$primary-color-L500: lighten($primary-color,25%);
+$primary-color-L400: lighten($primary-color,20%);
+$primary-color-L300: lighten($primary-color,15%);
+$primary-color-L200: lighten($primary-color,10%);
+$primary-color-L100: lighten($primary-color,5%);
+$primary-color-100: darken($primary-color,5%);
+$primary-color-200: darken($primary-color,10%);
+$primary-color-300: darken($primary-color,15%);
+$primary-color-400: darken($primary-color,20%);
+
 $primary-color-darker: #074CE9;
 
 
