@@ -57,13 +57,11 @@ function RiskList(props) {
 
       <Grid className="riskList_risk">
         <Cell size={3}>
-          <span></span>
+          <span />
           <FontIcon>keyboard_arrow_right</FontIcon>
           <span>RAFI</span>
         </Cell>
-        <Cell size={2}>
-          
-        </Cell>
+        <Cell size={2} />
       </Grid>
       {list && list.map(e => (
         <RiskItem key={e.id} risk={e} />

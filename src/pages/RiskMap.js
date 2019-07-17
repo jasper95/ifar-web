@@ -2,7 +2,6 @@ import React from 'react';
 import range from 'lodash/range';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
-import Page from 'components/Layout/Page';
 import Paper from 'react-md/lib/Papers/Paper';
 import DataTable from 'components/DataTable';
 import Button from 'react-md/lib/Buttons/Button';
@@ -14,7 +13,7 @@ import businessUnits from 'lib/constants/riskManagement/businessUnits';
 
 export default function RiskMap(props) {
   return (
-    <Page>
+    <div className="dbContainer">
       <Grid>
         <Cell size={1}>
           <span>Legend</span>
@@ -54,7 +53,7 @@ export default function RiskMap(props) {
                 <IconSeparator label="RAFI">
                   <FontIcon>arrow_drop_down</FontIcon>
                 </IconSeparator>
-              )}
+            )}
             />
           </MenuButton>
           <DataTable
@@ -78,7 +77,7 @@ export default function RiskMap(props) {
           />
         </Cell>
       </Grid>
-    </Page>
+    </div>
   );
 
   function rowMapper(row) {

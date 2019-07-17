@@ -55,7 +55,7 @@ function Header(props) {
     <nav className="nav">
       <div className="nav_container">
         <Link to="/" className="nav_logo">
-          <img 
+          <img
             src="/static/img/logo-minimal.png"
             alt=""
           />
@@ -105,12 +105,12 @@ function Header(props) {
             menuItems={[
               {
                 key: 1,
-                primaryText:'Item One'
+                primaryText: 'Item One',
               },
               {
                 key: 2,
-                primaryText:'Item Two'
-              }
+                primaryText: 'Item Two',
+              },
             ]}
             className="nav_profile_settings"
             anchor={{
@@ -126,12 +126,12 @@ function Header(props) {
             menuItems={[
               {
                 primaryText: 'View profile',
-                leftIcon: <FontIcon>account_circle</FontIcon>
+                leftIcon: <FontIcon>account_circle</FontIcon>,
               },
               {
                 primaryText: 'Logout',
-                leftIcon: <FontIcon>exit_to_app</FontIcon>
-              }
+                leftIcon: <FontIcon>exit_to_app</FontIcon>,
+              },
             ]}
             anchor={{
               x: MenuButton.HorizontalAnchors.INNER_LEFT,
@@ -143,18 +143,12 @@ function Header(props) {
                 John
               </span>
               <div className="avatar">
-                <ImageLoader src='https://images.unsplash.com/photo-1500649297466-74794c70acfc?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=bfc3d05aa60acb5ef0e58c1ac5eb6463' />
+                <ImageLoader src="https://images.unsplash.com/photo-1500649297466-74794c70acfc?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=bfc3d05aa60acb5ef0e58c1ac5eb6463" />
               </div>
             </>
           </MenuButton>
         </>
-      )
-
-      // return (
-      //   <Link to="/login" className="iBttn iBttn-primary nav_profile_login">>
-      //     Login
-      //   </Link>
-      // );
+      );
     }
     const profileLink = user.company ? `/companies/${user.company.slug}` : `/users/${user.slug}`;
     const displayName = [

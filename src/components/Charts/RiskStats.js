@@ -50,9 +50,9 @@ function RiskStats(props) {
         </div>
         <div className="chartCard_content_stats">
           {chartData.map(e => (
-            <Legend 
-              itemClassName='chartCard_content_stats_item' 
-              {...e} 
+            <Legend
+              itemClassName="chartCard_content_stats_item"
+              {...e}
             />
           ))}
         </div>

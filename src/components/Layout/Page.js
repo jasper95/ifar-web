@@ -3,8 +3,9 @@ import React from 'react';
 import loadable from '@loadable/component';
 import { Helmet as Head } from 'react-helmet';
 import { withRouter } from 'react-router';
-import flow from 'lodash/flow';
+import flowRight from 'lodash/flowRight';
 import Snackbar from 'components/Snackbar';
+import { withAuth } from 'apollo/auth';
 import { createSelector } from 'reselect';
 import { useSelector, useDispatch } from 'react-redux';
 import Footer from './Footer';
@@ -21,7 +22,6 @@ function Page(props) {
     children,
     hasNavigation, hasFooter,
     pageId, className, pageDescription, router,
-    isDashboard = false
   } = props;
   const appData = useSelector(pageSelector);
   const dispatch = useDispatch();
@@ -70,13 +70,8 @@ function Page(props) {
         <AsyncDialog path={dialog.path} {...dialog.props} />
       )}
       <main className={`page page-${pageId} ${className}`}>
-        { isDashboard 
-          ? ( <div className='dbContainer'> {children} </div> )
-          : children
-        }
+        {children}
       </main>
-
-
       {hasFooter && (
         <Footer />
       )}
@@ -84,7 +79,10 @@ function Page(props) {
   );
 }
 
-const EnhancedPage = flow(withRouter)(Page);
+const EnhancedPage = flowRight(
+  withRouter,
+  withAuth,
+)(Page);
 
 EnhancedPage.defaultProps = {
   hasNavigation: true,

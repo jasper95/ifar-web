@@ -18,9 +18,9 @@ function RiskItem(props) {
         <RiskPreview risk={risk} />
         <RiskDetails risk={risk} />
       </ExpansionPanel>
-      {/*<Cell size={1}>
+      {/* <Cell size={1}>
         <Button onClick={() => setIsCollapsed(!isCollapsed)} icon>{isCollapsed ? 'arrow_down' : 'arrow_right'}</Button>
-      </Cell>*/}
+      </Cell> */}
     </Grid>
   );
 }
