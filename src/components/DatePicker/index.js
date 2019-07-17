@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextFieldMessage from 'react-md/lib/TextFields/TextFieldMessage';
 import DatePicker from 'react-datepicker';
 
@@ -9,10 +10,9 @@ function CustomDatePicker(props) {
   return (
     <>
       {label && (
-        <span>Date of Birth</span>
+        <span>{label}</span>
       )}
       <DatePicker
-        // placeholderText="Select Date"
         selected={value ? new Date(value) : null}
         onChange={newVal => onChange(newVal.toISOString(), id)}
         {...restProps}
@@ -24,5 +24,18 @@ function CustomDatePicker(props) {
     </>
   );
 }
+
+CustomDatePicker.propTypes = {
+  value: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  error: PropTypes.string,
+};
+
+CustomDatePicker.defaultProps = {
+  error: '',
+};
+
 
 export default CustomDatePicker;

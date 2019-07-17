@@ -16,45 +16,58 @@ export default [
     component: Home,
     path: '/',
     exact: true,
-    requireAuth: 'optional',
+    pageProps: {
+      requireAuth: 'optional',
+    },
   },
   {
     key: 'login',
     component: Login,
     path: '/login',
     exact: true,
-    requireAuth: false,
-    pageTitle: 'Login',
-    pageDescription: 'Login to Internlik. Search and apply for internship jobs',
+    pageProps: {
+      requireAuth: false,
+      pageTitle: 'Login',
+      pageDescription: 'Login to Internlik. Search and apply for internship jobs',
+    },
   },
   {
     key: 'signup',
     component: Signup,
     path: '/signup',
     exact: true,
-    requireAuth: false,
-    pageId: 'register',
+    pageProps: {
+      requireAuth: false,
+      pageId: 'register',
+    },
   },
   {
     key: 'forgotpw',
     component: ForgotPassword,
     path: '/forgot-password',
     exact: true,
-    requireAuth: false,
+    pageProps: {
+      requireAuth: false,
+    },
   },
   {
     key: 'manage-risk',
     component: ManageRisk,
     path: '/risk-management',
     exact: true,
-    requireAuth: false,
+    pageProps: {
+      requireAuth: false,
+      pageTitle: 'Manage Risk',
+    },
   },
   {
     key: 'risk-map',
     component: RiskMap,
     path: '/risk-map',
     exact: true,
-    requireAuth: false,
+    pageProps: {
+      requireAuth: false,
+    },
   },
   {
     key: 'not-found',
@@ -75,11 +88,14 @@ export function renderRoutes(routes, extraProps = {}, switchProps = {}) {
           exact={route.exact}
           strict={route.strict}
           render={(props) => {
+            const { pageProps = { }, key } = route;
+            console.log('key: ', key);
             const {
               title, hasNavigation,
-              hasFooter, requireAuth, key,
+              hasFooter, requireAuth,
               pageId, pageDescription,
-            } = route;
+            } = pageProps;
+            console.log('pageProps: ', pageProps);
             return (
               <PageLayout
                 key={key}

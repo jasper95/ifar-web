@@ -2,6 +2,7 @@
 import React, {
   useContext, useMemo, useEffect, useRef,
 } from 'react';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import useQuery from 'apollo/query';
 import { Redirect } from 'react-router';
@@ -50,7 +51,7 @@ function getSessionId(token) {
   }
 }
 
-export default function AppWithAuth(props) {
+function AppWithAuth(props) {
   const { children } = props;
   const token = useSelector(state => state.token);
   const sessionId = useMemo(() => getSessionId(token), [token]);
@@ -73,12 +74,19 @@ export default function AppWithAuth(props) {
   );
 }
 
+AppWithAuth.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+};
+
+export default AppWithAuth;
+
 export const withAuth = (WrappedComponent) => {
   function Auth(props) {
     const isMounted = useRef(false);
-    const { requireAuth = true } = props;
-    console.log('props: ', props);
-
+    const { requireAuth } = props;
     const { data: auth, loading, error } = useContext(AuthContext);
     useEffect(() => {
       isMounted.current = true;
@@ -95,5 +103,14 @@ export const withAuth = (WrappedComponent) => {
       <WrappedComponent {...props} />
     );
   }
+
+  Auth.defaultProps = {
+    requireAuth: true,
+  };
+
+  Auth.propTypes = {
+    requireAuth: PropTypes.oneOf([true, false, 'optional']),
+  };
+
   return Auth;
 };

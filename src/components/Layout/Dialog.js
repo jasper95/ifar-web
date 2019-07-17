@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DialogContainer from 'react-md/lib/Dialogs/DialogContainer';
 import Button from 'react-md/lib/Buttons/Button';
 import pick from 'lodash/pick';
@@ -20,6 +21,11 @@ function DefaultDialogTitle(props) {
     </>
   );
 }
+
+DefaultDialogTitle.propTypes = {
+  onCancel: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+};
 
 function DefaultDialogActions(props) {
   const { onContinue, onCancel, isProcessing } = props;
@@ -43,6 +49,12 @@ function DefaultDialogActions(props) {
     </>
   );
 }
+
+DefaultDialogActions.propTypes = {
+  onContinue: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  isProcessing: PropTypes.bool.isRequired,
+};
 
 function DialogLayout(props) {
   const {
@@ -73,6 +85,21 @@ function DialogLayout(props) {
     </DialogContainer>
   );
 }
+
+DialogLayout.propTypes = {
+  dialogTitleRenderer: PropTypes.func,
+  dialogActionsRenderer: PropTypes.func,
+  dialogClassName: PropTypes.string,
+  titleClassName: PropTypes.string,
+  contentClassName: PropTypes.string,
+  footerClassName: PropTypes.string,
+  dialogClass: '',
+  dialogId: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+};
 
 DialogLayout.defaultProps = {
   dialogTitleRenderer: DefaultDialogTitle,

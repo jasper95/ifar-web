@@ -31,6 +31,7 @@ Legend.propTypes = {
   onClick: PropTypes.func,
   label: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
+  itemClassName: PropTypes.string.isRequired,
 };
 
 Legend.defaultProps = {
