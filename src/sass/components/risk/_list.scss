@@ -1,0 +1,70 @@
+// $unitlist-bg: $primary-color-L600;
+$unitlist-bg: #b9e1f7;
+
+.rafi .riskList {
+	width: 100%;
+	font-size: 1rem;
+
+	// .riskList_unitList
+	&_unitList {
+		font-size: 1em;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		flex-wrap: nowrap;
+		border-top-left-radius: .5em; 
+		border-top-right-radius: .5em; 
+		padding: .25em;
+
+		width: 100%;
+		background-color: $unitlist-bg;
+
+		// .riskList_unitList_item
+		&_item {
+			flex-grow: 1;
+			flex-shrink: 1;
+			font-size: 1em;
+			padding: 0 .25em;
+	
+			&:not(:last-child) {
+				border-right: 1px solid rgba(#000,.10);
+			}
+
+			.md-icon-text {
+				font-size: 1em;
+				flex-grow: 0;
+				font-weight: 600;
+			}
+			.md-icon-separator {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1em;
+			}
+
+			// .riskList_unitList_item_badge
+			&_badge {
+				min-width: 3ch;
+				text-align: center;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				line-height: 1;
+				font-size: .9em;
+				background-color: rgba(#FFF,.5);
+				color: $black;
+				font-weight: bold;
+				padding: .25em 0;
+				border-radius: .25em;
+			}
+
+			&:hover {
+				background-color: $primary-color;
+				color: $white;
+				.riskList_unitList_item_badge {
+					color: $white;
+				}
+			}
+		}
+	}
+}

@@ -54,7 +54,7 @@ function ManageRisk(props) {
           />
         </Cell>
       </Grid>
-      <Grid>
+      <Grid className='row-riskCharts'>
         <Cell size={4}>
           <RiskStats
             filterFunc={classificationFilter}
