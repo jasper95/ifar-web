@@ -9,10 +9,10 @@ import Button from 'react-md/lib/Buttons/Button';
 import get from 'lodash/get';
 
 function DataTable(props) {
-  const { rows, columns, onRowClick } = props;
+  const { rows, columns, onRowClick, className } = props;
 
   return (
-    <Table plain className="iTable">
+    <Table plain className={`iTable ${className}`}>
       <TableHead>
         <TableRow>
           {columns.map(({ title, headProps = {} }, idx) => (

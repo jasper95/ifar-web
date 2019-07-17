@@ -1,0 +1,40 @@
+.RiskTable {
+	width: 100%;
+
+	// .RiskTable_header
+	&_header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		border-bottom: .15em solid $primary-color-L600;
+		padding: .25em;
+
+		// .RiskTable_header_title
+		&_title {
+			margin-bottom: 0;
+			line-height: 1;
+			flex-grow: 1;
+			flex-shrink: 1;
+			overflow: hidden;
+			display: block;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			font-weight: 700;
+			font-size: 1em;
+			color: $primary-color-400;
+		}
+
+		// .RiskTable_header_actions
+		&_actions {
+			flex-shrink: 0;
+		}
+	}
+
+	// .RiskTable_table
+	&_table {
+		width: 100%;
+		padding: 1em;
+		background-color: $gray-100;
+	}
+}

@@ -1,8 +1,16 @@
+$table-header-bg: #cce0ff;
+$table-header-text: $primary-color-200;
+
 .iTable {
 	font-size: 1em;
 	font-family: $font-family;
 	overflow: visible;
 	position: relative;
+
+
+	.md-data-table {
+		background-color: $white;
+	}
 
 	// cells
 	.md-table-column {
@@ -16,10 +24,13 @@
 	// header
 	.md-table-header {
 		font-size: 1em;
+		background-color: $table-header-bg;
 		color: $black;
 		height: auto;
 
 		.md-table-column {
+			font-weight: bold;
+			color: $table-header-text;
 			border-bottom: .15em solid $primary-color;
 		}
 	}
@@ -32,8 +43,11 @@
 			left: 0;
 			width: 100%;
 			text-align: center;
-			padding: .5em;
 			opacity: .5;
+		}
+
+		.md-table-column {
+			padding: .25em 1em;
 		}
 	}
 }

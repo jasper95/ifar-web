@@ -3,13 +3,22 @@ import Cell from 'react-md/lib/Grids/Cell';
 import PropTypes from 'prop-types';
 
 function RiskInfo(props) {
-  const { title, list, colspan } = props;
+  const { colspan, title, list, className } = props;
+
+  const labelKey = title.toLowerCase().replace(/ /g, '-');
+  const uniqueItemClassName = `RiskInfo_cell-${labelKey}`;
+
   return (
-    <Cell size={colspan}>
-      <h3>{title}</h3>
-      <ul>
+    <Cell size={colspan} className={`RiskInfo_info RiskInfo_cell ${uniqueItemClassName}`}>
+      <h3 className="RiskInfo_info_label">{title}</h3>
+      <ul className="RiskInfo_info_list">
         {list.map(e => (
-          <li key={e.id}>{e.name}</li>
+          <li
+            key={e.id} 
+            className="RiskInfo_info_list_item"
+          >
+            {e.name}
+          </li>
         ))}
       </ul>
     </Cell>
