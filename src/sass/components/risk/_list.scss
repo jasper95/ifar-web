@@ -157,14 +157,136 @@ $risklist-header-arrow-bg: $primary-color-400;
 
 		// .riskList_risk_content
 		&_content {
-			background-color: rgba($primary-color-L600,.15);;
+			background-color: $white;
 			padding: 1em;
 
 			// .riskList_risk_content_item
 			&_item {
 				background-color: $white;
+				border: .15em solid $gray-100;
 				margin-bottom: 1em;
 				padding: 1em;
+				border-radius: .5em;
+				position: relative;
+
+				// .riskList_risk_content_item_toggler
+				&_toggler {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: auto;
+					height: auto;
+					min-width: 0;
+					font-size: 2em;
+					color: $primary-color;
+					.md-icon {
+						display: flex;
+						font-size: 1em;
+					}
+				}
+
+				// .riskList_risk_content_item_expansion
+				&_expansion {
+					list-style: none;
+					margin-top: 0;
+					box-shadow: none !important;
+					[role="button"] {
+						display: none;
+					}
+
+					.md-panel-content {
+						padding: 0;
+					}
+				}
+
+				// .riskList_risk_content_item_details
+				&_details {
+					padding: 0 1em;
+				}
+
+			}
+		}
+	}
+}
+
+
+// =============================
+// RISK PREVIEW CONTAINER
+// =============================
+.rafi .RiskPreview {
+	> .md-grid {
+		width: 100%;
+	}
+}
+
+// =============================
+// RISK DETAILS CONTAINER
+// =============================
+.rafi .RiskDetails {
+	> .md-grid {
+		width: 100%;
+	}
+}
+
+
+// =============================
+// RISK INFO
+// =============================
+.rafi .RiskInfo {
+	font-size: 1rem;
+
+	// .RiskInfo_info
+	&_info {
+		// .RiskPreview_info_label
+		&_label {
+			font-size: 1em;
+			font-weight: 700;
+			color: $primary-color-400;
+			margin-bottom: .5em;
+		}
+
+		// .RiskPreview_info_info
+		&_info {
+			font-family: $font-family;
+			font-size: 1em;
+		}
+
+		// .RiskInfo_info_list
+		&_list {
+			margin-top: 0;
+			margin-bottom: 0;
+			padding-left: 2em;
+			font-size: 1em;
+
+			// .RiskInfo_info_list_item
+			&_item {
+				margin-bottom: .5em;
+				font-family: $font-family;
+			}
+		}
+	}
+
+
+	// .RiskInfo_cell
+	&_cell {
+
+		// .RiskInfo_cell-ratings
+		&-ratings {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		// .RiskInfo_cell-actions
+		&-actions {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			.md-btn {
+				color: $gray;
+				&:not(:last-child) {
+					margin-right: .5em;
+				}
 			}
 		}
 	}

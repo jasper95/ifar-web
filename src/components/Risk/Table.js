@@ -12,20 +12,24 @@ function RiskTable(props) {
     title, rows, columns, riskType,
   } = props;
   return (
-    <Grid>
-      <Cell size={10}>
-        <h3>{title}</h3>
-      </Cell>
-      <Cell size={2}>
-        <Button onClick={showDialog}>Add/Edit</Button>
-      </Cell>
-      <hr />
-      <Cell size={12}>
-        <DataTable
-          rows={rows}
-          columns={columns}
-        />
-      </Cell>
+    <Grid className="RiskTable">
+      <div className="RiskTable_header">
+        <h3 className="RiskTable_header_title">
+          {title}
+        </h3>
+        <div className="RiskTable_header_actions">
+          <Button
+            className="iBttn iBttn-primary"
+            onClick={showDialog}>
+            Add/Edit
+          </Button>
+        </div>
+      </div>
+      <DataTable
+        rows={rows}
+        columns={columns}
+        className="RiskTable_table"
+      />
     </Grid>
   );
 

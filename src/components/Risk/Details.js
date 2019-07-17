@@ -9,25 +9,26 @@ function RiskDetails(props) {
   const { risk, className } = props;
   return (
     <Grid className={`RiskDetails ${className}`}>
-      <RiskInfo colspan={4} title="Causes" list={risk.causes} />
-      <RiskInfo colspan={4} title="Impact" list={risk.impacts} />
-      <RiskInfo colspan={4} title="Affected Stakeholders" list={risk.stakeholders} />
-      <Cell size={12}>
-        <RiskTable
-          riskType="Residual"
-          title="Current Risk Treatment"
-          rows={[risk.current_treatments]}
-          columns={getColumns('residual')}
-        />
-      </Cell>
-      <Cell size={12}>
-        <RiskTable
-          title="Future Risk Treatment"
-          rows={risk.future_treatments}
-          riskType="Target"
-          columns={getColumns('target')}
-        />
-      </Cell>
+      <Grid className="RiskDetails_row RiskDetails_row-infos">
+        <RiskInfo colspan={4} title="Causes" list={risk.causes} />
+        <RiskInfo colspan={4} title="Impact" list={risk.impacts} />
+        <RiskInfo colspan={4} title="Affected Stakeholders" list={risk.stakeholders} />
+      </Grid>
+
+      <RiskTable
+        riskType="Residual"
+        title="Current Risk Treatment"
+        rows={[risk.current_treatments]}
+        columns={getColumns('residual')}
+      />
+
+      <RiskTable
+        title="Future Risk Treatment"
+        rows={risk.future_treatments}
+        riskType="Target"
+        columns={getColumns('target')}
+      />
+
     </Grid>
   );
 

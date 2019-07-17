@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Table from 'react-md/lib/DataTables/DataTable';
 import TableBody from 'react-md/lib/DataTables/TableBody';
 import TableRow from 'react-md/lib/DataTables/TableRow';
@@ -8,10 +9,10 @@ import Button from 'react-md/lib/Buttons/Button';
 import get from 'lodash/get';
 
 function DataTable(props) {
-  const { rows, columns, onRowClick } = props;
+  const { rows, columns, onRowClick, className } = props;
 
   return (
-    <Table plain className="iTable">
+    <Table plain className={`iTable ${className}`}>
       <TableHead>
         <TableRow>
           {columns.map(({ title, headProps = {} }, idx) => (
@@ -42,17 +43,29 @@ function DataTable(props) {
   );
 }
 
+DataTable.propTypes = {
+  rows: PropTypes.array.isRequired,
+  columns: PropTypes.array.isRequired,
+  onRowClick: PropTypes.func,
+};
+
+DataTable.defaultProps = {
+  onRowClick: () => {},
+};
+
+export default DataTable;
+
 function Row(props) {
   const {
     type, row, accessor, bodyProps = {}, actions = [],
-    component: Cell, fn = () => null,
+    component: Cell, fn,
   } = props;
   let children;
   if (type === 'actions') {
     children = actions.map(({
-      label, className, icon, onClick, type, component: Action,
+      label, className, icon, onClick, type: actionType, component: Action,
     }) => {
-      if (type === 'component') {
+      if (actionType === 'component') {
         return (
           <Action key={icon} row={row} label={label} icon={icon} onClick={onClick} />
         );
@@ -85,8 +98,23 @@ function Row(props) {
   );
 }
 
-DataTable.defaultProps = {
-  onRowClick: () => {},
+Row.propTypes = {
+  bodyProps: PropTypes.object,
+  type: PropTypes.oneOf(['actions', 'function', 'component']),
+  actions: PropTypes.array,
+  accessor: PropTypes.string,
+  row: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+  component: PropTypes.func,
+  fn: PropTypes.func,
 };
 
-export default DataTable;
+Row.defaultProps = {
+  bodyProps: {},
+  type: 'value',
+  actions: [],
+  accessor: '',
+  fn: () => null,
+  component: () => null,
+};

@@ -10,24 +10,34 @@ function RiskPreview(props) {
   // console.log('RiskPreview', risk)
   return (
     <Grid className={`RiskPreview ${className}`}>
-      <Cell size={6}>
-        <Grid>
-          <RiskPreviewInfo colspan={6} title="Classification" info={risk.classification} />
-          <RiskPreviewInfo colspan={6} title="Risk name" info={risk.name} />
-        </Grid>
-      </Cell>
-      <Cell size={6}>
-        <Grid>
-          <RiskPreviewInfo colspan={3} title="Inherent" info={risk.inherent_rating} />
-          <RiskPreviewInfo colspan={3} title="Residual" info={risk.residual_rating} />
-          <RiskPreviewInfo colspan={3} title="Target" info={risk.target_rating} />
-          <Cell size={3}>
-            <Button icon>edit</Button>
-            <Button icon>delete</Button>
-          </Cell>
-        </Grid>
-      </Cell>
-      <RiskPreviewInfo colspan={12} title="Definition" info={risk.definition} />
+      <Grid>
+        <RiskPreviewInfo
+          colspan={3}
+          title="Classification"
+          info={risk.classification}
+        />
+        <RiskPreviewInfo
+          colspan={3}
+          title="Risk name"
+          info={risk.name}
+        />
+        <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
+          <RiskPreviewInfo colspan={4} title="Inherent" info={risk.inherent_rating} />
+          <RiskPreviewInfo colspan={4} title="Residual" info={risk.residual_rating} />
+          <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
+        </Cell>
+        <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
+          <Button icon>edit</Button>
+          <Button icon>delete</Button>
+        </Cell>
+      </Grid>
+      <Grid>
+        <RiskPreviewInfo
+          colspan={12}
+          title="Definition"
+          info={risk.definition}
+        />
+      </Grid>
     </Grid>
   );
 }

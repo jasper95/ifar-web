@@ -6,7 +6,6 @@ import Link from 'react-router-dom/Link';
 import useForm from 'lib/hooks/useForm';
 import cookie from 'js-cookie';
 import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools';
-import Page from 'components/Layout/Page';
 import * as yup from 'yup';
 import useMutation from 'apollo/mutation';
 import { withAuth } from 'apollo/auth';
@@ -30,99 +29,91 @@ function LoginPage() {
   } = formHandlers;
   const { fields, errors } = formState;
   return (
-    <Page
-      pageId="login"
-      hasNavigation={false}
-      hasFooter={false}
-      pageTitle="Login"
-      pageDescription="Login to Internlik. Search and apply for internship jobs"
-    >
-      <div className="authContainer">
-        <div className="authContainer_content">
-          <div className="authContainer_contentHeader">
-            <Link to="/" className="authContainer_contentHeader_logo">
-              <img
-                src="/static/img/logo.png"
-                alt=""
-              />
-            </Link>
-
-            <h1 className="authContainer_contentHeader_title">
-              Login
-            </h1>
-
-            <p className="authContainer_contentHeader_msg">
-              Welcome back , Please login
-              {' '}
-              <br />
-              to your account
-            </p>
-          </div>
-          <form
-            className="authContainer_form"
-            noValidate
-            autoComplete="off"
-            onSubmit={(e) => {
-              e.preventDefault();
-              onValidate();
-            }}
-          >
-            {/* { verified && (
-              <div className="authContainer_form_msg
-                authContainer_form_msg-success"
-              >
-                <p>Account successfully verified</p>
-              </div>
-            )} */}
-            <input type="Submit" hidden />
-            <TextField
-              className="iField"
-              id="email"
-              label="Email"
-              type="email"
-              variant="outlined"
-              onChange={onElementChange}
-              errorText={errors.email}
-              error={!!errors.email}
-              value={fields.email || ''}
+    <div className="authContainer">
+      <div className="authContainer_content">
+        <div className="authContainer_contentHeader">
+          <Link to="/" className="authContainer_contentHeader_logo">
+            <img
+              src="/static/img/logo.png"
+              alt=""
             />
-            <TextField
-              className="iField"
-              id="password"
-              type="password"
-              label="Password"
-              value={fields.password || ''}
-              error={!!errors.password}
-              errorText={errors.password}
-              onChange={onElementChange}
+          </Link>
+
+          <h1 className="authContainer_contentHeader_title">
+            Login
+          </h1>
+
+          <p className="authContainer_contentHeader_msg">
+            Welcome back , Please login
+            {' '}
+            <br />
+            to your account
+          </p>
+        </div>
+        <form
+          className="authContainer_form"
+          noValidate
+          autoComplete="off"
+          onSubmit={(e) => {
+            e.preventDefault();
+            onValidate();
+          }}
+        >
+          {/* { verified && (
+            <div className="authContainer_form_msg
+              authContainer_form_msg-success"
+            >
+              <p>Account successfully verified</p>
+            </div>
+          )} */}
+          <input type="Submit" hidden />
+          <TextField
+            className="iField"
+            id="email"
+            label="Email"
+            type="email"
+            variant="outlined"
+            onChange={onElementChange}
+            errorText={errors.email}
+            error={!!errors.email}
+            value={fields.email || ''}
+          />
+          <TextField
+            className="iField"
+            id="password"
+            type="password"
+            label="Password"
+            value={fields.password || ''}
+            error={!!errors.password}
+            errorText={errors.password}
+            onChange={onElementChange}
+          />
+          <div className="authContainer_form_action">
+            <Button
+              className={cn('iBttn iBttn-primary', { processing: loginState.loading })}
+              onClick={onValidate}
+              children="Login"
+              flat
             />
-            <div className="authContainer_form_action">
+            <Link to="/signup">
               <Button
-                className={cn('iBttn iBttn-primary', { processing: loginState.loading })}
-                onClick={onValidate}
-                children="Login"
+                className="iBttn iBttn-second-prio"
+                children="Sign Up"
                 flat
               />
-              <Link to="/signup">
-                <Button
-                  className="iBttn iBttn-second-prio"
-                  children="Sign Up"
-                  flat
-                />
-              </Link>
-              <div className="row">
-                <p>
-                  <Link to="/forgot-password">
-                    Forgot Password?
-                  </Link>
-                </p>
-              </div>
+            </Link>
+            <div className="row">
+              <p>
+                <Link to="/forgot-password">
+                  Forgot Password?
+                </Link>
+              </p>
             </div>
-          </form>
-        </div>
-        <div className="authContainer_bg" />
+          </div>
+        </form>
       </div>
-    </Page>
+      <div className="authContainer_bg" />
+    </div>
   );
 
   function onValid(data) {
@@ -137,9 +128,7 @@ function LoginPage() {
     cookie.set('token', token, { expires: 360000 });
   }
 }
-export default flowRight(
-  withAuth({ requireAuth: false }),
-)(LoginPage);
+export default LoginPage;
 
 function validator(data) {
   const schema = yup.object().shape({

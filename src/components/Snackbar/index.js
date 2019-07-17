@@ -33,10 +33,15 @@ function MySnackbarContent(props) {
 }
 
 MySnackbarContent.propTypes = {
-  className: PropTypes.string,
   message: PropTypes.node,
   onClose: PropTypes.func,
   type: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+
+MySnackbarContent.defaultProps = {
+  message: PropTypes.node,
+  onClose: PropTypes.func,
 };
 
 export default MySnackbarContent;

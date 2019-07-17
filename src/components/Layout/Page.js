@@ -1,27 +1,30 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import React from 'react';
 import loadable from '@loadable/component';
+import PropTypes from 'prop-types';
 import { Helmet as Head } from 'react-helmet';
-import { withRouter } from 'react-router';
-import flow from 'lodash/flow';
+// import { withRouter } from 'react-router';
+import flowRight from 'lodash/flowRight';
 import Snackbar from 'components/Snackbar';
+import { withAuth } from 'apollo/auth';
 import { createSelector } from 'reselect';
 import { useSelector, useDispatch } from 'react-redux';
 import Footer from './Footer';
 import Header from './Header';
 
 const AsyncDialog = loadable(props => import(`components/Dialogs/${props.path}`));
+
 const pageSelector = createSelector(
   state => state.toast,
   state => state.dialog,
   (toast, dialog) => ({ toast, dialog }),
 );
+
 function Page(props) {
   const {
     children,
     hasNavigation, hasFooter,
-    pageId, className, pageDescription, router,
-    isDashboard = false
+    pageId, className, pageDescription,
   } = props;
   const appData = useSelector(pageSelector);
   const dispatch = useDispatch();
@@ -70,13 +73,8 @@ function Page(props) {
         <AsyncDialog path={dialog.path} {...dialog.props} />
       )}
       <main className={`page page-${pageId} ${className}`}>
-        { isDashboard 
-          ? ( <div className='dbContainer'> {children} </div> )
-          : children
-        }
+        {children}
       </main>
-
-
       {hasFooter && (
         <Footer />
       )}
@@ -84,12 +82,24 @@ function Page(props) {
   );
 }
 
-const EnhancedPage = flow(withRouter)(Page);
+const EnhancedPage = flowRight(
+  // withRouter,
+  withAuth,
+)(Page);
 
-EnhancedPage.defaultProps = {
+Page.propTypes = {
+  pageId: PropTypes.string,
+  hasFooter: PropTypes.bool,
+  hasNavigation: PropTypes.bool,
+};
+
+Page.defaultProps = {
   hasNavigation: true,
   hasFooter: true,
   pageId: '',
 };
+
+EnhancedPage.propTypes = Page.propTypes;
+EnhancedPage.defaultProps = Page.defaultProps;
 
 export default EnhancedPage;

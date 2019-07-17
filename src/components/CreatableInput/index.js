@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CreatableSelect from 'react-select/lib/Creatable';
+import PropTypes from 'prop-types';
 
 const components = {
   DropdownIndicator: null,
@@ -26,6 +27,8 @@ function CreatableInput(props) {
           setInputValue('');
         }
         event.preventDefault();
+        break;
+      default:
     }
   };
   const handleChange = (newValue) => {
@@ -50,6 +53,11 @@ function CreatableInput(props) {
     />
   );
 }
+
+CreatableInput.propTypes = {
+  onChange: PropTypes.func,
+  value: PropTypes.array,
+};
 
 CreatableInput.defaultProps = {
   onChange: () => {},
