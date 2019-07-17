@@ -1,6 +1,7 @@
 import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
-import Cell from 'react-md/lib/Grids/Cell';
+// import Cell from 'react-md/lib/Grids/Cell';
+import pick from 'lodash/pick';
 import PropTypes from 'prop-types';
 import RiskInfo from './Info';
 import RiskTable from './Table';
@@ -18,8 +19,10 @@ function RiskDetails(props) {
       <RiskTable
         riskType="Residual"
         title="Current Risk Treatment"
-        rows={[risk.current_treatments]}
+        rows={risk.current_treatments}
         columns={getColumns('residual')}
+        risk={pick(risk, 'id', 'likelihood', 'impact')}
+        // onSave={onUpdateRisk}
       />
 
       <RiskTable
@@ -27,11 +30,21 @@ function RiskDetails(props) {
         rows={risk.future_treatments}
         riskType="Target"
         columns={getColumns('target')}
+        risk={pick(risk, 'id', 'likelihood', 'impact')}
+        // onSave={onUpdateRisk}
       />
 
     </Grid>
   );
 
+  // function onUpdateRisk(data) {
+  //   onUpdate({
+  //     data: {
+  //       ...data,
+  //       id: risk.id,
+  //     },
+  //   });
+  // }
   function getColumns(type) {
     return {
       residual: [

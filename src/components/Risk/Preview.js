@@ -14,7 +14,7 @@ function RiskPreview(props) {
         <RiskPreviewInfo
           colspan={3}
           title="Classification"
-          info={risk.classification}
+          info={risk.classification.name}
         />
         <RiskPreviewInfo
           colspan={3}
@@ -44,7 +44,7 @@ function RiskPreview(props) {
 
 RiskPreview.propTypes = {
   risk: PropTypes.shape({
-    classification: PropTypes.string.isRequired,
+    classification: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired,
     inherent_rating: PropTypes.number.isRequired,
     residual_rating: PropTypes.number.isRequired,

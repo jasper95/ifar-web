@@ -1,15 +1,16 @@
 import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
-import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import DataTable from 'components/DataTable';
 import PropTypes from 'prop-types';
+import { useUpdateNode } from 'apollo/mutation';
 import { useDispatch } from 'react-redux';
 
 function RiskTable(props) {
   const dispatch = useDispatch();
+  const [, onUpdate] = useUpdateNode({ node: 'risk', callback: () => {} });
   const {
-    title, rows, columns, riskType,
+    title, rows, columns, riskType, risk,
   } = props;
   return (
     <Grid className="RiskTable">
@@ -20,7 +21,8 @@ function RiskTable(props) {
         <div className="RiskTable_header_actions">
           <Button
             className="iBttn iBttn-primary"
-            onClick={showDialog}>
+            onClick={showDialog}
+          >
             Add/Edit
           </Button>
         </div>
@@ -40,6 +42,8 @@ function RiskTable(props) {
         path: `${riskType}Risk`,
         props: {
           title,
+          onValid: data => onUpdate({ data }),
+          initialFields: risk,
         },
       },
     });
@@ -51,5 +55,6 @@ RiskTable.propTypes = {
   rows: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
   riskType: PropTypes.string.isRequired,
+  // onSave: PropTypes.func.isRequired,
 };
 export default RiskTable;

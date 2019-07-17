@@ -1,32 +1,79 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-// import FontIcon from 'react-md/lib/FontIcons/FontIcon';
+import React, { useState } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
-// import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
-import businessUnits from 'lib/constants/riskManagement/businessUnits';
 import { useCreateNode } from 'apollo/mutation';
+import useQuery from 'apollo/query';
+import gql from 'graphql-tag';
 import RiskItem from './Item';
 
 import 'sass/components/risk/index.scss';
 
-function RiskList(props) {
-  const { list } = props;
+const riskListQuery = gql`
+  query getList($id: uuid!){
+    risk(where: {business_unit: {id: {_eq: $id }}}) {
+      causes
+      classification {
+        name
+      }
+      current_treatments
+      definition
+      future_treatments
+      id
+      impact
+      impacts
+      inherent_rating
+      likelihood
+      name
+      residual_rating
+      stakeholders
+      target_rating
+      business_unit {
+        name
+        id
+      }
+    }
+  }
+`;
+
+const businessUnitQuery = gql`
+  query {
+    business_unit {
+      id
+      name
+      risks_aggregate {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
+`;
+
+
+function RiskList() {
   const dispatch = useDispatch();
   const [, onCreate] = useCreateNode({ node: 'risk', callback: () => {} });
+  const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
+  const listResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit } });
+  const businessUnitResponse = useQuery(businessUnitQuery);
+  const { data: { risk: list } } = listResponse;
+  const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
+  const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   return (
     <Grid className="riskList">
       <div className="riskList_unitList">
-        {businessUnits.map(e => (
+        {businessUnits && businessUnits.map(e => (
           <Button
             flat
             className="riskList_unitList_item"
+            onClick={() => changeBusinessUnit(e.id)}
             iconBefore={false}
             children={e.name}
+            key={e.id}
             iconEl={(
               <span className="riskList_unitList_item_badge">
-                0
+                {e.risks_aggregate.aggregate.count}
               </span>
             )}
           />
@@ -43,7 +90,7 @@ function RiskList(props) {
             </h1>
             <h1 className="crumb_sub">
               <div className="text">
-                RAFI
+                {selected && selected.name}
               </div>
             </h1>
           </div>
@@ -70,6 +117,11 @@ function RiskList(props) {
       </div>
     </Grid>
   );
+
+  function changeBusinessUnit(id) {
+    setBusinessUnit(id);
+    listResponse.refetch({ id });
+  }
 
   function showRiskDialog() {
     dispatch({
@@ -106,8 +158,5 @@ function RiskList(props) {
   }
 }
 
-RiskList.propTypes = {
-  list: PropTypes.array.isRequired,
-};
 
 export default RiskList;
