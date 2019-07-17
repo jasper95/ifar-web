@@ -154,5 +154,18 @@ $risklist-header-arrow-bg: $primary-color-400;
 				}
 			}
 		}
+
+		// .riskList_risk_content
+		&_content {
+			background-color: rgba($primary-color-L600,.15);;
+			padding: 1em;
+
+			// .riskList_risk_content_item
+			&_item {
+				background-color: $white;
+				margin-bottom: 1em;
+				padding: 1em;
+			}
+		}
 	}
 }
