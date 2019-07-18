@@ -5,11 +5,12 @@ import omit from 'lodash/omit';
 import useForm from 'lib/hooks/useForm';
 import { useSelector, useDispatch } from 'react-redux';
 
-const dialogProps = ['dialogId', 'dialogActionsRenderer', 'dialogTitleRenderer', 'title', 'dialogClass'];
+const dialogProps = ['dialogId', 'dialogActionsRenderer', 'dialogTitleRenderer', 'title', 'dialogClass','dialogClassName'];
 const formProps = ['initialFields', 'validator', 'customChangeHandler', 'onValid'];
 
 export default () => (WrappedComponent) => {
   function Dialog(props) {
+
     const dispatch = useDispatch();
     const dialogProcessing = useSelector(state => state.dialogProcessing);
     const [formState, formHandlers] = useForm({ ...pick(props, formProps), onValid });

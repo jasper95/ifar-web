@@ -26,9 +26,11 @@ function Page(props) {
     hasNavigation, hasFooter,
     pageId, className, pageDescription,
   } = props;
+
   const appData = useSelector(pageSelector);
   const dispatch = useDispatch();
   const { toast, dialog } = appData;
+
   let { pageTitle } = props;
   if (pageTitle) {
     pageTitle = `RAFI - ${pageTitle}`;

@@ -61,6 +61,7 @@ function DialogLayout(props) {
     children,
     dialogTitleRenderer: DialogTitle,
     dialogActionsRenderer: DialogActions,
+    dialogClassName,
     dialogClass,
     dialogId,
   } = props;
@@ -79,7 +80,8 @@ function DialogLayout(props) {
       actions={(
         <DialogActions {...pick(props, ['onContinue', 'onCancel', 'isProcessing'])} />
       )}
-      {...pick(props, 'dialogClassName', 'footerClassName', 'titleClassName', 'contentClassName', 'onHide', 'height', 'width')}
+      dialogClassName={`i_dialog_container ${dialogClassName}`}
+      {...pick(props, 'footerClassName', 'titleClassName', 'contentClassName', 'onHide', 'height', 'width')}
     >
       {children}
     </DialogContainer>
@@ -104,7 +106,7 @@ DialogLayout.propTypes = {
 DialogLayout.defaultProps = {
   dialogTitleRenderer: DefaultDialogTitle,
   dialogActionsRenderer: DefaultDialogActions,
-  dialogClassName: 'i_dialog_container i_dialog_container--md',
+  dialogClassName: 'i_dialog_container--md',
   titleClassName: 'i_dialog_title',
   contentClassName: 'i_dialog_body',
   footerClassName: 'i_dialog_footer',

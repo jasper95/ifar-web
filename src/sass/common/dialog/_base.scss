@@ -1,8 +1,8 @@
 $dialog_size_xs: 320px;
 $dialog_size_sm: 600px;
 $dialog_size_md: 768px;
-$dialog_size_lg: 1024px;
-$dialog_size_xl: 1280px;
+$dialog_size_lg: 1280px;
+$dialog_size_xl: 1440px;
 
 
 $dialog-easing : cubic-bezier(0.180, -0.020, 0.300, 1.020);
@@ -32,7 +32,7 @@ $dialog-easing : cubic-bezier(0.180, -0.020, 0.300, 1.020);
 	bottom: 0;
 	left: 0;
 	right: 0;
-	z-index: 999999;
+	z-index: 999999 !important;
 	width: 100vw;
 	height: 100vh;
 	overflow-x: hidden;
@@ -109,7 +109,7 @@ $dialog-easing : cubic-bezier(0.180, -0.020, 0.300, 1.020);
 			flex-shrink: 1;
 			font-size: 1em;
 			font-weight: 700;
-			color: $primary-color
+			color: $primary-color-600;
 		}
 
 		// .d_dialog_title-close

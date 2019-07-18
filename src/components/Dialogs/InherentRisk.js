@@ -16,7 +16,7 @@ function InherentRisk(props) {
   console.log('errors: ', errors);
   const { onElementChange } = formHandlers;
   return (
-    <>
+    <div className='InherentRisk_form risk_forms'>
       <TextField
         id="name"
         required
@@ -25,6 +25,7 @@ function InherentRisk(props) {
         error={!!errors.name}
         errorText={errors.name}
         value={fields.name || ''}
+        className="iField"
       />
       <TextField
         id="definition"
@@ -35,6 +36,7 @@ function InherentRisk(props) {
         error={!!errors.definition}
         errorText={errors.definition}
         value={fields.definition || ''}
+        className="iField"
       />
       <SelectAutocomplete
         id="classification_id"
@@ -45,6 +47,7 @@ function InherentRisk(props) {
         options={classifications.map(e => ({ value: e.id, label: e.name }))}
         value={fields.classification}
         error={errors.classification}
+        className="iField iField-rs"
       />
       <MultFields
         id="causes"
@@ -58,6 +61,7 @@ function InherentRisk(props) {
         fieldLabels={[{ label: 'Cause' }]}
         onChange={onElementChange}
         errors={errors}
+        className="iFieldMultiversion"
       />
       <MultFields
         id="impacts"
@@ -91,7 +95,7 @@ function InherentRisk(props) {
         likelihood={fields.likelihood}
         impact={fields.impact}
       />
-    </>
+    </div>
   );
 }
 
@@ -101,6 +105,7 @@ function SingleTextField(prop) {
   } = prop;
   return (
     <TextField
+      className="iField"
       value={value.name}
       error={!!errors[`${id}[${index}].name`]}
       errorText={errors[`${id}[${index}].name`]}

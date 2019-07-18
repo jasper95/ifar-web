@@ -17,6 +17,7 @@ function ResidualRisk(props) {
       />
       <TextField
         id="treatment"
+        className="iField"
         onChange={val => onChange({ ...value, treatment: val }, id)}
         value={value.treatment}
         error={!!errors[`${id}[${index}].treatment`]}
@@ -24,6 +25,7 @@ function ResidualRisk(props) {
       />
       <TextField
         id="business_unit"
+        className="iField"
         onChange={val => onChange({ ...value, business_unit: val }, id)}
         value={value.business_unit}
         error={!!errors[`${id}[${index}].business_unit`]}
@@ -31,6 +33,7 @@ function ResidualRisk(props) {
       />
       <TextField
         id="kpi"
+        className="iField"
         onChange={val => onChange({ ...value, kpi: val }, id)}
         value={value.kpi}
         error={!!errors[`${id}[${index}].kpi`]}

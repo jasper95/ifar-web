@@ -1,0 +1,31 @@
+.rafi .riskEvaluation {
+	margin: 1em 0;
+	// .riskEvaluation_header
+	&_header {
+		font-size: 1rem;
+		width: 100%;
+		margin-bottom: 1em;
+
+		// .riskEvaluation_title
+		&_title {
+			font-size: 1.25em;
+			width: 100%;
+			font-weight: bold;
+			color: $primary-color-600;
+			text-align: left;
+			margin-bottom: 0;
+			border-bottom: 2px solid $c_gray-200;
+		}
+
+		// .riskEvaluation_header_desc
+		&_desc {
+			text-align: left;
+			font-size: .9em;
+			padding: .5em;
+			background-color: $lightgray;
+			line-height: 1.4;
+			font-weight: 600;
+			color: $gray;
+		}
+	}
+}

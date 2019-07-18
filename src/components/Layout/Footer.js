@@ -71,7 +71,7 @@ export default function Footer() {
                 alt=""
               />
             </Link>
-            <p>Find the right internship for you anywhere in the Philippines!</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque atque itaque doloremque in, accusamus voluptate assumenda voluptatem, obcaecati natus at!</p>
           </Cell>
           <Cell
             className="footer_colItem footer_colItem-information"
