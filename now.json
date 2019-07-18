@@ -2,16 +2,28 @@
   "name": "RAMONS",
   "version": 2,
   "builds": [
-    { "src": "dist/index.js", "use": "@now/node" }
+    {
+      "src": "package.json",
+      "use": "@now/static-build",
+      "config": { "distDir": "build" }
+    }
   ],
   "routes": [
-    {"src": "/service-worker.js", "dest": "https://d3iv4vv2373yy7.cloudfront.net/service-worker.js",
-      "headers": { "cache-control": "public, max-age=0" }
+    {
+      "src": "/static/(.*)",
+      "headers": { "cache-control": "s-maxage=31536000,immutable" },
+      "dest": "/$1"
     },
-    { "src": "/static/(.*)", "dest": "https://d3iv4vv2373yy7.cloudfront.net/$1",
-      "headers": { "cache-control": "public, max-age=31536000" }
+    {
+      "src": "/service-worker.js",
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "/service-worker.js"
     },
-    { "src": "/(.*)", "dest": "/dist/index.js" }
+    {
+      "src": "/(.*)",
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "/index.html"
+    }
   ],
   "build": {
     "env": {

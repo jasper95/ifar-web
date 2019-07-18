@@ -88,10 +88,7 @@ module.exports = baseConfig({
       { from: 'public', to: '' },
     ]),
     // new CompressionPlugin({
-    //   filename: '[path].br[query]',
-    //   algorithm: 'brotliCompress',
     //   test: /\.js$|\.css$/,
-    //   compressionOptions: { level: 11 },
     //   cache: true,
     //   deleteOriginalAssets: true,
     // }),

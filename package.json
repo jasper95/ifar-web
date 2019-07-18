@@ -9,6 +9,7 @@
     "build:server": "NODE_ENV=production webpack --mode=production --config config/webpack/server.config.js",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
+    "now-build": "yarn build:client",
     "build": "yarn build:client && yarn build:server",
     "deploy:assets": "aws s3 sync build/ s3://graph-spike",
     "deploy:server": "now",

@@ -1,14 +1,4 @@
-src
-config
 node_modules
-src
-views
-yarn.lock
-babel.config.js
-dockerfile
-.gitlab-ci.yml
-Procfile
-README.md
-public
-build
 ssr
+dist
+build
