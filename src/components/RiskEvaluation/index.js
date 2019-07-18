@@ -43,20 +43,20 @@ const descriptionMapping = {
   ),
 };
 
-const Header = (props) => (
-    <div className="riskEvaluation_header">
-      { props.title && (
-        <h2 className="riskEvaluation_header_title">
-          {props.title}
-        </h2>
-      )}
-      { props.desc && (
-        <p className="riskEvaluation_header_desc">
-          {props.desc}
-        </p>
-      )}
-    </div>
-  );
+const Header = props => (
+  <div className="riskEvaluation_header">
+    { props.title && (
+    <h2 className="riskEvaluation_header_title">
+      {props.title}
+    </h2>
+    )}
+    { props.desc && (
+    <p className="riskEvaluation_header_desc">
+      {props.desc}
+    </p>
+    )}
+  </div>
+);
 
 function RiskEvaluation(props) {
   const {

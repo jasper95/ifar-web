@@ -1,7 +1,6 @@
 import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
-// import Cell from 'react-md/lib/Grids/Cell';
-import pick from 'lodash/pick';
+import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
 import RiskInfo from './Info';
 import RiskTable from './Table';
@@ -21,7 +20,7 @@ function RiskDetails(props) {
         title="Current Risk Treatment"
         rows={risk.current_treatments}
         columns={getColumns('residual')}
-        risk={pick(risk, 'id', 'likelihood', 'impact')}
+        risk={risk}
         // onSave={onUpdateRisk}
       />
 
@@ -30,7 +29,7 @@ function RiskDetails(props) {
         rows={risk.future_treatments}
         riskType="Target"
         columns={getColumns('target')}
-        risk={pick(risk, 'id', 'likelihood', 'impact')}
+        risk={risk}
         // onSave={onUpdateRisk}
       />
 
@@ -93,11 +92,13 @@ function RiskDetails(props) {
           title: 'Team',
         },
         {
-          accessor: 'start_date',
+          type: 'function',
+          fn: formatDate('start_date', 'MMMM DD, YYYY'),
           title: 'Start',
         },
         {
-          accessor: 'end_date',
+          type: 'function',
+          fn: formatDate('end_date', 'MMMM DD, YYYY'),
           title: 'End',
         },
         {

@@ -22,7 +22,7 @@ function InherentRisk(props) {
         required
         defaultItem={{
           plan: '',
-          treatment: '',
+          strategy: '',
           business_unit: '',
           kpi: '',
           start_date: '',
@@ -52,10 +52,10 @@ Dialog.defaultProps = {
 
 function validator(data) {
   const schema = yup.object({
-    current_treatments: yup.array().of(
+    future_treatments: yup.array().of(
       yup.object({
         plan: yup.string().required(fieldIsRequired),
-        treatment: yup.string().required(fieldIsRequired),
+        strategy: yup.string().required(fieldIsRequired),
         business_unit: yup.string().required(fieldIsRequired),
         kpi: yup.string().required(fieldIsRequired),
         start_date: yup.date(fieldIsInvalid).required(fieldIsRequired),
