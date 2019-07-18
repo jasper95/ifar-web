@@ -15,7 +15,7 @@ import {
   healthSafetySecurityOptions,
 } from 'lib/constants/riskManagement/evaluationOptions';
 
-import 'sass/components/RiskEvaluation/index.scss';
+import 'sass/components/riskEvaluation/index.scss';
 
 const descriptionMapping = {
   inherent: (
@@ -43,8 +43,7 @@ const descriptionMapping = {
   ),
 };
 
-const Header = (props) => {
-  return (
+const Header = (props) => (
     <div className="riskEvaluation_header">
       { props.title && (
         <h2 className="riskEvaluation_header_title">
@@ -57,8 +56,7 @@ const Header = (props) => {
         </p>
       )}
     </div>
-  )
-}
+  );
 
 function RiskEvaluation(props) {
   const {
