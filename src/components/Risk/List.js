@@ -151,6 +151,7 @@ function RiskList() {
               management_action: 1,
             },
           },
+          dialogClassName: 'i_dialog_container--sm'
         },
       },
       type: 'SHOW_DIALOG',

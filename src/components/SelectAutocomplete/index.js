@@ -30,6 +30,8 @@ function SelectAutocomplete(props) {
         value={selectOptions.find(e => e.value === value)}
         options={selectOptions}
         onChange={handleChange}
+        className="iField iField-rs"
+        classNamePrefix="iField-rs"
         {...restProps}
       />
       <TextFieldMessage

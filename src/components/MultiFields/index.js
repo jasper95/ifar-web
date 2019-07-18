@@ -10,39 +10,40 @@ function MultiFields(props) {
   } = props;
   const [value, setValue] = useState(valueProp);
   return (
-    <div>
-      <span>
-        {label}
-        {' '}
-        {' '}
-        {' '}
-        {required && '*'}
-      </span>
-      <div>
-        {fieldLabels.map(e => (
-          <span>
-            {e.label}
-            {' '}
-            {e.required && '*'}
-          </span>
-        ))}
-      </div>
-      <div>
+    <div className="iFieldMultiversion">
+      <h1 className="iFieldMultiversion_label">
+        <span className="text">{label}</span>
+        <span className="isReq">{required && '*'}</span>
+      </h1>
+      <div className="iFieldMultiversion_list">
         {value.map((e, idx) => (
-          <div>
-            {value.length > 1 && <Button onClick={() => handleRemove(e.id)} icon>remove</Button>}
-            <Component
-              id={id}
-              index={idx}
-              key={e.id}
-              onChange={handleChange}
-              value={e}
-              {...restProps}
-            />
+          <div className="iFieldMultiversion_list_item">
+            <Button
+              icon
+              className="iBttn iBttn-error iFieldMultiversion_list_item_remove"
+              onClick={() => handleRemove(e.id)}>
+              remove
+            </Button>
+            <div className="iFieldMultiversion_list_item_field">
+              <Component
+                id={id}
+                index={idx}
+                key={e.id}
+                onChange={handleChange}
+                value={e}
+                {...restProps}
+              />
+            </div>
           </div>
         ))}
       </div>
-      <Button flat onClick={handleAdd}>Add New</Button>
+      <Button 
+        flat 
+        onClick={handleAdd}
+        iconChildren="add"
+        className='iBttn iFieldMultiversion_add'>
+        Add New
+      </Button>
     </div>
   );
 

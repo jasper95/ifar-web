@@ -24,6 +24,7 @@ $btn-colors: (
 	'purple': $purple,
 	'violet': $violet,
 	'white': $white,
+	'error': #F93B3B,
 	'primary': $primary-color,
 	'primary-100': $primary-color-100,
 	'secondary': $secondary-color,
@@ -195,6 +196,25 @@ $btn-colors: (
 	}
 }
 
+// ========================
+// ICON
+// ========================
+.iBttn.md-btn--icon {
+	width: auto;
+	height: auto;
+	font-size: 1em;
+	padding: .25em;
+	line-height: 1;
+	font-size: 1em;
+	border-radius: 50%;
+	.md-icon {
+		line-height: 1;
+		font-size: 1em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
 
 // ========================
 // PROCESSING

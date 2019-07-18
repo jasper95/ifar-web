@@ -36,8 +36,11 @@ $primary-color-100: darken($primary-color,5%);
 $primary-color-200: darken($primary-color,10%);
 $primary-color-300: darken($primary-color,15%);
 $primary-color-400: darken($primary-color,20%);
+$primary-color-500: darken($primary-color,25%);
+$primary-color-600: darken($primary-color,30%);
 
 $primary-color-darker: #074CE9;
+
 
 
 // ========================
@@ -59,8 +62,6 @@ $gray: #20262B;
 
 $lightgray: #F9F9F9;
 $darkgray: #A8A8A8;
-
-
 
 
 $red: #FF4444;
@@ -101,12 +102,11 @@ $rafi-cat-reputation: #7678F0;
 $rafi-cat-management-action: #005195;
 $rafi-cat-operations: #359EC6;
 
-
-
-
-
-
-
+// ========================
+// CUSTOM
+// ========================
+$c_gray-100: #D8E5EC;
+$c_gray-200: #B0C2CB;
 
 
 // ========================
@@ -145,6 +145,12 @@ $nav-bg: #232323;
 // ========================
 // PAGE
 // ========================
+
+// ========================
+// TABLE
+// ========================
+$table-header-bg: #DFE8F7;
+
 // ========================
 // DASHBOARD CONTAINER
 // ========================

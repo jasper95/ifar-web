@@ -15,6 +15,8 @@ import {
   healthSafetySecurityOptions,
 } from 'lib/constants/riskManagement/evaluationOptions';
 
+import 'sass/components/RiskEvaluation/index.scss';
+
 const descriptionMapping = {
   inherent: (
     <span>
@@ -41,6 +43,23 @@ const descriptionMapping = {
   ),
 };
 
+const Header = (props) => {
+  return (
+    <div className="riskEvaluation_header">
+      { props.title && (
+        <h2 className="riskEvaluation_header_title">
+          {props.title}
+        </h2>
+      )}
+      { props.desc && (
+        <p className="riskEvaluation_header_desc">
+          {props.desc}
+        </p>
+      )}
+    </div>
+  )
+}
+
 function RiskEvaluation(props) {
   const {
     type,
@@ -49,14 +68,20 @@ function RiskEvaluation(props) {
     onChange,
   } = props;
   return (
-    <div>
-      <h2>
-        {capitalize(type)}
-        {' '}
-        Risk Evaluation
-      </h2>
-      {descriptionMapping[type]}
+    <div className="riskEvaluation">
+
+      <Header
+        title={(
+          <>
+            <span className="type">{ capitalize(type)}</span>
+            <span className="title"> Risk Evaluation</span>
+          </>
+        )}
+        desc={descriptionMapping[type]}
+      />
+
       <SelectionControlGroup
+        className="iField iField-selectionGrp"
         id="likelihood.basis"
         controls={basisOptions}
         value={likelihood.basis}
@@ -65,6 +90,7 @@ function RiskEvaluation(props) {
         type="radio"
       />
       <SelectionControlGroup
+        className="iField iField-selectionGrp"
         id="likelihood.rating"
         label="Likelihood *"
         controls={likelihood.basis === 'Frequency' ? frequencyOptions : probabilityOptions}
@@ -72,8 +98,13 @@ function RiskEvaluation(props) {
         onChange={newVal => onChange({ ...likelihood, rating: Number(newVal) }, 'likelihood')}
         value={likelihood.rating}
       />
-      <h2>Impact</h2>
+
+      <Header
+        title="Impact"
+      />
+
       <SelectionControlGroup
+        className="iField iField-selectionGrp"
         id="impact.management_action"
         label="Management Action *"
         controls={managementActionOptions}
@@ -83,6 +114,7 @@ function RiskEvaluation(props) {
       />
       {type === 'inherent' && (
         <SelectionControlGroup
+          className="iField iField-selectionGrp"
           label="Affected"
           id="impact.affected"
           controls={businessUnits.map(e => ({ label: e.name, value: e.id }))}
@@ -90,6 +122,7 @@ function RiskEvaluation(props) {
         />
       )}
       <SelectionControlGroup
+        className="iField iField-selectionGrp"
         id="impact.reputation"
         label="Reputation *"
         required
@@ -99,6 +132,7 @@ function RiskEvaluation(props) {
         type="radio"
       />
       <SelectionControlGroup
+        className="iField iField-selectionGrp"
         label="Financial *"
         id="impact.financial"
         controls={financialOptions}
@@ -107,6 +141,7 @@ function RiskEvaluation(props) {
         type="radio"
       />
       <SelectionControlGroup
+        className="iField iField-selectionGrp"
         label="Health, Safety & Security *"
         id="impact.health_safety_security"
         value={impact.health_safety_security}
@@ -115,6 +150,7 @@ function RiskEvaluation(props) {
         type="radio"
       />
       <SelectionControlGroup
+        className="iField iField-selectionGrp"
         label="Operational *"
         id="impact.operational"
         controls={operationalOptions}
@@ -123,6 +159,7 @@ function RiskEvaluation(props) {
         type="radio"
       />
       <SelectionControlGroup
+        className="iField iField-selectionGrp"
         label="Legal and Compliance *"
         required
         id="impact.legal_compliance"

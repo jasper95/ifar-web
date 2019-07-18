@@ -1,5 +1,5 @@
 import React from 'react';
-import MultFields from 'components/MultiFields';
+import MultiFields from 'components/MultiFields';
 import withDialog from 'lib/hocs/dialog';
 import flowRight from 'lodash/flowRight';
 import ResidualRiskFields from 'components/RiskEvaluation/ResidualRisk';
@@ -15,7 +15,7 @@ function InherentRisk(props) {
   const { onElementChange } = formHandlers;
   return (
     <>
-      <MultFields
+      <MultiFields
         id="current_treatments"
         fieldsRenderer={ResidualRiskFields}
         value={fields.current_treatments || []}
