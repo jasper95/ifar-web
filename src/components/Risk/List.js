@@ -133,7 +133,7 @@ function RiskList() {
           onValid: data => onCreate({
             data: {
               ...data,
-              business_unit_id: '871637c4-5510-4500-8e78-984fce5001ff',
+              business_unit_id: currentBusinessUnit,
               inherent_rating: 1,
             },
           }),
@@ -151,7 +151,7 @@ function RiskList() {
               management_action: 1,
             },
           },
-          dialogClassName: 'i_dialog_container--sm'
+          dialogClassName: 'i_dialog_container--sm',
         },
       },
       type: 'SHOW_DIALOG',
