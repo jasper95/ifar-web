@@ -13,7 +13,7 @@ const { baseConfig } = require('./base');
 module.exports = baseConfig({
   mode: 'production',
   output: {
-    // publicPath: '/static/',
+    publicPath: '/static/',
     filename: 'js/[name].[chunkhash].js',
     chunkFilename: 'js/[name].[chunkhash].js',
   },
