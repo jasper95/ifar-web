@@ -6,7 +6,7 @@ const safePostCssParser = require('postcss-safe-parser');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
-// const CompressionPlugin = require('compression-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const { baseConfig } = require('./base');
 
@@ -87,10 +87,10 @@ module.exports = baseConfig({
     new CopyPlugin([
       { from: 'public', to: '' },
     ]),
-    // new CompressionPlugin({
-    //   test: /\.js$|\.css$/,
-    //   cache: true,
-    //   deleteOriginalAssets: true,
-    // }),
+    new CompressionPlugin({
+      test: /\.js$|\.css$/,
+      cache: true,
+      // deleteOriginalAssets: f,
+    }),
   ],
 });
