@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
+import { useUpdateNode } from 'apollo/mutation';
+import { useDispatch } from 'react-redux';
+import QueryContext from './Context';
 import RiskInfo from './Info';
 import RiskTable from './Table';
 
 function RiskDetails(props) {
+  const dispatch = useDispatch();
+  const context = useContext(QueryContext);
+  const [, onUpdate] = useUpdateNode({ node: 'risk', callback: () => context.refetchRisk() });
   const { risk, className } = props;
   return (
     <Grid className={`RiskDetails ${className}`}>
@@ -16,43 +22,46 @@ function RiskDetails(props) {
       </Grid>
 
       <RiskTable
-        riskType="Residual"
+        type="Residual"
         title="Current Risk Treatment"
         rows={risk.current_treatments}
-        columns={getColumns('residual')}
-        risk={risk}
-        // onSave={onUpdateRisk}
+        columns={getColumns('Residual')}
+        onClickAdd={() => showDialog({ type: 'Residual', dialogTitle: 'Current Risk Treatment' })}
       />
 
       <RiskTable
         title="Future Risk Treatment"
         rows={risk.future_treatments}
-        riskType="Target"
-        columns={getColumns('target')}
-        risk={risk}
-        // onSave={onUpdateRisk}
+        columns={getColumns('Target')}
+        onClickAdd={() => showDialog({ type: 'Target', dialogTitle: 'Future Risk Treatment' })}
       />
 
     </Grid>
   );
 
-  // function onUpdateRisk(data) {
-  //   onUpdate({
-  //     data: {
-  //       ...data,
-  //       id: risk.id,
-  //     },
-  //   });
-  // }
+  function showDialog({ type, dialogTitle }) {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: `${type}Risk`,
+        props: {
+          title: dialogTitle,
+          onValid: data => onUpdate({ data }),
+          initialFields: risk,
+        },
+      },
+    });
+  }
+
   function getColumns(type) {
     return {
-      residual: [
+      Residual: [
         {
           accessor: 'strategy',
           title: 'Strategy',
         },
         {
-          accessor: 'action',
+          accessor: 'treatment',
           title: 'Existing action',
         },
         {
@@ -74,13 +83,13 @@ function RiskDetails(props) {
           ],
         },
       ],
-      target: [
+      Target: [
         {
           accessor: 'strategy',
           title: 'Strategy',
         },
         {
-          accessor: 'action',
+          accessor: 'treatment',
           title: 'Existing action',
         },
         {

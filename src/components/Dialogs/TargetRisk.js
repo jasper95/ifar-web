@@ -21,14 +21,14 @@ function InherentRisk(props) {
         label="Impact"
         required
         defaultItem={{
-          plan: '',
+          treatment: '',
           strategy: '',
           business_unit: '',
           kpi: '',
           start_date: '',
           end_date: '',
         }}
-        fieldLabels={[{ label: 'Risk Treatment Strategy' }, { label: 'Future Plan' }, { label: 'Budget/Resource' }, { label: 'Business Unit' }, { label: 'KPI' }, { label: 'Start Date' }, { label: 'End Date' }]}
+        fieldLabels={[{ label: 'Risk Treatment Strategy' }, { label: 'Future treatment' }, { label: 'Budget/Resource' }, { label: 'Business Unit' }, { label: 'KPI' }, { label: 'Start Date' }, { label: 'End Date' }]}
         onChange={onElementChange}
         errors={errors}
       />
@@ -54,7 +54,7 @@ function validator(data) {
   const schema = yup.object({
     future_treatments: yup.array().of(
       yup.object({
-        plan: yup.string().required(fieldIsRequired),
+        treatment: yup.string().required(fieldIsRequired),
         strategy: yup.string().required(fieldIsRequired),
         business_unit: yup.string().required(fieldIsRequired),
         kpi: yup.string().required(fieldIsRequired),

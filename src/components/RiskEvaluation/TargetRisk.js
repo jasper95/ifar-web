@@ -14,8 +14,8 @@ function TargetRisk(props) {
         options={['Reduce', 'Transfer', 'Avoid', 'Accept']}
       />
       <TextField
-        onChange={val => onChange({ ...value, plan: val }, id)}
-        value={value.plan}
+        onChange={val => onChange({ ...value, treatment: val }, id)}
+        value={value.treatment}
       />
       <TextField
         onChange={val => onChange({ ...value, budget: val }, id)}

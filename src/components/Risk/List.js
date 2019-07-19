@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useCreateNode } from 'apollo/mutation';
 import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
+import QueryContext from './Context';
 import RiskItem from './Item';
 
 import 'sass/components/risk/index.scss';
@@ -33,11 +34,6 @@ const riskListQuery = gql`
         id
       }
     }
-  }
-`;
-
-const businessUnitQuery = gql`
-  query {
     business_unit {
       id
       name
@@ -55,72 +51,72 @@ function RiskList() {
   const dispatch = useDispatch();
   const [, onCreate] = useCreateNode({ node: 'risk', callback: () => {} });
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
-  const listResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit } });
-  const businessUnitResponse = useQuery(businessUnitQuery);
-  const { data: { risk: list } } = listResponse;
-  const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
+  const queryResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit } });
+  const { data: { risk: list, business_unit: businessUnits = [] } } = queryResponse;
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   return (
-    <Grid className="riskList">
-      <div className="riskList_unitList">
-        {businessUnits && businessUnits.map(e => (
-          <Button
-            flat
-            className="riskList_unitList_item"
-            onClick={() => changeBusinessUnit(e.id)}
-            iconBefore={false}
-            children={e.name}
-            key={e.id}
-            iconEl={(
-              <span className="riskList_unitList_item_badge">
-                {e.risks_aggregate.aggregate.count}
-              </span>
-            )}
-          />
-        ))}
-      </div>
-
-      <div className="riskList_risk">
-        <div className="riskList_risk_header">
-          <div className="crumb">
-            <h1 className="crumb_main">
-              <div className="text">
-                Strategic Risk Management Plan
-              </div>
-            </h1>
-            <h1 className="crumb_sub">
-              <div className="text">
-                {selected && selected.name}
-              </div>
-            </h1>
-          </div>
-          <div className="actions">
+    <QueryContext.Provider value={{ refetchRisk: queryResponse.refetch }}>
+      <Grid className="riskList">
+        <div className="riskList_unitList">
+          {businessUnits && businessUnits.map(e => (
             <Button
               flat
-              className="actions_addRisk iBttn iBttn-teal"
-              iconChildren="add_circle"
-              onClick={showRiskDialog}
-            >
-              Add Risk
-            </Button>
-          </div>
-        </div>
-        <div className="riskList_risk_content">
-          {list && list.map(e => (
-            <RiskItem
-              risk={e}
+              className="riskList_unitList_item"
+              onClick={() => changeBusinessUnit(e.id)}
+              iconBefore={false}
+              children={e.name}
               key={e.id}
-              className="riskList_risk_content_item"
+              iconEl={(
+                <span className="riskList_unitList_item_badge">
+                  {e.risks_aggregate.aggregate.count}
+                </span>
+              )}
             />
           ))}
         </div>
-      </div>
-    </Grid>
+
+        <div className="riskList_risk">
+          <div className="riskList_risk_header">
+            <div className="crumb">
+              <h1 className="crumb_main">
+                <div className="text">
+                  Strategic Risk Management Plan
+                </div>
+              </h1>
+              <h1 className="crumb_sub">
+                <div className="text">
+                  {selected && selected.name}
+                </div>
+              </h1>
+            </div>
+            <div className="actions">
+              <Button
+                flat
+                className="actions_addRisk iBttn iBttn-teal"
+                iconChildren="add_circle"
+                onClick={showRiskDialog}
+              >
+                Add Risk
+              </Button>
+            </div>
+          </div>
+          <div className="riskList_risk_content">
+            {list && list.map(e => (
+              <RiskItem
+                risk={e}
+                key={e.id}
+                className="riskList_risk_content_item"
+              />
+            ))}
+          </div>
+        </div>
+      </Grid>
+    </QueryContext.Provider>
   );
 
   function changeBusinessUnit(id) {
     setBusinessUnit(id);
-    listResponse.refetch({ id });
+    queryResponse.refetch({ id });
   }
 
   function showRiskDialog() {
