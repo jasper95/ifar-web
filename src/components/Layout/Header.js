@@ -14,6 +14,7 @@ import { format as formatTime } from 'timeago.js';
 import gql from 'graphql-tag';
 import { useManualQuery } from 'apollo/query';
 import { useDispatch } from 'react-redux';
+import cn from 'classnames';
 import AuthContext from 'apollo/AuthContext';
 import useMutation from 'apollo/mutation';
 
@@ -37,7 +38,9 @@ const NOTIFICATION_QUERY = gql`
 function Header(props) {
   const {
     avatarLink = '',
+    match,
   } = props;
+  console.log('props: ', props);
   const dispatch = useDispatch();
   const { data: user, loading: authIsLoading } = useContext(AuthContext);
   const [, onLogout] = useMutation({ url: '/logout', onSuccess: onLogoutSucess });
@@ -60,28 +63,7 @@ function Header(props) {
             alt=""
           />
         </Link>
-        <div className="nav_menu">
-          <ul className="nav_menu_list">
-            <li className="nav_menu_list_item active">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="nav_menu_list_item">
-              <Link to="/">Dashboards</Link>
-            </li>
-            <li className="nav_menu_list_item">
-              <Link to="/">Discussion board</Link>
-            </li>
-            <li className="nav_menu_list_item">
-              <Link to="/">Audit observations</Link>
-            </li>
-            <li className="nav_menu_list_item">
-              <Link to="/">Management Actions</Link>
-            </li>
-            <li className="nav_menu_list_item">
-              <Link to="/">Risk Management</Link>
-            </li>
-          </ul>
-        </div>
+        <NavItems currentPath={match.path} />
         <div className="nav_actions">
 
           <div className="nav_profile">
@@ -242,6 +224,52 @@ function Header(props) {
   }
 }
 
+function NavItems(props) {
+  const { currentPath } = props;
+  const menus = [
+    {
+      id: 1,
+      path: '/',
+      label: 'Home',
+    },
+    {
+      id: 2,
+      path: '/dashboard',
+      label: 'Dashboard',
+    },
+    {
+      id: 3,
+      path: '/discussion',
+      label: 'Discussion Board',
+    },
+    {
+      id: 4,
+      path: '/audit',
+      label: 'Audit Observations',
+    },
+    {
+      id: 5,
+      path: '/actions',
+      label: 'Manage Actions',
+    },
+    {
+      id: 6,
+      path: '/risk-management',
+      label: 'Risk Management',
+    },
+  ];
+  return (
+    <div className="nav_menu">
+      <ul className="nav_menu_list">
+        {menus.map(e => (
+          <li key={e.id} className={cn('nav_menu_list_item', { active: currentPath === e.path })}>
+            <Link to={e.path}>{e.label}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function itemMapper(item) {
   const { id, body: { icon, type, message }, created_date: createdDate } = item;

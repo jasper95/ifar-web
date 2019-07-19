@@ -6,7 +6,7 @@ import RiskStats from 'components/Charts/RiskStats';
 import RiskList from 'components/Risk/List';
 import dashboardData from 'lib/mock/dashboardData';
 import classificationLegend from 'lib/mock/classificationLegend';
-
+import history from 'lib/history';
 import 'sass/pages/manage-risk.scss';
 
 function ManageRisk(props) {
@@ -39,13 +39,14 @@ function ManageRisk(props) {
           <Button
             flat
             className="iBttn iBttn-primary iBttn-counterBadge"
-            iconBefore={false}
+            // iconBefore={false}
             children="View Strategic Map"
-            iconEl={(
-              <span className="iBttn_badge">
-                0
-              </span>
-            )}
+            onClick={() => history.push('/risk-map')}
+            // iconEl={(
+            //   <span className="iBttn_badge">
+            //     0
+            //   </span>
+            // )}
           />
         </Cell>
       </Grid>

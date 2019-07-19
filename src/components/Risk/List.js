@@ -35,7 +35,7 @@ const riskListQuery = gql`
         id
       }
     }
-    business_unit {
+    business_unit(order_by: {order: asc}) {
       id
       name
       risks_aggregate {
