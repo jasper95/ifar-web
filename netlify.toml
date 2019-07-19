@@ -5,18 +5,6 @@
   headers = { cache-control = "max-age=0" }
 
 [[redirects]]
-  from = "/static/js/*" 
-  to = "/js/:splat.gz"
-  status = 200
-  headers = { cache-control = "public, max-age=31536000", content-type = "application/javascript" }
-
-[[redirects]]
-  from = "/static/css/*" 
-  to = "/css/:splat.gz"
-  status = 200
-  headers = { cache-control = "public, max-age=31536000", content-type = "application/css" }
-
-[[redirects]]
   from = "/static/*" 
   to = "/:splat"
   status = 200
