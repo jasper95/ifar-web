@@ -12,7 +12,7 @@
 
 [[redirects]]
   from = "/static/css/*" 
-  to = "/css/:splat.css"
+  to = "/css/:splat.gz"
   status = 200
   headers = { cache-control = "public, max-age=31536000", content-type = "application/css" }
 
