@@ -81,6 +81,7 @@ function RiskEvaluation(props) {
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         id="likelihood.basis"
+        name="likelihood.basis"
         controls={basisOptions}
         value={likelihood.basis}
         onChange={newVal => onChange({ ...likelihood, basis: newVal }, 'likelihood')}
@@ -90,6 +91,7 @@ function RiskEvaluation(props) {
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         id="likelihood.rating"
+        name="likelihood.rating"
         label="Likelihood *"
         controls={likelihood.basis === 'Frequency' ? frequencyOptions : probabilityOptions}
         type="radio"
@@ -104,6 +106,7 @@ function RiskEvaluation(props) {
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         id="impact.management_action"
+        name="impact.management_action"
         label="Management Action *"
         controls={managementActionOptions}
         value={impact.management_action}
@@ -115,6 +118,7 @@ function RiskEvaluation(props) {
           className="iField iField-selectionGrp"
           label="Affected"
           id="impact.affected"
+          name="impact.affected"
           controls={businessUnits.map(e => ({ label: e.name, value: e.id }))}
           value={impact.affected}
         />
@@ -122,6 +126,7 @@ function RiskEvaluation(props) {
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         id="impact.reputation"
+        name="impact.reputation"
         label="Reputation *"
         required
         controls={reputionOptions}
@@ -133,6 +138,7 @@ function RiskEvaluation(props) {
         className="iField iField-selectionGrp"
         label="Financial *"
         id="impact.financial"
+        name="impact.financial"
         controls={financialOptions}
         value={impact.financial}
         onChange={newVal => onChange({ ...impact, financial: Number(newVal) }, 'impact')}
@@ -142,6 +148,7 @@ function RiskEvaluation(props) {
         className="iField iField-selectionGrp"
         label="Health, Safety & Security *"
         id="impact.health_safety_security"
+        name="impact.health_safety_security"
         value={impact.health_safety_security}
         controls={healthSafetySecurityOptions}
         onChange={newVal => onChange({ ...impact, health_safety_security: Number(newVal) }, 'impact')}
@@ -151,6 +158,7 @@ function RiskEvaluation(props) {
         className="iField iField-selectionGrp"
         label="Operational *"
         id="impact.operational"
+        name="impact.operational"
         controls={operationalOptions}
         value={impact.operational}
         onChange={newVal => onChange({ ...impact, operational: Number(newVal) }, 'impact')}
@@ -161,6 +169,7 @@ function RiskEvaluation(props) {
         label="Legal and Compliance *"
         required
         id="impact.legal_compliance"
+        name="impact.legal_compliance"
         controls={legalComplianceOptions}
         value={impact.legal_compliance}
         onChange={newVal => onChange({ ...impact, legal_compliance: Number(newVal) }, 'impact')}

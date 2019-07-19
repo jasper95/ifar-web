@@ -22,9 +22,14 @@ export default function useMutation(params = {}) {
   return [state, mutate];
   async function mutate(params2 = {}) {
     setLoading(true);
+    const allParams = { ...params, ...params2 };
     const {
-      data: body = {}, url, method = 'POST', onSuccess = simpleFn,
-    } = { ...params, ...params2 };
+      data: body = {}, method = 'POST', onSuccess = simpleFn,
+    } = allParams;
+    let { url } = allParams;
+    if (method.toLowerCase() === 'delete' && body.id) {
+      url = `${url}/${body.id}`;
+    }
     const options = {
       method,
       headers: {
@@ -85,6 +90,7 @@ export function useDeleteNode(params) {
     ...params,
     message,
     method: 'DELETE',
+    url: `/${node}`,
   });
 }
 

@@ -13,10 +13,9 @@ import * as yup from 'yup';
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
-  console.log('errors: ', errors);
   const { onElementChange } = formHandlers;
   return (
-    <div className='InherentRisk_form risk_forms'>
+    <div className="InherentRisk_form risk_forms">
       <TextField
         id="name"
         required
@@ -45,8 +44,8 @@ function InherentRisk(props) {
         label="Classification"
         onChange={onElementChange}
         options={classifications.map(e => ({ value: e.id, label: e.name }))}
-        value={fields.classification}
-        error={errors.classification}
+        value={fields.classification_id}
+        error={errors.classification_id}
         className="iField iField-rs"
       />
       <MultFields

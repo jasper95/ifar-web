@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import PropTypes from 'prop-types';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
+import { useDispatch } from 'react-redux';
+import QueryContext from './Context';
 import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
   const { risk, className } = props;
-  // console.log('RiskPreview', risk)
+  const context = useContext(QueryContext);
+  const dispatch = useDispatch();
   return (
     <Grid className={`RiskPreview ${className}`}>
       <Grid>
@@ -27,8 +30,8 @@ function RiskPreview(props) {
           <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
         </Cell>
         <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
-          <Button icon>edit</Button>
-          <Button icon>delete</Button>
+          <Button onClick={() => showDialog('edit')} icon>edit</Button>
+          <Button onClick={() => showDialog('delete')} icon>delete</Button>
         </Cell>
       </Grid>
       <Grid>
@@ -40,6 +43,36 @@ function RiskPreview(props) {
       </Grid>
     </Grid>
   );
+
+  function showDialog(action) {
+    if (action === 'edit') {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
+          path: 'InherentRisk',
+          props: {
+            dialogId: 'InherentRisk',
+            title: 'Inherent Risk',
+            onValid: data => context.updateRisk({ data }),
+            initialFields: risk,
+            dialogClassName: 'i_dialog_container--sm',
+          },
+        },
+      });
+    } else if (action === 'delete') {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
+          path: 'Confirm',
+          props: {
+            title: 'Confirm Delete',
+            message: 'Do you want to delete this risk?',
+            onValid: () => context.deleteRisk({ data: risk }),
+          },
+        },
+      });
+    }
+  }
 }
 
 RiskPreview.propTypes = {

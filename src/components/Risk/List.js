@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
-import { useCreateNode } from 'apollo/mutation';
+import { useCreateNode, useUpdateNode, useDeleteNode } from 'apollo/mutation';
 import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 import QueryContext from './Context';
@@ -17,6 +17,7 @@ const riskListQuery = gql`
       classification {
         name
       }
+      classification_id
       current_treatments
       definition
       future_treatments
@@ -49,13 +50,15 @@ const riskListQuery = gql`
 
 function RiskList() {
   const dispatch = useDispatch();
-  const [, onCreate] = useCreateNode({ node: 'risk', callback: () => {} });
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const queryResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit } });
+  const [, onCreate] = useCreateNode({ node: 'risk', callback: queryResponse.refetch });
+  const [, onUpdate] = useUpdateNode({ node: 'risk', callback: queryResponse.refetch });
+  const [, onDelete] = useDeleteNode({ node: 'risk', callback: queryResponse.refetch });
   const { data: { risk: list, business_unit: businessUnits = [] } } = queryResponse;
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   return (
-    <QueryContext.Provider value={{ refetchRisk: queryResponse.refetch }}>
+    <QueryContext.Provider value={{ updateRisk: onUpdate, deleteRisk: onDelete }}>
       <Grid className="riskList">
         <div className="riskList_unitList">
           {businessUnits && businessUnits.map(e => (

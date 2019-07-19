@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
-import { useUpdateNode } from 'apollo/mutation';
 import { useDispatch } from 'react-redux';
 import QueryContext from './Context';
 import RiskInfo from './Info';
@@ -11,7 +10,6 @@ import RiskTable from './Table';
 function RiskDetails(props) {
   const dispatch = useDispatch();
   const context = useContext(QueryContext);
-  const [, onUpdate] = useUpdateNode({ node: 'risk', callback: () => context.refetchRisk() });
   const { risk, className } = props;
   return (
     <Grid className={`RiskDetails ${className}`}>
@@ -46,7 +44,7 @@ function RiskDetails(props) {
         path: `${type}Risk`,
         props: {
           title: dialogTitle,
-          onValid: data => onUpdate({ data }),
+          onValid: data => context.updateRisk({ data }),
           initialFields: risk,
         },
       },

@@ -89,13 +89,11 @@ export function renderRoutes(routes, extraProps = {}, switchProps = {}) {
           strict={route.strict}
           render={(props) => {
             const { pageProps = { }, key } = route;
-            console.log('key: ', key);
             const {
               title, hasNavigation,
               hasFooter, requireAuth,
               pageId, pageDescription,
             } = pageProps;
-            console.log('pageProps: ', pageProps);
             return (
               <PageLayout
                 key={key}

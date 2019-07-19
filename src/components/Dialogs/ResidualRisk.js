@@ -11,7 +11,6 @@ import { impact } from './InherentRisk';
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
-  console.log('fields: ', fields);
   const { onElementChange } = formHandlers;
   return (
     <>
