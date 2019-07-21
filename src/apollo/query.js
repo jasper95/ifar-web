@@ -3,7 +3,7 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks';
 import { useDispatch } from 'react-redux';
 import gql from 'graphql-tag';
 
-function generateQueryByFilter({
+export function generateQueryByFilter({
   node, keys, variables, filters,
 }) {
   return gql`
@@ -65,5 +65,5 @@ export function useManualQuery(query, options = {}, initialData = {}) {
     setIsLoading(false);
     return result;
   }
-  return [{ data, isLoading, error }, { onQuery }];
+  return [{ data, loading: isLoading, error }, { onQuery }];
 }

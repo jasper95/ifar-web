@@ -1,25 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AuthLayout from 'components/Layout/Auth';
 import Link from 'react-router-dom/Link';
 import useMutation from 'apollo/mutation';
 import Button from 'react-md/lib/Buttons/Button';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
-import { useDispatch } from 'react-redux';
+import useVerifyToken from 'lib/hooks/useVerifyToken';
 
-function Verify(props) {
-  const [verifyState, onVerify] = useMutation({ url: '/verify-account', method: 'put', onSuccess });
-  console.log('verifyState: ', verifyState);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (typeof window === 'object') {
-      const token = new URLSearchParams(window.location.search).get('token');
-      if (!token) {
-        dispatch({ type: 'ERROR', payload: { message: 'Invalid verification link' } });
-        return;
-      }
-      onVerify({ data: { token } });
-    }
-  }, []);
+function Verify() {
+  const [verifyState, onVerify] = useMutation({ url: '/verify-account', method: 'put' });
+  const [verifyTokenState] = useVerifyToken({ name: 'Verification link', onSuccess });
   return (
     <AuthLayout
       header={(
@@ -28,12 +17,12 @@ function Verify(props) {
         </h1>
       )}
     >
-      {verifyState.loading && (
+      {(verifyState.loading || verifyTokenState === 'pending') && (
         <div>
           Verifying your account ....
         </div>
       )}
-      {verifyState.error && (
+      {(verifyState.error || verifyTokenState === 'invalid') && (
         <div>
           Something went wrong
         </div>
@@ -56,8 +45,8 @@ function Verify(props) {
     </AuthLayout>
   );
 
-  function onSuccess() {
-
+  function onSuccess(token) {
+    onVerify({ data: { token } });
   }
 }
 

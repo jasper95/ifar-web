@@ -1,0 +1,188 @@
+.riskMap_map {
+	font-size: 1rem;
+	width: 100%;
+}
+
+.riskMap_map_filter {
+	margin-bottom: 1em;
+	.iBttn {
+		width: percentage(1/3);
+		border-radius: 0;
+		border: none;
+		font-size: 1em;
+
+		&:hover {
+			background-color: rgba(#000,.05);
+		}
+
+		&:not(:last-child) {
+			border-right: 2px solid rgba(#000,.05);
+		}
+	}
+}
+
+.riskMap_map .mapTable {
+	background-color: #fff;
+	box-shadow: 0 0 1em 0 rgba(#000,.1);
+	margin-bottom: 2em;
+	padding: 1em;
+	table {
+		width: 100%;
+	}
+
+	// .mapTable_col
+	&_col {
+		position: relative;
+		flex-grow: 0 !important;
+		flex-shrink: 0 !important;
+		width: auto !important;
+		height: 100%;
+
+		&[class*="-label-"] {
+			.mapTable_col_content {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+
+				.number {
+					font-size: 1em;
+					font-weight: 700;
+					margin-bottom: 0;
+				}
+
+				.title {
+					font-size: 1em;
+					font-weight: 700;
+					text-align: center;
+				}
+			}
+		}
+
+		// .mapTable_col-label-left
+		&-label-left {
+			background-color: $tbl-label-left;
+		}
+
+		// .mapTable_col-label-bottom
+		&-label-bottom {
+			background-color: $tbl-label-bottom;
+		}
+
+		// .mapTable_col-label-leftBottom
+		&-label-leftBottom {
+			padding: 0 !important;
+			.mapTable_col_container {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				padding: 0 !important;
+			}
+			.mapTable_col_content {
+				height: 100%;
+			}
+			.mapTable_col-label-half-left {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background-color: $tbl-label-left;
+			}
+			.mapTable_col-label-half-bottom {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background-color: $tbl-label-bottom;
+			}
+		}
+
+		// .mapTable_col_container
+		&_container {
+			padding: 1em;
+		}
+
+		// .mapTable_col_content
+		&_content {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		// .mapTable_col_numLabel
+		&_numLabel {
+			position: absolute;
+			top: .5em;
+			right: .5em;
+			font-size: .8em;
+			width: 1.2em;
+			height: 1.2em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			line-height: 1;
+			border-radius: .50%;
+			color: $black;
+			font-weight: bold;
+		}
+
+		&-low {
+			background-color: $rafi-riskLegend-low;
+		}
+
+		&-moderate {
+			background-color: $rafi-riskLegend-moderate;
+		}
+
+		&-high {
+			background-color: $rafi-riskLegend-high;
+		}
+
+		&-critical {
+			background-color: $rafi-riskLegend-critical;
+		}
+	}
+}
+
+.riskMap_map .riskCircle {
+	
+	font-weight: bold;
+	font-size: .8em;
+	width: 2em;
+	height: 2em;
+	margin: .15em;
+	border-radius: 50%;
+	border: 2px solid $black;
+	box-shadow: 0 0 1em 0 rgba(#000,.1);
+	line-height: 1;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $white;
+	// .riskCircle-finance
+	&-finance {
+		background-color: $rafi-cat-finance;
+	}
+	// .riskCircle-legal
+	&-legal {
+		background-color: $rafi-cat-legal;
+	}
+	// .riskCircle-health-safety-security
+	&-health-safety-security {
+		background-color: $rafi-cat-health-safety-security;
+	}
+	// .riskCircle-reputation
+	&-reputation {
+		background-color: $rafi-cat-reputation;
+	}
+	// .riskCircle-management-action
+	&-management-action {
+		background-color: $rafi-cat-management-action;
+	}
+	// .riskCircle-operations
+	&-operations {
+		background-color: $rafi-cat-operations;
+	}
+}

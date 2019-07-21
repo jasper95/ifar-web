@@ -1,0 +1,46 @@
+$tbl-label-left: $c_gray-100;
+$tbl-label-bottom: $c_beige-100;
+
+.riskMap {
+
+	width: 100%;
+
+	// .riskMap_row
+	&_row {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+
+	// .riskMap_legend
+	&_legend {
+		flex-shrink: 0;
+	}
+
+	// .riskMap_map
+	&_map {
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+
+	// .riskMap_categories
+	&_categories {
+		width: 100%;
+		.mapCategories {
+			display: flex;
+			align-items: stretch;
+			justify-content: center;
+			flex-wrap: nowrap;
+		}
+
+		.iBttn {
+			width: percentage(1/6);
+			margin: .25em;
+		}
+	}
+}
+
+

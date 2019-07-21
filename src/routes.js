@@ -8,6 +8,7 @@ const Verify = loadable(() => import('pages/Verify'));
 const Signup = loadable(() => import('pages/Signup'));
 const Home = loadable(() => import('pages/Home'));
 const ForgotPassword = loadable(() => import('pages/ForgotPassword'));
+const ResetPassword = loadable(() => import('pages/ResetPassword'));
 const ManageRisk = loadable(() => import('pages/ManageRisk'));
 const RiskMap = loadable(() => import('pages/RiskMap'));
 
@@ -68,6 +69,17 @@ export default [
       hasFooter: false,
       hasNavigation: false,
       requireAuth: false,
+    },
+  },
+  {
+    key: 'resetpw',
+    component: ResetPassword,
+    path: '/reset-password',
+    exact: true,
+    pageProps: {
+      hasFooter: false,
+      hasNavigation: false,
+      requireAuth: 'optional',
     },
   },
   {
