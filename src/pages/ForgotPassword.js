@@ -9,7 +9,7 @@ import useForm from 'lib/hooks/useForm';
 import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools';
 import * as yup from 'yup';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
-import { useNodeMutation } from 'apollo/mutation';
+import useMutation from 'apollo/mutation';
 import 'sass/pages/login.scss';
 
 
@@ -19,10 +19,10 @@ const initialFields = {
 
 function ForgotPassword() {
   const captchaRef = useRef(null);
-  const [resetState, onReset] = useNodeMutation({
+  const [resetState, onReset] = useMutation({
     url: '/forgot-password',
     message: 'Reset Password Link successfully sent to email',
-    callback: onResetSuccess,
+    onSuccess: onResetSuccess,
   });
   const [formState, formHandlers] = useForm({ initialFields, validator, onValid });
   const [captcha, setCaptcha] = useState(null);

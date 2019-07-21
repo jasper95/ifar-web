@@ -24,7 +24,7 @@ export default function useMutation(params = {}) {
     setLoading(true);
     const allParams = { ...params, ...params2 };
     const {
-      data: body = {}, method = 'POST', onSuccess = simpleFn,
+      data: body = {}, method = 'POST', onSuccess = simpleFn, message,
     } = allParams;
     let { url } = allParams;
     if (method.toLowerCase() === 'delete' && body.id) {
@@ -45,6 +45,9 @@ export default function useMutation(params = {}) {
     if (status === 200) {
       setData(response);
       onSuccess(response);
+      if (message) {
+        dispatch({ type: 'SUCCESS', payload: { message } });
+      }
       return;
     }
     const err = {
@@ -60,7 +63,7 @@ export function useCreateNode(params) {
     node,
     message = `${capitalize(node)} successfully created`,
   } = params;
-  return useNodeMutation({
+  return useMutation({
     ...params,
     message,
     method: 'POST',
@@ -73,7 +76,7 @@ export function useUpdateNode(params) {
     node,
     message = `${capitalize(node)} successfully updated`,
   } = params;
-  return useNodeMutation({
+  return useMutation({
     ...params,
     message,
     method: 'PUT',
@@ -86,20 +89,10 @@ export function useDeleteNode(params) {
     node,
     message = `${capitalize(node)} successfully deleted`,
   } = params;
-  return useNodeMutation({
+  return useMutation({
     ...params,
     message,
     method: 'DELETE',
     url: `/${node}`,
   });
-}
-
-export function useNodeMutation(params) {
-  const dispatch = useDispatch();
-  const { callback = () => {}, message } = params;
-  const onSuccess = () => {
-    dispatch({ type: 'SUCCESS', payload: { message } });
-    callback();
-  };
-  return useMutation({ ...params, onSuccess });
 }

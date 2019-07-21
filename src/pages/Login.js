@@ -19,8 +19,10 @@ const initialFields = {
 };
 
 function LoginPage() {
-  const [formState, formHandlers] = useForm({ initialFields, validator, onValid });
-  const [loginState, onLogin] = useMutation({ url: '/login' });
+  const [formState, formHandlers] = useForm({
+    initialFields, validator, onValid,
+  });
+  const [loginState, onLogin] = useMutation({ url: '/login', onSuccess });
   const dispatch = useDispatch();
   const {
     onElementChange,
@@ -104,11 +106,10 @@ function LoginPage() {
   function onValid(data) {
     onLogin({
       data,
-      onSuccess: setToken,
     });
   }
 
-  function setToken({ token }) {
+  function onSuccess({ token }) {
     dispatch({ type: 'SET_STATE', payload: { token } });
     cookie.set('token', token, { expires: 360000 });
   }

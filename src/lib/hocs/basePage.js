@@ -22,9 +22,9 @@ const withBasePage = params => (WrappedComponent) => {
     const { data: listData, refetch } = useQuery(listQuery,
       { variables: { user_id: auth && auth.id } });
     const [, detailsHandler] = useManualQuery(detailsQuery);
-    const [, createNode] = useCreateNode({ node, callback: refetch });
-    const [, updateNode] = useUpdateNode({ node, callback: refetch });
-    const [, deleteNode] = useDeleteNode({ node, callback: refetch });
+    const [, createNode] = useCreateNode({ node, onSuccess: refetch });
+    const [, updateNode] = useUpdateNode({ node, onSuccess: refetch });
+    const [, deleteNode] = useDeleteNode({ node, onSuccess: refetch });
     return (
       <WrappedComponent
         onDelete={handleDelete}

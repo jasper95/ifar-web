@@ -37,6 +37,10 @@ export default function useForm(params) {
     }
     setErrors(validationErrors);
   }
+  function onReset() {
+    setErrors({});
+    setFields(initialFields);
+  }
   return [
     {
       fields,
@@ -46,6 +50,7 @@ export default function useForm(params) {
       onElementChange,
       onChange,
       onValidate,
+      onReset,
     },
   ];
 }

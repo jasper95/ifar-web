@@ -6,7 +6,7 @@ import cn from 'classnames';
 import useForm from 'lib/hooks/useForm';
 import * as yup from 'yup';
 import useVerifyToken from 'lib/hooks/useVerifyToken';
-import { useNodeMutation } from 'apollo/mutation';
+import useMutation from 'apollo/mutation';
 import { getValidationResult, fieldIsRequired } from 'lib/tools';
 import 'sass/pages/login.scss';
 
@@ -15,13 +15,13 @@ const initialFields = {
   email: '',
 };
 
-function ForgotPassword() {
+function ResetPassword() {
   const [verifyTokenState] = useVerifyToken({ name: 'Reset password link', type: 'reset-password', onSuccess: onVerifySuccess });
-  const [resetState, onReset] = useNodeMutation({
+  const [resetState, onReset] = useMutation({
     url: '/reset-password',
     method: 'put',
     message: 'Password successfully updated',
-    callback: onResetSuccess,
+    onSuccess: onResetSuccess,
   });
   const [formState, formHandlers] = useForm({ initialFields, validator, onValid });
   const {
@@ -30,7 +30,6 @@ function ForgotPassword() {
     onElementChange,
   } = formHandlers;
   const { fields, errors } = formState;
-  console.log('errors: ', errors);
   return (
     <AuthLayout
       header={(
@@ -103,4 +102,4 @@ function validator(data) {
   return getValidationResult(data, schema);
 }
 
-export default ForgotPassword;
+export default ResetPassword;

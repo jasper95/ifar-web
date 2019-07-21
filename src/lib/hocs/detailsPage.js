@@ -43,7 +43,7 @@ const withDetailsPage = params => (WrappedComponent) => {
           onValid: data => dispatch(Update({
             data: dataFormatter(data, 'SAVE_EDIT', props),
             node,
-            callback: getDetails,
+            onSuccess: getDetails,
           })),
         },
       }));

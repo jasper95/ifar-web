@@ -52,9 +52,9 @@ function RiskList(props) {
   const dispatch = useDispatch();
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const queryResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit } });
-  const [, onCreate] = useCreateNode({ node: 'risk', callback: queryResponse.refetch });
-  const [, onUpdate] = useUpdateNode({ node: 'risk', callback: queryResponse.refetch });
-  const [, onDelete] = useDeleteNode({ node: 'risk', callback: queryResponse.refetch });
+  const [, onCreate] = useCreateNode({ node: 'risk', onSuccess: queryResponse.refetch });
+  const [, onUpdate] = useUpdateNode({ node: 'risk', onSuccess: queryResponse.refetch });
+  const [, onDelete] = useDeleteNode({ node: 'risk', onSuccess: queryResponse.refetch });
   const { data: { risk: list, business_unit: businessUnits = [] } } = queryResponse;
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   return (

@@ -3,10 +3,9 @@ import Button from 'react-md/lib/Buttons/Button';
 import TextField from 'react-md/lib/TextFields/TextField';
 import Link from 'react-router-dom/Link';
 import useForm from 'lib/hooks/useForm';
-import { useDispatch } from 'react-redux';
 import useMutation from 'apollo/mutation';
 import {
-  getValidationResult, delay, fieldIsRequired, fieldIsInvalid,
+  getValidationResult, fieldIsRequired, fieldIsInvalid,
 } from 'lib/tools';
 import * as yup from 'yup';
 import cn from 'classnames';
@@ -24,8 +23,11 @@ const initialFields = {
 };
 
 function SignupPage() {
-  const [signupState, onSignup] = useMutation({ url: '/signup' });
-  const dispatch = useDispatch();
+  const [signupState, onSignup] = useMutation({
+    url: '/signup',
+    onSuccess,
+    message: 'Account successfully registered. Please verify your email to login',
+  });
   const [formState, formHandlers] = useForm({ initialFields, validator, onValid });
   const {
     onElementChange,
@@ -121,12 +123,13 @@ function SignupPage() {
   );
 
   async function onValid(data) {
-    await onSignup({
+    onSignup({
       data,
     });
-    dispatch({ type: 'SUCCESS', payload: { message: 'Account successfully registered. Please verify your email to login' } });
-    await delay(3000);
-    dispatch({ type: 'HIDE_NOTIFICATION' });
+  }
+
+  async function onSuccess() {
+    formHandlers.onReset();
   }
 }
 
