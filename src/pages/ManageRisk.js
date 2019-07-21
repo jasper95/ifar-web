@@ -7,9 +7,11 @@ import RiskList from 'components/Risk/List';
 import dashboardData from 'lib/mock/dashboardData';
 import classificationLegend from 'lib/mock/classificationLegend';
 import history from 'lib/history';
+import { useDispatch } from 'react-redux';
 import 'sass/pages/manage-risk.scss';
 
 function ManageRisk(props) {
+  const dispatch = useDispatch();
   return (
     <div className="dbContainer">
       <Grid className="row-ToolbarHeader">
@@ -30,6 +32,7 @@ function ManageRisk(props) {
             className="iBttn iBttn-primary iBttn-counterBadge"
             iconBefore={false}
             children="View All Requests"
+            onClick={() => showDialog({ type: 'Requests', dialogTitle: 'Requests' })}
             iconEl={(
               <span className="iBttn_badge">
                 0
@@ -39,14 +42,8 @@ function ManageRisk(props) {
           <Button
             flat
             className="iBttn iBttn-primary iBttn-counterBadge"
-            // iconBefore={false}
             children="View Strategic Map"
             onClick={() => history.push('/risk-map')}
-            // iconEl={(
-            //   <span className="iBttn_badge">
-            //     0
-            //   </span>
-            // )}
           />
         </Cell>
       </Grid>
@@ -82,6 +79,21 @@ function ManageRisk(props) {
 
   function classificationFilter(data, legend) {
     return data.classification === legend.classification;
+  }
+
+  function showDialog({ type, dialogTitle }) {
+    if (type === 'Request') {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
+          path: type,
+          props: {
+            title: dialogTitle,
+            onValid: () => {},
+          },
+        },
+      });
+    }
   }
 }
 

@@ -8,8 +8,7 @@ import cookie from 'js-cookie';
 import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools';
 import * as yup from 'yup';
 import useMutation from 'apollo/mutation';
-import { withAuth } from 'apollo/auth';
-import flowRight from 'lodash/flowRight';
+import AuthLayout from 'components/Layout/Auth';
 import { useDispatch } from 'react-redux';
 import 'sass/pages/login.scss';
 
@@ -29,16 +28,9 @@ function LoginPage() {
   } = formHandlers;
   const { fields, errors } = formState;
   return (
-    <div className="authContainer">
-      <div className="authContainer_content">
-        <div className="authContainer_contentHeader">
-          <Link to="/" className="authContainer_contentHeader_logo">
-            <img
-              src="/static/img/logo.png"
-              alt=""
-            />
-          </Link>
-
+    <AuthLayout
+      header={(
+        <>
           <h1 className="authContainer_contentHeader_title">
             Login
           </h1>
@@ -49,71 +41,64 @@ function LoginPage() {
             <br />
             to your account
           </p>
-        </div>
-        <form
-          className="authContainer_form"
-          noValidate
-          autoComplete="off"
-          onSubmit={(e) => {
-            e.preventDefault();
-            onValidate();
-          }}
-        >
-          {/* { verified && (
-            <div className="authContainer_form_msg
-              authContainer_form_msg-success"
-            >
-              <p>Account successfully verified</p>
-            </div>
-          )} */}
-          <input type="Submit" hidden />
-          <TextField
-            className="iField"
-            id="email"
-            label="Email"
-            type="email"
-            variant="outlined"
-            onChange={onElementChange}
-            errorText={errors.email}
-            error={!!errors.email}
-            value={fields.email || ''}
+        </>
+      )}
+    >
+      <form
+        className="authContainer_form"
+        noValidate
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onValidate();
+        }}
+      >
+        <input type="Submit" hidden />
+        <TextField
+          className="iField"
+          id="email"
+          label="Email"
+          type="email"
+          variant="outlined"
+          onChange={onElementChange}
+          errorText={errors.email}
+          error={!!errors.email}
+          value={fields.email || ''}
+        />
+        <TextField
+          className="iField"
+          id="password"
+          type="password"
+          label="Password"
+          value={fields.password || ''}
+          error={!!errors.password}
+          errorText={errors.password}
+          onChange={onElementChange}
+        />
+        <div className="authContainer_form_action">
+          <Button
+            className={cn('iBttn iBttn-primary', { processing: loginState.loading })}
+            onClick={onValidate}
+            children="Login"
+            flat
           />
-          <TextField
-            className="iField"
-            id="password"
-            type="password"
-            label="Password"
-            value={fields.password || ''}
-            error={!!errors.password}
-            errorText={errors.password}
-            onChange={onElementChange}
-          />
-          <div className="authContainer_form_action">
+          <Link to="/signup">
             <Button
-              className={cn('iBttn iBttn-primary', { processing: loginState.loading })}
-              onClick={onValidate}
-              children="Login"
+              className="iBttn iBttn-second-prio"
+              children="Sign Up"
               flat
             />
-            <Link to="/signup">
-              <Button
-                className="iBttn iBttn-second-prio"
-                children="Sign Up"
-                flat
-              />
-            </Link>
-            <div className="row">
-              <p>
-                <Link to="/forgot-password">
+          </Link>
+          <div className="row">
+            <p>
+              <Link to="/forgot-password">
                   Forgot Password?
-                </Link>
-              </p>
-            </div>
+              </Link>
+            </p>
           </div>
-        </form>
-      </div>
-      <div className="authContainer_bg" />
-    </div>
+        </div>
+      </form>
+    </AuthLayout>
   );
 
   function onValid(data) {

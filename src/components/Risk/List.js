@@ -10,7 +10,7 @@ import RiskItem from './Item';
 
 import 'sass/components/risk/index.scss';
 
-const riskListQuery = gql`
+export const riskListQuery = gql`
   query getList($id: uuid!){
     risk(where: {business_unit: {id: {_eq: $id }}}) {
       causes
@@ -48,7 +48,7 @@ const riskListQuery = gql`
 `;
 
 
-function RiskList() {
+function RiskList(props) {
   const dispatch = useDispatch();
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const queryResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit } });
@@ -106,7 +106,8 @@ function RiskList() {
           <div className="riskList_risk_content">
             {list && list.map(e => (
               <RiskItem
-                risk={e}
+                previewProps={{ risk: e }}
+                detailsProps={{ risk: e }}
                 key={e.id}
                 className="riskList_risk_content_item"
               />

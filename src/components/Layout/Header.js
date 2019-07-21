@@ -40,7 +40,6 @@ function Header(props) {
     avatarLink = '',
     match,
   } = props;
-  console.log('props: ', props);
   const dispatch = useDispatch();
   const { data: user, loading: authIsLoading } = useContext(AuthContext);
   const [, onLogout] = useMutation({ url: '/logout', onSuccess: onLogoutSucess });

@@ -4,6 +4,7 @@ import loadable from '@loadable/component';
 import PageLayout from 'components/Layout/Page';
 
 const Login = loadable(() => import('pages/Login'));
+const Verify = loadable(() => import('pages/Verify'));
 const Signup = loadable(() => import('pages/Signup'));
 const Home = loadable(() => import('pages/Home'));
 const ForgotPassword = loadable(() => import('pages/ForgotPassword'));
@@ -21,14 +22,29 @@ export default [
     },
   },
   {
+    key: 'verify',
+    component: Verify,
+    path: '/verify',
+    exact: true,
+    pageProps: {
+      hasNavigation: false,
+      hasFooter: false,
+      requireAuth: 'optional',
+      pageTitle: 'Verify Account',
+      pageDescription: 'Verify Account to Login',
+    },
+  },
+  {
     key: 'login',
     component: Login,
     path: '/login',
     exact: true,
     pageProps: {
+      hasNavigation: false,
+      hasFooter: false,
       requireAuth: false,
       pageTitle: 'Login',
-      pageDescription: 'Login to Internlik. Search and apply for internship jobs',
+      pageDescription: 'Login to RAMONS',
     },
   },
   {
@@ -37,6 +53,8 @@ export default [
     path: '/signup',
     exact: true,
     pageProps: {
+      hasNavigation: false,
+      hasFooter: false,
       requireAuth: false,
       pageId: 'register',
     },
@@ -47,6 +65,8 @@ export default [
     path: '/forgot-password',
     exact: true,
     pageProps: {
+      hasFooter: false,
+      hasNavigation: false,
       requireAuth: false,
     },
   },
@@ -56,7 +76,7 @@ export default [
     path: '/risk-management',
     exact: true,
     pageProps: {
-      requireAuth: false,
+      requireAuth: true,
       pageTitle: 'Manage Risk',
     },
   },
@@ -66,7 +86,8 @@ export default [
     path: '/risk-map',
     exact: true,
     pageProps: {
-      requireAuth: false,
+      requireAuth: true,
+      pageTitle: 'Risk Map',
     },
   },
   {

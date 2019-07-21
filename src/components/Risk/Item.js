@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import PropType from 'prop-types';
+import PropTypes from 'prop-types';
 import Button from 'react-md/lib/Buttons/Button';
 import { ExpansionPanel } from 'react-md';
-
 import RiskPreview from './Preview';
 import RiskDetails from './Details';
 
 function RiskItem(props) {
-  const { risk, className } = props;
+  const {
+    className, previewRenderer: Preview,
+    previewProps, detailsProps,
+  } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <div className={className}>
@@ -22,9 +24,9 @@ function RiskItem(props) {
           : 'arrow_drop_down'
         }
       </Button>
-      <RiskPreview
+      <Preview
         className={`${className}_preview`}
-        risk={risk}
+        {...previewProps}
       />
       <ExpansionPanel
         className={`${className}_expansion`}
@@ -34,7 +36,7 @@ function RiskItem(props) {
       >
         <RiskDetails
           className={`${className}_details`}
-          risk={risk}
+          {...detailsProps}
         />
       </ExpansionPanel>
     </div>
@@ -42,7 +44,13 @@ function RiskItem(props) {
 }
 
 RiskItem.propTypes = {
-  risk: PropType.object.isRequired,
+  risk: PropTypes.object.isRequired,
+  previewRenderer: PropTypes.func,
+};
+
+
+RiskItem.defaultProps = {
+  previewRenderer: RiskPreview,
 };
 
 export default RiskItem;

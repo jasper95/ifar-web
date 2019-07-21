@@ -19,19 +19,8 @@ const sessionQuery = generateQueryById({
       first_name
       last_name
       avatar
-      address_description
-      address
-      contact_number
       email
-      resume
-      nationality
-      birth_date
       slug
-      company {
-        id
-        name
-        slug
-      }
       notifications_aggregate(where: {status: {_eq: "unread"}}) {
         aggregate {
           count
