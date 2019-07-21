@@ -8,7 +8,7 @@ import useVerifyToken from 'lib/hooks/useVerifyToken';
 
 function Verify() {
   const [verifyState, onVerify] = useMutation({ url: '/verify-account', method: 'put' });
-  const [verifyTokenState] = useVerifyToken({ name: 'Verification link', onSuccess });
+  const [verifyTokenState] = useVerifyToken({ name: 'Verification link', type: 'signup', onSuccess });
   return (
     <AuthLayout
       header={(
