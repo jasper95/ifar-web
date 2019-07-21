@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const express = require('express');
 const { baseConfig, resolvePath } = require('./base');
 
+require('dotenv').config({ path: resolvePath('config/.env') });
+
 const result = baseConfig({
   mode: 'development',
   plugins: [
@@ -31,6 +33,13 @@ const result = baseConfig({
     historyApiFallback: true,
     before(app) {
       app.use('/static', express.static(resolvePath('public')));
+    },
+    proxy: {
+      '/api': {
+        target: process.env.API_URL,
+        pathRewrite: { '^/api': '' },
+        changeOrigin: true,
+      },
     },
   },
 });
