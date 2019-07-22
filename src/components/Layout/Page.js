@@ -3,7 +3,6 @@ import React from 'react';
 import loadable from '@loadable/component';
 import PropTypes from 'prop-types';
 import { Helmet as Head } from 'react-helmet';
-// import { withRouter } from 'react-router';
 import flowRight from 'lodash/flowRight';
 import Snackbar from 'components/Snackbar';
 import { withAuth } from 'apollo/auth';

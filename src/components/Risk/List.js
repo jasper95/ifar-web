@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, {
+  useState, useRef, useCallback, useEffect,
+} from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
 import { useCreateNode, useUpdateNode, useDeleteNode } from 'apollo/mutation';
 import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
+import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
+import List from 'react-virtualized/dist/commonjs/List';
+import WindowScroller from 'react-virtualized/dist/commonjs/WindowScroller';
+import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/commonjs/CellMeasurer';
 import QueryContext from './Context';
 import RiskItem from './Item';
-
 import 'sass/components/risk/index.scss';
 
 export const riskListQuery = gql`
   query getList($id: uuid!){
-    risk(where: {business_unit: {id: {_eq: $id }}}) {
+    risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {name: asc}) {
       causes
       classification {
         name
@@ -49,13 +54,24 @@ export const riskListQuery = gql`
 
 
 function RiskList(props) {
+  const [cacheToggle, setCacheToggle] = useState(false);
+  const [collapsedItems, setCollapsedItems] = useState([]);
+  console.log('collapsedItems: ', collapsedItems);
   const dispatch = useDispatch();
+  const vlistCache = useRef(new CellMeasurerCache({
+    fixedWidth: true,
+    defaultHeight: 300,
+  }));
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const queryResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit } });
-  const [, onCreate] = useCreateNode({ node: 'risk', onSuccess: queryResponse.refetch });
-  const [, onUpdate] = useUpdateNode({ node: 'risk', onSuccess: queryResponse.refetch });
-  const [, onDelete] = useDeleteNode({ node: 'risk', onSuccess: queryResponse.refetch });
+  const [, onCreate] = useCreateNode({ node: 'risk', onSuccess: () => queryResponse.refetch() });
+  const [, onUpdate] = useUpdateNode({ node: 'risk', onSuccess: () => queryResponse.refetch() });
+  const [, onDelete] = useDeleteNode({ node: 'risk', onSuccess: () => queryResponse.refetch() });
   const { data: { risk: list, business_unit: businessUnits = [] } } = queryResponse;
+  const rowRenderer = useCallback(rowItem, [list, collapsedItems]);
+  useEffect(() => {
+    vlistCache.current.clearAll();
+  }, [list]);
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   return (
     <QueryContext.Provider value={{ updateRisk: onUpdate, deleteRisk: onDelete }}>
@@ -104,19 +120,65 @@ function RiskList(props) {
             </div>
           </div>
           <div className="riskList_risk_content">
-            {list && list.map(e => (
-              <RiskItem
-                previewProps={{ risk: e }}
-                detailsProps={{ risk: e }}
-                key={e.id}
-                className="riskList_risk_content_item"
-              />
-            ))}
+            {list && (
+              <WindowScroller>
+                {({ height, scrollTop }) => (
+                  <AutoSizer disableHeight>
+                    {({ width }) => (
+                      <List
+                        autoHeight
+                        rowCount={list.length}
+                        width={width}
+                        height={height}
+                        deferredMeasurementCache={vlistCache.current}
+                        rowHeight={vlistCache.current.rowHeight}
+                        rowRenderer={rowRenderer}
+                        overscanRowCount={1}
+                        scrollTop={scrollTop}
+                      />
+                    )}
+                  </AutoSizer>
+                )}
+              </WindowScroller>
+            )}
           </div>
         </div>
       </Grid>
     </QueryContext.Provider>
   );
+
+  function rowItem({
+    index, parent, key, style,
+  }) {
+    const e = list[index];
+    const isCollapsed = collapsedItems.includes(e.id);
+    return (
+      <CellMeasurer
+        key={key}
+        cache={vlistCache.current}
+        parent={parent}
+        columnIndex={0}
+        rowIndex={index}
+      >
+        <RiskItem
+          style={style}
+          previewProps={{ risk: e }}
+          detailsProps={{ risk: e }}
+          key={e.id}
+          onCollapse={() => {
+            if (isCollapsed) {
+              setCollapsedItems(prev => prev.filter(ee => ee !== e.id));
+            } else {
+              setCollapsedItems(prev => [...prev, e.id]);
+            }
+            vlistCache.current.clear(index);
+          }}
+          isCollapsed={isCollapsed}
+          className="riskList_risk_content_item"
+        />
+      </CellMeasurer>
+    );
+  }
 
   function changeBusinessUnit(id) {
     setBusinessUnit(id);

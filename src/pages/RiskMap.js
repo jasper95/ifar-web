@@ -8,7 +8,6 @@ import FakeButton from 'react-md/lib/Helpers/AccessibleFakeButton';
 import IconSeparator from 'react-md/lib/Helpers/IconSeparator';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import businessUnits from 'lib/constants/riskManagement/businessUnits';
-
 import RiskMapComponent from 'components/RiskMap';
 
 export default function RiskMap() {

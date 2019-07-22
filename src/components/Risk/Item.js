@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-md/lib/Buttons/Button';
 import { ExpansionPanel } from 'react-md';
@@ -8,16 +8,22 @@ import RiskDetails from './Details';
 function RiskItem(props) {
   const {
     className, previewRenderer: Preview,
-    previewProps, detailsProps,
+    previewProps, detailsProps, style, onCollapse, isCollapsed,
   } = props;
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  // const [isCollapsed, setIsCollapsed] = useState(false);
+  useEffect(() => {
+    console.log('did mount', isCollapsed);
+  }, []);
   return (
-    <div className={className}>
+    <div className={className} style={style}>
       <Button
         icon
         flat
         className={`${className}_toggler`}
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={() => {
+          // setIsCollapsed(!isCollapsed);
+          onCollapse();
+        }}
       >
         { isCollapsed
           ? 'arrow_drop_up'
@@ -28,17 +34,26 @@ function RiskItem(props) {
         className={`${className}_preview`}
         {...previewProps}
       />
-      <ExpansionPanel
+      {isCollapsed && (
+        <RiskDetails
+          className={`${className}_details`}
+          {...detailsProps}
+        />
+      )}
+      {/* <ExpansionPanel
         className={`${className}_expansion`}
         expanded={isCollapsed}
         footer={null}
-        onExpandToggle={() => setIsCollapsed(!isCollapsed)}
+        onExpandToggle={() => {
+          setIsCollapsed(!isCollapsed);
+          onCollapse();
+        }}
       >
         <RiskDetails
           className={`${className}_details`}
           {...detailsProps}
         />
-      </ExpansionPanel>
+      </ExpansionPanel> */}
     </div>
   );
 }
@@ -46,11 +61,13 @@ function RiskItem(props) {
 RiskItem.propTypes = {
   risk: PropTypes.object.isRequired,
   previewRenderer: PropTypes.func,
+  onCollapse: PropTypes.func,
 };
 
 
 RiskItem.defaultProps = {
   previewRenderer: RiskPreview,
+  onCollapse: () => {},
 };
 
 export default RiskItem;
