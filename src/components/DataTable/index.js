@@ -26,7 +26,7 @@ function DataTable(props) {
         {rows.length === 0 && (
           <div>No Records Found</div>
         )}
-        {rows.map(row => (
+        {rows.map((row, rowIndex) => (
           <TableRow
             key={row.id}
             onClick={(e) => {
@@ -35,7 +35,7 @@ function DataTable(props) {
             }}
           >
             {columns.map((column, idx) => (
-              <Row key={idx} {...column} row={row} />
+              <Row index={rowIndex} key={idx} {...column} row={row} />
             ))
             }
           </TableRow>
@@ -60,7 +60,7 @@ export default DataTable;
 function Row(props) {
   const {
     type, row, accessor, bodyProps = {}, actions = [],
-    component: Cell, fn,
+    component: Cell, fn, index,
   } = props;
   let children;
   if (type === 'actions') {
@@ -88,10 +88,10 @@ function Row(props) {
     });
   } else if (type === 'component') {
     children = (
-      <Cell row={row} />
+      <Cell index={index} row={row} />
     );
   } else if (type === 'function') {
-    children = fn(row);
+    children = fn(row, index);
   } else {
     children = get(row, accessor);
   }
@@ -110,6 +110,7 @@ Row.propTypes = {
   }).isRequired,
   component: PropTypes.func,
   fn: PropTypes.func,
+  index: PropTypes.number.isRequired,
 };
 
 Row.defaultProps = {

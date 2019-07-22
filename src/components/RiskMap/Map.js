@@ -105,8 +105,8 @@ function Map(props) {
       'Extreme',
     ];
 
-    console.log(`column = ${column} row = ${row}`);
-    console.log(`isLeftLabel = ${isLeftLabel} isBottomLabel = ${isBottomLabel}`);
+    // console.log(`column = ${column} row = ${row}`);
+    // console.log(`isLeftLabel = ${isLeftLabel} isBottomLabel = ${isBottomLabel}`);
 
     // if left label on bottom
     if (isLeftLabel && isBottomLabel) {
@@ -182,7 +182,7 @@ function Map(props) {
           {mockRisk.map((i) => {
             // example only
             const catType = riskTypes.find(x => i.riskId === x.id);
-            console.log('catType ', catType);
+            // console.log('catType ', catType);
             return (
               <RiskCircleItems
                 riskType={catType.cssColorKey}

@@ -15,13 +15,23 @@ function MultiFields(props) {
         <span className="text">{label}</span>
         <span className="isReq">{required && '*'}</span>
       </h1>
+      {/* {fieldLabels.length && (
+        <div>
+          {fieldLabels.map(e => (
+            <div>
+              {`${e.label} *`}
+            </div>
+          ))}
+        </div>
+      )} */}
       <div className="iFieldMultiversion_list">
         {value.map((e, idx) => (
           <div className="iFieldMultiversion_list_item">
             <Button
               icon
               className="iBttn iBttn-error iFieldMultiversion_list_item_remove"
-              onClick={() => handleRemove(e.id)}>
+              onClick={() => handleRemove(e.id)}
+            >
               remove
             </Button>
             <div className="iFieldMultiversion_list_item_field">
@@ -37,11 +47,12 @@ function MultiFields(props) {
           </div>
         ))}
       </div>
-      <Button 
-        flat 
+      <Button
+        flat
         onClick={handleAdd}
         iconChildren="add"
-        className='iBttn iFieldMultiversion_add'>
+        className="iBttn iFieldMultiversion_add"
+      >
         Add New
       </Button>
     </div>

@@ -40,20 +40,6 @@ function RiskItem(props) {
           {...detailsProps}
         />
       )}
-      {/* <ExpansionPanel
-        className={`${className}_expansion`}
-        expanded={isCollapsed}
-        footer={null}
-        onExpandToggle={() => {
-          setIsCollapsed(!isCollapsed);
-          onCollapse();
-        }}
-      >
-        <RiskDetails
-          className={`${className}_details`}
-          {...detailsProps}
-        />
-      </ExpansionPanel> */}
     </div>
   );
 }

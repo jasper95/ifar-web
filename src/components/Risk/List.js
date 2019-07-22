@@ -54,9 +54,7 @@ export const riskListQuery = gql`
 
 
 function RiskList(props) {
-  const [cacheToggle, setCacheToggle] = useState(false);
   const [collapsedItems, setCollapsedItems] = useState([]);
-  console.log('collapsedItems: ', collapsedItems);
   const dispatch = useDispatch();
   const vlistCache = useRef(new CellMeasurerCache({
     fixedWidth: true,
