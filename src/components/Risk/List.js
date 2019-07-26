@@ -9,6 +9,7 @@ import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import List from 'react-virtualized/dist/commonjs/List';
+import InfiniteLoader from 'react-virtualized/dist/commonjs/InfiniteLoader';
 import WindowScroller from 'react-virtualized/dist/commonjs/WindowScroller';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/commonjs/CellMeasurer';
 import QueryContext from './Context';
@@ -16,8 +17,8 @@ import RiskItem from './Item';
 import 'sass/components/risk/index.scss';
 
 export const riskListQuery = gql`
-  query getList($id: uuid!){
-    risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {name: asc}) {
+  query getList($id: uuid!, $offset:Int , $limit: Int =5){
+    risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {name: asc}, offset: $offset, limit: $limit) @connection(key: "risk", filter: ["type"]) {
       causes
       classification {
         name
@@ -40,6 +41,11 @@ export const riskListQuery = gql`
         id
       }
     }
+  }
+`;
+
+const businessUnitListQuery = `
+  query {
     business_unit(order_by: {order: asc}) {
       id
       name
@@ -53,19 +59,22 @@ export const riskListQuery = gql`
 `;
 
 
-function RiskList(props) {
+function RiskList() {
   const [collapsedItems, setCollapsedItems] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
   const vlistCache = useRef(new CellMeasurerCache({
     fixedWidth: true,
     defaultHeight: 300,
   }));
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
-  const queryResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit } });
-  const [, onCreate] = useCreateNode({ node: 'risk', onSuccess: () => queryResponse.refetch() });
-  const [, onUpdate] = useUpdateNode({ node: 'risk', onSuccess: () => queryResponse.refetch() });
-  const [, onDelete] = useDeleteNode({ node: 'risk', onSuccess: () => queryResponse.refetch() });
-  const { data: { risk: list, business_unit: businessUnits = [] } } = queryResponse;
+  const riskListResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit, offset: 0 }, fetchPolicy: 'cache-and-network' });
+  const businessUnitListResponse = useQuery(businessUnitListQuery);
+  const [, onCreate] = useCreateNode({ node: 'risk', onSuccess: onSuccessMutation });
+  const [, onUpdate] = useUpdateNode({ node: 'risk', onSuccess: onSuccessMutation });
+  const [, onDelete] = useDeleteNode({ node: 'risk', onSuccess: onSuccessMutation });
+  const { data: { risk: list = [] } } = riskListResponse;
+  const { data: { business_unit: businessUnits = [] } } = businessUnitListResponse;
   const rowRenderer = useCallback(rowItem, [list, collapsedItems]);
   useEffect(() => {
     vlistCache.current.clearAll();
@@ -118,27 +127,36 @@ function RiskList(props) {
             </div>
           </div>
           <div className="riskList_risk_content">
-            {list && (
-              <WindowScroller>
-                {({ height, scrollTop }) => (
-                  <AutoSizer disableHeight>
-                    {({ width }) => (
-                      <List
-                        autoHeight
-                        rowCount={list.length}
-                        width={width}
-                        height={height}
-                        deferredMeasurementCache={vlistCache.current}
-                        rowHeight={vlistCache.current.rowHeight}
-                        rowRenderer={rowRenderer}
-                        overscanRowCount={1}
-                        scrollTop={scrollTop}
-                      />
-                    )}
-                  </AutoSizer>
-                )}
-              </WindowScroller>
-            )}
+            <InfiniteLoader
+              isRowLoaded={isRowLoaded}
+              loadMoreRows={loadMoreRows}
+              threshold={1}
+              rowCount={1000000}
+            >
+              {({ onRowsRendered, registerChild }) => (
+                <WindowScroller>
+                  {({ height, scrollTop }) => (
+                    <AutoSizer disableHeight>
+                      {({ width }) => (
+                        <List
+                          ref={registerChild}
+                          autoHeight
+                          rowCount={list.length}
+                          width={width}
+                          height={height}
+                          deferredMeasurementCache={vlistCache.current}
+                          rowHeight={vlistCache.current.rowHeight}
+                          onRowsRendered={onRowsRendered}
+                          rowRenderer={rowRenderer}
+                          overscanRowCount={1}
+                          scrollTop={scrollTop}
+                        />
+                      )}
+                    </AutoSizer>
+                  )}
+                </WindowScroller>
+              )}
+            </InfiniteLoader>
           </div>
         </div>
       </Grid>
@@ -178,9 +196,36 @@ function RiskList(props) {
     );
   }
 
+  function isRowLoaded({ index }) {
+    return list.length > index;
+  }
+
+  function loadMoreRows() {
+    if (!riskListResponse.loading && hasMore) {
+      riskListResponse.fetchMore({
+        variables: { offset: list.length },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult.risk.length) {
+            setHasMore(false);
+            return prev;
+          }
+          return {
+            ...prev,
+            risk: [...prev.risk, ...fetchMoreResult.risk],
+          };
+        },
+      });
+    }
+  }
+
+  function onSuccessMutation() {
+    riskListResponse.refetch();
+    businessUnitListResponse.refetch();
+  }
+
   function changeBusinessUnit(id) {
     setBusinessUnit(id);
-    queryResponse.refetch({ id });
+    riskListResponse.refetch({ id });
   }
 
   function showRiskDialog() {
