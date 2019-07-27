@@ -145,3 +145,10 @@ export function fieldIsInvalid({ label, path }) {
     .join(' ');
   return `${display} is required`;
 }
+
+export function getImpactDriver(stage) {
+  const max = Math.max(...Object.values(stage));
+  const keys = Object.keys(stage)
+    .filter(e => stage[e] === max);
+  return ['financial', 'reputation', 'management_action', 'health_safety_security', 'operational', 'legal_compliance'].find(e => keys.includes(e));
+}

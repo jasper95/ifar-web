@@ -12,39 +12,12 @@ import List from 'react-virtualized/dist/commonjs/List';
 import InfiniteLoader from 'react-virtualized/dist/commonjs/InfiniteLoader';
 import WindowScroller from 'react-virtualized/dist/commonjs/WindowScroller';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/commonjs/CellMeasurer';
+import { getImpactDriver } from 'lib/tools';
 import QueryContext from './Context';
 import RiskItem from './Item';
 import 'sass/components/risk/index.scss';
 
-export const riskListQuery = gql`
-  query getList($id: uuid!, $offset:Int , $limit: Int =5){
-    risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {name: asc}, offset: $offset, limit: $limit) @connection(key: "risk", filter: ["type"]) {
-      causes
-      classification {
-        name
-      }
-      classification_id
-      current_treatments
-      definition
-      future_treatments
-      id
-      impact
-      impacts
-      inherent_rating
-      likelihood
-      name
-      residual_rating
-      stakeholders
-      target_rating
-      business_unit {
-        name
-        id
-      }
-    }
-  }
-`;
-
-const businessUnitListQuery = `
+export const businessUnitQuery = gql`
   query {
     business_unit(order_by: {order: asc}) {
       id
@@ -58,8 +31,9 @@ const businessUnitListQuery = `
   }
 `;
 
-
-function RiskList() {
+function RiskList(props) {
+  const { riskListResponse } = props;
+  const { data: { risk: list = [] } } = riskListResponse;
   const [collapsedItems, setCollapsedItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
@@ -68,13 +42,11 @@ function RiskList() {
     defaultHeight: 300,
   }));
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
-  const riskListResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit, offset: 0 }, fetchPolicy: 'cache-and-network' });
-  const businessUnitListResponse = useQuery(businessUnitListQuery);
-  const [, onCreate] = useCreateNode({ node: 'risk', onSuccess: onSuccessMutation });
+  const businessUnitResponse = useQuery(businessUnitQuery);
+  const [, onCreate] = useCreateNode({ node: 'risk', onSuccess: () => onSuccessMutation(true) });
   const [, onUpdate] = useUpdateNode({ node: 'risk', onSuccess: onSuccessMutation });
   const [, onDelete] = useDeleteNode({ node: 'risk', onSuccess: onSuccessMutation });
-  const { data: { risk: list = [] } } = riskListResponse;
-  const { data: { business_unit: businessUnits = [] } } = businessUnitListResponse;
+  const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
   const rowRenderer = useCallback(rowItem, [list, collapsedItems]);
   useEffect(() => {
     vlistCache.current.clearAll();
@@ -218,9 +190,11 @@ function RiskList() {
     }
   }
 
-  function onSuccessMutation() {
+  function onSuccessMutation(isCreate) {
     riskListResponse.refetch();
-    businessUnitListResponse.refetch();
+    if (isCreate) {
+      businessUnitResponse.refetch();
+    }
   }
 
   function changeBusinessUnit(id) {
@@ -235,26 +209,21 @@ function RiskList() {
         props: {
           dialogId: 'InherentRisk',
           title: 'Inherent Risk',
-          onValid: data => onCreate({
-            data: {
-              ...data,
-              business_unit_id: currentBusinessUnit,
-              inherent_rating: 1,
-            },
-          }),
+          onValid: (data) => {
+            const impactDriver = getImpactDriver(data.impact_details.inherent);
+            onCreate({
+              data: {
+                ...data,
+                business_unit_id: currentBusinessUnit,
+                inherent_impact_driver: impactDriver,
+                inherent_rating: data.impact_details.inherent[impactDriver],
+              },
+            });
+          },
           initialFields: {
-            likelihood: {
-              basis: 'Frequency',
-              rating: 1,
-            },
-            impact: {
-              reputation: 1,
-              financial: 1,
-              legal_compliance: 1,
-              operational: 1,
-              health_safety_security: 1,
-              management_action: 1,
-            },
+            basis: 'Frequency',
+            inherent_likelihood: 1,
+            impact_details: {},
           },
           dialogClassName: 'i_dialog_container--sm',
         },

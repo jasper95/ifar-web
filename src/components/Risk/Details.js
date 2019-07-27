@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
+import { getImpactDriver } from 'lib/tools';
 import { useDispatch } from 'react-redux';
 import QueryContext from './Context';
 import RiskInfo from './Info';
@@ -44,7 +45,25 @@ function RiskDetails(props) {
         path: `${type}Risk`,
         props: {
           title: dialogTitle,
-          onValid: data => context.updateRisk({ data }),
+          onValid: (data) => {
+            const key = type.toLowerCase();
+            const impactDriver = getImpactDriver(data.impact_details[key]);
+            const { previous_details: previousDetails = {} } = data;
+            context.updateRisk({
+              data: {
+                ...data,
+                [`${key}_impact_driver`]: impactDriver,
+                [`${key}_rating`]: data.impact_details[key][impactDriver],
+                previous_details: {
+                  ...previousDetails,
+                  [key]: {
+                    rating: risk[`${key}_rating`],
+                    likelihood: risk[`${key}_likelihood`],
+                  },
+                },
+              },
+            });
+          },
           initialFields: risk,
         },
       },
@@ -114,6 +133,11 @@ function RiskDetails(props) {
             {
               icon: 'delete',
               label: 'Delete',
+              onClick: () => {},
+            },
+            {
+              icon: 'check',
+              label: 'Done',
               onClick: () => {},
             },
           ],

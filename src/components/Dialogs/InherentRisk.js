@@ -9,11 +9,13 @@ import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools'
 import classifications from 'lib/constants/riskManagement/classifications';
 import * as yup from 'yup';
 
-
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
-  const { onElementChange } = formHandlers;
+  console.log('fields: ', fields);
+  // console.log('errors: ', errors);
+  // console.log('fields: ', fields);
+  const { onElementChange, onChange } = formHandlers;
   return (
     <div className="InherentRisk_form risk_forms">
       <TextField
@@ -89,10 +91,12 @@ function InherentRisk(props) {
         errors={errors}
       />
       <RiskEvaluation
-        type="inherint"
+        type="inherent"
         onChange={onElementChange}
-        likelihood={fields.likelihood}
-        impact={fields.impact}
+        basis={fields.basis}
+        likelihood={fields.inherent_likelihood}
+        impact={fields.impact_details.inherent}
+        onChangeImpact={inherent => onElementChange({ ...fields.impact_details, inherent }, 'impact_details')}
       />
     </div>
   );
@@ -155,7 +159,9 @@ function validator(data) {
         name: yup.string().label('Impact').required(fieldIsRequired),
       }),
     ),
-    impact,
+    impact_details: yup.object({
+      inherent: impact,
+    }),
   });
   return getValidationResult(data, schema);
 }
