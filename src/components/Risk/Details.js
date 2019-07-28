@@ -4,6 +4,7 @@ import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
 import { getImpactDriver } from 'lib/tools';
 import { useDispatch } from 'react-redux';
+import { useUpdateNode } from 'apollo/mutation';
 import QueryContext from './Context';
 import RiskInfo from './Info';
 import RiskTable from './Table';
@@ -11,7 +12,10 @@ import RiskTable from './Table';
 function RiskDetails(props) {
   const dispatch = useDispatch();
   const context = useContext(QueryContext);
-  const { risk, className } = props;
+  const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
+  const { risk, className, showTableActions } = props;
+  console.log('risk: ', risk);
+  // console.log('props: ', props);
   return (
     <Grid className={`RiskDetails ${className}`}>
       <Grid className="RiskDetails_row RiskDetails_row-infos">
@@ -70,7 +74,7 @@ function RiskDetails(props) {
             const key = type.toLowerCase();
             const impactDriver = getImpactDriver(data.impact_details[key]);
             const { previous_details: previousDetails = {} } = data;
-            context.updateRisk({
+            onUpdateRisk({
               data: {
                 ...data,
                 [`${key}_impact_driver`]: impactDriver,
@@ -110,7 +114,8 @@ function RiskDetails(props) {
           accessor: 'team',
           title: 'Team',
         },
-        {
+        showTableActions
+        && {
           type: 'actions',
           actions: [
             {
@@ -120,7 +125,7 @@ function RiskDetails(props) {
             },
           ],
         },
-      ],
+      ].filter(Boolean),
       Target: [
         {
           accessor: 'strategy',
@@ -148,7 +153,8 @@ function RiskDetails(props) {
           fn: formatDate('end_date', 'MMMM DD, YYYY'),
           title: 'End',
         },
-        {
+        showTableActions
+        && {
           type: 'actions',
           actions: [
             {
@@ -163,7 +169,7 @@ function RiskDetails(props) {
             },
           ],
         },
-      ],
+      ].filter(Boolean),
     }[type] || [];
   }
 }
@@ -176,6 +182,11 @@ RiskDetails.propTypes = {
     impacts: PropTypes.array.isRequired,
     causes: PropTypes.array.isRequired,
   }).isRequired,
+  showTableActions: PropTypes.bool,
+};
+
+RiskDetails.defaultProps = {
+  showTableActions: true,
 };
 
 export default RiskDetails;

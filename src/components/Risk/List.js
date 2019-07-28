@@ -44,7 +44,6 @@ function RiskList(props) {
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const businessUnitResponse = useQuery(businessUnitQuery);
   const [, onCreateRisk] = useCreateNode({ node: 'risk', onSuccess: () => onSuccessMutation(true) });
-  const [, onUpdateRisk] = useUpdateNode({ node: 'risk', onSuccess: onSuccessMutation });
   const [, onCreateRequest] = useCreateNode({ node: 'request', message: 'Request successfully sent' });
   const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
   const rowRenderer = useCallback(rowItem, [list, collapsedItems]);
@@ -53,7 +52,7 @@ function RiskList(props) {
   }, [list]);
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   return (
-    <QueryContext.Provider value={{ updateRisk: onUpdateRisk, createRequest: onCreateRequest }}>
+    <QueryContext.Provider value={{ createRequest: onCreateRequest }}>
       <Grid className="riskList">
         <div className="riskList_unitList">
           {businessUnits && businessUnits.map(e => (

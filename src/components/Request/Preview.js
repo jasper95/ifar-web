@@ -43,8 +43,9 @@ function RequestPreview(props) {
           <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
         </Cell>
         <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
-          <Button onClick={() => {}} icon>edit</Button>
-          <Button onClick={() => {}} icon>delete</Button>
+          <Button onClick={() => {}} icon>add</Button>
+          <Button onClick={() => {}} icon>check</Button>
+          <Button onClick={() => {}} icon>remove</Button>
         </Cell>
       </Grid>
     </Grid>

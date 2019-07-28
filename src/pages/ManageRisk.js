@@ -13,38 +13,45 @@ import 'sass/pages/manage-risk.scss';
 import gql from 'graphql-tag';
 import useQuery from 'apollo/query';
 
+export const riskDetailsFragment = gql`
+  fragment RiskDetails on risk {
+    causes
+    classification {
+      name
+    }
+    impact_details
+    previous_details
+    classification_id
+    current_treatments
+    definition
+    future_treatments
+    id
+    impacts
+    name
+    stakeholders
+    basis
+    target_rating
+    residual_rating
+    inherent_rating
+    target_likelihood
+    residual_likelihood
+    inherent_likelihood
+    residual_impact_driver
+  }
+`;
 export const riskListQuery = gql`
   query getList($id: uuid!, $offset:Int , $limit: Int =5){
     risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {name: asc}, offset: $offset, limit: $limit) @connection(key: "risk", filter: ["type"]) {
-      causes
-      classification {
-        name
-      }
-      impact_details
-      previous_details
-      classification_id
-      current_treatments
-      definition
-      future_treatments
-      id
-      impacts
-      name
-      stakeholders
-      basis
-      target_rating
-      residual_rating
-      inherent_rating
-      target_likelihood
-      residual_likelihood
-      inherent_likelihood
-      residual_impact_driver
+      ...RiskDetails
       business_unit {
         name
         id
       }
     }
   }
+  ${riskDetailsFragment}
 `;
+
 
 function ManageRisk() {
   const dispatch = useDispatch();
@@ -129,7 +136,7 @@ function ManageRisk() {
   }
 
   function showDialog({ type, dialogTitle }) {
-    if (type === 'Request') {
+    if (type === 'Requests') {
       dispatch({
         type: 'SHOW_DIALOG',
         payload: {

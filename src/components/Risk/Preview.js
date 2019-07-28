@@ -1,16 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import PropTypes from 'prop-types';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
 import { getImpactDriver } from 'lib/tools';
-import QueryContext from './Context';
+import { useUpdateNode } from 'apollo/mutation';
 import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
   const { risk, className } = props;
-  const context = useContext(QueryContext);
+  const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
   const dispatch = useDispatch();
   return (
     <Grid className={`RiskPreview ${className}`}>
@@ -57,7 +57,7 @@ function RiskPreview(props) {
             onValid: (data) => {
               const impactDriver = getImpactDriver(data.impact_details.inherent);
               const { previous_details: previousDetails = {} } = data;
-              context.updateRisk({
+              onUpdateRisk({
                 data: {
                   ...data,
                   inherent_impact_driver: impactDriver,
