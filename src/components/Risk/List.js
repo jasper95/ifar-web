@@ -4,7 +4,7 @@ import React, {
 import Grid from 'react-md/lib/Grids/Grid';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
-import { useCreateNode, useUpdateNode, useDeleteNode } from 'apollo/mutation';
+import { useCreateNode, useUpdateNode } from 'apollo/mutation';
 import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
@@ -43,9 +43,9 @@ function RiskList(props) {
   }));
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const businessUnitResponse = useQuery(businessUnitQuery);
-  const [, onCreate] = useCreateNode({ node: 'risk', onSuccess: () => onSuccessMutation(true) });
-  const [, onUpdate] = useUpdateNode({ node: 'risk', onSuccess: onSuccessMutation });
-  const [, onDelete] = useDeleteNode({ node: 'risk', onSuccess: onSuccessMutation });
+  const [, onCreateRisk] = useCreateNode({ node: 'risk', onSuccess: () => onSuccessMutation(true) });
+  const [, onUpdateRisk] = useUpdateNode({ node: 'risk', onSuccess: onSuccessMutation });
+  const [, onCreateRequest] = useCreateNode({ node: 'request', message: 'Request successfully sent' });
   const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
   const rowRenderer = useCallback(rowItem, [list, collapsedItems]);
   useEffect(() => {
@@ -53,7 +53,7 @@ function RiskList(props) {
   }, [list]);
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   return (
-    <QueryContext.Provider value={{ updateRisk: onUpdate, deleteRisk: onDelete }}>
+    <QueryContext.Provider value={{ updateRisk: onUpdateRisk, createRequest: onCreateRequest }}>
       <Grid className="riskList">
         <div className="riskList_unitList">
           {businessUnits && businessUnits.map(e => (
@@ -211,7 +211,7 @@ function RiskList(props) {
           title: 'Inherent Risk',
           onValid: (data) => {
             const impactDriver = getImpactDriver(data.impact_details.inherent);
-            onCreate({
+            onCreateRisk({
               data: {
                 ...data,
                 business_unit_id: currentBusinessUnit,

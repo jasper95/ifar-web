@@ -83,9 +83,14 @@ function RiskPreview(props) {
         payload: {
           path: 'Confirm',
           props: {
-            title: 'Confirm Delete',
-            message: 'Do you want to delete this risk?',
-            onValid: () => context.deleteRisk({ data: risk }),
+            title: 'Request Delete Form',
+            message: 'Send request to delete this record?',
+            onValid: () => context.deleteRisk({
+              data: {
+                risk_id: risk.id,
+                type: 'DELETE_RISK',
+              },
+            }),
           },
         },
       });

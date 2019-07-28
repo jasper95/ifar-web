@@ -38,6 +38,27 @@ function RiskDetails(props) {
     </Grid>
   );
 
+  function showDoneDialog(row) {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'Confirm',
+        props: {
+          title: 'Request Done Treatment',
+          message: 'Send request to done this treatment?',
+          onValid: data => context.createRequest({
+            data: {
+              risk_id: risk.id,
+              treatment_details: data,
+              type: 'DONE_TREATMENT',
+            },
+          }),
+          initialFields: row,
+        },
+      },
+    });
+  }
+
   function showDialog({ type, dialogTitle }) {
     dispatch({
       type: 'SHOW_DIALOG',
@@ -138,7 +159,7 @@ function RiskDetails(props) {
             {
               icon: 'check',
               label: 'Done',
-              onClick: () => {},
+              onClick: showDoneDialog,
             },
           ],
         },
