@@ -17,13 +17,14 @@ function Legend(props) {
       onClick={onClick}
       className={`${itemClassName} ${uniqueItemClassName}`}
       iconBefore={false}
-      children={label}
       iconEl={(
         <span className={`${itemClassName}_badge`}>
           {value}
         </span>
       )}
-    />
+    >
+      {label}
+    </Button>
   );
 }
 

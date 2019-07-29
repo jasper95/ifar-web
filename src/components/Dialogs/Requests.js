@@ -32,25 +32,31 @@ const titleMapping = {
 };
 
 function Requests() {
-  const requestResponse = useQuery(requestQuery);
-  console.log('requestResponse: ', requestResponse);
+  const requestResponse = useQuery(requestQuery, { fetchPolicy: 'cache-and-network' });
   const { data: { request: requests = [] } } = requestResponse;
   return (
-    <Context.Provider value={{}}>
-      <div className="riskList_risk_content">
-        {requests.map(e => (
-          <div>
-            <h2>{titleMapping[e.type]}</h2>
-            <RiskItem
-              key={e.id}
-              previewProps={{ request: e }}
-              detailsProps={{ risk: e.risk, showTableActions: false }}
-              previewRenderer={Preview}
-              className="riskList_risk_content_item"
-            />
-          </div>
-        ))}
-      </div>
+    <Context.Provider value={{ refetchRequests: requestResponse.refetch }}>
+      {requestResponse.loading ? (
+        <span>Loading...</span>
+      ) : (
+        <div className="riskList_risk_content">
+          {requests.length === 0 && (
+            <span>No Records Found</span>
+          )}
+          {requests.map(e => (
+            <div>
+              <h2>{titleMapping[e.type]}</h2>
+              <RiskItem
+                key={e.id}
+                previewProps={{ request: e }}
+                detailsProps={{ risk: e.risk, showTableActions: false }}
+                previewRenderer={Preview}
+                className="riskList_risk_content_item"
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </Context.Provider>
   );
 }

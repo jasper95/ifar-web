@@ -4,9 +4,10 @@ import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import RiskStats from 'components/Charts/RiskStats';
 import RiskList from 'components/Risk/List';
-import classificationLegend from 'lib/mock/classificationLegend';
-import impactDriverLegend from 'lib/mock/impactDriverLegend';
-import vulnerabilityLegend from 'lib/mock/vulnerabilityLegend';
+import classificationLegend from 'lib/constants/riskManagement/classificationLegend';
+import impactDriverLegend from 'lib/constants/riskManagement/impactDriverLegend';
+import vulnerabilityLegend from 'lib/constants/riskManagement/vulnerabilityLegend';
+import colorMapping from 'lib/constants/riskManagement/colorMapping';
 import history from 'lib/history';
 import { useDispatch } from 'react-redux';
 import 'sass/pages/manage-risk.scss';
@@ -41,7 +42,7 @@ export const riskDetailsFragment = gql`
 `;
 export const riskListQuery = gql`
   query getList($id: uuid!, $offset:Int , $limit: Int =5){
-    risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {name: asc}, offset: $offset, limit: $limit) @connection(key: "risk", filter: ["type"]) {
+    risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {created_date: desc}, offset: $offset, limit: $limit) @connection(key: "risk", filter: ["type"]) {
       ...RiskDetails
       business_unit {
         name
@@ -56,7 +57,7 @@ export const riskListQuery = gql`
 function ManageRisk() {
   const dispatch = useDispatch();
   const riskListResponse = useQuery(riskListQuery, { variables: { id: '871637c4-5510-4500-8e78-984fce5001ff', offset: 0 }, fetchPolicy: 'cache-and-network' });
-  const { data: { risk: dashboardData = [] } } = riskListResponse;
+  const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
   return (
     <div className="dbContainer">
       <Grid className="row-ToolbarHeader">
@@ -77,10 +78,10 @@ function ManageRisk() {
             className="iBttn iBttn-primary iBttn-counterBadge"
             iconBefore={false}
             children="View All Requests"
-            onClick={() => showDialog({ 
-              type: 'Requests', 
+            onClick={() => showDialog({
+              type: 'Requests',
               dialogTitle: 'Requests',
-              dialogSize: 'lg'
+              dialogSize: 'lg',
             })}
             iconEl={(
               <span className="iBttn_badge">
@@ -103,6 +104,7 @@ function ManageRisk() {
             legend={classificationLegend}
             data={dashboardData}
             title="Classification"
+            colorMapper={e => colorMapping.classification[e.classification]}
           />
         </Cell>
         <Cell size={4}>
@@ -111,6 +113,7 @@ function ManageRisk() {
             legend={impactDriverLegend}
             data={dashboardData}
             title="Impact Drivers"
+            colorMapper={e => colorMapping.impact[e.impact]}
           />
         </Cell>
         <Cell size={4}>
@@ -118,7 +121,8 @@ function ManageRisk() {
             filterFunc={vulnerabilityFilter}
             legend={vulnerabilityLegend}
             data={dashboardData}
-            title="Residual Vurnerability"
+            title="Residual Vulnerability"
+            colorMapper={e => colorMapping.vulnerability[e.label.toLowerCase()]}
           />
         </Cell>
       </Grid>
@@ -148,7 +152,7 @@ function ManageRisk() {
           props: {
             title: dialogTitle,
             onValid: () => {},
-            dialogClassName: `i_dialog_container--${dialogSize}`
+            dialogClassName: `i_dialog_container--${dialogSize}`,
           },
         },
       });
