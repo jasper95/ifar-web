@@ -3,4 +3,5 @@ export default {
   toast: null,
   dialogProcessing: false,
   token: '',
+  temporaryClosedDialogs: [],
 };

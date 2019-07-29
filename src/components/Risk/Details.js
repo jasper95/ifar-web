@@ -2,7 +2,9 @@ import React, { useContext } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
+import { getImpactDriver } from 'lib/tools';
 import { useDispatch } from 'react-redux';
+import { useUpdateNode } from 'apollo/mutation';
 import QueryContext from './Context';
 import RiskInfo from './Info';
 import RiskTable from './Table';
@@ -10,7 +12,10 @@ import RiskTable from './Table';
 function RiskDetails(props) {
   const dispatch = useDispatch();
   const context = useContext(QueryContext);
-  const { risk, className } = props;
+  const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
+  const { risk, className, showTableActions } = props;
+  console.log('risk: ', risk);
+  // console.log('props: ', props);
   return (
     <Grid className={`RiskDetails ${className}`}>
       <Grid className="RiskDetails_row RiskDetails_row-infos">
@@ -37,6 +42,27 @@ function RiskDetails(props) {
     </Grid>
   );
 
+  function showDoneDialog(row) {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'Confirm',
+        props: {
+          title: 'Request Done Treatment',
+          message: 'Send request to done this treatment?',
+          onValid: data => context.createRequest({
+            data: {
+              risk_id: risk.id,
+              treatment_details: data,
+              type: 'DONE_TREATMENT',
+            },
+          }),
+          initialFields: row,
+        },
+      },
+    });
+  }
+
   function showDialog({ type, dialogTitle }) {
     dispatch({
       type: 'SHOW_DIALOG',
@@ -44,7 +70,25 @@ function RiskDetails(props) {
         path: `${type}Risk`,
         props: {
           title: dialogTitle,
-          onValid: data => context.updateRisk({ data }),
+          onValid: (data) => {
+            const key = type.toLowerCase();
+            const impactDriver = getImpactDriver(data.impact_details[key]);
+            const { previous_details: previousDetails = {} } = data;
+            onUpdateRisk({
+              data: {
+                ...data,
+                [`${key}_impact_driver`]: impactDriver,
+                [`${key}_rating`]: data.impact_details[key][impactDriver],
+                previous_details: {
+                  ...previousDetails,
+                  [key]: {
+                    rating: risk[`${key}_rating`],
+                    likelihood: risk[`${key}_likelihood`],
+                  },
+                },
+              },
+            });
+          },
           initialFields: risk,
         },
       },
@@ -70,7 +114,8 @@ function RiskDetails(props) {
           accessor: 'team',
           title: 'Team',
         },
-        {
+        showTableActions
+        && {
           type: 'actions',
           actions: [
             {
@@ -80,7 +125,7 @@ function RiskDetails(props) {
             },
           ],
         },
-      ],
+      ].filter(Boolean),
       Target: [
         {
           accessor: 'strategy',
@@ -108,7 +153,8 @@ function RiskDetails(props) {
           fn: formatDate('end_date', 'MMMM DD, YYYY'),
           title: 'End',
         },
-        {
+        showTableActions
+        && {
           type: 'actions',
           actions: [
             {
@@ -116,9 +162,14 @@ function RiskDetails(props) {
               label: 'Delete',
               onClick: () => {},
             },
+            {
+              icon: 'check',
+              label: 'Done',
+              onClick: showDoneDialog,
+            },
           ],
         },
-      ],
+      ].filter(Boolean),
     }[type] || [];
   }
 }
@@ -131,6 +182,11 @@ RiskDetails.propTypes = {
     impacts: PropTypes.array.isRequired,
     causes: PropTypes.array.isRequired,
   }).isRequired,
+  showTableActions: PropTypes.bool,
+};
+
+RiskDetails.defaultProps = {
+  showTableActions: true,
 };
 
 export default RiskDetails;

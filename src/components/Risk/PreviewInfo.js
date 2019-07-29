@@ -3,7 +3,9 @@ import Cell from 'react-md/lib/Grids/Cell';
 import PropTypes from 'prop-types';
 
 function RiskPreviewInfo(props) {
-  const { colspan, title, info, className } = props;
+  const {
+    colspan, title, info, className,
+  } = props;
 
   const labelKey = title.toLowerCase().replace(/ /g, '-');
   const uniqueItemClassName = `RiskInfo_cell-${labelKey}`;

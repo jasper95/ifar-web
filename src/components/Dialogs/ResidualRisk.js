@@ -11,6 +11,7 @@ import { impact } from './InherentRisk';
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
+  console.log('fields: ', fields);
   const { onElementChange } = formHandlers;
   return (
     <>
@@ -33,8 +34,10 @@ function InherentRisk(props) {
       <RiskEvaluation
         type="residual"
         onChange={onElementChange}
-        likelihood={fields.likelihood}
-        impact={fields.impact}
+        basis={fields.basis}
+        likelihood={fields.residual_likelihood}
+        impact={fields.impact_details.residual}
+        onChangeImpact={residual => onElementChange({ ...fields.impact_details, residual }, 'impact_details')}
       />
     </>
   );
@@ -58,7 +61,9 @@ function validator(data) {
         kpi: yup.string().required(fieldIsRequired),
       }),
     ),
-    impact,
+    impact_details: yup.object({
+      residual: impact,
+    }),
   });
   return getValidationResult(data, schema);
 }

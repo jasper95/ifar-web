@@ -1,33 +1,6 @@
 import React from 'react';
 import range from 'lodash/range';
 
-const mockRisk = [
-  {
-    riskNumber: 10,
-    riskId: 2,
-  },
-  {
-    riskNumber: 5,
-    riskId: 3,
-  },
-  {
-    riskNumber: 20,
-    riskId: 1,
-  },
-  {
-    riskNumber: 6,
-    riskId: 5,
-  },
-  {
-    riskNumber: 11,
-    riskId: 4,
-  },
-  {
-    riskNumber: 12,
-    riskId: 6,
-  },
-];
-
 const Column = (props) => {
   const {
     key,
@@ -54,7 +27,7 @@ const Column = (props) => {
 };
 
 const RiskCircleItems = props => (
-  <div className={`riskCircle riskCircle-${props.riskType}`}>
+  <div className={`riskCircle riskCircle-${props.impactDriver.replace('_', '-')}`}>
     {props.children}
   </div>
 );
@@ -80,7 +53,7 @@ function Map(props) {
 
   function columnMapper(column, row) {
     const {
-      riskTypes,
+      risks,
     } = props;
 
     const isLeftLabel = column === 0;
@@ -105,8 +78,8 @@ function Map(props) {
       'Extreme',
     ];
 
-    console.log(`column = ${column} row = ${row}`);
-    console.log(`isLeftLabel = ${isLeftLabel} isBottomLabel = ${isBottomLabel}`);
+    // console.log(`column = ${column} row = ${row}`);
+    // console.log(`isLeftLabel = ${isLeftLabel} isBottomLabel = ${isBottomLabel}`);
 
     // if left label on bottom
     if (isLeftLabel && isBottomLabel) {
@@ -179,17 +152,12 @@ function Map(props) {
           columnNumber={column}
           className={`mapTable_col-${riskColColor}`}
         >
-          {mockRisk.map((i) => {
-            // example only
-            const catType = riskTypes.find(x => i.riskId === x.id);
-            console.log('catType ', catType);
-            return (
-              <RiskCircleItems
-                riskType={catType.cssColorKey}
-                children={i.riskNumber}
-              />
-            );
-          })}
+          {risks.filter(e => e.likelihood === rowIndex && e.rating === column).map(risk => (
+            <RiskCircleItems
+              impactDriver={risk.impact_driver}
+              children={risk.order}
+            />
+          ))}
         </Column>
       );
     }

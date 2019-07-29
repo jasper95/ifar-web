@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import PropTypes from 'prop-types';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
-import QueryContext from './Context';
+import { getImpactDriver } from 'lib/tools';
+import { useUpdateNode } from 'apollo/mutation';
 import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
   const { risk, className } = props;
-  const context = useContext(QueryContext);
+  const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
   const dispatch = useDispatch();
   return (
     <Grid className={`RiskPreview ${className}`}>
@@ -53,7 +54,24 @@ function RiskPreview(props) {
           props: {
             dialogId: 'InherentRisk',
             title: 'Inherent Risk',
-            onValid: data => context.updateRisk({ data }),
+            onValid: (data) => {
+              const impactDriver = getImpactDriver(data.impact_details.inherent);
+              const { previous_details: previousDetails = {} } = data;
+              onUpdateRisk({
+                data: {
+                  ...data,
+                  inherent_impact_driver: impactDriver,
+                  inherent_rating: data.impact_details.inherent[impactDriver],
+                  previous_details: {
+                    ...previousDetails,
+                    inherent: {
+                      likelihood: risk.inherent_likelihood,
+                      rating: risk.inherent_rating,
+                    },
+                  },
+                },
+              });
+            },
             initialFields: risk,
             dialogClassName: 'i_dialog_container--sm',
           },
@@ -65,9 +83,14 @@ function RiskPreview(props) {
         payload: {
           path: 'Confirm',
           props: {
-            title: 'Confirm Delete',
-            message: 'Do you want to delete this risk?',
-            onValid: () => context.deleteRisk({ data: risk }),
+            title: 'Request Delete Form',
+            message: 'Send request to delete this record?',
+            onValid: () => context.deleteRisk({
+              data: {
+                risk_id: risk.id,
+                type: 'DELETE_RISK',
+              },
+            }),
           },
         },
       });

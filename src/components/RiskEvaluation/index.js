@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
 import SelectionControlGroup from 'react-md/lib/SelectionControls/SelectionControlGroup';
@@ -43,6 +43,15 @@ const descriptionMapping = {
   ),
 };
 
+const defaultImpact = {
+  reputation: 1,
+  financial: 1,
+  legal_compliance: 1,
+  operational: 1,
+  health_safety_security: 1,
+  management_action: 1,
+};
+
 const Header = props => (
   <div className="riskEvaluation_header">
     { props.title && (
@@ -61,10 +70,20 @@ const Header = props => (
 function RiskEvaluation(props) {
   const {
     type,
-    likelihood,
     impact,
     onChange,
+    onChangeImpact,
+    basis,
+    likelihood,
   } = props;
+  useEffect(() => {
+    if (!impact) {
+      onChangeImpact(defaultImpact);
+    }
+  }, []);
+  if (!impact) {
+    return null;
+  }
   return (
     <div className="riskEvaluation">
 
@@ -83,8 +102,8 @@ function RiskEvaluation(props) {
         id="likelihood.basis"
         name="likelihood.basis"
         controls={basisOptions}
-        value={likelihood.basis}
-        onChange={newVal => onChange({ ...likelihood, basis: newVal }, 'likelihood')}
+        value={basis}
+        onChange={newVal => onChange(newVal, 'basis')}
         label="Rate Likelihood by: Frequency or probability *"
         type="radio"
       />
@@ -93,10 +112,10 @@ function RiskEvaluation(props) {
         id="likelihood.rating"
         name="likelihood.rating"
         label="Likelihood *"
-        controls={likelihood.basis === 'Frequency' ? frequencyOptions : probabilityOptions}
+        controls={basis === 'Frequency' ? frequencyOptions : probabilityOptions}
         type="radio"
-        onChange={newVal => onChange({ ...likelihood, rating: Number(newVal) }, 'likelihood')}
-        value={likelihood.rating}
+        onChange={newVal => onChange(Number(newVal), `${type}_likelihood`)}
+        value={likelihood}
       />
 
       <Header
@@ -110,10 +129,10 @@ function RiskEvaluation(props) {
         label="Management Action *"
         controls={managementActionOptions}
         value={impact.management_action}
-        onChange={newVal => onChange({ ...impact, management_action: Number(newVal) }, 'impact')}
+        onChange={newVal => onChangeImpact({ ...impact, management_action: Number(newVal) })}
         type="radio"
       />
-      {type === 'inherent' && (
+      {/* {type === 'inherent' && (
         <SelectionControlGroup
           className="iField iField-selectionGrp"
           label="Affected"
@@ -122,7 +141,7 @@ function RiskEvaluation(props) {
           controls={businessUnits.map(e => ({ label: e.name, value: e.id }))}
           value={impact.affected}
         />
-      )}
+      )} */}
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         id="impact.reputation"
@@ -131,7 +150,7 @@ function RiskEvaluation(props) {
         required
         controls={reputionOptions}
         value={impact.reputation}
-        onChange={newVal => onChange({ ...impact, reputation: Number(newVal) }, 'impact')}
+        onChange={newVal => onChangeImpact({ ...impact, reputation: Number(newVal) })}
         type="radio"
       />
       <SelectionControlGroup
@@ -141,7 +160,7 @@ function RiskEvaluation(props) {
         name="impact.financial"
         controls={financialOptions}
         value={impact.financial}
-        onChange={newVal => onChange({ ...impact, financial: Number(newVal) }, 'impact')}
+        onChange={newVal => onChangeImpact({ ...impact, financial: Number(newVal) })}
         type="radio"
       />
       <SelectionControlGroup
@@ -151,7 +170,7 @@ function RiskEvaluation(props) {
         name="impact.health_safety_security"
         value={impact.health_safety_security}
         controls={healthSafetySecurityOptions}
-        onChange={newVal => onChange({ ...impact, health_safety_security: Number(newVal) }, 'impact')}
+        onChange={newVal => onChangeImpact({ ...impact, health_safety_security: Number(newVal) })}
         type="radio"
       />
       <SelectionControlGroup
@@ -161,7 +180,7 @@ function RiskEvaluation(props) {
         name="impact.operational"
         controls={operationalOptions}
         value={impact.operational}
-        onChange={newVal => onChange({ ...impact, operational: Number(newVal) }, 'impact')}
+        onChange={newVal => onChangeImpact({ ...impact, operational: Number(newVal) })}
         type="radio"
       />
       <SelectionControlGroup
@@ -172,7 +191,7 @@ function RiskEvaluation(props) {
         name="impact.legal_compliance"
         controls={legalComplianceOptions}
         value={impact.legal_compliance}
-        onChange={newVal => onChange({ ...impact, legal_compliance: Number(newVal) }, 'impact')}
+        onChange={newVal => onChangeImpact({ ...impact, legal_compliance: Number(newVal) })}
         type="radio"
       />
     </div>
@@ -180,38 +199,13 @@ function RiskEvaluation(props) {
 }
 
 RiskEvaluation.defaultProps = {
-  likelihood: {
-    basis: 'Frequency',
-    rating: 1,
-  },
-  impact: {
-    reputation: 1,
-    financial: 1,
-    legal_compliance: 1,
-    operational: 1,
-    health_safety_security: 1,
-    management_action: 1,
-    affected: '',
-  },
   onChange: () => {},
+  impact: null,
 };
 
 RiskEvaluation.propTypes = {
   type: PropTypes.oneOf(['inherent', 'residual', 'target']).isRequired,
-  likelihood: PropTypes.shape({
-    basis: PropTypes.number,
-    rating: PropTypes.number,
-  }),
-  impact: PropTypes.shape({
-    basis: PropTypes.string,
-    legal_compliance: PropTypes.number,
-    operational: PropTypes.number,
-    financial: PropTypes.number,
-    reputation: PropTypes.number,
-    health_safety_security: PropTypes.number,
-    management_action: PropTypes.number,
-    affected: PropTypes.string,
-  }),
+  impact: PropTypes.object,
   onChange: PropTypes.func,
 };
 

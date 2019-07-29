@@ -4,42 +4,21 @@ import React, {
 import Grid from 'react-md/lib/Grids/Grid';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
-import { useCreateNode, useUpdateNode, useDeleteNode } from 'apollo/mutation';
+import { useCreateNode, useUpdateNode } from 'apollo/mutation';
 import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import List from 'react-virtualized/dist/commonjs/List';
+import InfiniteLoader from 'react-virtualized/dist/commonjs/InfiniteLoader';
 import WindowScroller from 'react-virtualized/dist/commonjs/WindowScroller';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/commonjs/CellMeasurer';
+import { getImpactDriver } from 'lib/tools';
 import QueryContext from './Context';
 import RiskItem from './Item';
 import 'sass/components/risk/index.scss';
 
-export const riskListQuery = gql`
-  query getList($id: uuid!){
-    risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {name: asc}) {
-      causes
-      classification {
-        name
-      }
-      classification_id
-      current_treatments
-      definition
-      future_treatments
-      id
-      impact
-      impacts
-      inherent_rating
-      likelihood
-      name
-      residual_rating
-      stakeholders
-      target_rating
-      business_unit {
-        name
-        id
-      }
-    }
+export const businessUnitQuery = gql`
+  query {
     business_unit(order_by: {order: asc}) {
       id
       name
@@ -52,29 +31,28 @@ export const riskListQuery = gql`
   }
 `;
 
-
 function RiskList(props) {
-  const [cacheToggle, setCacheToggle] = useState(false);
+  const { riskListResponse } = props;
+  const { data: { risk: list = [] } } = riskListResponse;
   const [collapsedItems, setCollapsedItems] = useState([]);
-  console.log('collapsedItems: ', collapsedItems);
+  const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
   const vlistCache = useRef(new CellMeasurerCache({
     fixedWidth: true,
     defaultHeight: 300,
   }));
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
-  const queryResponse = useQuery(riskListQuery, { variables: { id: currentBusinessUnit } });
-  const [, onCreate] = useCreateNode({ node: 'risk', onSuccess: () => queryResponse.refetch() });
-  const [, onUpdate] = useUpdateNode({ node: 'risk', onSuccess: () => queryResponse.refetch() });
-  const [, onDelete] = useDeleteNode({ node: 'risk', onSuccess: () => queryResponse.refetch() });
-  const { data: { risk: list, business_unit: businessUnits = [] } } = queryResponse;
+  const businessUnitResponse = useQuery(businessUnitQuery);
+  const [, onCreateRisk] = useCreateNode({ node: 'risk', onSuccess: () => onSuccessMutation(true) });
+  const [, onCreateRequest] = useCreateNode({ node: 'request', message: 'Request successfully sent' });
+  const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
   const rowRenderer = useCallback(rowItem, [list, collapsedItems]);
   useEffect(() => {
     vlistCache.current.clearAll();
   }, [list]);
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   return (
-    <QueryContext.Provider value={{ updateRisk: onUpdate, deleteRisk: onDelete }}>
+    <QueryContext.Provider value={{ createRequest: onCreateRequest }}>
       <Grid className="riskList">
         <div className="riskList_unitList">
           {businessUnits && businessUnits.map(e => (
@@ -120,27 +98,36 @@ function RiskList(props) {
             </div>
           </div>
           <div className="riskList_risk_content">
-            {list && (
-              <WindowScroller>
-                {({ height, scrollTop }) => (
-                  <AutoSizer disableHeight>
-                    {({ width }) => (
-                      <List
-                        autoHeight
-                        rowCount={list.length}
-                        width={width}
-                        height={height}
-                        deferredMeasurementCache={vlistCache.current}
-                        rowHeight={vlistCache.current.rowHeight}
-                        rowRenderer={rowRenderer}
-                        overscanRowCount={1}
-                        scrollTop={scrollTop}
-                      />
-                    )}
-                  </AutoSizer>
-                )}
-              </WindowScroller>
-            )}
+            <InfiniteLoader
+              isRowLoaded={isRowLoaded}
+              loadMoreRows={loadMoreRows}
+              threshold={1}
+              rowCount={1000000}
+            >
+              {({ onRowsRendered, registerChild }) => (
+                <WindowScroller>
+                  {({ height, scrollTop }) => (
+                    <AutoSizer disableHeight>
+                      {({ width }) => (
+                        <List
+                          ref={registerChild}
+                          autoHeight
+                          rowCount={list.length}
+                          width={width}
+                          height={height}
+                          deferredMeasurementCache={vlistCache.current}
+                          rowHeight={vlistCache.current.rowHeight}
+                          onRowsRendered={onRowsRendered}
+                          rowRenderer={rowRenderer}
+                          overscanRowCount={1}
+                          scrollTop={scrollTop}
+                        />
+                      )}
+                    </AutoSizer>
+                  )}
+                </WindowScroller>
+              )}
+            </InfiniteLoader>
           </div>
         </div>
       </Grid>
@@ -180,9 +167,38 @@ function RiskList(props) {
     );
   }
 
+  function isRowLoaded({ index }) {
+    return list.length > index;
+  }
+
+  function loadMoreRows() {
+    if (!riskListResponse.loading && hasMore) {
+      riskListResponse.fetchMore({
+        variables: { offset: list.length },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult.risk.length) {
+            setHasMore(false);
+            return prev;
+          }
+          return {
+            ...prev,
+            risk: [...prev.risk, ...fetchMoreResult.risk],
+          };
+        },
+      });
+    }
+  }
+
+  function onSuccessMutation(isCreate) {
+    riskListResponse.refetch();
+    if (isCreate) {
+      businessUnitResponse.refetch();
+    }
+  }
+
   function changeBusinessUnit(id) {
     setBusinessUnit(id);
-    queryResponse.refetch({ id });
+    riskListResponse.refetch({ id });
   }
 
   function showRiskDialog() {
@@ -192,26 +208,21 @@ function RiskList(props) {
         props: {
           dialogId: 'InherentRisk',
           title: 'Inherent Risk',
-          onValid: data => onCreate({
-            data: {
-              ...data,
-              business_unit_id: currentBusinessUnit,
-              inherent_rating: 1,
-            },
-          }),
+          onValid: (data) => {
+            const impactDriver = getImpactDriver(data.impact_details.inherent);
+            onCreateRisk({
+              data: {
+                ...data,
+                business_unit_id: currentBusinessUnit,
+                inherent_impact_driver: impactDriver,
+                inherent_rating: data.impact_details.inherent[impactDriver],
+              },
+            });
+          },
           initialFields: {
-            likelihood: {
-              basis: 'Frequency',
-              rating: 1,
-            },
-            impact: {
-              reputation: 1,
-              financial: 1,
-              legal_compliance: 1,
-              operational: 1,
-              health_safety_security: 1,
-              management_action: 1,
-            },
+            basis: 'Frequency',
+            inherent_likelihood: 1,
+            impact_details: {},
           },
           dialogClassName: 'i_dialog_container--sm',
         },

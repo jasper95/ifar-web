@@ -1,25 +1,50 @@
 import React from 'react';
 import flowRight from 'lodash/flowRight';
 import withDialog from 'lib/hocs/dialog';
+import { riskDetailsFragment } from 'pages/ManageRisk';
 import RiskItem from 'components/Risk/Item';
 import Preview from 'components/Request/Preview';
 import Context from 'components/Risk/Context';
-import { riskListQuery } from 'components/Risk/List';
 import useQuery from 'apollo/query';
+import gql from 'graphql-tag';
 
-function Requests(props) {
-  const response = useQuery(riskListQuery, { variables: { id: '871637c4-5510-4500-8e78-984fce5001ff' } });
-  const { data: { risk: requests = [] } } = response;
+const requestQuery = gql`
+  query {
+    request {
+      id
+      user {
+        first_name
+        last_name
+      }
+      type
+      risk {
+        ...RiskDetails
+      }
+    }
+  }
+  ${riskDetailsFragment}
+`;
+
+const titleMapping = {
+  EDIT_RISK: 'Edit Request',
+  DELETE_RISK: 'Delete Request',
+  DONE_TREATMENT: 'Treatment Request',
+};
+
+function Requests() {
+  const requestResponse = useQuery(requestQuery);
+  console.log('requestResponse: ', requestResponse);
+  const { data: { request: requests = [] } } = requestResponse;
   return (
     <Context.Provider value={{}}>
       <div className="riskList_risk_content">
         {requests.map(e => (
           <div>
-            <h2>Delete Request</h2>
+            <h2>{titleMapping[e.type]}</h2>
             <RiskItem
               key={e.id}
-              previewProps={{ request: { risk: e } }}
-              detailsProps={{ risk: e }}
+              previewProps={{ request: e }}
+              detailsProps={{ risk: e.risk, showTableActions: false }}
               previewRenderer={Preview}
               className="riskList_risk_content_item"
             />

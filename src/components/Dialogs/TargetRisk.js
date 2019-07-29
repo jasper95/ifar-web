@@ -35,8 +35,10 @@ function InherentRisk(props) {
       <RiskEvaluation
         type="target"
         onChange={onElementChange}
-        likelihood={fields.likelihood}
-        impact={fields.impact}
+        basis={fields.basis}
+        likelihood={fields.target_likelihood}
+        impact={fields.impact_details.target}
+        onChangeImpact={target => onElementChange({ ...fields.impact_details, target }, 'impact_details')}
       />
     </>
   );
@@ -62,7 +64,9 @@ function validator(data) {
         end_date: yup.date(fieldIsInvalid).required(fieldIsRequired),
       }),
     ),
-    impact,
+    impact_details: yup.object({
+      target: impact,
+    }),
   });
   return getValidationResult(data, schema);
 }

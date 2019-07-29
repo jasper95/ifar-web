@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-md/lib/Buttons/Button';
-import { ExpansionPanel } from 'react-md';
+// import { ExpansionPanel } from 'react-md';
 import RiskPreview from './Preview';
 import RiskDetails from './Details';
 
@@ -10,10 +10,7 @@ function RiskItem(props) {
     className, previewRenderer: Preview,
     previewProps, detailsProps, style, onCollapse, isCollapsed,
   } = props;
-  // const [isCollapsed, setIsCollapsed] = useState(false);
-  useEffect(() => {
-    console.log('did mount', isCollapsed);
-  }, []);
+  const [collapseState, setCollapseState] = useState(false);
   return (
     <div className={className} style={style}>
       <Button
@@ -21,11 +18,14 @@ function RiskItem(props) {
         flat
         className={`${className}_toggler`}
         onClick={() => {
-          // setIsCollapsed(!isCollapsed);
-          onCollapse();
+          if (isCollapsed !== undefined) {
+            onCollapse();
+          } else {
+            setCollapseState(!collapseState);
+          }
         }}
       >
-        { isCollapsed
+        { (isCollapsed || collapseState)
           ? 'arrow_drop_up'
           : 'arrow_drop_down'
         }
@@ -34,26 +34,12 @@ function RiskItem(props) {
         className={`${className}_preview`}
         {...previewProps}
       />
-      {isCollapsed && (
+      {(isCollapsed || collapseState) && (
         <RiskDetails
           className={`${className}_details`}
           {...detailsProps}
         />
       )}
-      {/* <ExpansionPanel
-        className={`${className}_expansion`}
-        expanded={isCollapsed}
-        footer={null}
-        onExpandToggle={() => {
-          setIsCollapsed(!isCollapsed);
-          onCollapse();
-        }}
-      >
-        <RiskDetails
-          className={`${className}_details`}
-          {...detailsProps}
-        />
-      </ExpansionPanel> */}
     </div>
   );
 }

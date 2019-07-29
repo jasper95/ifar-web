@@ -9,58 +9,23 @@ import 'sass/components/riskMap/index.scss';
 // refer to 'sass/utils/_vars'
 // line 98
 // ================================
-const mockRiskTypeMap = [
-  {
-    id: 1,
-    icon: '',
-    cssColorKey: 'management-action',
-    label: 'Management Action',
-  },
-  {
-    id: 2,
-    icon: '',
-    cssColorKey: 'finance',
-    label: 'Finance',
-  },
-  {
-    id: 3,
-    icon: '',
-    cssColorKey: 'reputation',
-    label: 'Reputation',
-  },
-  {
-    id: 4,
-    icon: '',
-    cssColorKey: 'operations',
-    label: 'Operation',
-  },
-  {
-    id: 5,
-    icon: '',
-    cssColorKey: 'health-safety-security',
-    label: 'Health, Safety & Environment',
-  },
-  {
-    id: 6,
-    icon: '',
-    cssColorKey: 'legal',
-    label: 'Legal and Compliance',
-  },
-];
 
-const Filters = () => (
+const Filters = ({ onChangeStage }) => (
   <div className="riskMap_map_filter">
     <Button
       className="iBttn"
       children="Inherent Risk Map"
+      onClick={() => onChangeStage('inherent')}
     />
     <Button
       className="iBttn"
       children="Risidual Risk Map"
+      onClick={() => onChangeStage('residual')}
     />
     <Button
       className="iBttn"
       children="Target Risk Map"
+      onClick={() => onChangeStage('target')}
     />
   </div>
 );
@@ -93,6 +58,9 @@ const Legend = () => {
 };
 
 function RiskMap(props) {
+  const {
+    currentStage, onChangeStage, risks, onChangeImpact, currentImpact,
+  } = props;
   return (
     <div className="riskMap">
       <div className="riskMap_row">
@@ -100,12 +68,12 @@ function RiskMap(props) {
           <Legend />
         </div>
         <div className="riskMap_map">
-          <Filters />
-          <Map riskTypes={mockRiskTypeMap} />
+          <Filters onChangeStage={onChangeStage} currentStage={currentStage} />
+          <Map risks={risks} />
         </div>
       </div>
       <div className="riskMap_categories">
-        <Categories riskTypes={mockRiskTypeMap} />
+        <Categories risks={risks} onChange={onChangeImpact} currentImpact={currentImpact} />
       </div>
     </div>
   );
