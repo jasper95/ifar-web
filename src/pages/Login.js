@@ -84,20 +84,18 @@ function LoginPage() {
             children="Login"
             flat
           />
-          <Link to="/signup">
-            <Button
-              className="iBttn iBttn-second-prio"
-              children="Sign Up"
-              flat
-            />
+          <Link 
+            to="/signup"
+            className="iBttn iBttn-second-prio"
+          >
+            Sign Up
           </Link>
-          <div className="row">
-            <p>
-              <Link to="/forgot-password">
-                  Forgot Password?
-              </Link>
-            </p>
-          </div>
+          <Link 
+            to="/forgot-password"
+            className="authContainer_form_action_forget"
+          >
+              Forgot Password?
+          </Link>
         </div>
       </form>
     </AuthLayout>

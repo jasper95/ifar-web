@@ -14,10 +14,12 @@
 
 		display: flex;
 		align-items: flex-start;
-		justify-content: center;
+		justify-content: flex-start;
 		flex-direction: column;
 
 		overflow-y: auto;
+
+		padding-top: 10vh;
 
 		// .authContainer_contentHeader
 		&Header {
@@ -74,8 +76,19 @@
 		// .authContainer_form_action
 		&_action {
 			margin-top: 2em;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+
 			.iBttn:not(:last-child) {
 				margin-right: 1em;
+			}
+
+			// .authContainer_form_action_forget
+			&_forget {
+				display: block;
+				margin-left: auto;
+				font-family: $font-family;
 			}
 		}
 
