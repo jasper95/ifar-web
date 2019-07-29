@@ -1,7 +1,7 @@
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { WebSocketLink } from 'apollo-link-ws';
-import { ApolloLink, split } from 'apollo-link';
+import { ApolloLink, split, concat } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import ApolloClient from 'apollo-client';
 import { onError } from 'apollo-link-error';
