@@ -8,20 +8,22 @@ function CustomDatePicker(props) {
     value, label, onChange, id, error, ...restProps
   } = props;
   return (
-    <>
+    <div className='iField_date'>
       {label && (
-        <span>{label}</span>
+        <span className='iField_date_label'>{label}</span>
       )}
       <DatePicker
+        className='iField_date_picker'
         selected={value ? new Date(value) : null}
         onChange={newVal => onChange(newVal.toISOString(), id)}
         {...restProps}
       />
       <TextFieldMessage
+        className='iField_date_message'
         errorText={error}
         error={error}
       />
-    </>
+    </div>
   );
 }
 

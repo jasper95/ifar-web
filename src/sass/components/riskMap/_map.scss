@@ -35,10 +35,10 @@
 		position: relative;
 		flex-grow: 0 !important;
 		flex-shrink: 0 !important;
-		width: auto !important;
 		height: 100%;
 
 		&[class*="-label-"] {
+			width: auto !important;
 			.mapTable_col_content {
 				display: flex;
 				align-items: center;
@@ -142,6 +142,13 @@
 		&-critical {
 			background-color: $rafi-riskLegend-critical;
 		}
+	}
+
+	// .mapTable_col
+	&_col:not(.mapTable_col-label-left) {
+		width: 200px;
+		max-width: 200px;
+		height: 200px;
 	}
 }
 

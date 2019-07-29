@@ -162,6 +162,7 @@ $risklist-header-arrow-bg: $primary-color-400;
 
 			// .riskList_risk_content_item
 			&_item {
+				font-size: 1rem;
 				background-color: $white;
 				border: .15em solid $gray-100;
 				margin-bottom: 1em;

@@ -77,7 +77,11 @@ function ManageRisk() {
             className="iBttn iBttn-primary iBttn-counterBadge"
             iconBefore={false}
             children="View All Requests"
-            onClick={() => showDialog({ type: 'Requests', dialogTitle: 'Requests' })}
+            onClick={() => showDialog({ 
+              type: 'Requests', 
+              dialogTitle: 'Requests',
+              dialogSize: 'lg'
+            })}
             iconEl={(
               <span className="iBttn_badge">
                 0
@@ -135,7 +139,7 @@ function ManageRisk() {
     return score >= legend.min && score <= legend.max;
   }
 
-  function showDialog({ type, dialogTitle }) {
+  function showDialog({ type, dialogTitle, dialogSize = 'md' }) {
     if (type === 'Requests') {
       dispatch({
         type: 'SHOW_DIALOG',
@@ -144,6 +148,7 @@ function ManageRisk() {
           props: {
             title: dialogTitle,
             onValid: () => {},
+            dialogClassName: `i_dialog_container--${dialogSize}`
           },
         },
       });

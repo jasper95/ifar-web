@@ -43,9 +43,15 @@ function RequestPreview(props) {
           <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
         </Cell>
         <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
-          <Button onClick={() => {}} icon>add</Button>
-          <Button onClick={() => {}} icon>check</Button>
-          <Button onClick={() => {}} icon>remove</Button>
+          <Button
+            className='iBttn iBttn-primary' 
+            onClick={() => {}} icon>add</Button>
+          <Button
+            className='iBttn iBttn-success' 
+            onClick={() => {}} icon>check</Button>
+          <Button
+            className='iBttn iBttn-error' 
+            onClick={() => {}} icon>remove</Button>
         </Cell>
       </Grid>
     </Grid>

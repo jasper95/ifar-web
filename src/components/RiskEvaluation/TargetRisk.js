@@ -54,16 +54,20 @@ function TargetRisk(props) {
         errorText={errors[`${id}[${index}].kpi`]}
         required
       />
-      <DatePicker
-        placeholderText="Start Date"
-        onChange={val => onChange({ ...value, start_date: val }, id)}
-        value={value.start_date}
-      />
-      <DatePicker
-        placeholderText="End Date"
-        onChange={val => onChange({ ...value, end_date: val }, id)}
-        value={value.end_date}
-      />
+      <div className='iField iField-range'>
+        <DatePicker
+          label="Start Date"
+          placeholderText="Start Date"
+          onChange={val => onChange({ ...value, start_date: val }, id)}
+          value={value.start_date}
+        />
+        <DatePicker
+          label="End Date"
+          placeholderText="End Date"
+          onChange={val => onChange({ ...value, end_date: val }, id)}
+          value={value.end_date}
+        />
+      </div>
     </>
   );
 }
