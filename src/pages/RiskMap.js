@@ -7,6 +7,8 @@ import FakeButton from 'react-md/lib/Helpers/AccessibleFakeButton';
 import IconSeparator from 'react-md/lib/Helpers/IconSeparator';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import RiskMapComponent from 'components/RiskMap';
+import { useDispatch } from 'react-redux';
+import { riskDetailsFragment } from 'pages/ManageRisk';
 import gql from 'graphql-tag';
 import useQuery from 'apollo/query';
 import orderBy from 'lodash/orderBy';
@@ -36,8 +38,10 @@ const riskQuery = gql`
       inherent_impact_driver
       causes
       impacts
+      ...RiskDetails
     }
   }
+  ${riskDetailsFragment}
 `;
 
 export default function RiskMap() {
@@ -58,7 +62,7 @@ export default function RiskMap() {
         rating: e[`${currentStage}_rating`],
         vulnerability: (e[`${currentStage}_rating`] || 0) * e[`${currentStage}_likelihood`],
       }))
-      .filter(e => (currentImpact ? e.impact_driver === currentImpact : true)),
+      .filter(e => (currentImpact ? e.impact_driver === currentImpact : e.impact_driver)),
     ['vulnerability'], ['desc'],
   ).map((e, idx) => ({ ...e, order: idx + 1 })),
   [currentStage, riskItems, currentImpact]);
@@ -109,7 +113,8 @@ export default function RiskMap() {
               },
               {
                 title: 'Risk Name',
-                accessor: 'name',
+                type: 'component',
+                component: RiskName,
               },
             ]}
           />
@@ -123,4 +128,24 @@ function RowIndex({ row }) {
   return (
     <span className={`impact-${row.impact_driver.replace('_', '-')}`}>{row.order}</span>
   );
+}
+
+function RiskName({ row }) {
+  console.log('row: ', row);
+  const dispatch = useDispatch();
+  return (
+    <span onClick={onClick}>{row.name}</span>
+  );
+
+  function onClick() {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'RiskMapItemDetails',
+        props: {
+          risk: row,
+        },
+      },
+    });
+  }
 }
