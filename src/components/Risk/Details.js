@@ -14,8 +14,6 @@ function RiskDetails(props) {
   const context = useContext(QueryContext);
   const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
   const { risk, className, showTableActions } = props;
-  console.log('risk: ', risk);
-  // console.log('props: ', props);
   return (
     <Grid className={`RiskDetails ${className}`}>
       <Grid className="RiskDetails_row RiskDetails_row-infos">

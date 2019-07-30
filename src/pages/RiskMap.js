@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import DataTable from 'components/DataTable';
-import Button from 'react-md/lib/Buttons/Button';
 import MenuButton from 'react-md/lib/Menus/MenuButton';
 import FakeButton from 'react-md/lib/Helpers/AccessibleFakeButton';
 import IconSeparator from 'react-md/lib/Helpers/IconSeparator';
@@ -76,7 +75,6 @@ export default function RiskMap() {
           />
         </Cell>
         <Cell size={3}>
-          <Button>Strategic Risk Map</Button>
           <MenuButton
             adjusted={false}
             raised
@@ -102,7 +100,8 @@ export default function RiskMap() {
             columns={[
               {
                 title: '',
-                accessor: 'order',
+                type: 'component',
+                component: RowIndex,
               },
               {
                 title: 'Level',
@@ -117,5 +116,11 @@ export default function RiskMap() {
         </Cell>
       </Grid>
     </div>
+  );
+}
+
+function RowIndex({ row }) {
+  return (
+    <span className={`impact-${row.impact_driver.replace('_', '-')}`}>{row.order}</span>
   );
 }

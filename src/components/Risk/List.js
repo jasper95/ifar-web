@@ -224,7 +224,7 @@ function RiskList(props) {
             inherent_likelihood: 1,
             impact_details: {},
           },
-          dialogClassName: 'i_dialog_container--sm',
+          dialogClassName: 'i_dialog_container--xl',
         },
       },
       type: 'SHOW_DIALOG',

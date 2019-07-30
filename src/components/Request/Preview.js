@@ -3,15 +3,17 @@ import Grid from 'react-md/lib/Grids/Grid';
 import PropTypes from 'prop-types';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
-// import { useDispatch } from 'react-redux';
-// import QueryContext from 'components/Risk/Context';
 import RiskPreviewInfo from 'components/Risk/PreviewInfo';
+import useMutation from 'apollo/mutation';
+import Context from 'components/Risk/Context';
+import { useDispatch } from 'react-redux';
 
 function RequestPreview(props) {
   const { request, className } = props;
+  const dispatch = useDispatch();
+  const context = useContext(Context);
+  const [, onMutateRequest] = useMutation({ onSuccess: () => context.refetchRequests() });
   const { risk } = request;
-  // const context = useContext(QueryContext);
-  // const dispatch = useDispatch();
   return (
     <Grid className={`RiskPreview ${className}`}>
       <Grid>
@@ -44,18 +46,70 @@ function RequestPreview(props) {
         </Cell>
         <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
           <Button
-            className='iBttn iBttn-primary' 
-            onClick={() => {}} icon>add</Button>
+            className="iBttn iBttn-primary"
+            tooltipLabel="Add Comments"
+            onClick={() => {}}
+            icon
+          >
+            add
+          </Button>
           <Button
-            className='iBttn iBttn-success' 
-            onClick={() => {}} icon>check</Button>
+            className="iBttn iBttn-success"
+            onClick={() => showDialog({ type: 'ACCEPT_REQUEST' })}
+            tooltipLabel="Accept Request"
+            icon
+          >
+            check
+          </Button>
           <Button
-            className='iBttn iBttn-error' 
-            onClick={() => {}} icon>remove</Button>
+            className="iBttn iBttn-error"
+            onClick={() => showDialog({ type: 'DECLINE_REQUEST' })}
+            icon
+            tooltipLabel="Decline Request"
+          >
+            remove
+          </Button>
         </Cell>
       </Grid>
     </Grid>
   );
+
+  function showDialog({ type }) {
+    if (type === 'ACCEPT_REQUEST') {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
+          path: 'Confirm',
+          props: {
+            title: 'Confirm Accept Request',
+            message: 'Do you want to accept this request?',
+            onValid: () => onMutateRequest({
+              url: '/request/accept',
+              data: request,
+              message: 'Request successfully accepted',
+            }),
+          },
+        },
+      });
+    } else if (type === 'DECLINE_REQUEST') {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
+          path: 'Confirm',
+          props: {
+            title: 'Confirm Decline Request',
+            message: 'Do you want to decline this request?',
+            onValid: () => onMutateRequest({
+              url: '/request',
+              method: 'DELETE',
+              data: request,
+              message: 'Request successfully declined',
+            }),
+          },
+        },
+      });
+    }
+  }
 }
 
 RequestPreview.propTypes = {

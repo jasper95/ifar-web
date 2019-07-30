@@ -3,24 +3,22 @@ import PropTypes from 'prop-types';
 import {
   Label, PieChart, Pie, Cell,
 } from 'recharts';
-// import Card from 'react-md/lib/Cards/Card';
-import MdGrid from 'react-md/lib/Grids/Grid';
-import MdCell from 'react-md/lib/Grids/Cell';
 import Legend from './Legend';
 
 import 'sass/components/chartCard/index.scss';
 
 function RiskStats(props) {
   const {
-    legend, data, title, filterFunc,
+    legend, data, title, filterFunc, colorMapper,
   } = props;
-  const chartData = legend.map((e, idx) => {
-    return({
-      ...e,
-      value: data.filter(ee => filterFunc(ee, e)).length,
-      key: idx,
-    })
-  });
+  const chartData = legend.map((e, idx) => ({
+    ...e,
+    color: colorMapper(e),
+    value: data.filter(ee => filterFunc(ee, e)).length,
+    key: idx,
+  }));
+
+  console.log('chartData: ', chartData);
 
   const svgSize = 250;
   const pieSize = (svgSize / 2);
@@ -53,6 +51,7 @@ function RiskStats(props) {
         <div className="chartCard_content_stats">
           {chartData.map(e => (
             <Legend
+              parentKey={title.toLowerCase().replace(/ /g, '-')}
               itemClassName="chartCard_content_stats_item"
               {...e}
             />

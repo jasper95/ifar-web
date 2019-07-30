@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import PropTypes from 'prop-types';
 import Cell from 'react-md/lib/Grids/Cell';
@@ -7,11 +7,13 @@ import { useDispatch } from 'react-redux';
 import { getImpactDriver } from 'lib/tools';
 import { useUpdateNode } from 'apollo/mutation';
 import RiskPreviewInfo from './PreviewInfo';
+import Context from './Context';
 
 function RiskPreview(props) {
   const { risk, className } = props;
   const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
   const dispatch = useDispatch();
+  const context = useContext(Context);
   return (
     <Grid className={`RiskPreview ${className}`}>
       <Grid>
@@ -85,7 +87,7 @@ function RiskPreview(props) {
           props: {
             title: 'Request Delete Form',
             message: 'Send request to delete this record?',
-            onValid: () => context.deleteRisk({
+            onValid: () => context.createRequest({
               data: {
                 risk_id: risk.id,
                 type: 'DELETE_RISK',

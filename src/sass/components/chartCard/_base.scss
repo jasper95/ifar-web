@@ -84,7 +84,7 @@ $chart-width: 250px;
 					flex-wrap: nowrap;
 				}
 
-				// .chartCard_content_stats_item
+				// .chartCard_content_stats_item_badge
 				&_badge {
 					background-color: rgba(#000,.15);
 					min-width: 3ch;
@@ -93,6 +93,7 @@ $chart-width: 250px;
 					padding: .25em;
 					line-height: 1;
 					flex-shrink: 0;
+					color: #FFF;
 				}
 
 				&:hover {
@@ -104,51 +105,94 @@ $chart-width: 250px;
 }
 
 
-// ============================
-// unique chartCases
-// ============================
-.chartCard_content_stats_item {
-	// .chartCard_content_stats_item-strategic
+// ==========================================
+// unique chartCases: CLASSIFICATION
+// ==========================================
+.chartCard_content_stats_item_classification {
 	&-strategic {
-		&:before {
-			background-color: $rafi-cat-management-action;
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-classification-strategic;
 		}
-		&:hover .chartCard_content_stats_item_badge {
-			color: $white;
-			background-color: $rafi-cat-management-action;
-		}
-	}
 
-	// .chartCard_content_stats_item-operational
+	}
 	&-operational {
-		&:before {
-			background-color: $rafi-cat-operations;
-		}
-		&:hover .chartCard_content_stats_item_badge {
-			color: $white;
-			background-color: $rafi-cat-operations;
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-classification-operational;
 		}
 	}
-
-	// .chartCard_content_stats_item-financial
 	&-financial {
-		&:before {
-			background-color: $rafi-cat-finance;
-		}
-		&:hover .chartCard_content_stats_item_badge {
-			color: $white;
-			background-color: $rafi-cat-finance;
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-classification-financial;
 		}
 	}
-
-	// .chartCard_content_stats_item-legal-and-compliance
 	&-legal-and-compliance {
-		&:before {
-			background-color: $rafi-cat-legal;
-		}
-		&:hover .chartCard_content_stats_item_badge {
-			color: $white;
-			background-color: $rafi-cat-legal;
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-classification-legal;
 		}
 	}
 }
+
+// ==========================================
+// unique chartCases: IMPACT
+// ==========================================
+.chartCard_content_stats_item_impact-drivers {
+	&-operations {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-impact-operation;
+		}
+	}
+	&-management-action {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-impact-management;
+		}
+	}
+	&-reputation {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-impact-reputation;
+		}
+	}
+	&-finance {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-impact-finance;
+		}
+	}
+	&-health-safety-security {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-impact-health;
+		}
+	}
+	&-legal-and-compliance {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-impact-legal;
+		}
+	}
+}
+
+// ==========================================
+// unique chartCases: RISIDUAL
+// ==========================================
+.chartCard_content_stats_item_residual-vulnerability {
+	&-low {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-residual-low;
+		}
+	}
+	&-moderate {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-residual-moderate;
+		}
+	}
+	&-high {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-residual-high;
+		}
+	}
+	&-critical {
+		&:before , .chartCard_content_stats_item_badge {
+			background-color: $rafi-residual-critical;
+		}
+	}
+}
+
+
+
