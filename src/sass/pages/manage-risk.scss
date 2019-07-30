@@ -2,7 +2,7 @@
 	.row-ToolbarHeader {
 		.col-actions {
 			display: flex;
-			align-items: center;
+			align-items: stretch;
 			justify-content: flex-end;
 			.iBttn:not(:last-child) {
 				margin-right: .5em;

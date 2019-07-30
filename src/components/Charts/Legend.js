@@ -4,18 +4,20 @@ import Button from 'react-md/lib/Buttons/Button';
 
 function Legend(props) {
   const {
-    onClick, label, value, itemClassName,
+    onClick, label, value, itemClassName, colorClassname = ''
   } = props;
 
   // make label as key
-  const labelKey = label.toLowerCase().replace(/ /g, '-');
+  const labelKey = label.toLowerCase().replace(/,/g, '').replace(/ /g, '-');
   const uniqueItemClassName = `${itemClassName}-${labelKey}`;
+
+  // console.log(`label = ${labelKey} && pact == ${(impact && impact.toLowerCase())}`)
 
   return (
     <Button
       flat
       onClick={onClick}
-      className={`${itemClassName} ${uniqueItemClassName}`}
+      className={`${itemClassName} ${colorClassname}`}
       iconBefore={false}
       children={label}
       iconEl={(

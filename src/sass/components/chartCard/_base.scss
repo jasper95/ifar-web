@@ -19,7 +19,9 @@ $chart-width: 250px;
 		font-weight: bold;
 		color: $primary-color;
 		margin-top: 0;
-		margin-bottom: 0;
+		margin-bottom: .5em;
+		padding: 0 0 .5em 0;
+		border-bottom: 2px solid rgba($primary-color-L600,.25);
 	}
 
 	// .chartCard_content

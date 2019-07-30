@@ -118,7 +118,7 @@ function ManageRisk() {
             filterFunc={vulnerabilityFilter}
             legend={vulnerabilityLegend}
             data={dashboardData}
-            title="Residual Vurnerability"
+            title="Residual Vulnerability"
           />
         </Cell>
       </Grid>

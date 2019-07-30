@@ -14,11 +14,13 @@ function RiskStats(props) {
   const {
     legend, data, title, filterFunc,
   } = props;
-  const chartData = legend.map((e, idx) => ({
-    ...e,
-    value: data.filter(ee => filterFunc(ee, e)).length,
-    key: idx,
-  }));
+  const chartData = legend.map((e, idx) => {
+    return({
+      ...e,
+      value: data.filter(ee => filterFunc(ee, e)).length,
+      key: idx,
+    })
+  });
 
   const svgSize = 250;
   const pieSize = (svgSize / 2);
