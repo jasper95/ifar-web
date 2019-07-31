@@ -101,21 +101,40 @@ export default function RiskMap() {
           </MenuButton>
           <DataTable
             rows={riskItems}
+            className='tableRiskMap'
             columns={[
               {
                 title: '',
                 type: 'component',
                 component: RowIndex,
+                bodyProps: {
+                  className: 'tableRiskMap_risk-index'
+                }
               },
               {
                 title: 'Level',
-                accessor: 'vulnerability',
+                type: 'component',
+                component: RiskLevel,
+                bodyProps: {
+                  className: 'tableRiskMap_risk-level'
+                }
               },
               {
                 title: 'Risk Name',
                 type: 'component',
                 component: RiskName,
+                bodyProps: {
+                  className: 'tableRiskMap_risk-name'
+                }
               },
+              {
+                title: 'VC',
+                type: 'component',
+                component: VC,
+                bodyProps: {
+                  className: 'tableRiskMap_risk-vc'
+                }
+              }
             ]}
           />
         </Cell>
@@ -148,4 +167,35 @@ function RiskName({ row }) {
       },
     });
   }
+}
+
+
+function RiskLevel({ row: { vulnerability } }) {
+  let riskColor = 'low';
+
+  const isModerate = vulnerability > 3 && vulnerability < 9;
+  const isHigh = vulnerability > 8 && vulnerability < 15;
+  const isCritical = vulnerability > 14;
+
+  if (isModerate) {
+    riskColor = 'moderate';
+  } else if (isHigh) {
+    riskColor = 'high';
+  } else if (isCritical) {
+    riskColor = 'critical';
+  }
+
+  return (
+    <span
+      className={`level level-${riskColor}`}
+    >
+      {vulnerability}
+    </span>
+  )
+}
+
+function VC({ row }) {
+  return (
+    <span>test</span>
+  );
 }
