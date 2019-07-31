@@ -48,7 +48,7 @@ function RequestPreview(props) {
           <Button
             className="iBttn iBttn-primary"
             tooltipLabel="Add Comments"
-            onClick={() => {}}
+            onClick={() => showDialog({ type: 'ADD_COMMENTS' })}
             icon
           >
             add
@@ -105,6 +105,16 @@ function RequestPreview(props) {
               data: request,
               message: 'Request successfully declined',
             }),
+          },
+        },
+      });
+    } else if (type === 'ADD_COMMENTS') {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
+          path: 'Comments',
+          props: {
+            risk,
           },
         },
       });

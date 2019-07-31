@@ -1,36 +1,7 @@
 import React from 'react';
 import range from 'lodash/range';
-
-const Column = (props) => {
-  const {
-    key,
-    label,
-    columnNumber,
-    className,
-    children,
-    isLabel,
-  } = props;
-  return (
-    <td key={key} className={`mapTable_col ${className}`}>
-      <div className="mapTable_col_container">
-        {!isLabel && columnNumber && (
-          <div className="mapTable_col_numLabel">
-            {columnNumber}
-          </div>
-        )}
-        <div className="mapTable_col_content">
-          { children }
-        </div>
-      </div>
-    </td>
-  );
-};
-
-const RiskCircleItems = props => (
-  <div className={`riskCircle riskCircle-${props.impactDriver.replace('_', '-')}`}>
-    {props.children}
-  </div>
-);
+import MapItems from './MapItems';
+import Column from './Column';
 
 function Map(props) {
   return (
@@ -153,8 +124,9 @@ function Map(props) {
           className={`mapTable_col-${riskColColor}`}
         >
           {risks.filter(e => e.likelihood === rowIndex && e.rating === column).map(risk => (
-            <RiskCircleItems
+            <MapItems
               impactDriver={risk.impact_driver}
+              risk={risk}
               children={risk.order}
             />
           ))}

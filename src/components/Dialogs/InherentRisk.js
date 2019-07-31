@@ -12,10 +12,7 @@ import * as yup from 'yup';
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
-  console.log('fields: ', fields);
-  // console.log('errors: ', errors);
-  // console.log('fields: ', fields);
-  const { onElementChange, onChange } = formHandlers;
+  const { onElementChange } = formHandlers;
   return (
     <div className="InherentRisk_form risk_forms">
       <TextField
@@ -33,7 +30,6 @@ function InherentRisk(props) {
         rows={2}
         label="Definition"
         onChange={onElementChange}
-        value={fields.definition}
         error={!!errors.definition}
         errorText={errors.definition}
         value={fields.definition || ''}
