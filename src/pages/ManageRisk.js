@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
@@ -42,7 +42,7 @@ export const riskDetailsFragment = gql`
   }
 `;
 export const riskListQuery = gql`
-  query getList($id: uuid!, $offset:Int , $limit: Int =10){
+  subscription getList($id: uuid!, $offset:Int , $limit: Int =10){
     risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {created_date: desc}, offset: $offset, limit: $limit) @connection(key: "risk", filter: ["type"]) {
       ...RiskDetails
       business_unit {
@@ -56,8 +56,11 @@ export const riskListQuery = gql`
 
 function ManageRisk() {
   const dispatch = useDispatch();
-  const riskListResponse = useQuery(riskListQuery, { variables: { id: '871637c4-5510-4500-8e78-984fce5001ff', offset: 0 }, fetchPolicy: 'cache-and-network' });
-  const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
+  const riskListResponse = useQuery(riskListQuery,
+    { ws: true, variables: { id: currentBusinessUnit, offset: currentPage - 1 } });
+  const { data: { risk: dashboardData = [] } } = riskListResponse;
   return (
     <div className="dbContainer">
       <Grid className="row-ToolbarHeader">
@@ -126,7 +129,13 @@ function ManageRisk() {
           />
         </Cell>
       </Grid>
-      <RiskList riskListResponse={riskListResponse} />
+      <RiskList
+        riskListResponse={riskListResponse}
+        page={currentPage}
+        businessUnit={currentBusinessUnit}
+        onChangePage={setCurrentPage}
+        onChangeBusinessUnit={setBusinessUnit}
+      />
     </div>
   );
 

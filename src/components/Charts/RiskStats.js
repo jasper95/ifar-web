@@ -17,7 +17,6 @@ function RiskStats(props) {
     value: data.filter(ee => filterFunc(ee, e)).length,
     key: idx,
   }));
-  console.log('chartData: ', chartData);
 
   const svgSize = 250;
   const pieSize = (svgSize / 2);
@@ -50,6 +49,7 @@ function RiskStats(props) {
         <div className="chartCard_content_stats">
           {chartData.map(e => (
             <Legend
+              parentKey={title.toLowerCase().replace(/ /g, '-')}
               itemClassName="chartCard_content_stats_item"
               {...e}
             />

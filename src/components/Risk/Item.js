@@ -15,7 +15,6 @@ function RiskItem(props) {
     <div className={className} style={style}>
       <Button
         icon
-        flat
         className={`${className}_toggler`}
         onClick={() => {
           setIsCollapsed(!isCollapsed);

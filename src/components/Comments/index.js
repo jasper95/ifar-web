@@ -10,6 +10,8 @@ import useMutation from 'apollo/mutation';
 import gql from 'graphql-tag';
 import Comment from './Item';
 
+import 'sass/components/comments/_index.scss';
+
 const commentsQuery = gql`
   query getComments($id: uuid) {
     comment(where: {risk_id: {_eq: $id}}) {
@@ -37,35 +39,61 @@ function Comments(props) {
   });
   const { onElementChange, onValidate } = formHandlers;
   const { fields, errors } = formState;
+
   return (
-    <div>
-      <h2>Comments</h2>
-      <ul>
-        {comments.map(comment => (
-          <Comment key={comment.id} comment={comment} />
-        ))}
-      </ul>
-      <Button onClick={() => setShowForm(!showForm)}>{showForm ? 'Cancel' : 'Comment'}</Button>
-      {showForm && (
-        <div>
-          <TextField
-            id="message"
-            rows={2}
-            label="Comment"
-            onChange={onElementChange}
-            error={!!errors.message}
-            errorText={errors.message}
-            value={fields.message || ''}
-            className="iField"
-          />
-          <Button
-            className={cn('iBttn iBttn-primary', { processing: mutationState.loading })}
-            onClick={() => onValidate(fields)}
-          >
-            Submit
-          </Button>
-        </div>
-      )}
+    <div className="commentForm">
+      <div className="commentForm_replies">
+        <ul className="reply">
+          {comments.map(comment => (
+            <Comment key={comment.id} comment={comment} className="reply_item"/>
+          ))}
+        </ul>
+      </div>
+      <div className="commentForm_actions">
+        {!showForm 
+          ? (
+            <Button 
+              onClick={() => setShowForm(!showForm)}
+              iconChildren="message"
+              className="commentForm_actions_write"
+            >
+              Write A Comment
+            </Button>
+          ):(
+            <div className='commentForm_actions_form'>
+              <h1 className="commentForm_actions_form_header">
+                Write Comment
+              </h1>
+              <TextField
+                id="message"
+                rows={2}
+                placeholder="Write Comment"
+                onChange={onElementChange}
+                error={!!errors.message}
+                errorText={errors.message}
+                value={fields.message || ''}
+                className="iField commentForm_actions_form_field"
+              />
+              <div className="commentForm_actions_form_actions">
+                <Button
+                  className={cn('iBttn iBttn-primary',
+                    { processing: mutationState.loading })}
+                  onClick={() => onValidate(fields)}
+                >
+                  Submit
+                </Button>
+                <Button
+                  className={cn('iBttn iBttn-second-prio',
+                    { processing: mutationState.loading })}
+                  onClick={() => setShowForm(!showForm)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )
+        }
+      </div>
     </div>
   );
 

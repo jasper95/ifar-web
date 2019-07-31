@@ -123,6 +123,7 @@ $dialog-easing : cubic-bezier(0.180, -0.020, 0.300, 1.020);
 		height: auto;
 		padding: 2em 1em 4em 1em;
 		font-size: 1em;
+		max-height: unset !important;
 	}
 
 	// .i_dialog_footer

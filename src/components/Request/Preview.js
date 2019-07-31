@@ -27,24 +27,10 @@ function RequestPreview(props) {
           title="Unit"
           info="RMF"
         />
-      </Grid>
-      <Grid>
-        <RiskPreviewInfo
-          colspan={3}
-          title="Classification"
-          info={risk.classification.name}
-        />
-        <RiskPreviewInfo
-          colspan={3}
-          title="Risk name"
-          info={risk.name}
-        />
-        <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
-          <RiskPreviewInfo colspan={4} title="Inherent" info={risk.inherent_rating} />
-          <RiskPreviewInfo colspan={4} title="Residual" info={risk.residual_rating} />
-          <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
-        </Cell>
-        <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
+        <Cell 
+          size={1} offset={5} 
+          className="RiskInfo_cell RiskInfo_cell-actions"
+        >
           <Button
             className="iBttn iBttn-primary"
             tooltipLabel="Add Comments"
@@ -69,6 +55,23 @@ function RequestPreview(props) {
           >
             remove
           </Button>
+        </Cell>
+      </Grid>
+      <Grid>
+        <RiskPreviewInfo
+          colspan={3}
+          title="Classification"
+          info={risk.classification.name}
+        />
+        <RiskPreviewInfo
+          colspan={3}
+          title="Risk name"
+          info={risk.name}
+        />
+        <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
+          <RiskPreviewInfo colspan={4} title="Inherent" info={risk.inherent_rating} />
+          <RiskPreviewInfo colspan={4} title="Residual" info={risk.residual_rating} />
+          <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
         </Cell>
       </Grid>
     </Grid>
@@ -114,6 +117,7 @@ function RequestPreview(props) {
         payload: {
           path: 'Comments',
           props: {
+            title: 'Comments',
             risk,
           },
         },

@@ -9,7 +9,7 @@ import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 
 const requestQuery = gql`
-  query {
+  subscription {
     request {
       id
       user {
@@ -32,7 +32,7 @@ const titleMapping = {
 };
 
 function Requests() {
-  const requestResponse = useQuery(requestQuery, { fetchPolicy: 'cache-and-network' });
+  const requestResponse = useQuery(requestQuery, { ws: true });
   const { data: { request: requests = [] }, loading: listIsLoading } = requestResponse;
   return (
     <Context.Provider value={{ refetchRequests: requestResponse.refetch }}>

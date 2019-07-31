@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useApolloClient, useQuery } from 'react-apollo-hooks';
+import { useApolloClient, useQuery, useSubscription } from 'react-apollo-hooks';
 import { useDispatch } from 'react-redux';
 import gql from 'graphql-tag';
 
@@ -15,6 +15,8 @@ export function generateQueryByFilter({
   `;
 }
 
+const isClient = typeof window === 'object';
+
 export function generateQueryById({ node, keys = ['id', 'name'] }) {
   const filters = 'id: $id';
   const variables = '$id: uuid!';
@@ -23,12 +25,21 @@ export function generateQueryById({ node, keys = ['id', 'name'] }) {
   });
 }
 
-export default function customUseQuery(query, params) {
+export default function customUseQuery(query, params = {}) {
   const dispatch = useDispatch();
-  return useQuery(query, {
-    ...params,
+  const { ws = false, ...restParams } = params;
+  let queryFn = ws ? useSubscription : useQuery;
+  if (!isClient) {
+    queryFn = useQuery;
+  }
+  const { data = {}, ...response } = queryFn(query, {
+    ...restParams,
     onError,
   });
+  return {
+    ...response,
+    data,
+  };
   function onError() {
     if (typeof window !== 'object') {
       dispatch({
