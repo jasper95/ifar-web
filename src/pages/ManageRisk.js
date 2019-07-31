@@ -41,7 +41,7 @@ export const riskDetailsFragment = gql`
   }
 `;
 export const riskListQuery = gql`
-  query getList($id: uuid!, $offset:Int , $limit: Int =5){
+  query getList($id: uuid!, $offset:Int , $limit: Int =10){
     risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {created_date: desc}, offset: $offset, limit: $limit) @connection(key: "risk", filter: ["type"]) {
       ...RiskDetails
       business_unit {
