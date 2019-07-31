@@ -106,7 +106,7 @@ function RiskList(props) {
   );
 
   function refreshList() {
-    riskListResponse.refetch({ variables: { id: currentBusinessUnit, offset: currentPage - 1 } })
+    riskListResponse.refetch({ id: currentBusinessUnit, offset: currentPage - 1 })
   }
 
   function onChangePagination(current, newPageSize) {
