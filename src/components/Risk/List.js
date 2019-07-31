@@ -1,17 +1,11 @@
-import React, {
-  useState, useRef, useCallback, useEffect,
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
-import { useCreateNode, useUpdateNode } from 'apollo/mutation';
+import { useCreateNode } from 'apollo/mutation';
 import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
-import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
-import List from 'react-virtualized/dist/commonjs/List';
-import InfiniteLoader from 'react-virtualized/dist/commonjs/InfiniteLoader';
-import WindowScroller from 'react-virtualized/dist/commonjs/WindowScroller';
-import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/commonjs/CellMeasurer';
+import Pagination from 'rc-pagination'
 import { getImpactDriver } from 'lib/tools';
 import QueryContext from './Context';
 import RiskItem from './Item';
@@ -34,23 +28,15 @@ export const businessUnitQuery = gql`
 function RiskList(props) {
   const { riskListResponse } = props;
   const { data: { risk: list = [] } } = riskListResponse;
-  const [collapsedItems, setCollapsedItems] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
-  const vlistCache = useRef(new CellMeasurerCache({
-    fixedWidth: true,
-    defaultHeight: 300,
-  }));
+  const [currentPage, setCurrentPage] = useState(1)
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const businessUnitResponse = useQuery(businessUnitQuery);
   const [, onCreateRisk] = useCreateNode({ node: 'risk', onSuccess: () => onSuccessMutation(true) });
   const [, onCreateRequest] = useCreateNode({ node: 'request', message: 'Request successfully sent' });
   const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
-  const rowRenderer = useCallback(rowItem, [list, collapsedItems]);
-  useEffect(() => {
-    vlistCache.current.clearAll();
-  }, [list]);
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
+  useEffect(refreshList, [currentPage, currentBusinessUnit])
   return (
     <QueryContext.Provider value={{ createRequest: onCreateRequest }}>
       <Grid className="riskList">
@@ -98,95 +84,33 @@ function RiskList(props) {
             </div>
           </div>
           <div className="riskList_risk_content">
-            <InfiniteLoader
-              isRowLoaded={isRowLoaded}
-              loadMoreRows={loadMoreRows}
-              threshold={1}
-              rowCount={1000000}
-            >
-              {({ onRowsRendered, registerChild }) => (
-                <WindowScroller>
-                  {({ height, scrollTop }) => (
-                    <AutoSizer disableHeight>
-                      {({ width }) => (
-                        <List
-                          ref={registerChild}
-                          autoHeight
-                          rowCount={list.length}
-                          width={width}
-                          height={height}
-                          deferredMeasurementCache={vlistCache.current}
-                          rowHeight={vlistCache.current.rowHeight}
-                          onRowsRendered={onRowsRendered}
-                          rowRenderer={rowRenderer}
-                          overscanRowCount={1}
-                          scrollTop={scrollTop}
-                        />
-                      )}
-                    </AutoSizer>
-                  )}
-                </WindowScroller>
-              )}
-            </InfiniteLoader>
+            {list.map(risk => (
+              <RiskItem
+                previewProps={{ risk }}
+                detailsProps={{ risk }}
+                key={risk.id}
+                className="riskList_risk_content_item"
+              />
+            ))}
+            <Pagination
+              onChange={onChangePagination}
+              current={currentPage}
+              pageSize={10}
+              total={selected ? selected.risks_aggregate.aggregate.count : 0}
+              hideOnSinglePage
+            />
           </div>
         </div>
       </Grid>
     </QueryContext.Provider>
   );
 
-  function rowItem({
-    index, parent, key, style,
-  }) {
-    const e = list[index];
-    const isCollapsed = collapsedItems.includes(e.id);
-    return (
-      <CellMeasurer
-        key={key}
-        cache={vlistCache.current}
-        parent={parent}
-        columnIndex={0}
-        rowIndex={index}
-      >
-        <RiskItem
-          style={style}
-          previewProps={{ risk: e }}
-          detailsProps={{ risk: e }}
-          key={e.id}
-          onCollapse={() => {
-            if (isCollapsed) {
-              setCollapsedItems(prev => prev.filter(ee => ee !== e.id));
-            } else {
-              setCollapsedItems(prev => [...prev, e.id]);
-            }
-            vlistCache.current.clear(index);
-          }}
-          isCollapsed={isCollapsed}
-          className="riskList_risk_content_item"
-        />
-      </CellMeasurer>
-    );
+  function refreshList() {
+    riskListResponse.refetch({ id: currentBusinessUnit, offset: currentPage - 1 })
   }
 
-  function isRowLoaded({ index }) {
-    return list.length > index;
-  }
-
-  function loadMoreRows() {
-    if (!riskListResponse.loading && hasMore) {
-      riskListResponse.fetchMore({
-        variables: { offset: list.length },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult.risk.length) {
-            setHasMore(false);
-            return prev;
-          }
-          return {
-            ...prev,
-            risk: [...prev.risk, ...fetchMoreResult.risk],
-          };
-        },
-      });
-    }
+  function onChangePagination(current, newPageSize) {
+    setCurrentPage(newPageSize)
   }
 
   function onSuccessMutation(isCreate) {
