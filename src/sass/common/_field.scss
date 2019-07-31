@@ -277,6 +277,19 @@ $fieldBorder: 1px solid $gray-200;
 }
 
 // ====================================
+// multifield
+// ====================================
+.iField.md-text-field-container--multiline {
+	.md-text-field-multiline-container {
+		margin-top: 0;
+	}
+
+	.md-divider {
+		margin-top: -5px;
+	}
+} 
+
+// ====================================
 // multifields
 // ====================================
 .iFieldMultiversion {

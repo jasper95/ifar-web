@@ -1,0 +1,19 @@
+.commentForm {
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-direction: column;
+	width: 100%;
+
+	// .commentForm_replies
+	&_replies {
+		flex-shrink: 0;
+		width: 100%;
+	}
+
+	// .commentForm_actions
+	&_actions {
+		flex-shrink: 0;
+		width: 100%;
+	}
+}
