@@ -10,7 +10,7 @@ import RiskPreviewInfo from './PreviewInfo';
 import Context from './Context';
 
 function RiskPreview(props) {
-  const { risk, className } = props;
+  const { risk, className, readOnly } = props;
   const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
   const dispatch = useDispatch();
   const context = useContext(Context);
@@ -32,10 +32,12 @@ function RiskPreview(props) {
           <RiskPreviewInfo colspan={4} title="Residual" info={risk.residual_rating} />
           <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
         </Cell>
-        <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
-          <Button onClick={() => showDialog('edit')} icon>edit</Button>
-          <Button onClick={() => showDialog('delete')} icon>delete</Button>
-        </Cell>
+        {!readOnly && (
+          <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
+            <Button onClick={() => showDialog('edit')} icon>edit</Button>
+            <Button onClick={() => showDialog('delete')} icon>delete</Button>
+          </Cell>
+        )}
       </Grid>
       <Grid>
         <RiskPreviewInfo
@@ -75,7 +77,7 @@ function RiskPreview(props) {
               });
             },
             initialFields: risk,
-            dialogClassName: 'i_dialog_container--sm',
+            dialogClassName: 'i_dialog_container--lg',
           },
         },
       });

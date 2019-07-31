@@ -10,9 +10,10 @@ import vulnerabilityLegend from 'lib/constants/riskManagement/vulnerabilityLegen
 import colorMapping from 'lib/constants/riskManagement/colorMapping';
 import history from 'lib/history';
 import { useDispatch } from 'react-redux';
-import 'sass/pages/manage-risk.scss';
 import gql from 'graphql-tag';
 import useQuery from 'apollo/query';
+import 'rc-pagination/assets/index.css';
+import 'sass/pages/manage-risk.scss';
 
 export const riskDetailsFragment = gql`
   fragment RiskDetails on risk {
@@ -52,7 +53,6 @@ export const riskListQuery = gql`
   }
   ${riskDetailsFragment}
 `;
-
 
 function ManageRisk() {
   const dispatch = useDispatch();

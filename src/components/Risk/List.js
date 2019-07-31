@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useCreateNode } from 'apollo/mutation';
 import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
-import Pagination from 'rc-pagination'
+import Pagination from 'rc-pagination';
 import { getImpactDriver } from 'lib/tools';
 import QueryContext from './Context';
 import RiskItem from './Item';
@@ -27,16 +27,16 @@ export const businessUnitQuery = gql`
 
 function RiskList(props) {
   const { riskListResponse } = props;
-  const { data: { risk: list = [] } } = riskListResponse;
+  const { data: { risk: list = [] }, loading: listIsLoading } = riskListResponse;
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const businessUnitResponse = useQuery(businessUnitQuery);
   const [, onCreateRisk] = useCreateNode({ node: 'risk', onSuccess: () => onSuccessMutation(true) });
   const [, onCreateRequest] = useCreateNode({ node: 'request', message: 'Request successfully sent' });
   const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
-  useEffect(refreshList, [currentPage, currentBusinessUnit])
+  useEffect(refreshList, [currentPage, currentBusinessUnit]);
   return (
     <QueryContext.Provider value={{ createRequest: onCreateRequest }}>
       <Grid className="riskList">
@@ -84,14 +84,6 @@ function RiskList(props) {
             </div>
           </div>
           <div className="riskList_risk_content">
-            {list.map(risk => (
-              <RiskItem
-                previewProps={{ risk }}
-                detailsProps={{ risk }}
-                key={risk.id}
-                className="riskList_risk_content_item"
-              />
-            ))}
             <Pagination
               onChange={onChangePagination}
               current={currentPage}
@@ -99,6 +91,19 @@ function RiskList(props) {
               total={selected ? selected.risks_aggregate.aggregate.count : 0}
               hideOnSinglePage
             />
+            {listIsLoading ? (
+              <span>Loading...</span>
+            ) : list.map(risk => (
+              <RiskItem
+                previewProps={{ risk }}
+                detailsProps={{ risk }}
+                key={risk.id}
+                className="riskList_risk_content_item"
+              />
+            ))}
+            {!listIsLoading && list.length === 0 && (
+              <span>No Records Found</span>
+            )}
           </div>
         </div>
       </Grid>
@@ -106,11 +111,11 @@ function RiskList(props) {
   );
 
   function refreshList() {
-    riskListResponse.refetch({ id: currentBusinessUnit, offset: currentPage - 1 })
+    riskListResponse.refetch({ id: currentBusinessUnit, offset: currentPage - 1 });
   }
 
   function onChangePagination(current, newPageSize) {
-    setCurrentPage(newPageSize)
+    setCurrentPage(newPageSize);
   }
 
   function onSuccessMutation(isCreate) {
@@ -122,7 +127,6 @@ function RiskList(props) {
 
   function changeBusinessUnit(id) {
     setBusinessUnit(id);
-    riskListResponse.refetch({ id });
   }
 
   function showRiskDialog() {
@@ -148,7 +152,7 @@ function RiskList(props) {
             inherent_likelihood: 1,
             impact_details: {},
           },
-          dialogClassName: 'i_dialog_container--sm',
+          dialogClassName: 'i_dialog_container--lg',
         },
       },
       type: 'SHOW_DIALOG',

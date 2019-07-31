@@ -13,7 +13,9 @@ function RiskDetails(props) {
   const dispatch = useDispatch();
   const context = useContext(QueryContext);
   const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
-  const { risk, className, showTableActions } = props;
+  const {
+    risk, className, showTableActions, readOnly,
+  } = props;
   return (
     <Grid className={`RiskDetails ${className}`}>
       <Grid className="RiskDetails_row RiskDetails_row-infos">
@@ -28,6 +30,7 @@ function RiskDetails(props) {
         rows={risk.current_treatments}
         columns={getColumns('Residual')}
         onClickAdd={() => showDialog({ type: 'Residual', dialogTitle: 'Current Risk Treatment' })}
+        readOnly={readOnly}
       />
 
       <RiskTable
@@ -35,6 +38,7 @@ function RiskDetails(props) {
         rows={risk.future_treatments}
         columns={getColumns('Target')}
         onClickAdd={() => showDialog({ type: 'Target', dialogTitle: 'Future Risk Treatment' })}
+        readOnly={readOnly}
       />
 
     </Grid>
@@ -181,10 +185,12 @@ RiskDetails.propTypes = {
     causes: PropTypes.array.isRequired,
   }).isRequired,
   showTableActions: PropTypes.bool,
+  readOnly: PropTypes.bool,
 };
 
 RiskDetails.defaultProps = {
   showTableActions: true,
+  readOnly: false,
 };
 
 export default RiskDetails;
