@@ -35,7 +35,7 @@ function Requests() {
   const requestResponse = useQuery(requestQuery, { ws: true });
   const { data: { request: requests = [] }, loading: listIsLoading } = requestResponse;
   return (
-    <Context.Provider value={{ refetchRequests: requestResponse.refetch }}>
+    <Context.Provider value={{}}>
       {listIsLoading ? (
         <span>Loading...</span>
       ) : (

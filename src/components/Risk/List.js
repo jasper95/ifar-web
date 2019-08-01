@@ -121,7 +121,6 @@ function RiskList(props) {
             onCreateRisk({
               data: {
                 ...data,
-                business_unit_id: businessUnit,
                 inherent_impact_driver: impactDriver,
                 inherent_rating: data.impact_details.inherent[impactDriver],
               },
@@ -131,6 +130,7 @@ function RiskList(props) {
             basis: 'Frequency',
             inherent_likelihood: 1,
             impact_details: {},
+            business_unit_id: businessUnit,
           },
           dialogClassName: 'i_dialog_container--xl',
         },

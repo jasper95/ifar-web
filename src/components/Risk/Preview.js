@@ -50,6 +50,7 @@ function RiskPreview(props) {
   );
 
   function showDialog(action) {
+    const { previous_details: previousDetails = {} } = risk;
     if (action === 'edit') {
       dispatch({
         type: 'SHOW_DIALOG',
@@ -60,14 +61,13 @@ function RiskPreview(props) {
             title: 'Inherent Risk',
             onValid: (data) => {
               const impactDriver = getImpactDriver(data.impact_details.inherent);
-              const { previous_details: previousDetails = {} } = data;
               onUpdateRisk({
                 data: {
                   ...data,
                   inherent_impact_driver: impactDriver,
                   inherent_rating: data.impact_details.inherent[impactDriver],
                   previous_details: {
-                    ...previousDetails,
+                    ...data.previous_details,
                     inherent: {
                       likelihood: risk.inherent_likelihood,
                       rating: risk.inherent_rating,
@@ -76,7 +76,14 @@ function RiskPreview(props) {
                 },
               });
             },
-            initialFields: risk,
+            initialFields: {
+              ...risk,
+              current_stage_impact_details: risk.impact_details && { ...risk.impact_details.inherent },
+              previous_details: {
+                ...previousDetails,
+                basis: risk.basis,
+              },
+            },
             dialogClassName: 'i_dialog_container--lg',
           },
         },

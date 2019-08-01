@@ -35,6 +35,10 @@ function InherentRisk(props) {
       <RiskEvaluation
         type="target"
         onChange={onElementChange}
+        currentEvaluation={fields.current_stage_impact_details}
+        prevStageEvaluation={fields.impact_details && fields.impact_details.inherent}
+        previousRating={fields.previous_details}
+        businessUnit={fields.business_unit_id}
         basis={fields.basis}
         likelihood={fields.target_likelihood}
         impact={fields.impact_details.target}

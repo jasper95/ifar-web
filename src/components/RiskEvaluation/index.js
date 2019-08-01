@@ -75,7 +75,20 @@ function RiskEvaluation(props) {
     onChangeImpact,
     basis,
     likelihood,
+    businessUnit,
+    previousRating,
+    currentEvaluation,
+    prevStageEvaluation,
   } = props;
+  console.log('currentEvaluation: ', currentEvaluation);
+  const previousStage = {
+    residual: 'inherent',
+    target: 'residual',
+  }[type];
+  const stagePrevRating = previousRating && previousRating[type];
+  console.log('stagePrevRating: ', stagePrevRating);
+  const prevStageRating = previousRating && previousStage && previousRating[previousStage];
+  console.log('prevStageRating: ', prevStageRating);
   useEffect(() => {
     if (!impact) {
       onChangeImpact(defaultImpact);
@@ -86,17 +99,25 @@ function RiskEvaluation(props) {
   }
   return (
     <div className="riskEvaluation">
-
       <Header
         title={(
           <>
-            <span className="type">{ capitalize(type)}</span>
+            <span className="type">{capitalize(type)}</span>
             <span className="title"> Risk Evaluation</span>
           </>
         )}
         desc={descriptionMapping[type]}
       />
-
+      <div className="riskEvaluation_header">
+        <h3 className="riskEvaluation_header_title">Likelihood</h3>
+        {previousRating && (
+          <em>
+            {`Previous Basis: ${previousRating.basis}; `}
+            {stagePrevRating && `Rating: ${stagePrevRating.likelihood}; `}
+            {prevStageRating && `${capitalize(previousStage)} Basis: ${basis}; Rating: ${prevStageRating.likelihood}; `}
+          </em>
+        )}
+      </div>
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         id="likelihood.basis"
@@ -104,49 +125,66 @@ function RiskEvaluation(props) {
         controls={basisOptions}
         value={basis}
         onChange={newVal => onChange(newVal, 'basis')}
-        label="Rate Likelihood by: Frequency or probability *"
+        label="Basis *"
         type="radio"
+        disabled={type !== 'inherent'}
       />
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         id="likelihood.rating"
         name="likelihood.rating"
-        label="Likelihood *"
+        label="Rating *"
         controls={basis === 'Frequency' ? frequencyOptions : probabilityOptions}
         type="radio"
         onChange={newVal => onChange(Number(newVal), `${type}_likelihood`)}
         value={likelihood}
       />
-
       <Header
         title="Impact"
       />
-
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         id="impact.management_action"
         name="impact.management_action"
-        label="Management Action *"
+        label={(
+          <>
+            <legend>Management Action *</legend>
+            <em>
+              {currentEvaluation && `Previous Rating: ${currentEvaluation.management_action}; `}
+              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.management_action}`}
+            </em>
+          </>
+        )}
         controls={managementActionOptions}
         value={impact.management_action}
         onChange={newVal => onChangeImpact({ ...impact, management_action: Number(newVal) })}
         type="radio"
       />
-      {/* {type === 'inherent' && (
+      {type === 'inherent' && (
         <SelectionControlGroup
           className="iField iField-selectionGrp"
           label="Affected"
           id="impact.affected"
           name="impact.affected"
           controls={businessUnits.map(e => ({ label: e.name, value: e.id }))}
-          value={impact.affected}
+          value={businessUnit}
+          type="radio"
+          disabled
         />
-      )} */}
+      )}
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         id="impact.reputation"
         name="impact.reputation"
-        label="Reputation *"
+        label={(
+          <>
+            <legend>Reputation *</legend>
+            <em>
+              {currentEvaluation && `Previous Rating: ${currentEvaluation.reputation}; `}
+              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.reputation}`}
+            </em>
+          </>
+        )}
         required
         controls={reputionOptions}
         value={impact.reputation}
@@ -155,17 +193,33 @@ function RiskEvaluation(props) {
       />
       <SelectionControlGroup
         className="iField iField-selectionGrp"
-        label="Financial *"
+        label={(
+          <>
+            <legend>Financial *</legend>
+            <em>
+              {currentEvaluation && `Previous Rating: ${currentEvaluation.financial}; `}
+              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.financial}`}
+            </em>
+          </>
+        )}
         id="impact.financial"
         name="impact.financial"
-        controls={financialOptions}
+        controls={financialOptions[businessUnit] || []}
         value={impact.financial}
         onChange={newVal => onChangeImpact({ ...impact, financial: Number(newVal) })}
         type="radio"
       />
       <SelectionControlGroup
         className="iField iField-selectionGrp"
-        label="Health, Safety & Security *"
+        label={(
+          <>
+            <legend>Health, Safety & Security *</legend>
+            <em>
+              {currentEvaluation && `Previous Rating: ${currentEvaluation.health_safety_security}; `}
+              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.health_safety_security}`}
+            </em>
+          </>
+        )}
         id="impact.health_safety_security"
         name="impact.health_safety_security"
         value={impact.health_safety_security}
@@ -175,7 +229,15 @@ function RiskEvaluation(props) {
       />
       <SelectionControlGroup
         className="iField iField-selectionGrp"
-        label="Operational *"
+        label={(
+          <>
+            <legend>Operational *</legend>
+            <em>
+              {currentEvaluation && `Previous Rating: ${currentEvaluation.operational}; `}
+              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.operational}`}
+            </em>
+          </>
+        )}
         id="impact.operational"
         name="impact.operational"
         controls={operationalOptions}
@@ -185,7 +247,15 @@ function RiskEvaluation(props) {
       />
       <SelectionControlGroup
         className="iField iField-selectionGrp"
-        label="Legal and Compliance *"
+        label={(
+          <>
+            <legend>Legal and Compliance *</legend>
+            <em>
+              {currentEvaluation && `Previous Rating: ${currentEvaluation.legal_compliance}; `}
+              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.legal_compliance}`}
+            </em>
+          </>
+        )}
         required
         id="impact.legal_compliance"
         name="impact.legal_compliance"

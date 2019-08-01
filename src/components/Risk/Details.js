@@ -66,6 +66,8 @@ function RiskDetails(props) {
   }
 
   function showDialog({ type, dialogTitle }) {
+    const key = type.toLowerCase();
+    const { previous_details: previousDetails = {} } = risk;
     dispatch({
       type: 'SHOW_DIALOG',
       payload: {
@@ -73,25 +75,26 @@ function RiskDetails(props) {
         props: {
           title: dialogTitle,
           onValid: (data) => {
-            const key = type.toLowerCase();
             const impactDriver = getImpactDriver(data.impact_details[key]);
-            const { previous_details: previousDetails = {} } = data;
             onUpdateRisk({
               data: {
                 ...data,
                 [`${key}_impact_driver`]: impactDriver,
                 [`${key}_rating`]: data.impact_details[key][impactDriver],
-                previous_details: {
-                  ...previousDetails,
-                  [key]: {
-                    rating: risk[`${key}_rating`],
-                    likelihood: risk[`${key}_likelihood`],
-                  },
-                },
               },
             });
           },
-          initialFields: risk,
+          initialFields: {
+            ...risk,
+            current_stage_impact_details: risk.impact_details && risk.impact_details[key],
+            previous_details: {
+              ...previousDetails,
+              [key]: {
+                rating: risk[`${key}_rating`],
+                likelihood: risk[`${key}_likelihood`],
+              },
+            },
+          },
         },
       },
     });

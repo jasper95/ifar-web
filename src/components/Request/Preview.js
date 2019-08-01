@@ -1,18 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import PropTypes from 'prop-types';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import RiskPreviewInfo from 'components/Risk/PreviewInfo';
 import useMutation from 'apollo/mutation';
-import Context from 'components/Risk/Context';
 import { useDispatch } from 'react-redux';
 
 function RequestPreview(props) {
   const { request, className } = props;
   const dispatch = useDispatch();
-  const context = useContext(Context);
-  const [, onMutateRequest] = useMutation({ onSuccess: () => context.refetchRequests() });
+  const [, onMutateRequest] = useMutation({});
   const { risk } = request;
   return (
     <Grid className={`RiskPreview ${className}`}>
@@ -27,8 +25,9 @@ function RequestPreview(props) {
           title="Unit"
           info="RMF"
         />
-        <Cell 
-          size={1} offset={5} 
+        <Cell
+          size={1}
+          offset={5}
           className="RiskInfo_cell RiskInfo_cell-actions"
         >
           <Button
