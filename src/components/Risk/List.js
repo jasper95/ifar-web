@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
 import { useCreateNode } from 'apollo/mutation';
-import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
-import Pagination from 'rc-pagination'
+import Pagination from 'rc-pagination';
 import { getImpactDriver } from 'lib/tools';
+import useQuery from 'apollo/query';
 import QueryContext from './Context';
 import RiskItem from './Item';
 import 'sass/components/risk/index.scss';
 
 export const businessUnitQuery = gql`
-  query {
+  subscription {
     business_unit(order_by: {order: asc}) {
       id
       name
@@ -26,17 +26,16 @@ export const businessUnitQuery = gql`
 `;
 
 function RiskList(props) {
-  const { riskListResponse } = props;
-  const { data: { risk: list = [] } } = riskListResponse;
+  const {
+    riskListResponse, onChangePage, onChangeBusinessUnit, businessUnit, page,
+  } = props;
+  const { data: { risk: list = [] }, loading: listIsLoading } = riskListResponse;
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1)
-  const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
-  const businessUnitResponse = useQuery(businessUnitQuery);
-  const [, onCreateRisk] = useCreateNode({ node: 'risk', onSuccess: () => onSuccessMutation(true) });
+  const businessUnitResponse = useQuery(businessUnitQuery, { ws: true });
+  const [, onCreateRisk] = useCreateNode({ node: 'risk' });
   const [, onCreateRequest] = useCreateNode({ node: 'request', message: 'Request successfully sent' });
   const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
-  const selected = businessUnits.find(e => e.id === currentBusinessUnit);
-  useEffect(refreshList, [currentPage, currentBusinessUnit])
+  const selected = businessUnits.find(e => e.id === businessUnit);
   return (
     <QueryContext.Provider value={{ createRequest: onCreateRequest }}>
       <Grid className="riskList">
@@ -45,7 +44,7 @@ function RiskList(props) {
             <Button
               flat
               className="riskList_unitList_item"
-              onClick={() => changeBusinessUnit(e.id)}
+              onClick={() => onChangeBusinessUnit(e.id)}
               iconBefore={false}
               children={e.name}
               key={e.id}
@@ -84,7 +83,16 @@ function RiskList(props) {
             </div>
           </div>
           <div className="riskList_risk_content">
-            {list.map(risk => (
+            <Pagination
+              onChange={(_, newPage) => onChangePage(newPage)}
+              current={page}
+              pageSize={10}
+              total={selected ? selected.risks_aggregate.aggregate.count : 0}
+              hideOnSinglePage
+            />
+            {listIsLoading ? (
+              <span>Loading...</span>
+            ) : list.map(risk => (
               <RiskItem
                 previewProps={{ risk }}
                 detailsProps={{ risk }}
@@ -92,38 +100,14 @@ function RiskList(props) {
                 className="riskList_risk_content_item"
               />
             ))}
-            <Pagination
-              onChange={onChangePagination}
-              current={currentPage}
-              pageSize={10}
-              total={selected ? selected.risks_aggregate.aggregate.count : 0}
-              hideOnSinglePage
-            />
+            {!listIsLoading && list.length === 0 && (
+              <span>No Records Found</span>
+            )}
           </div>
         </div>
       </Grid>
     </QueryContext.Provider>
   );
-
-  function refreshList() {
-    riskListResponse.refetch({ id: currentBusinessUnit, offset: currentPage - 1 })
-  }
-
-  function onChangePagination(current, newPageSize) {
-    setCurrentPage(newPageSize)
-  }
-
-  function onSuccessMutation(isCreate) {
-    riskListResponse.refetch();
-    if (isCreate) {
-      businessUnitResponse.refetch();
-    }
-  }
-
-  function changeBusinessUnit(id) {
-    setBusinessUnit(id);
-    riskListResponse.refetch({ id });
-  }
 
   function showRiskDialog() {
     dispatch({
@@ -137,7 +121,7 @@ function RiskList(props) {
             onCreateRisk({
               data: {
                 ...data,
-                business_unit_id: currentBusinessUnit,
+                business_unit_id: businessUnit,
                 inherent_impact_driver: impactDriver,
                 inherent_rating: data.impact_details.inherent[impactDriver],
               },

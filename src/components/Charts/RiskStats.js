@@ -18,8 +18,6 @@ function RiskStats(props) {
     key: idx,
   }));
 
-  console.log('chartData: ', chartData);
-
   const svgSize = 250;
   const pieSize = (svgSize / 2);
   const pieGutter = 20;

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 function RiskTable(props) {
   const {
-    title, rows, columns, onClickAdd,
+    title, rows, columns, onClickAdd, readOnly,
   } = props;
   return (
     <Grid className="RiskTable">
@@ -16,12 +16,14 @@ function RiskTable(props) {
           {title}
         </h3>
         <div className="RiskTable_header_actions">
-          <Button
-            className="iBttn iBttn-primary"
-            onClick={onClickAdd}
-          >
-            Add/Edit
-          </Button>
+          {!readOnly && (
+            <Button
+              className="iBttn iBttn-primary"
+              onClick={onClickAdd}
+            >
+              Add/Edit
+            </Button>
+          )}
         </div>
       </div>
       <DataTable

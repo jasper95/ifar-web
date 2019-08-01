@@ -4,14 +4,14 @@ import Button from 'react-md/lib/Buttons/Button';
 
 function Legend(props) {
   const {
-    onClick, label, value, itemClassName, colorClassname = '', parentKey
+    onClick, label, value, itemClassName, colorClassname = '', parentKey,
   } = props;
 
   // make label as key
   const labelKey = label.toLowerCase().replace(/,/g, '').replace(/ /g, '-');
   const uniqueItemClassName = `${itemClassName}_${parentKey}-${labelKey}`;
 
-  console.log('LEGEND uniqueItemClassName === ', uniqueItemClassName)
+  // console.log('LEGEND uniqueItemClassName === ', uniqueItemClassName)
 
   // console.log(`label = ${labelKey} && impact == ${(impact && impact.toLowerCase())}`)
 

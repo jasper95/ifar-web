@@ -8,6 +8,7 @@ import Snackbar from 'components/Snackbar';
 import { withAuth } from 'apollo/auth';
 import { createSelector } from 'reselect';
 import { useSelector, useDispatch } from 'react-redux';
+import DialogTitleWithBack from './DialogTitleWithBack'
 import Footer from './Footer';
 import Header from './Header';
 
@@ -16,7 +17,8 @@ const AsyncDialog = loadable(props => import(`components/Dialogs/${props.path}`)
 const pageSelector = createSelector(
   state => state.toast,
   state => state.dialog,
-  (toast, dialog) => ({ toast, dialog }),
+  state => state.temporaryClosedDialogs,
+  (toast, dialog, temporaryClosedDialogs) => ({ toast, dialog, hasTemporaryClosed: temporaryClosedDialogs.length > 0 }),
 );
 
 function Page(props) {
@@ -71,7 +73,11 @@ function Page(props) {
         />
       )}
       {dialog && dialog.path && (
-        <AsyncDialog path={dialog.path} {...dialog.props} />
+        <AsyncDialog
+          path={dialog.path}
+          {...dialog.props}
+          dialogTitleRenderer={appData.hasTemporaryClosed ? DialogTitleWithBack : undefined}
+        />
       )}
       <main className={`page page-${pageId} ${className}`}>
         {children}
@@ -84,7 +90,6 @@ function Page(props) {
 }
 
 const EnhancedPage = flowRight(
-  // withRouter,
   withAuth,
 )(Page);
 

@@ -14,11 +14,13 @@ function RiskMapItemDetails(props) {
         <Preview
           className={`${className}_preview`}
           risk={risk}
+          readOnly
         />
         <RiskDetails
           className={`${className}_details`}
           showTableActions={false}
           risk={risk}
+          readOnly
         />
       </Context.Provider>
       <hr />
