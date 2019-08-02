@@ -13,7 +13,7 @@ import Comment from './Item';
 import 'sass/components/comments/_index.scss';
 
 const commentsQuery = gql`
-  query getComments($id: uuid) {
+  subscription getComments($id: uuid) {
     comment(where: {risk_id: {_eq: $id}}) {
       id
       message
@@ -31,7 +31,7 @@ function Comments(props) {
   const [showForm, setShowForm] = useState(false);
   const { risk } = props;
   console.log('props: ', risk.id);
-  const commentsResponse = useQuery(commentsQuery, { variables: { id: risk.id } });
+  const commentsResponse = useQuery(commentsQuery, { ws: true, variables: { id: risk.id } });
   const { data: { comment: comments = [] } } = commentsResponse;
   const [mutationState, onMutate] = useMutation({ url: '/comment' });
   const [formState, formHandlers] = useForm({
