@@ -34,22 +34,37 @@ $table-header-text: $primary-color-200;
 			border-bottom: .15em solid $primary-color;
 		}
 	}
-
 	// body
 	.md-table-body {
-		> div:first-child {
-			position: absolute;
-			top: 100%;
-			left: 0;
-			width: 100%;
-			text-align: center;
-			opacity: .5;
-		}
-
 		.md-table-column {
 			padding: .25em 1em;
 		}
 	}
+
+}
+
+// if empty
+.iTable-empty {
+	padding-bottom: 4rem;
+	.md-data-table {
+		position: relative;
+	}
+
+	.md-table-body {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		width: 100%;
+		display: flex;
+		background-color: #fff;
+		padding: .75em;
+
+		> div:first-child {
+			width: 100%;
+			text-align: center;
+			opacity: .5;
+		}
+	} 
 }
 
 

@@ -11,17 +11,19 @@ function RiskMapItemDetails(props) {
   return (
     <div>
       <Context.Provider value={{}}>
-        <Preview
-          className={`${className}_preview`}
-          risk={risk}
-          readOnly
-        />
-        <RiskDetails
-          className={`${className}_details`}
-          showTableActions={false}
-          risk={risk}
-          readOnly
-        />
+        <div className="riskList_risk_content_item">
+          <Preview
+            className={`${className}_preview`}
+            risk={risk}
+            readOnly
+          />
+          <RiskDetails
+            className={`${className}_details`}
+            showTableActions={false}
+            risk={risk}
+            readOnly
+          />
+        </div>
       </Context.Provider>
       <hr />
       <Comments risk={risk} />

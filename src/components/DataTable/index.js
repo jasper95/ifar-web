@@ -7,6 +7,7 @@ import TableColumn from 'react-md/lib/DataTables/TableColumn';
 import TableHead from 'react-md/lib/DataTables/TableHeader';
 import Button from 'react-md/lib/Buttons/Button';
 import get from 'lodash/get';
+import cn from 'classnames';
 
 function DataTable(props) {
   const {
@@ -14,7 +15,9 @@ function DataTable(props) {
   } = props;
 
   return (
-    <Table plain className={`iTable ${className}`}>
+    <Table plain className={cn(`iTable ${className}`,{
+        'iTable-empty' : rows.length === 0
+      })}>
       <TableHead>
         <TableRow>
           {columns.map(({ title, headProps = {} }, idx) => (

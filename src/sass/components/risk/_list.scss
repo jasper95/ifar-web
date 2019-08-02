@@ -262,6 +262,7 @@ $risklist-header-arrow-bg: $primary-color-400;
 			// .RiskInfo_info_list_item
 			&_item {
 				margin-bottom: .5em;
+				text-align: left;
 				font-family: $font-family;
 			}
 		}
@@ -274,7 +275,7 @@ $risklist-header-arrow-bg: $primary-color-400;
 		// .RiskInfo_cell-ratings
 		&-ratings {
 			display: flex;
-			align-items: center;
+			align-items: flex-start;
 			justify-content: center;
 		}
 

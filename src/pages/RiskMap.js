@@ -163,6 +163,7 @@ function RiskName({ row }) {
         path: 'RiskMapItemDetails',
         props: {
           risk: row,
+          dialogClassName: `i_dialog_container--lg`
         },
       },
     });

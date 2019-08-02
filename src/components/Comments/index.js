@@ -83,8 +83,7 @@ function Comments(props) {
                   Submit
                 </Button>
                 <Button
-                  className={cn('iBttn iBttn-second-prio',
-                    { processing: mutationState.loading })}
+                  className='iBttn iBttn-second-prio'
                   onClick={() => setShowForm(!showForm)}
                 >
                   Cancel
