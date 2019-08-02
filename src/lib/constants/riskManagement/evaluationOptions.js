@@ -85,28 +85,162 @@ export const reputionOptions = [
   },
 ];
 
-export const financialOptions = [
-  {
-    value: 1,
-    label: '1 - Impaired 5% and below of Budgeted Outflow',
-  },
-  {
-    value: 2,
-    label: '2 - Impaired 10% of Budgeted Outflow',
-  },
-  {
-    value: 3,
-    label: '3 - Impaired 15% of Budgeted Outflow',
-  },
-  {
-    value: 4,
-    label: '4 - Impaired 20% of Budgeted Outflow',
-  },
-  {
-    value: 5,
-    label: '5 - Impaired Above 25% of Budgeted Outflow',
-  },
-];
+export const financialOptions = {
+  '871637c4-5510-4500-8e78-984fce5001ff': [
+    {
+      value: 1,
+      label: '1 - Impaired 5% and below of Budgeted Outflow',
+    },
+    {
+      value: 2,
+      label: '2 - Impaired 10% of Budgeted Outflow',
+    },
+    {
+      value: 3,
+      label: '3 - Impaired 15% of Budgeted Outflow',
+    },
+    {
+      value: 4,
+      label: '4 - Impaired 20% of Budgeted Outflow',
+    },
+    {
+      value: 5,
+      label: '5 - Impaired Above 25% of Budgeted Outflow',
+    },
+  ],
+  'd79f8707-3f9d-44c6-af5a-e44d27c22d28': [
+    {
+      value: 1,
+      label: 'Below 5% of NIAT (Less than 50M)',
+    },
+    {
+      value: 2,
+      label: '5% of NIAT (50M to 100M)',
+    },
+    {
+      value: 3,
+      label: '10% of NIAT (100M to 150M)',
+    },
+    {
+      value: 4,
+      label: '15% of NIAT (150M to 200M)',
+    },
+    {
+      value: 5,
+      label: '20% of NIAT (Above 200M)',
+    },
+  ],
+  '2184c63d-0f4f-4d68-aa76-4816a7e24b63': [
+    {
+      value: 1,
+      label: 'Less than 10% of NIAT',
+    },
+    {
+      value: 2,
+      label: '10 - 20% of NIAT',
+    },
+    {
+      value: 3,
+      label: '21 - 30% of NIAT',
+    },
+    {
+      value: 4,
+      label: '31 - 40% of NIAT',
+    },
+    {
+      value: 5,
+      label: 'Above 40% of NIAT',
+    },
+  ],
+  'a7fe8e1a-732d-4ea6-a8e7-fd1e2e0d8ea3': [
+    {
+      value: 1,
+      label: 'Less than 1% of Budgetted Outflow',
+    },
+    {
+      value: 2,
+      label: '1 - 2.99% of Budgetted Outflow',
+    },
+    {
+      value: 3,
+      label: '3 - 4.99% of Budgetted Outflow',
+    },
+    {
+      value: 4,
+      label: '5 - 7% of Budgetted Outflow',
+    },
+    {
+      value: 5,
+      label: 'Above 7% of Budgetted Outflow',
+    },
+  ],
+  '3dd65363-0981-44c3-a4f1-b94982d1c225': [
+    {
+      value: 1,
+      label: 'Impacts below 10% of the NIAT',
+    },
+    {
+      value: 2,
+      label: 'Impacts 10 - 19% of Net Income',
+    },
+    {
+      value: 3,
+      label: 'Impacts 20 - 34% of Net Income',
+    },
+    {
+      value: 4,
+      label: 'Impacts 35 - 49% of Net Income',
+    },
+    {
+      value: 5,
+      label: 'Impacts Above 50% of Net Income (or 6% of Sales)',
+    },
+  ],
+  'eaea63b5-fb13-4cee-b328-3fcc76447cd7': [
+    {
+      value: 1,
+      label: 'Less than 10% Recovery rate',
+    },
+    {
+      value: 2,
+      label: '10 - 19% Recovery rate',
+    },
+    {
+      value: 3,
+      label: '20 - 29% Recovery rate',
+    },
+    {
+      value: 4,
+      label: '30 - 40% Recovery rate',
+    },
+    {
+      value: 5,
+      label: 'More than 40% Recovery rate',
+    },
+  ],
+  'ac422fa3-e143-491a-ac01-a8a6093d6e6d': [
+    {
+      value: 1,
+      label: 'Less than 10% of Projected Net Outflow',
+    },
+    {
+      value: 2,
+      label: '10 - 24% of Projected Net Outlfow',
+    },
+    {
+      value: 3,
+      label: '25% - 34% of Projected Net Outflow',
+    },
+    {
+      value: 4,
+      label: '35% - 50% of Projected Net Outflow',
+    },
+    {
+      value: 5,
+      label: 'Greater than 50% of Average Projected Net Outflow',
+    },
+  ],
+};
 
 export const healthSafetySecurityOptions = [
   {

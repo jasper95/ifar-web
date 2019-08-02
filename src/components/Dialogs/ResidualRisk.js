@@ -11,7 +11,6 @@ import { impact } from './InherentRisk';
 function InherentRisk(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
-  console.log('fields: ', fields);
   const { onElementChange } = formHandlers;
   return (
     <>
@@ -33,9 +32,13 @@ function InherentRisk(props) {
       />
       <RiskEvaluation
         type="residual"
+        previousRating={fields.previous_details}
         onChange={onElementChange}
         basis={fields.basis}
+        currentEvaluation={fields.current_stage_impact_details}
+        prevStageEvaluation={fields.impact_details && fields.impact_details.inherent}
         likelihood={fields.residual_likelihood}
+        businessUnit={fields.business_unit_id}
         impact={fields.impact_details.residual}
         onChangeImpact={residual => onElementChange({ ...fields.impact_details, residual }, 'impact_details')}
       />
