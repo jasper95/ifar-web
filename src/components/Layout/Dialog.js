@@ -71,7 +71,7 @@ function DialogLayout(props) {
       visible
       portal
       modal
-      id={dialogId}
+      id={`${dialogId}_dialog`}
       renderNode={document.body}
       className={`i_dialog ${dialogId}_dialog ${dialogClass}`}
       title={(

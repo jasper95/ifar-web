@@ -117,6 +117,7 @@ function RequestPreview(props) {
           path: 'Comments',
           props: {
             title: 'Comments',
+            dialogId: 'Comments',
             risk,
           },
         },
