@@ -45,22 +45,22 @@ function Comments(props) {
       <div className="commentForm_replies">
         <ul className="reply">
           {comments.map(comment => (
-            <Comment key={comment.id} comment={comment} className="reply_item"/>
+            <Comment key={comment.id} comment={comment} className="reply_item" />
           ))}
         </ul>
       </div>
       <div className="commentForm_actions">
-        {!showForm 
+        {!showForm
           ? (
-            <Button 
+            <Button
               onClick={() => setShowForm(!showForm)}
               iconChildren="message"
               className="commentForm_actions_write"
             >
               Write A Comment
             </Button>
-          ):(
-            <div className='commentForm_actions_form'>
+          ) : (
+            <div className="commentForm_actions_form">
               <h1 className="commentForm_actions_form_header">
                 Write Comment
               </h1>
@@ -83,7 +83,7 @@ function Comments(props) {
                   Submit
                 </Button>
                 <Button
-                  className='iBttn iBttn-second-prio'
+                  className="iBttn iBttn-second-prio"
                   onClick={() => setShowForm(!showForm)}
                 >
                   Cancel

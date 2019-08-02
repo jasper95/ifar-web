@@ -60,7 +60,7 @@ function ManageRisk() {
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const riskListResponse = useQuery(riskListQuery,
     { ws: true, variables: { id: currentBusinessUnit, offset: currentPage - 1 } });
-  const { data: { risk: dashboardData = [] } } = riskListResponse;
+  const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
   return (
     <div className="dbContainer">
       <Grid className="row-ToolbarHeader">
@@ -102,31 +102,43 @@ function ManageRisk() {
       </Grid>
       <Grid className="row-riskCharts">
         <Cell size={4}>
-          <RiskStats
-            filterFunc={classificationFilter}
-            legend={classificationLegend}
-            data={dashboardData}
-            title="Classification"
-            colorMapper={e => colorMapping.classification[e.classification]}
-          />
+          {loading ? (
+            <span>Loading...</span>
+          ) : (
+            <RiskStats
+              filterFunc={classificationFilter}
+              legend={classificationLegend}
+              data={dashboardData}
+              title="Classification"
+              colorMapper={e => colorMapping.classification[e.classification]}
+            />
+          )}
         </Cell>
         <Cell size={4}>
-          <RiskStats
-            filterFunc={impactDriverFilter}
-            legend={impactDriverLegend}
-            data={dashboardData}
-            title="Impact Drivers"
-            colorMapper={e => colorMapping.impact[e.impact]}
-          />
+          {loading ? (
+            <span>Loading...</span>
+          ) : (
+            <RiskStats
+              filterFunc={impactDriverFilter}
+              legend={impactDriverLegend}
+              data={dashboardData}
+              title="Impact Drivers"
+              colorMapper={e => colorMapping.impact[e.impact]}
+            />
+          )}
         </Cell>
         <Cell size={4}>
-          <RiskStats
-            filterFunc={vulnerabilityFilter}
-            legend={vulnerabilityLegend}
-            data={dashboardData}
-            title="Residual Vulnerability"
-            colorMapper={e => colorMapping.vulnerability[e.label.toLowerCase()]}
-          />
+          {loading ? (
+            <span>Loading...</span>
+          ) : (
+            <RiskStats
+              filterFunc={vulnerabilityFilter}
+              legend={vulnerabilityLegend}
+              data={dashboardData}
+              title="Residual Vulnerability"
+              colorMapper={e => colorMapping.vulnerability[e.label.toLowerCase()]}
+            />
+          )}
         </Cell>
       </Grid>
       <RiskList
