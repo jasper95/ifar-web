@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import Button from 'react-md/lib/Buttons/Button';
-import TextField from 'react-md/lib/TextFields/TextField';
 import useForm from 'lib/hooks/useForm';
 import { getValidationResult, fieldIsRequired } from 'lib/tools';
+import { EditorState, convertToRaw } from 'draft-js';
+import Editor from 'draft-js-plugins-editor';
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import * as yup from 'yup';
 import cn from 'classnames';
 import useQuery from 'apollo/query';
 import useMutation from 'apollo/mutation';
 import gql from 'graphql-tag';
+import mentions from './mentions';
+import editorStyles from './editorStyles.css';
 import Comment from './Item';
 
 import 'sass/components/comments/_index.scss';
@@ -24,21 +28,25 @@ const commentsQuery = gql`
       created_date
     }
   }
-
 `;
+
+const mentionPlugin = createMentionPlugin();
+const { MentionSuggestions } = mentionPlugin;
+const plugins = [mentionPlugin];
 
 function Comments(props) {
   const [showForm, setShowForm] = useState(false);
   const { risk } = props;
-  console.log('props: ', risk.id);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [suggestions, setSuggestions] = useState([]);
   const commentsResponse = useQuery(commentsQuery, { ws: true, variables: { id: risk.id } });
   const { data: { comment: comments = [] } } = commentsResponse;
-  const [mutationState, onMutate] = useMutation({ url: '/comment' });
+  const [mutationState, onMutate] = useMutation({ url: '/comment', onSuccess });
   const [formState, formHandlers] = useForm({
     initialFields: { message: '' }, validator, onValid,
   });
-  const { onElementChange, onValidate } = formHandlers;
-  const { fields, errors } = formState;
+  const { onValidate, onChange, reset } = formHandlers;
+  const { fields } = formState;
 
   return (
     <div className="commentForm">
@@ -64,16 +72,20 @@ function Comments(props) {
               <h1 className="commentForm_actions_form_header">
                 Write Comment
               </h1>
-              <TextField
-                id="message"
-                rows={2}
-                placeholder="Write Comment"
-                onChange={onElementChange}
-                error={!!errors.message}
-                errorText={errors.message}
-                value={fields.message || ''}
-                className="iField commentForm_actions_form_field"
-              />
+              <div className={editorStyles.editor}>
+                <Editor
+                  editorState={editorState}
+                  onChange={(newVal) => {
+                    onChange(convertToRaw(newVal.getCurrentContent()), 'body');
+                    setEditorState(newVal);
+                  }}
+                  plugins={plugins}
+                />
+                <MentionSuggestions
+                  onSearchChange={onSearch}
+                  suggestions={suggestions}
+                />
+              </div>
               <div className="commentForm_actions_form_actions">
                 <Button
                   className={cn('iBttn iBttn-primary',
@@ -96,8 +108,17 @@ function Comments(props) {
     </div>
   );
 
+  function onSuccess() {
+    reset();
+    setEditorState(EditorState.createEmpty());
+  }
+
   function onValid(data) {
     onMutate({ data: { ...data, risk_id: risk.id } });
+  }
+
+  function onSearch({ value }) {
+    setSuggestions(defaultSuggestionsFilter(value, mentions));
   }
 }
 

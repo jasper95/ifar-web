@@ -14,6 +14,7 @@ import {
   legalComplianceOptions,
   healthSafetySecurityOptions,
 } from 'lib/constants/riskManagement/evaluationOptions';
+import Header from './Header';
 
 import 'sass/components/riskEvaluation/index.scss';
 
@@ -52,20 +53,6 @@ const defaultImpact = {
   management_action: 1,
 };
 
-const Header = props => (
-  <div className="riskEvaluation_header">
-    { props.title && (
-    <h2 className="riskEvaluation_header_title">
-      {props.title}
-    </h2>
-    )}
-    { props.desc && (
-    <p className="riskEvaluation_header_desc">
-      {props.desc}
-    </p>
-    )}
-  </div>
-);
 
 function RiskEvaluation(props) {
   const {
@@ -80,15 +67,12 @@ function RiskEvaluation(props) {
     currentEvaluation,
     prevStageEvaluation,
   } = props;
-  console.log('currentEvaluation: ', currentEvaluation);
   const previousStage = {
     residual: 'inherent',
     target: 'residual',
   }[type];
   const stagePrevRating = previousRating && previousRating[type];
-  console.log('stagePrevRating: ', stagePrevRating);
   const prevStageRating = previousRating && previousStage && previousRating[previousStage];
-  console.log('prevStageRating: ', prevStageRating);
   useEffect(() => {
     if (!impact) {
       onChangeImpact(defaultImpact);
@@ -270,13 +254,38 @@ function RiskEvaluation(props) {
 
 RiskEvaluation.defaultProps = {
   onChange: () => {},
+  onChangeImpact: () => {},
   impact: null,
+  currentEvaluation: null,
+  prevStageEvaluation: null,
+  previousRating: null,
 };
 
 RiskEvaluation.propTypes = {
+  businessUnit: PropTypes.string.isRequired,
+  likelihood: PropTypes.number.isRequired,
+  basis: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['inherent', 'residual', 'target']).isRequired,
   impact: PropTypes.object,
   onChange: PropTypes.func,
+  onChangeImpact: PropTypes.func,
+  previousRating: PropTypes.shape({
+    basis: PropTypes.string,
+  }),
+  currentEvaluation: PropTypes.shape({
+    operational: PropTypes.number,
+    legal_compliance: PropTypes.number,
+    health_safety_security: PropTypes.number,
+    financial: PropTypes.number,
+    management_action: PropTypes.number,
+  }),
+  prevStageEvaluation: PropTypes.shape({
+    operational: PropTypes.number,
+    legal_compliance: PropTypes.number,
+    health_safety_security: PropTypes.number,
+    financial: PropTypes.number,
+    management_action: PropTypes.number,
+  }),
 };
 
 export default RiskEvaluation;

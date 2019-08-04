@@ -2,7 +2,18 @@ import React from 'react';
 import flowRight from 'lodash/flowRight';
 import capitalize from 'lodash/capitalize';
 import withDialog from 'lib/hocs/dialog';
+import useQuery from 'apollo/query';
+import gql from 'graphql-tag';
 
+const notificationQuery = gql`
+  subscription($role: String) {
+    notification(where: {role: {_eq: $role}}) {
+      id
+      body
+      created_date
+    }
+  }
+`;
 function Notifications(props) {
   // const { notifications } = props
   const notifications = [];
