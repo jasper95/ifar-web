@@ -46,7 +46,7 @@ function RiskStats(props) {
               </Pie>
             </PieChart>
           ) : (
-            <span>No Data Available</span>
+            <span className="chartCard_content_chart_empty">No Data Available</span>
           )}
         </div>
         <div className="chartCard_content_stats">

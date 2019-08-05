@@ -27,7 +27,7 @@ function InherentRisk(props) {
       />
       <TextField
         id="definition"
-        rows={2}
+        rows={5}
         label="Definition"
         onChange={onElementChange}
         error={!!errors.definition}

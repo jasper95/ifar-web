@@ -145,7 +145,7 @@ export default function RiskMap() {
 
 function RowIndex({ row }) {
   return (
-    <span className={`impact-${row.impact_driver.replace('_', '-')}`}>{row.order}</span>
+    <span className={`number impact-${row.impact_driver.replace('_', '-')}`}>{row.order}</span>
   );
 }
 

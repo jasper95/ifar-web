@@ -101,7 +101,7 @@ function RiskList(props) {
               />
             ))}
             {!listIsLoading && list.length === 0 && (
-              <span>No Records Found</span>
+              <span className="riskList_risk_content_empty">No Records Found</span>
             )}
           </div>
         </div>

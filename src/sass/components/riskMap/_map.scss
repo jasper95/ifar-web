@@ -168,13 +168,13 @@
 	align-items: center;
 	justify-content: center;
 	color: $white;
-	// .riskCircle-finance
-	&-finance {
-		background-color: $rafi-cat-finance;
+	// .riskCircle-financial
+	&-financial {
+		background-color: $rafi-impact-finance;
 	}
-	// .riskCircle-legal
-	&-legal {
-		background-color: $rafi-cat-legal;
+	// .riskCircle-legal-compliance
+	&-legal-compliance {
+		background-color: $rafi-impact-legal;
 	}
 	// .riskCircle-health-safety-security
 	&-health-safety-security {
@@ -188,8 +188,8 @@
 	&-management-action {
 		background-color: $rafi-cat-management-action;
 	}
-	// .riskCircle-operations
-	&-operations {
-		background-color: $rafi-cat-operations;
+	// .riskCircle-operational
+	&-operational {
+		background-color: $rafi-impact-operation;
 	}
 }
