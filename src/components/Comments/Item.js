@@ -1,19 +1,20 @@
 import React from 'react';
 import day from 'dayjs';
+import parser from 'html-react-parser';
+import draftToHtml from 'draftjs-to-html';
 import cn from 'classnames';
 
 
 function CommentItem(props) {
   const { comment, className: BCP } = props;
 
-  const isOtherUser = true
+  const isOtherUser = true;
   return (
     <li className={cn(BCP, {
-        [`${BCP}-isOtherUser`] : isOtherUser
-      })}
-     >
-      <div className={`${BCP}_avatar`}>
-      </div>
+      [`${BCP}-isOtherUser`]: isOtherUser,
+    })}
+    >
+      <div className={`${BCP}_avatar`} />
       <div className={`${BCP}_info`}>
         <div className={`${BCP}_info_row`}>
           <div className={`${BCP}_info_name`}>
@@ -33,7 +34,7 @@ function CommentItem(props) {
 
         <div className={`${BCP}_info_row`}>
           <p className={`${BCP}_info_message`}>
-            {comment.message}
+            {parser(draftToHtml(comment.body))}
           </p>
         </div>
       </div>

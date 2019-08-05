@@ -1,6 +1,6 @@
 import React from 'react';
 import range from 'lodash/range';
-import MapItems from './MapItems';
+import MapItem from './MapItem';
 import Column from './Column';
 
 function Map(props) {
@@ -124,7 +124,7 @@ function Map(props) {
           className={`mapTable_col-${riskColColor}`}
         >
           {risks.filter(e => e.likelihood === rowIndex && e.rating === column).map(risk => (
-            <MapItems
+            <MapItem
               impactDriver={risk.impact_driver}
               risk={risk}
               children={risk.order}

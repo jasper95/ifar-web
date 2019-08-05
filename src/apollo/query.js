@@ -76,5 +76,5 @@ export function useManualQuery(query, options = {}, initialData = {}) {
     setIsLoading(false);
     return result;
   }
-  return [{ data, loading: isLoading, error }, { onQuery }];
+  return [{ data, loading: isLoading, error }, onQuery];
 }

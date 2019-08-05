@@ -21,11 +21,6 @@ const sessionQuery = generateQueryById({
       avatar
       email
       slug
-      notifications_aggregate(where: {status: {_eq: "unread"}}) {
-        aggregate {
-          count
-        }
-      }
     }`,
   ],
 });

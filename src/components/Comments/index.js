@@ -4,13 +4,12 @@ import useForm from 'lib/hooks/useForm';
 import { getValidationResult, fieldIsRequired } from 'lib/tools';
 import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import createMentionPlugin from 'draft-js-mention-plugin';
 import * as yup from 'yup';
 import cn from 'classnames';
-import useQuery from 'apollo/query';
+import useQuery, { useManualQuery } from 'apollo/query';
 import useMutation from 'apollo/mutation';
 import gql from 'graphql-tag';
-import mentions from './mentions';
 import editorStyles from './editorStyles.css';
 import Comment from './Item';
 
@@ -20,12 +19,22 @@ const commentsQuery = gql`
   subscription getComments($id: uuid) {
     comment(where: {risk_id: {_eq: $id}}) {
       id
-      message
+      body
       user {
         first_name
         last_name
       }
       created_date
+    }
+  }
+`;
+const userQuery = gql`
+  query getUsers($name: String) {
+    user(where: {first_name: {_like: $name}, _or: {last_name: {_like: $name}}}) {
+      id
+      first_name
+      last_name
+      avatar
     }
   }
 `;
@@ -37,16 +46,16 @@ const plugins = [mentionPlugin];
 function Comments(props) {
   const [showForm, setShowForm] = useState(false);
   const { risk } = props;
+  const [, onQueryUsers] = useManualQuery(userQuery);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [suggestions, setSuggestions] = useState([]);
   const commentsResponse = useQuery(commentsQuery, { ws: true, variables: { id: risk.id } });
   const { data: { comment: comments = [] } } = commentsResponse;
+  console.log('comments: ', comments);
   const [mutationState, onMutate] = useMutation({ url: '/comment', onSuccess });
-  const [formState, formHandlers] = useForm({
-    initialFields: { message: '' }, validator, onValid,
-  });
-  const { onValidate, onChange, reset } = formHandlers;
-  const { fields } = formState;
+  const [formState, formHandlers] = useForm({ validator, onValid });
+  const { onValidate, onElementChange, reset } = formHandlers;
+  const { fields, errors } = formState;
 
   return (
     <div className="commentForm">
@@ -76,7 +85,7 @@ function Comments(props) {
                 <Editor
                   editorState={editorState}
                   onChange={(newVal) => {
-                    onChange(convertToRaw(newVal.getCurrentContent()), 'body');
+                    onElementChange(convertToRaw(newVal.getCurrentContent()), 'body');
                     setEditorState(newVal);
                   }}
                   plugins={plugins}
@@ -114,17 +123,32 @@ function Comments(props) {
   }
 
   function onValid(data) {
-    onMutate({ data: { ...data, risk_id: risk.id } });
+    onMutate({
+      data: { ...data, risk_id: risk.id },
+      message: 'Comment successfully posted',
+      onSuccess: () => {
+        const state = EditorState.createEmpty();
+        setEditorState(state);
+        onElementChange(convertToRaw(state.getCurrentContent()), 'body');
+      },
+    });
   }
 
-  function onSearch({ value }) {
-    setSuggestions(defaultSuggestionsFilter(value, mentions));
+  async function onSearch({ value }) {
+    const result = await onQueryUsers({ variables: { name: `%${value}%` } });
+    setSuggestions(result.user.map(e => ({ ...e, name: `${e.first_name} ${e.last_name}`, link: '#' })));
   }
 }
 
 function validator(data) {
   const schema = yup.object({
-    message: yup.string().required(fieldIsRequired),
+    body: yup.object({
+      blocks: yup.array().of(
+        yup.object({
+          text: yup.string().label('message').required(fieldIsRequired),
+        }),
+      ),
+    }),
   });
   return getValidationResult(data, schema);
 }
