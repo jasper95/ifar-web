@@ -1,0 +1,44 @@
+.commentForm_actions_form_field {
+	width: 100%;
+	border: 2px solid $gray-200;
+	min-height: 5rem;
+	position: relative;
+
+	.DraftEditor-root {
+		// position: relative;
+		padding: 1em;
+		z-index: 1;
+		// text-align: left;
+		// padding: 1em;
+
+		.public-DraftStyleDefault-ltr > span {
+			width: 100%;
+		}
+
+	}
+
+	[role="listbox"] {
+		position: absolute;
+		z-index: 10;
+		background-color: #fff;
+		box-shadow: 0 0 1em 0 rgba(#000,.15);
+
+		[role="option"] {
+			width: 100%;
+			padding: .25em 1em;
+			cursor: pointer;
+
+			&[aria-selected="true"] {
+				color: $primary-color;
+			}
+
+			&:not(:last-child) {
+				border-bottom: 1px solid $c_gray-200;
+			}
+
+			&:hover {
+				background-color: $c_gray-100;
+			}
+		}
+	}
+}

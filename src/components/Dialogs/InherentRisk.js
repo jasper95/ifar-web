@@ -44,7 +44,6 @@ function InherentRisk(props) {
         options={classifications.map(e => ({ value: e.id, label: e.name }))}
         value={fields.classification_id}
         error={errors.classification_id}
-        className="iField iField-rs"
       />
       <MultFields
         id="causes"
@@ -109,6 +108,7 @@ function SingleTextField(prop) {
   return (
     <TextField
       className="iField"
+      placeholder="Enter Value"
       value={value.name}
       error={!!errors[`${id}[${index}].name`]}
       errorText={errors[`${id}[${index}].name`]}

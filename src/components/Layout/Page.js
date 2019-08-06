@@ -61,6 +61,7 @@ function Page(props) {
         <link rel="shortcut icon" href="/static/icons/favicon.ico" />
 
         <link rel="stylesheet" type="text/css" href="/static/css/react-md.indigo-pink.min.css" />
+        <link rel="stylesheet" type="text/css" href="/static/css/Draft.css" />
       </Head>
       {hasNavigation && (
         <Header />

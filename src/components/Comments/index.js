@@ -11,6 +11,7 @@ import useQuery, { useManualQuery } from 'apollo/query';
 import useMutation from 'apollo/mutation';
 import gql from 'graphql-tag';
 import editorStyles from './editorStyles.css';
+import mentionsStyles from './mentionsStyles.css';
 import Comment from './Item';
 
 import 'sass/components/comments/_index.scss';
@@ -39,7 +40,7 @@ const userQuery = gql`
   }
 `;
 
-const mentionPlugin = createMentionPlugin();
+const mentionPlugin = createMentionPlugin({ theme: mentionsStyles });
 const { MentionSuggestions } = mentionPlugin;
 const plugins = [mentionPlugin];
 
@@ -81,19 +82,21 @@ function Comments(props) {
               <h1 className="commentForm_actions_form_header">
                 Write Comment
               </h1>
-              <div className={editorStyles.editor}>
-                <Editor
-                  editorState={editorState}
-                  onChange={(newVal) => {
-                    onElementChange(convertToRaw(newVal.getCurrentContent()), 'body');
-                    setEditorState(newVal);
-                  }}
-                  plugins={plugins}
-                />
-                <MentionSuggestions
-                  onSearchChange={onSearch}
-                  suggestions={suggestions}
-                />
+              <div className="commentForm_actions_form_field">
+                <div className={editorStyles.editor}>
+                  <Editor
+                    editorState={editorState}
+                    onChange={(newVal) => {
+                      onElementChange(convertToRaw(newVal.getCurrentContent()), 'body');
+                      setEditorState(newVal);
+                    }}
+                    plugins={plugins}
+                  />
+                  <MentionSuggestions
+                    onSearchChange={onSearch}
+                    suggestions={suggestions}
+                  />
+                </div>
               </div>
               <div className="commentForm_actions_form_actions">
                 <Button

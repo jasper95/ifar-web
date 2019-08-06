@@ -373,3 +373,25 @@ $fieldBorder: 1px solid $gray-200;
 		}
 	}
 }
+
+// ====================================
+// multifields
+// ====================================
+.selectAutoComplete {
+	font-size: 1rem;
+	&_label {
+		margin-bottom: .5em;
+		font-size: .8em;
+		font-family: inherit;
+		transform: none !important;
+		color: $gray-300;
+		width: 100%;
+		text-align: left;
+		display: block;
+		font-weight: bold;
+		letter-spacing: .15em;
+		text-transform: uppercase;
+		margin-bottom: 0;
+		padding: 0 .8em;
+	}
+}

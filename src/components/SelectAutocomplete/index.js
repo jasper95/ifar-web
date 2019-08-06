@@ -17,9 +17,9 @@ function SelectAutocomplete(props) {
   },
   [options]);
   return (
-    <div className={className}>
+    <div className={`selectAutoComplete ${className}`}>
       {label && (
-        <span>
+        <span className='selectAutoComplete_label'>
           {label}
           {' '}
           {required && '*'}
