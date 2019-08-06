@@ -24,7 +24,7 @@ export default function useMutation(params = {}) {
     setLoading(true);
     const allParams = { ...params, ...params2 };
     const {
-      data: body = {}, method = 'POST', onSuccess = simpleFn, message,
+      data: body = {}, method = 'POST', onSuccess = simpleFn, message, hideDialog = true,
     } = allParams;
     let { url } = allParams;
     if (method.toLowerCase() === 'delete' && body.id) {
@@ -46,7 +46,7 @@ export default function useMutation(params = {}) {
       setData(response);
       onSuccess(response);
       if (message) {
-        dispatch({ type: 'SUCCESS', payload: { message } });
+        dispatch({ type: 'SUCCESS', payload: { message, hideDialog } });
       }
       return;
     }

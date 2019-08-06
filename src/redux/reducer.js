@@ -42,11 +42,13 @@ export default {
     };
   },
   SUCCESS(state, { payload }) {
+    const { message, hideDialog = true } = payload;
     return {
-      ...this.HIDE_DIALOG(state),
+      ...hideDialog ? this.HIDE_DIALOG(state) : state,
       toast: {
         type: 'success',
-        ...payload,
+        message,
+        // ...payload,
       },
     };
   },

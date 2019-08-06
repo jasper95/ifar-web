@@ -1,9 +1,8 @@
 import React from 'react';
-import day from 'dayjs';
+import { format as formatTime } from 'timeago.js';
 import parser from 'html-react-parser';
 import draftToHtml from 'draftjs-to-html';
 import cn from 'classnames';
-
 
 function CommentItem(props) {
   const { comment, className: BCP } = props;
@@ -24,11 +23,11 @@ function CommentItem(props) {
           </div>
           <div className={`${BCP}_info_timestamp`}>
             <span className="date">
-              <span>{day(comment.created_date).format('MMMM DD, YYYY')}</span>
+              <span>{formatTime(comment.created_date)}</span>
             </span>
-            <span className="time">
+            {/* <span className="time">
               8:59 PM
-            </span>
+            </span> */}
           </div>
         </div>
 

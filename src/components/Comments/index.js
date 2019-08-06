@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Button from 'react-md/lib/Buttons/Button';
 import useForm from 'lib/hooks/useForm';
 import { getValidationResult, fieldIsRequired } from 'lib/tools';
@@ -10,6 +10,7 @@ import cn from 'classnames';
 import useQuery, { useManualQuery } from 'apollo/query';
 import useMutation from 'apollo/mutation';
 import gql from 'graphql-tag';
+import debounce from 'lodash/debounce';
 import editorStyles from './editorStyles.css';
 import mentionsStyles from './mentionsStyles.css';
 import Comment from './Item';
@@ -18,7 +19,7 @@ import 'sass/components/comments/_index.scss';
 
 const commentsQuery = gql`
   subscription getComments($id: uuid) {
-    comment(where: {risk_id: {_eq: $id}}) {
+    comment(where: {risk_id: {_eq: $id}}, order_by: {created_date: desc}) {
       id
       body
       user {
@@ -52,12 +53,11 @@ function Comments(props) {
   const [suggestions, setSuggestions] = useState([]);
   const commentsResponse = useQuery(commentsQuery, { ws: true, variables: { id: risk.id } });
   const { data: { comment: comments = [] } } = commentsResponse;
-  console.log('comments: ', comments);
   const [mutationState, onMutate] = useMutation({ url: '/comment', onSuccess });
   const [formState, formHandlers] = useForm({ validator, onValid });
   const { onValidate, onElementChange, reset } = formHandlers;
-  const { fields, errors } = formState;
-
+  const { fields } = formState;
+  const debounceSearch = useCallback(debounce(onSearch, 1000), []);
   return (
     <div className="commentForm">
       <div className="commentForm_replies">
@@ -93,7 +93,7 @@ function Comments(props) {
                     plugins={plugins}
                   />
                   <MentionSuggestions
-                    onSearchChange={onSearch}
+                    onSearchChange={debounceSearch}
                     suggestions={suggestions}
                   />
                 </div>
@@ -128,6 +128,7 @@ function Comments(props) {
   function onValid(data) {
     onMutate({
       data: { ...data, risk_id: risk.id },
+      hideDialog: false,
       message: 'Comment successfully posted',
       onSuccess: () => {
         const state = EditorState.createEmpty();
@@ -138,8 +139,12 @@ function Comments(props) {
   }
 
   async function onSearch({ value }) {
-    const result = await onQueryUsers({ variables: { name: `%${value}%` } });
-    setSuggestions(result.user.map(e => ({ ...e, name: `${e.first_name} ${e.last_name}`, link: '#' })));
+    if (value) {
+      const result = await onQueryUsers({ variables: { name: `%${value}%` } });
+      setSuggestions(result.user.map(e => ({ ...e, name: `${e.first_name} ${e.last_name}`, link: '#' })));
+      return;
+    }
+    setSuggestions([]);
   }
 }
 
