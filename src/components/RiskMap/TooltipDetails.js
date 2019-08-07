@@ -3,37 +3,50 @@ import React from 'react';
 function TooltipDetails(props) {
   const { risk } = props;
   return (
-    <div>
-      <div>
-        <span>Risk Name</span>
-        :
-        <span>{risk.name}</span>
+    <div className="riskMapTooltip">
+
+      <div className="riskMapTooltip_info">
+        <span className="label">Risk Name :</span> 
+        <span className="name">{risk.name}</span>
       </div>
-      <div>
-        <span>Risk Definition</span>
-        :
-        <span>{risk.name}</span>
+
+      <div className="riskMapTooltip_info">
+        <span className="label">Risk Definition :</span>
+        <span className="name">{name}</span>
       </div>
-      <div>
-        <span>Risk Causes</span>
-        <ul>
+
+      <div className="riskMapTooltip_infoList">
+        <h1 className="riskMapTooltip_infoList_header">
+          Risk Causes
+        </h1>
+        <ul className="riskMapTooltip_infoList_list">
           {risk.causes.map(e => (
-            <li>{e.name}</li>
+            <li className="riskMapTooltip_infoList_list_item">
+              {e.name}
+            </li>
           ))}
         </ul>
       </div>
-      <hr />
-      <div>
-        <span>Risk Impact</span>
-        <ul>
+
+      <div className="riskMapTooltip_divider"/>
+
+      <div className="riskMapTooltip_infoList">
+        <h1 className="riskMapTooltip_infoList_header">
+          Risk Impact
+        </h1>
+        <ul className="riskMapTooltip_infoList_list">
           {risk.impacts.map(e => (
-            <li>{e.name}</li>
+            <li className="riskMapTooltip_infoList_list_item">
+              {e.name}
+            </li>
           ))}
         </ul>
       </div>
-      <hr />
-      <div>
-        <span>Inherent Evaluation</span>
+
+      <div className="riskMapTooltip_divider"/>
+
+      <div className="riskMapTooltip_info">
+        <span className="label">Inherent Evaluation :</span>
       </div>
     </div>
   );

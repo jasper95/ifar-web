@@ -1,0 +1,13 @@
+.rc-tooltip {
+	background-color: #fff;
+	box-shadow: 0 0 1em 0 rgba(#000,.05);
+	opacity: 1;
+	border-radius: .25em;
+
+
+	// .rc-tooltip-inner
+	&-inner {
+		border: none;
+		background-color: transparent;
+	}
+}

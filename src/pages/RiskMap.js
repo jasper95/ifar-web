@@ -196,7 +196,11 @@ function RiskLevel({ row: { vulnerability } }) {
 }
 
 function VC({ row }) {
-  const status = 'up'
+
+  const statuses = ['up', 'stagnant', 'new']
+  const status = statuses[Math.floor(Math.random() * statuses.length)]
+
+  // ilisdi lang ni hehe
 
   if (status === 'up') {
     return (
