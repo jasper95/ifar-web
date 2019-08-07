@@ -62,6 +62,7 @@ function Page(props) {
 
         <link rel="stylesheet" type="text/css" href="/static/css/react-md.indigo-pink.min.css" />
         <link rel="stylesheet" type="text/css" href="/static/css/Draft.css" />
+        <link rel="stylesheet" type="text/css" href="/static/css/rafiIcons.css" />
       </Head>
       {hasNavigation && (
         <Header />
