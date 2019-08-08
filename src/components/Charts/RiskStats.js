@@ -42,7 +42,7 @@ function RiskStats(props) {
                 {chartData.map(entry => (
                   <Cell key={entry.key} fill={entry.color} />
                 ))}
-                <Label value={data.length} position="center" />
+                <Label value={sum} position="center" />
               </Pie>
             </PieChart>
           ) : (
