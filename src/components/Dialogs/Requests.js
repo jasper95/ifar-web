@@ -4,7 +4,6 @@ import withDialog from 'lib/hocs/dialog';
 import { riskDetailsFragment } from 'components/Risk/List';
 import RiskItem from 'components/Risk/Item';
 import Preview from 'components/Request/Preview';
-import Context from 'components/Risk/Context';
 import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 
@@ -35,7 +34,7 @@ function Requests() {
   const requestResponse = useQuery(requestQuery, { ws: true });
   const { data: { request: requests = [] }, loading: listIsLoading } = requestResponse;
   return (
-    <Context.Provider value={{}}>
+    <>
       {listIsLoading ? (
         <span>Loading...</span>
       ) : (
@@ -57,7 +56,7 @@ function Requests() {
           ))}
         </div>
       )}
-    </Context.Provider>
+    </>
   );
 }
 

@@ -1,20 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
 import { getImpactDriver, getVulnerabilityLevel } from 'lib/tools';
 import { useDispatch } from 'react-redux';
-import { useUpdateNode } from 'apollo/mutation';
-import QueryContext from './Context';
 import RiskInfo from './Info';
 import RiskTable from './Table';
 
 function RiskDetails(props) {
   const dispatch = useDispatch();
-  const context = useContext(QueryContext);
-  const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
   const {
-    risk, className, readOnly,
+    risk, className, readOnly, onCreateRequest, onUpdateRisk,
   } = props;
   return (
     <Grid className={`RiskDetails ${className}`}>
@@ -52,7 +48,7 @@ function RiskDetails(props) {
         props: {
           title: 'Request Done Treatment',
           message: 'Send request to done this treatment?',
-          onValid: data => context.createRequest({
+          onValid: data => onCreateRequest({
             data: {
               risk_id: risk.id,
               treatment_details: data,
