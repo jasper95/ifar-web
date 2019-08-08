@@ -196,7 +196,33 @@ function RiskLevel({ row: { vulnerability } }) {
 }
 
 function VC({ row }) {
-  return (
-    <span>test</span>
-  );
+
+  const statuses = ['up', 'stagnant', 'new']
+  const status = statuses[Math.floor(Math.random() * statuses.length)]
+
+  // ilisdi lang ni hehe
+
+  if (status === 'up') {
+    return (
+      <div className="vcStatus-up">
+        <span className="rafi-icon-arrow-up"/>
+      </div>
+    )
+  } else if (status === 'stagnant') {
+    return (
+      <div className="vcStatus-stagnant">
+        <span className="rafi-icon-arrow-sides"/>
+      </div>
+    )
+  } else if (status === 'new') {
+    return (
+      <div className="vcStatus-new">
+        <span className="text">
+          new
+        </span>
+      </div>
+    )
+  }
+
+  return
 }
