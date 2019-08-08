@@ -1,7 +1,7 @@
 import React from 'react';
 import flowRight from 'lodash/flowRight';
 import withDialog from 'lib/hocs/dialog';
-import { riskDetailsFragment } from 'pages/ManageRisk';
+import { riskDetailsFragment } from 'components/Risk/List';
 import RiskItem from 'components/Risk/Item';
 import Preview from 'components/Request/Preview';
 import Context from 'components/Risk/Context';
@@ -49,7 +49,7 @@ function Requests() {
               <RiskItem
                 key={e.id}
                 previewProps={{ request: e }}
-                detailsProps={{ risk: e.risk, showTableActions: false }}
+                detailsProps={{ risk: e.risk, readOnly: true }}
                 previewRenderer={Preview}
                 className="riskList_risk_content_item"
               />

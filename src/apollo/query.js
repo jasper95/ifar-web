@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useApolloClient, useQuery, useSubscription } from 'react-apollo-hooks';
+import { useApolloClient, useQuery, useSubscription } from '@apollo/react-hooks';
 import { useDispatch } from 'react-redux';
 import gql from 'graphql-tag';
 

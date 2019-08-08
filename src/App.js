@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StaticRouter } from 'react-router-dom';
 import { Router } from 'react-router';
-import { ApolloProvider } from 'react-apollo-hooks';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { hot } from 'react-hot-loader/root';
 import ApolloAuth from 'apollo/auth';
 import history from 'lib/history';

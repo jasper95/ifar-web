@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
-import { getImpactDriver } from 'lib/tools';
+import { getImpactDriver, getVulnerabilityLevel } from 'lib/tools';
 import { useDispatch } from 'react-redux';
 import { useUpdateNode } from 'apollo/mutation';
 import QueryContext from './Context';
@@ -14,7 +14,7 @@ function RiskDetails(props) {
   const context = useContext(QueryContext);
   const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
   const {
-    risk, className, showTableActions, readOnly,
+    risk, className, readOnly,
   } = props;
   return (
     <Grid className={`RiskDetails ${className}`}>
@@ -76,11 +76,13 @@ function RiskDetails(props) {
           title: dialogTitle,
           onValid: (data) => {
             const impactDriver = getImpactDriver(data.impact_details[key]);
+            const rating = data.impact_details[key][impactDriver];
             onUpdateRisk({
               data: {
                 ...data,
+                [`${key}_vulnerability`]: getVulnerabilityLevel(data[`${key}_likelihood`] * rating),
                 [`${key}_impact_driver`]: impactDriver,
-                [`${key}_rating`]: data.impact_details[key][impactDriver],
+                [`${key}_rating`]: rating,
               },
             });
           },
@@ -119,7 +121,7 @@ function RiskDetails(props) {
           accessor: 'team',
           title: 'Team',
         },
-        showTableActions
+        !readOnly
         && {
           type: 'actions',
           actions: [
@@ -158,7 +160,7 @@ function RiskDetails(props) {
           fn: formatDate('end_date', 'MMMM DD, YYYY'),
           title: 'End',
         },
-        showTableActions
+        !readOnly
         && {
           type: 'actions',
           actions: [
@@ -187,12 +189,10 @@ RiskDetails.propTypes = {
     impacts: PropTypes.array.isRequired,
     causes: PropTypes.array.isRequired,
   }).isRequired,
-  showTableActions: PropTypes.bool,
   readOnly: PropTypes.bool,
 };
 
 RiskDetails.defaultProps = {
-  showTableActions: true,
   readOnly: false,
 };
 

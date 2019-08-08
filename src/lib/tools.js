@@ -153,3 +153,18 @@ export function getImpactDriver(stage) {
 
   return ['financial', 'reputation', 'operational', 'legal_compliance', 'health_safety_security', 'management_action'].find(e => keys.includes(e));
 }
+
+export function getVulnerabilityLevel(vulnerability) {
+  let level = 'low';
+  const isModerate = vulnerability > 3 && vulnerability < 9;
+  const isHigh = vulnerability > 8 && vulnerability < 15;
+  const isCritical = vulnerability > 14;
+  if (isModerate) {
+    level = 'moderate';
+  } else if (isHigh) {
+    level = 'high';
+  } else if (isCritical) {
+    level = 'critical';
+  }
+  return level;
+}

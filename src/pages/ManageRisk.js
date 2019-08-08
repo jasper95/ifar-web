@@ -15,49 +15,28 @@ import useQuery from 'apollo/query';
 import 'rc-pagination/assets/index.css';
 import 'sass/pages/manage-risk.scss';
 
-export const riskDetailsFragment = gql`
-  fragment RiskDetails on risk {
-    causes
-    classification {
-      name
-    }
-    impact_details
-    previous_details
-    classification_id
-    current_treatments
-    definition
-    future_treatments
-    id
-    impacts
-    name
-    stakeholders
-    basis
-    target_rating
-    residual_rating
-    inherent_rating
-    target_likelihood
-    residual_likelihood
-    inherent_likelihood
-    residual_impact_driver
-  }
-`;
-export const riskListQuery = gql`
+const riskListQuery = gql`
   subscription getList($id: uuid!, $offset:Int , $limit: Int =10){
-    risk(where: {business_unit: {id: {_eq: $id }}}, order_by: {created_date: desc}, offset: $offset, limit: $limit) @connection(key: "risk", filter: ["type"]) {
-      ...RiskDetails
+    risk(where: {business_unit: {id: {_eq: $id }}}){
+      classification_id
+      residual_impact_driver
+      residual_rating
+      residual_likelihood
       business_unit {
         name
         id
       }
     }
   }
-  ${riskDetailsFragment}
 `;
 
 function ManageRisk() {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
+  const [currentClassification, setCurrentClassification] = useState(null);
+  const [currentImpactDriver, setCurrentImpactDriver] = useState(null);
+  const [currentVulnerability, setCurrentVulnerability] = useState();
   const riskListResponse = useQuery(riskListQuery,
     { ws: true, variables: { id: currentBusinessUnit, offset: currentPage - 1 } });
   const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
@@ -111,6 +90,9 @@ function ManageRisk() {
               data={dashboardData}
               title="Classification"
               colorMapper={e => colorMapping.classification[e.classification]}
+              selected={currentClassification}
+              onChangeSelected={newVal => setCurrentClassification(prev => (prev !== newVal ? newVal : null))}
+              filterKey="classification"
             />
           )}
         </Cell>
@@ -124,6 +106,9 @@ function ManageRisk() {
               data={dashboardData}
               title="Impact Drivers"
               colorMapper={e => colorMapping.impact[e.impact]}
+              selected={currentImpactDriver}
+              onChangeSelected={newVal => setCurrentImpactDriver(prev => (prev !== newVal ? newVal : null))}
+              filterKey="impact"
             />
           )}
         </Cell>
@@ -136,7 +121,10 @@ function ManageRisk() {
               legend={vulnerabilityLegend}
               data={dashboardData}
               title="Residual Vulnerability"
-              colorMapper={e => colorMapping.vulnerability[e.label.toLowerCase()]}
+              colorMapper={e => colorMapping.vulnerability[e.level]}
+              selected={currentVulnerability}
+              onChangeSelected={newVal => setCurrentVulnerability(prev => (prev !== newVal ? newVal : null))}
+              filterKey="level"
             />
           )}
         </Cell>
@@ -147,6 +135,9 @@ function ManageRisk() {
         businessUnit={currentBusinessUnit}
         onChangePage={setCurrentPage}
         onChangeBusinessUnit={setBusinessUnit}
+        classification={currentClassification}
+        impactDriver={currentImpactDriver}
+        residualVulnerability={currentVulnerability}
       />
     </div>
   );

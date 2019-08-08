@@ -19,7 +19,6 @@ function RiskMapItemDetails(props) {
           />
           <RiskDetails
             className={`${className}_details`}
-            showTableActions={false}
             risk={risk}
             readOnly
           />

@@ -3,8 +3,6 @@ import Link from 'react-router-dom/Link';
 import ImageLoader from 'react-image';
 import MenuButton from 'react-md/lib/Menus/MenuButton';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
-import gql from 'graphql-tag';
-import { useManualQuery } from 'apollo/query';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 import AuthContext from 'apollo/AuthContext';

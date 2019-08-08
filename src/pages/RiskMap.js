@@ -8,8 +8,9 @@ import IconSeparator from 'react-md/lib/Helpers/IconSeparator';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import RiskMapComponent from 'components/RiskMap';
 import { useDispatch } from 'react-redux';
-import { riskDetailsFragment } from 'pages/ManageRisk';
+import { riskDetailsFragment } from 'components/Risk/List';
 import gql from 'graphql-tag';
+import { getVulnerabilityLevel } from 'lib/tools';
 import useQuery from 'apollo/query';
 import orderBy from 'lodash/orderBy';
 
@@ -57,6 +58,7 @@ export default function RiskMap() {
     riskItems
       .map(e => ({
         ...e,
+        prevDetails: e.previous_details ? e.previous_details[currentStage] : null,
         impact_driver: e[`${currentStage}_impact_driver`],
         likelihood: e[`${currentStage}_likelihood`],
         rating: e[`${currentStage}_rating`],
@@ -101,40 +103,40 @@ export default function RiskMap() {
           </MenuButton>
           <DataTable
             rows={riskItems}
-            className='tableRiskMap'
+            className="tableRiskMap"
             columns={[
               {
                 title: '',
                 type: 'component',
                 component: RowIndex,
                 bodyProps: {
-                  className: 'tableRiskMap_risk-index'
-                }
+                  className: 'tableRiskMap_risk-index',
+                },
               },
               {
                 title: 'Level',
                 type: 'component',
                 component: RiskLevel,
                 bodyProps: {
-                  className: 'tableRiskMap_risk-level'
-                }
+                  className: 'tableRiskMap_risk-level',
+                },
               },
               {
                 title: 'Risk Name',
                 type: 'component',
                 component: RiskName,
                 bodyProps: {
-                  className: 'tableRiskMap_risk-name'
-                }
+                  className: 'tableRiskMap_risk-name',
+                },
               },
               {
                 title: 'VC',
                 type: 'component',
                 component: VC,
                 bodyProps: {
-                  className: 'tableRiskMap_risk-vc'
-                }
-              }
+                  className: 'tableRiskMap_risk-vc',
+                },
+              },
             ]}
           />
         </Cell>
@@ -150,7 +152,6 @@ function RowIndex({ row }) {
 }
 
 function RiskName({ row }) {
-  console.log('row: ', row);
   const dispatch = useDispatch();
   return (
     <span onClick={onClick}>{row.name}</span>
@@ -163,7 +164,7 @@ function RiskName({ row }) {
         path: 'RiskMapItemDetails',
         props: {
           risk: row,
-          dialogClassName: `i_dialog_container--lg`
+          dialogClassName: 'i_dialog_container--lg',
         },
       },
     });
@@ -171,58 +172,60 @@ function RiskName({ row }) {
 }
 
 
-function RiskLevel({ row: { vulnerability } }) {
-  let riskColor = 'low';
-
-  const isModerate = vulnerability > 3 && vulnerability < 9;
-  const isHigh = vulnerability > 8 && vulnerability < 15;
-  const isCritical = vulnerability > 14;
-
-  if (isModerate) {
-    riskColor = 'moderate';
-  } else if (isHigh) {
-    riskColor = 'high';
-  } else if (isCritical) {
-    riskColor = 'critical';
-  }
-
+function RiskLevel({ row }) {
+  const { vulnerability } = row;
   return (
     <span
-      className={`level level-${riskColor}`}
+      className={`level level-${getVulnerabilityLevel(vulnerability)}`}
     >
       {vulnerability}
     </span>
-  )
+  );
 }
 
 function VC({ row }) {
+  const { prevDetails, vulnerability } = row;
+  // const statuses = ['up', 'stagnant', 'new'];
+  // const status = statuses[Math.floor(Math.random() * statuses.length)];
 
-  const statuses = ['up', 'stagnant', 'new']
-  const status = statuses[Math.floor(Math.random() * statuses.length)]
+  let status = 'new';
 
-  // ilisdi lang ni hehe
-
+  if (prevDetails && prevDetails.rating && prevDetails.likelihood) {
+    const oldVulnerability = (prevDetails.rating * prevDetails.likelihood);
+    if (oldVulnerability === vulnerability) {
+      status = 'stagnant';
+    } else if (oldVulnerability > vulnerability) {
+      status = 'up';
+    } else {
+      status = 'down';
+    }
+  }
   if (status === 'up') {
     return (
       <div className="vcStatus-up">
-        <span className="rafi-icon-arrow-up"/>
+        <span className="rafi-icon-arrow-up" />
       </div>
-    )
-  } else if (status === 'stagnant') {
+    );
+  }
+  if (status === 'stagnant') {
     return (
       <div className="vcStatus-stagnant">
-        <span className="rafi-icon-arrow-sides"/>
+        <span className="rafi-icon-arrow-sides" />
       </div>
-    )
-  } else if (status === 'new') {
+    );
+  }
+  if (status === 'new') {
     return (
       <div className="vcStatus-new">
         <span className="text">
           new
         </span>
       </div>
-    )
+    );
   }
-
-  return
+  return (
+    <div className="vcStatus-down">
+      <span className="rafi-icon-arrow-down" />
+    </div>
+  );
 }

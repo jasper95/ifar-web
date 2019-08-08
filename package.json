@@ -16,6 +16,7 @@
     "deploy": "yarn build && yarn deploy:assets && yarn deploy:server"
   },
   "dependencies": {
+    "@apollo/react-hooks": "^3.0.0",
     "@babel/runtime": "^7.3.1",
     "@hot-loader/react-dom": "^16.8.6",
     "@loadable/component": "^5.6.0",
@@ -55,7 +56,6 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-transition-group": "^15.6.2",
     "react-apollo": "^2.5.8",
-    "react-apollo-hooks": "^0.5.0-alpha.0",
     "react-datepicker": "^2.7.0",
     "react-dom": "^16.8.6",
     "react-draft-wysiwyg": "^1.13.2",

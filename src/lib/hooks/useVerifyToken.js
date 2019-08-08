@@ -34,7 +34,7 @@ function getTokenData() {
 
 export default function verifyToken({ name, type, onSuccess = () => {} }) {
   console.log('type: ', type);
-  const [, { onQuery }] = useManualQuery(query);
+  const [, onQuery] = useManualQuery(query);
   const dispatch = useDispatch();
   const [tokenState, setTokenState] = useState('pending');
   useEffect(() => {

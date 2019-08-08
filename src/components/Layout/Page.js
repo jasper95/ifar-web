@@ -8,7 +8,7 @@ import Snackbar from 'components/Snackbar';
 import { withAuth } from 'apollo/auth';
 import { createSelector } from 'reselect';
 import { useSelector, useDispatch } from 'react-redux';
-import DialogTitleWithBack from './DialogTitleWithBack'
+import DialogTitleWithBack from './DialogTitleWithBack';
 import Footer from './Footer';
 import Header from './Header';
 

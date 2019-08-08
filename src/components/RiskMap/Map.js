@@ -1,5 +1,6 @@
 import React from 'react';
 import range from 'lodash/range';
+import { getVulnerabilityLevel } from 'lib/tools';
 import MapItem from './MapItem';
 import Column from './Column';
 
@@ -102,26 +103,12 @@ function Map(props) {
 
     // if not a label
     if (!isLeftLabel && !isBottomLabel) {
-      let riskColColor = 'low';
       const riskColValue = rowIndex * column;
-
-      const isModerate = riskColValue > 3 && riskColValue < 9;
-      const isHigh = riskColValue > 8 && riskColValue < 15;
-      const isCritical = riskColValue > 14;
-
-      if (isModerate) {
-        riskColColor = 'moderate';
-      } else if (isHigh) {
-        riskColColor = 'high';
-      } else if (isCritical) {
-        riskColColor = 'critical';
-      }
-
       return (
         <Column
           key={key}
-          columnNumber={column}
-          className={`mapTable_col-${riskColColor}`}
+          columnNumber={riskColValue}
+          className={`mapTable_col-${getVulnerabilityLevel(riskColValue)}`}
         >
           {risks.filter(e => e.likelihood === rowIndex && e.rating === column).map(risk => (
             <MapItem

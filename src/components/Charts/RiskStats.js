@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
 import {
   Label, PieChart, Pie, Cell,
 } from 'recharts';
@@ -9,7 +10,7 @@ import 'sass/components/chartCard/index.scss';
 
 function RiskStats(props) {
   const {
-    legend, data, title, filterFunc, colorMapper,
+    legend, data, title, filterFunc, colorMapper, filterKey,
   } = props;
   const chartData = legend.map((e, idx) => ({
     ...e,
@@ -55,6 +56,8 @@ function RiskStats(props) {
               parentKey={title.toLowerCase().replace(/ /g, '-')}
               itemClassName="chartCard_content_stats_item"
               {...e}
+              {...pick(props, 'selected', 'onChangeSelected')}
+              filterValue={e[filterKey]}
             />
           ))}
         </div>

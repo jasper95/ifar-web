@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
@@ -25,10 +25,61 @@ export const businessUnitQuery = gql`
   }
 `;
 
+export const riskDetailsFragment = gql`
+  fragment RiskDetails on risk {
+    causes
+    classification {
+      name
+    }
+    impact_details
+    previous_details
+    classification_id
+    current_treatments
+    definition
+    future_treatments
+    id
+    impacts
+    name
+    stakeholders
+    basis
+    target_rating
+    residual_rating
+    inherent_rating
+    target_likelihood
+    residual_likelihood
+    inherent_likelihood
+    residual_impact_driver
+  }
+`;
+
+export const riskListQuery = gql`
+  subscription getList($business_unit_id: uuid!, $classification_id: uuid, $residual_impact_driver: String, $residual_vulnerability: String, $offset:Int , $limit: Int =10){
+    risk(where: {business_unit_id: {_eq: $business_unit_id }, classification_id: { _eq: $classification_id }, residual_impact_driver: { _eq: $residual_impact_driver }, residual_vulnerability: { _eq: $residual_vulnerability } }, order_by: {created_date: desc}, offset: $offset, limit: $limit) @connection(key: "risk", filter: ["type"]) {
+      ...RiskDetails
+      business_unit {
+        name
+        id
+      }
+    }
+  }
+  ${riskDetailsFragment}
+`;
+
 function RiskList(props) {
   const {
-    riskListResponse, onChangePage, onChangeBusinessUnit, businessUnit, page,
+    onChangeBusinessUnit, businessUnit, classification, impactDriver, residualVulnerability,
   } = props;
+  console.log('residualVulnerability: ', residualVulnerability);
+  const [currentPage, setCurrentPage] = useState(1);
+  const variables = {
+    business_unit_id: businessUnit,
+    classification_id: classification,
+    residual_impact_driver: impactDriver,
+    residual_vulnerability: residualVulnerability,
+    offset: currentPage - 1,
+  };
+  const riskListResponse = useQuery(riskListQuery,
+    { ws: true, variables });
   const { data: { risk: list = [] }, loading: listIsLoading } = riskListResponse;
   const dispatch = useDispatch();
   const businessUnitResponse = useQuery(businessUnitQuery, { ws: true });
@@ -84,8 +135,8 @@ function RiskList(props) {
           </div>
           <div className="riskList_risk_content">
             <Pagination
-              onChange={(_, newPage) => onChangePage(newPage)}
-              current={page}
+              onChange={(_, newPage) => setCurrentPage(newPage)}
+              current={currentPage}
               pageSize={10}
               total={selected ? selected.risks_aggregate.aggregate.count : 0}
               hideOnSinglePage
