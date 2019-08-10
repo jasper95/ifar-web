@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import RiskStats from 'components/Charts/RiskStats';
 import RiskList from 'components/Risk/List';
+import AuthContext from 'apollo/AuthContext';
 import classificationLegend from 'lib/constants/riskManagement/classificationLegend';
 import impactDriverLegend from 'lib/constants/riskManagement/impactDriverLegend';
 import vulnerabilityLegend from 'lib/constants/riskManagement/vulnerabilityLegend';
@@ -30,8 +31,28 @@ const riskListQuery = gql`
   }
 `;
 
+const notifCountQuery = gql`
+  subscription getRequestNotifCount($user_id: jsonb, $business_unit_id: uuid) {
+    notification_aggregate(where: {receivers: {_contains: $user_id }, business_unit_id: { _eq: $business_unit_id }}) {
+      aggregate {
+        count
+      }
+    }
+  }
+`;
+
+const requestCountQuery = gql`
+  subscription getRequestNotifCount($user_id: jsonb, $business_unit_id: uuid) {
+    request_aggregate(where: {business_unit_id: { _eq: $business_unit_id }}) {
+      aggregate {
+        count
+      }
+    }
+  }
+`;
 function ManageRisk() {
   const dispatch = useDispatch();
+  const { data: user } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const [currentClassification, setCurrentClassification] = useState(null);
@@ -39,6 +60,24 @@ function ManageRisk() {
   const [currentVulnerability, setCurrentVulnerability] = useState();
   const riskListResponse = useQuery(riskListQuery,
     { ws: true, variables: { id: currentBusinessUnit, offset: currentPage - 1 } });
+  const requestNotifCountVars = {
+    ...user && !['ADMIN'].includes(user.role) && { business_unit_id: currentBusinessUnit, user_id: user.id },
+  };
+  const notifCount = useQuery(
+    notifCountQuery,
+    {
+      ws: true,
+      variables: requestNotifCountVars,
+    },
+  );
+  const requestCount = useQuery(
+    requestCountQuery,
+    {
+      ws: true,
+      variables: requestNotifCountVars,
+    },
+  );
+  console.log('requestCount: ', requestCount);
   const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
   return (
     <div className="dbContainer">
@@ -51,9 +90,14 @@ function ManageRisk() {
             children="Notifications"
             iconEl={(
               <span className="iBttn_badge">
-                0
+                {!notifCount.loading && notifCount.data.notification_aggregate.aggregate.count}
               </span>
             )}
+            onClick={() => showDialog({
+              type: 'Notifications',
+              dialogTitle: 'Notifications',
+              dialogSize: 'lg',
+            })}
           />
           <Button
             flat
@@ -67,7 +111,7 @@ function ManageRisk() {
             })}
             iconEl={(
               <span className="iBttn_badge">
-                0
+                {!requestCount.loading && requestCount.data.request_aggregate.aggregate.count}
               </span>
             )}
           />
@@ -156,19 +200,18 @@ function ManageRisk() {
   }
 
   function showDialog({ type, dialogTitle, dialogSize = 'md' }) {
-    if (type === 'Requests') {
-      dispatch({
-        type: 'SHOW_DIALOG',
-        payload: {
-          path: type,
-          props: {
-            title: dialogTitle,
-            onValid: () => {},
-            dialogClassName: `i_dialog_container--${dialogSize}`,
-          },
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: type,
+        props: {
+          title: dialogTitle,
+          onValid: () => {},
+          dialogClassName: `i_dialog_container--${dialogSize}`,
+          requestNotifCountVars,
         },
-      });
-    }
+      },
+    });
   }
 }
 

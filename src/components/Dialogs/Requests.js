@@ -8,8 +8,8 @@ import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 
 const requestQuery = gql`
-  subscription {
-    request {
+  subscription getRequests($user_id: jsonb, $business_unit_id: uuid) {
+    request(where: {business_unit_id: { _eq: $business_unit_id }}){
       id
       user {
         first_name
@@ -18,7 +18,13 @@ const requestQuery = gql`
       type
       risk {
         ...RiskDetails
-      }
+        business_unit {
+          id
+          name
+        }
+      },
+      risk_details
+      treatment_details
     }
   }
   ${riskDetailsFragment}
@@ -27,14 +33,15 @@ const requestQuery = gql`
 const titleMapping = {
   EDIT_RISK: 'Edit Request',
   DELETE_RISK: 'Delete Request',
-  DONE_TREATMENT: 'Treatment Request',
+  DONE_TREATMENT_RISK: 'Treatment Request',
 };
 
-function Requests() {
-  const requestResponse = useQuery(requestQuery, { ws: true });
+function Requests(props) {
+  const { requestNotifCountVars } = props;
+  const requestResponse = useQuery(requestQuery, { ws: true, variables: requestNotifCountVars });
   const { data: { request: requests = [] }, loading: listIsLoading } = requestResponse;
   return (
-    <>
+    <div>
       {listIsLoading ? (
         <span>Loading...</span>
       ) : (
@@ -47,16 +54,17 @@ function Requests() {
               <h2>{titleMapping[e.type]}</h2>
               <RiskItem
                 key={e.id}
-                previewProps={{ request: e }}
-                detailsProps={{ risk: e.risk, readOnly: true }}
+                previewProps={{ request: e, risk: e.type === 'EDIT_RISK' ? e.risk_details : e.risk }}
+                detailsProps={{ risk: e.type === 'EDIT_RISK' ? e.risk_details : e.risk, readOnly: true }}
                 previewRenderer={Preview}
+                detailsRenderer={e.type === 'DONE_TREATMENT_RISK' ? () => null : undefined}
                 className="riskList_risk_content_item"
               />
             </div>
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }
 

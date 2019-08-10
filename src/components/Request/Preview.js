@@ -5,25 +5,28 @@ import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import RiskPreviewInfo from 'components/Risk/PreviewInfo';
 import useMutation from 'apollo/mutation';
+import RiskTable from 'components/Risk/Table';
 import { useDispatch } from 'react-redux';
 
 function RequestPreview(props) {
-  const { request, className } = props;
+  const {
+    request, className, risk,
+  } = props;
   const dispatch = useDispatch();
   const [, onMutateRequest] = useMutation({});
-  const { risk } = request;
+  const { user } = request;
   return (
     <Grid className={`RiskPreview ${className}`}>
       <Grid>
         <RiskPreviewInfo
           colspan={3}
           title="Author"
-          info="Ian Earl Bantillan"
+          info={`${user.first_name} ${user.last_name}`}
         />
         <RiskPreviewInfo
           colspan={3}
           title="Unit"
-          info="RMF"
+          info={risk.business_unit.name}
         />
         <Cell
           size={1}
@@ -57,21 +60,50 @@ function RequestPreview(props) {
         </Cell>
       </Grid>
       <Grid>
-        <RiskPreviewInfo
-          colspan={3}
-          title="Classification"
-          info={risk.classification.name}
-        />
-        <RiskPreviewInfo
-          colspan={3}
-          title="Risk name"
-          info={risk.name}
-        />
-        <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
-          <RiskPreviewInfo colspan={4} title="Inherent" info={risk.inherent_rating} />
-          <RiskPreviewInfo colspan={4} title="Residual" info={risk.residual_rating} />
-          <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
-        </Cell>
+        {request.type === 'DONE_TREATMENT_RISK' ? (
+          <RiskTable
+            title="Risk Treatment"
+            rows={[request.treatment_details]}
+            readOnly
+            columns={[
+              {
+                accessor: 'strategy',
+                title: 'Strategy',
+              },
+              {
+                accessor: 'treatment',
+                title: 'Existing action',
+              },
+              {
+                accessor: 'kpi',
+                title: 'KPI',
+              },
+              {
+                accessor: 'team',
+                title: 'Team',
+              },
+            ]}
+          />
+        ) : (
+          <>
+
+            <RiskPreviewInfo
+              colspan={3}
+              title="Classification"
+              info={risk.classification.name}
+            />
+            <RiskPreviewInfo
+              colspan={3}
+              title="Risk name"
+              info={risk.name}
+            />
+            <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
+              <RiskPreviewInfo colspan={4} title="Inherent" info={risk.inherent_rating} />
+              <RiskPreviewInfo colspan={4} title="Residual" info={risk.residual_rating} />
+              <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
+            </Cell>
+          </>
+        )}
       </Grid>
     </Grid>
   );

@@ -9,7 +9,6 @@ function Legend(props) {
     parentKey, selected, onChangeSelected,
     filterValue,
   } = props;
-  console.log('filterValue: ', filterValue);
   // make label as key
   const labelKey = label.toLowerCase().replace(/,/g, '').replace(/ /g, '-');
   const uniqueItemClassName = `${itemClassName}_${parentKey}-${labelKey}`;

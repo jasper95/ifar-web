@@ -9,7 +9,7 @@ import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
   const {
-    risk, className, readOnly, onCreateRequest, onUpdateRisk,
+    risk, className, readOnly, onMutateRisk,
   } = props;
   const dispatch = useDispatch();
   return (
@@ -59,19 +59,21 @@ function RiskPreview(props) {
             title: 'Inherent Risk',
             onValid: (data) => {
               const impactDriver = getImpactDriver(data.impact_details.inherent);
-              onUpdateRisk({
-                data: {
-                  ...data,
-                  inherent_impact_driver: impactDriver,
-                  inherent_rating: data.impact_details.inherent[impactDriver],
-                  previous_details: {
-                    ...data.previous_details,
-                    inherent: {
-                      likelihood: risk.inherent_likelihood,
-                      rating: risk.inherent_rating,
-                    },
+              const newData = {
+                ...data,
+                inherent_impact_driver: impactDriver,
+                inherent_rating: data.impact_details.inherent[impactDriver],
+                previous_details: {
+                  ...data.previous_details,
+                  inherent: {
+                    likelihood: risk.inherent_likelihood,
+                    rating: risk.inherent_rating,
                   },
                 },
+              };
+              onMutateRisk({
+                data: newData,
+                action: 'EDIT',
               });
             },
             initialFields: {
@@ -94,11 +96,9 @@ function RiskPreview(props) {
           props: {
             title: 'Request Delete Form',
             message: 'Send request to delete this record?',
-            onValid: () => onCreateRequest({
-              data: {
-                risk_id: risk.id,
-                type: 'DELETE_RISK',
-              },
+            onValid: () => onMutateRisk({
+              data: risk,
+              action: 'DELETE',
             }),
           },
         },

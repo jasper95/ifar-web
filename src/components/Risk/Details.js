@@ -3,6 +3,7 @@ import Grid from 'react-md/lib/Grids/Grid';
 import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
 import { getImpactDriver, getVulnerabilityLevel } from 'lib/tools';
+
 import { useDispatch } from 'react-redux';
 import RiskInfo from './Info';
 import RiskTable from './Table';
@@ -10,7 +11,7 @@ import RiskTable from './Table';
 function RiskDetails(props) {
   const dispatch = useDispatch();
   const {
-    risk, className, readOnly, onCreateRequest, onUpdateRisk,
+    risk, className, readOnly, onMutateRisk,
   } = props;
   return (
     <Grid className={`RiskDetails ${className}`}>
@@ -48,12 +49,10 @@ function RiskDetails(props) {
         props: {
           title: 'Request Done Treatment',
           message: 'Send request to done this treatment?',
-          onValid: data => onCreateRequest({
-            data: {
-              risk_id: risk.id,
-              treatment_details: data,
-              type: 'DONE_TREATMENT',
-            },
+          onValid: data => onMutateRisk({
+            data: risk,
+            treatment_details: data,
+            action: 'DONE_TREATMENT',
           }),
           initialFields: row,
         },
@@ -73,13 +72,15 @@ function RiskDetails(props) {
           onValid: (data) => {
             const impactDriver = getImpactDriver(data.impact_details[key]);
             const rating = data.impact_details[key][impactDriver];
-            onUpdateRisk({
-              data: {
-                ...data,
-                [`${key}_vulnerability`]: getVulnerabilityLevel(data[`${key}_likelihood`] * rating),
-                [`${key}_impact_driver`]: impactDriver,
-                [`${key}_rating`]: rating,
-              },
+            const newData = {
+              ...data,
+              [`${key}_vulnerability`]: getVulnerabilityLevel(data[`${key}_likelihood`] * rating),
+              [`${key}_impact_driver`]: impactDriver,
+              [`${key}_rating`]: rating,
+            };
+            onMutateRisk({
+              data: newData,
+              action: 'EDIT',
             });
           },
           initialFields: {

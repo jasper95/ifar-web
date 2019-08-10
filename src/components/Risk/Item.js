@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-md/lib/Buttons/Button';
 import { ExpansionPanel } from 'react-md';
-import { useCreateNode, useUpdateNode } from 'apollo/mutation';
+import useRiskMutation from './useRiskMutation';
 import RiskPreview from './Preview';
 import RiskDetails from './Details';
 
 function RiskItem(props) {
   const {
-    className, previewRenderer: Preview,
+    className, previewRenderer: Preview, detailsRenderer: Details,
     previewProps, detailsProps, style,
   } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [, onUpdateRisk] = useUpdateNode({ node: 'risk' });
-  const [, onCreateRequest] = useCreateNode({ node: 'request', message: 'Request successfully sent' });
+  const [, onMutateRisk] = useRiskMutation();
   return (
     <div className={className} style={style}>
       <Button
@@ -30,8 +29,7 @@ function RiskItem(props) {
       </Button>
       <Preview
         className={`${className}_preview`}
-        onCreateRequest={onCreateRequest}
-        onUpdateRisk={onUpdateRisk}
+        onMutateRisk={onMutateRisk}
         {...previewProps}
       />
       <ExpansionPanel
@@ -39,10 +37,9 @@ function RiskItem(props) {
         expanded={isCollapsed}
         footer={null}
       >
-        <RiskDetails
+        <Details
           className={`${className}_details`}
-          onCreateRequest={onCreateRequest}
-          onUpdateRisk={onUpdateRisk}
+          onMutateRisk={onMutateRisk}
           {...detailsProps}
         />
       </ExpansionPanel>
@@ -53,6 +50,7 @@ function RiskItem(props) {
 RiskItem.propTypes = {
   risk: PropTypes.object.isRequired,
   previewRenderer: PropTypes.func,
+  detailsRenderer: PropTypes.func,
   onCollapse: PropTypes.func,
 };
 
@@ -60,6 +58,7 @@ RiskItem.propTypes = {
 RiskItem.defaultProps = {
   previewRenderer: RiskPreview,
   onCollapse: () => {},
+  detailsRenderer: RiskDetails,
 };
 
 export default RiskItem;

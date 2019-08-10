@@ -31,6 +31,7 @@ export const riskDetailsFragment = gql`
     classification {
       name
     }
+    business_unit_id
     impact_details
     previous_details
     classification_id
@@ -69,7 +70,6 @@ function RiskList(props) {
   const {
     onChangeBusinessUnit, businessUnit, classification, impactDriver, residualVulnerability,
   } = props;
-  console.log('residualVulnerability: ', residualVulnerability);
   const [currentPage, setCurrentPage] = useState(1);
   const variables = {
     business_unit_id: businessUnit,
