@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import day from 'dayjs';
 
 function DateCell({ row }) {
-  const { start_date, end_date } = row;
+  const { start_date: startDate, end_date: endDate } = row;
   const format = 'MMM YYYY';
   return (
     <>
-      {day(start_date).format(format)}
+      {day(startDate).format(format)}
       {' '}
       -
-      {end_date ? day(end_date).format(format) : 'Present' }
+      {endDate ? day(endDate).format(format) : 'Present' }
     </>
   );
 }

@@ -9,12 +9,12 @@ import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Map from 'components/RiskMap';
 import { useDispatch } from 'react-redux';
 import { riskDetailsFragment } from 'components/Risk/List';
-import Button from 'react-md/lib/Buttons/Button'
+import Button from 'react-md/lib/Buttons/Button';
 import gql from 'graphql-tag';
 import { getVulnerabilityLevel } from 'lib/tools';
 import useQuery from 'apollo/query';
 import orderBy from 'lodash/orderBy';
-import generateRiskMapExcel from 'lib/generateRiskMapExcel'
+import generateRiskMapExcel from 'lib/generateRiskMapExcel';
 
 const businessUnitsQuery = gql`
   query {
@@ -106,52 +106,57 @@ export default function RiskMap() {
           <Button
             flat
             onClick={() => {
-              generateRiskMapExcel(riskItems)
+              generateRiskMapExcel(riskItems);
             }}
-          >Export as Excel
+          >
+            Export as Excel
           </Button>
           <DataTable
             rows={riskItems}
             className="tableRiskMap"
-            columns={[
-              {
-                title: '',
-                type: 'component',
-                component: RowIndex,
-                bodyProps: {
-                  className: 'tableRiskMap_risk-index',
-                },
-              },
-              {
-                title: 'Level',
-                type: 'component',
-                component: RiskLevel,
-                bodyProps: {
-                  className: 'tableRiskMap_risk-level',
-                },
-              },
-              {
-                title: 'Risk Name',
-                type: 'component',
-                component: RiskName,
-                bodyProps: {
-                  className: 'tableRiskMap_risk-name',
-                },
-              },
-              {
-                title: 'VC',
-                type: 'component',
-                component: VC,
-                bodyProps: {
-                  className: 'tableRiskMap_risk-vc',
-                },
-              },
-            ]}
+            columns={getTableColumns()}
           />
         </Cell>
       </Grid>
     </div>
   );
+
+  function getTableColumns() {
+    return [
+      {
+        title: '',
+        type: 'component',
+        component: RowIndex,
+        bodyProps: {
+          className: 'tableRiskMap_risk-index',
+        },
+      },
+      {
+        title: 'Level',
+        type: 'component',
+        component: RiskLevel,
+        bodyProps: {
+          className: 'tableRiskMap_risk-level',
+        },
+      },
+      {
+        title: 'Risk Name',
+        type: 'component',
+        component: RiskName,
+        bodyProps: {
+          className: 'tableRiskMap_risk-name',
+        },
+      },
+      {
+        title: 'VC',
+        type: 'component',
+        component: VulnerabilityChange,
+        bodyProps: {
+          className: 'tableRiskMap_risk-vc',
+        },
+      },
+    ];
+  }
 }
 
 function RowIndex({ row }) {
@@ -192,8 +197,9 @@ function RiskLevel({ row }) {
   );
 }
 
-function VC({ row }) {
+export function VulnerabilityChange({ row }) {
   const { prevDetails, vulnerability } = row;
+  const dispatch = useDispatch();
 
   let status = 'new';
 
@@ -201,7 +207,7 @@ function VC({ row }) {
     const oldVulnerability = (prevDetails.rating * prevDetails.likelihood);
     if (oldVulnerability === vulnerability) {
       status = 'stagnant';
-    } else if (oldVulnerability > vulnerability) {
+    } else if (vulnerability > oldVulnerability) {
       status = 'up';
     } else {
       status = 'down';
@@ -209,21 +215,21 @@ function VC({ row }) {
   }
   if (status === 'up') {
     return (
-      <div className="vcStatus-up">
+      <div className="vcStatus-up" onClick={handleClick} role="presentation">
         <span className="rafi-icon-arrow-up" />
       </div>
     );
   }
   if (status === 'stagnant') {
     return (
-      <div className="vcStatus-stagnant">
+      <div className="vcStatus-stagnant" onClick={handleClick} role="presentation">
         <span className="rafi-icon-arrow-sides" />
       </div>
     );
   }
   if (status === 'new') {
     return (
-      <div className="vcStatus-new">
+      <div className="vcStatus-new" onClick={handleClick} role="presentation">
         <span className="text">
           new
         </span>
@@ -231,8 +237,25 @@ function VC({ row }) {
     );
   }
   return (
-    <div className="vcStatus-down">
+    <div
+      className="vcStatus-down"
+      onClick={handleClick}
+      role="presentation"
+    >
       <span className="rafi-icon-arrow-down" />
     </div>
   );
+
+  function handleClick() {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'RiskChanges',
+        props: {
+          risk: row,
+          dialogClassName: 'i_dialog_container--lg',
+        },
+      },
+    });
+  }
 }
