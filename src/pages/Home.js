@@ -10,7 +10,7 @@ function Index(props) {
         <title>Job Search</title>
         <meta name="description" content="description for indexing bots" />
       </Head>
-      <JobPosts posts={[]} isAdmin={user && user.role === 'ADMIN'} />
+      <div>Welcome</div>
     </>
   );
 }

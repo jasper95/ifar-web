@@ -86,7 +86,7 @@ export default function Footer() {
             className="footer_colItem footer_colItem-other"
             size={3}
           >
-            <h1 className="footer_colItem_header">Interns</h1>
+            <h1 className="footer_colItem_header">Risk Management</h1>
             <ul className="footer_colItem_menu">
               { renderInterns() }
             </ul>
@@ -113,7 +113,7 @@ export default function Footer() {
             <div>
               <FontIcon>email</FontIcon>
               <div className="value">
-                <p>internlinksupport@gmail.com</p>
+                <p>ramonssupport@gmail.com</p>
               </div>
             </div>
           </Cell>

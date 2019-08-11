@@ -141,7 +141,15 @@ function Comments(props) {
   async function onSearch({ value }) {
     if (value) {
       const result = await onQueryUsers({ variables: { name: `%${value}%` } });
-      setSuggestions(result.user.map(e => ({ ...e, name: `${e.first_name} ${e.last_name}`, link: '#' })));
+      setSuggestions(
+        result.user
+          .map(e => ({
+            ...e,
+            name: `${e.first_name} ${e.last_name}`,
+            link: '#',
+            avatar: '/static/img/default-avatar.png',
+          })),
+      );
       return;
     }
     setSuggestions([]);

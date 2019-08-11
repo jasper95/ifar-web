@@ -102,7 +102,7 @@ function Header(props) {
               {user.first_name}
             </span>
             <div className="avatar">
-              <ImageLoader src="https://images.unsplash.com/photo-1500649297466-74794c70acfc?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=bfc3d05aa60acb5ef0e58c1ac5eb6463" />
+              <ImageLoader src="/static/img/default-avatar.png" />
             </div>
           </>
         </MenuButton>

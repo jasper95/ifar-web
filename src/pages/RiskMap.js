@@ -6,13 +6,15 @@ import MenuButton from 'react-md/lib/Menus/MenuButton';
 import FakeButton from 'react-md/lib/Helpers/AccessibleFakeButton';
 import IconSeparator from 'react-md/lib/Helpers/IconSeparator';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
-import RiskMapComponent from 'components/RiskMap';
+import Map from 'components/RiskMap';
 import { useDispatch } from 'react-redux';
 import { riskDetailsFragment } from 'components/Risk/List';
+import Button from 'react-md/lib/Buttons/Button'
 import gql from 'graphql-tag';
 import { getVulnerabilityLevel } from 'lib/tools';
 import useQuery from 'apollo/query';
 import orderBy from 'lodash/orderBy';
+import generateRiskMapExcel from 'lib/generateRiskMapExcel'
 
 const businessUnitsQuery = gql`
   query {
@@ -72,7 +74,7 @@ export default function RiskMap() {
     <div className="dbContainer">
       <Grid>
         <Cell size={9}>
-          <RiskMapComponent
+          <Map
             risks={riskItems}
             currentStage={currentStage}
             onChangeStage={setStage}
@@ -101,6 +103,13 @@ export default function RiskMap() {
             )}
             />
           </MenuButton>
+          <Button
+            flat
+            onClick={() => {
+              generateRiskMapExcel(riskItems)
+            }}
+          >Export as Excel
+          </Button>
           <DataTable
             rows={riskItems}
             className="tableRiskMap"
@@ -185,8 +194,6 @@ function RiskLevel({ row }) {
 
 function VC({ row }) {
   const { prevDetails, vulnerability } = row;
-  // const statuses = ['up', 'stagnant', 'new'];
-  // const status = statuses[Math.floor(Math.random() * statuses.length)];
 
   let status = 'new';
 

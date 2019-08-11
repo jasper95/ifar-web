@@ -62,6 +62,7 @@ function validator(data) {
       yup.object({
         treatment: yup.string().required(fieldIsRequired),
         strategy: yup.string().required(fieldIsRequired),
+        budget: yup.string().required(fieldIsRequired),
         business_unit: yup.string().required(fieldIsRequired),
         kpi: yup.string().required(fieldIsRequired),
         start_date: yup.date(fieldIsInvalid).required(fieldIsRequired),
