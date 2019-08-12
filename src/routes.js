@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router';
 import loadable from '@loadable/component';
 import PageLayout from 'components/Layout/Page';
+import NotFound from 'pages/NotFound';
 
 const Login = loadable(() => import('pages/Login'));
 const Verify = loadable(() => import('pages/Verify'));
@@ -105,7 +106,7 @@ export default [
   {
     key: 'not-found',
     path: '*',
-    component: () => (<div>Not Found</div>),
+    component: () => (<NotFound/>),
     exact: true,
   },
 ];

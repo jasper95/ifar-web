@@ -37,10 +37,17 @@
 
 		// .footer_colItem-brand
 		&-brand {
-			img {
-				height: 5em;
-				width: auto;
+			// .footer_colItem-brand_logo
+			&_logo {
+				display: flex;
+				width: 100%;
+				max-width: 15em;
+				height: auto;
 				margin-bottom: 1em;
+				img {
+					width: 100%;
+					height: auto;
+				}
 			}
 
 			p {

@@ -43,15 +43,25 @@ $chart-width: 250px;
 
 		// .chartCard_content_chart
 		&_chart {
-			width: $chart-width;
+			width: 100%;
+			max-width: $chart-width;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 
-			> svg {
+			svg {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
 				width: 100%;
 			}
 
+			.recharts-wrapper {
+				width: 100% !important;
+				height: auto !important;
+				padding-top: 100% !important;
+			}
 			.recharts-text {
 				font-family: $font-family;
 				font-weight: 700;
@@ -224,3 +234,34 @@ $chart-width: 250px;
 
 
 
+@media (max-width: 1441px) {
+	.rafi .chartCard_content {
+		// .chartCard_content_chart
+		&_chart {
+			max-width: $chart-width - 50;
+		}
+		// .chartCard_content_stats
+		&_stats {
+			width: calc( 100% - #{$chart-width - 50} );
+		}
+	}
+}
+
+@media (max-width: 1367px) {
+	.rafi .chartCard_content {
+		justify-content: flex-start;
+		flex-direction: column;
+		// .chartCard_content_chart
+		&_chart {
+			max-width: 100%;
+			margin-bottom: 2rem;
+			.recharts-wrapper {
+				padding-top: 50% !important;
+			}
+		}
+		// .chartCard_content_stats
+		&_stats {
+			width: 100%;
+		}
+	}
+}

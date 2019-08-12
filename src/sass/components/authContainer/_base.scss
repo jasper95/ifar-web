@@ -27,15 +27,14 @@
 
 			// .authContainer_contentHeader_logo
 			&_logo {
-				width: auto;
-				height: 6
-				em;
+				width: 8em;
+				height: auto;
 				display: flex;
 				margin-bottom: 5rem;
 				cursor: pointer;
 				img {
-					height: 100%;
-					width: auto;
+					width: 100%;
+					height: auto;
 				}
 			}
 

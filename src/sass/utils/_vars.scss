@@ -50,7 +50,7 @@ $lightblack-backup: #1A1A1A;
 $lightblack: #20262B;
 
 
-$black: #2D2D2D;
+$black: #0c0c0c;
 
 $gray-400: #818181;
 $gray-300: #BFBFBF;
@@ -159,7 +159,7 @@ $box-shadow-lite: 0 0 1em 0 rgba(#000,.05);
 // ========================
 $nav-height: 3.5em;
 $nav-avatar-size: $nav-height - 1em;
-$nav-bg: #232323;
+$nav-bg: $black;
 
 // ========================
 // SIDE NAVIGATION

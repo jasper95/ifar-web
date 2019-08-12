@@ -65,7 +65,7 @@ export default function Footer() {
             className="footer_colItem-brand"
             size={3}
           >
-            <Link to="/">
+            <Link to="/" className="footer_colItem-brand_logo">
               <img
                 src="/static/img/logo.png"
                 alt=""

@@ -10,7 +10,7 @@ function Index(props) {
         <title>Job Search</title>
         <meta name="description" content="description for indexing bots" />
       </Head>
-      <div>Welcome</div>
+      <div className="dbContainer dbContainer-home"/>
     </>
   );
 }
