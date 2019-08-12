@@ -25,9 +25,6 @@ function CommentItem(props) {
             <span className="date">
               <span>{formatTime(comment.created_date)}</span>
             </span>
-            {/* <span className="time">
-              8:59 PM
-            </span> */}
           </div>
         </div>
 

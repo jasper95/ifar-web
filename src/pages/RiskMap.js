@@ -78,7 +78,7 @@ export default function RiskMap() {
             risks={riskItems}
             currentStage={currentStage}
             onChangeStage={setStage}
-            onChangeImpact={setImpact}
+            onChangeImpact={newVal => setImpact(prev => (prev !== newVal ? newVal : ''))}
             currentImpact={currentImpact}
           />
         </Cell>

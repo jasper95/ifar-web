@@ -9,9 +9,25 @@ export default function useRiskMutation() {
   const [, onCreateRequest] = useCreateNode({ node: 'request' });
 
   function onMutate({ data, action, treatment_details: treatment }) {
-    const message = ['EDIT', 'DONE_TREATMENT'].includes(action) ? 'Risk successfully updated' : 'Risk successfully deleted';
-    const method = ['EDIT', 'DONE_TREATMENT'].includes(action) ? 'PUT' : 'DELETE';
-    if (user.role !== 'ADMIN') {
+    let message;
+    let method;
+    switch (action) {
+      case 'EDIT':
+      case 'DONE_TREATMENT':
+        message = 'Risk successfully updated';
+        method = 'PUT';
+        break;
+      case 'DELETE':
+        message = 'Risk successfully deleted';
+        method = 'DELETE';
+        break;
+      case 'COPY':
+        message = 'Risk successfully created';
+        method = 'POST';
+        break;
+      default:
+    }
+    if (user.role !== 'ADMIN' && action !== 'COPY') {
       onCreateRequest({
         data: {
           type: `${action}_RISK`,
