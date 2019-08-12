@@ -31,12 +31,13 @@ const commentsQuery = gql`
   }
 `;
 const userQuery = gql`
-  query getUsers($name: String) {
-    user(where: {first_name: {_like: $name}, _or: {last_name: {_like: $name}}}) {
-      id
+  query searchUsers($name: String) {
+    search_users(
+      args: {search: $name}
+    ){
+      id,
       first_name
       last_name
-      avatar
     }
   }
 `;
@@ -142,7 +143,7 @@ function Comments(props) {
     if (value) {
       const result = await onQueryUsers({ variables: { name: `%${value}%` } });
       setSuggestions(
-        result.user
+        result.search_users
           .map(e => ({
             ...e,
             name: `${e.first_name} ${e.last_name}`,

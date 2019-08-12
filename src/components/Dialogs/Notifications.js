@@ -1,7 +1,6 @@
 import React from 'react';
 import useQuery from 'apollo/query';
 import flowRight from 'lodash/flowRight';
-import capitalize from 'lodash/capitalize';
 import withDialog from 'lib/hocs/dialog';
 import gql from 'graphql-tag';
 
@@ -56,9 +55,14 @@ function NotificationItem(props) {
   const {
     user, risk, details: { action },
   } = data;
+  const actionDescription = {
+    tag: 'tagged you',
+    comment: 'commented',
+  }[action];
+  const description = `${user.first_name} ${user.last_name} (${user.role}) ${actionDescription} on Risk Record: ${risk.name}`;
   return (
     <div>
-      {`${user.first_name} ${user.last_name} (${user.role}) ${action}ed on Risk Record: ${risk.name}`}
+      {description}
     </div>
   );
 }

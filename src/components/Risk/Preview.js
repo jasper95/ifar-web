@@ -3,6 +3,7 @@ import Grid from 'react-md/lib/Grids/Grid';
 import PropTypes from 'prop-types';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
+import omit from 'lodash/omit';
 import { useDispatch } from 'react-redux';
 import { getImpactDriver } from 'lib/tools';
 import RiskPreviewInfo from './PreviewInfo';
@@ -32,8 +33,9 @@ function RiskPreview(props) {
         </Cell>
         {!readOnly && (
           <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
-            <Button onClick={() => showDialog('edit')} icon>edit</Button>
-            <Button onClick={() => showDialog('delete')} icon>delete</Button>
+            <Button onClick={() => showDialog('copy')} tooltipLabel="Copy" icon>insert_drive_file</Button>
+            <Button onClick={() => showDialog('edit')} tooltipLabel="Edit" icon>edit</Button>
+            <Button onClick={() => showDialog('delete')} tooltipLabel="Delete" icon>delete</Button>
           </Cell>
         )}
       </Grid>
@@ -94,12 +96,30 @@ function RiskPreview(props) {
         payload: {
           path: 'Confirm',
           props: {
-            title: 'Request Delete Form',
-            message: 'Send request to delete this record?',
+            title: 'Delete Risk',
+            message: 'Do you want to delete this record?',
             onValid: () => onMutateRisk({
               data: risk,
               action: 'DELETE',
             }),
+          },
+        },
+      });
+    } else if (action === 'copy') {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
+          path: 'CopyRisk',
+          props: {
+            title: 'Copy Risk',
+            onValid: data => onMutateRisk({
+              data: omit(data, 'id'),
+              action: 'COPY',
+            }),
+            initialFields: {
+              ...risk,
+              business_unit_id: '',
+            },
           },
         },
       });
