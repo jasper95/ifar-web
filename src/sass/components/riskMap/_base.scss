@@ -1,6 +1,9 @@
 $tbl-label-left: $c_gray-100;
 $tbl-label-bottom: $c_beige-100;
 
+$map-legend-width: 150px;
+
+
 .riskMap {
 
 	width: 100%;
@@ -17,13 +20,19 @@ $tbl-label-bottom: $c_beige-100;
 
 	// .riskMap_legend
 	&_legend {
+		position: fixed;
+		top: 30vh;
+		left: 0;
 		flex-shrink: 0;
+		width: $map-legend-width;
 	}
 
 	// .riskMap_map
 	&_map {
 		flex-grow: 1;
 		flex-shrink: 1;
+		margin-left: $map-legend-width;
+		width: calc( 100% - #{$map-legend-width} );
 	}
 
 	// .riskMap_categories

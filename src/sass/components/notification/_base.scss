@@ -1,0 +1,111 @@
+.notification {
+	width: 100%;
+	// .notification_loading
+	&_loading {
+		width: 100%;
+		height: 300px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: .8em;
+		font-style: italic;
+		color: $gray-300;
+	}
+
+	// .notification_item
+	&_item {
+		width: 100%;
+		padding: .75em 1.25em;
+		display: flex;
+		align-items: stretch;
+		justify-content: flex-start;
+		flex-wrap: nowrap;
+		
+		// .notification_item_avatar
+		&_avatar {
+			position: relative;
+			flex-shrink: 0;
+			.avatar {
+				width: 75px;
+				height: 75px;
+				border-radius: 50%;
+				overflow: hidden;
+				position: relative;
+				z-index: 1;
+
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					object-position: 50% 50%;
+				}
+			}
+			.role {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				font-size: .75rem;
+				text-transform: uppercase;
+				letter-spacing: .15em;
+				padding: .15em .25em;
+				font-weight: 700;
+				line-height: 1;
+				z-index: 10;
+				width: 100%;
+				background-color: $gray-300;
+				color: $black;
+
+				&-admin {
+					background-color: $red;
+					color: $white;
+				}
+			}
+		}
+
+		// .notification_item_info
+		&_info {
+			flex-grow: 1;
+			flex-shrink: 1;
+			font-size: 1rem;
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+			flex-direction: column;
+
+			padding: 1em;
+			.notif {
+				width: 100%;
+				font-size: 1em;
+				color: darkgray;
+				line-height: 1.5;
+				text-align: left;
+				.emphasize {
+					color: $black;
+					cursor: pointer;
+					font-weight: 700;
+					margin: 0 .5ch;
+					&:hover {
+						color: $primary-color;
+					}
+				}
+			}
+
+			.time {
+				width: 100%;
+				font-style: italic;
+				color: $gray-200;
+				font-size: .8em;
+				text-align: left;
+			}
+		}
+		
+
+		&:not(:last-child) {
+			border-bottom: 1px solid $gray-100;
+		}
+
+		&:hover {
+			box-shadow: 0 0 1em 0 rgba(#000,.05);
+		}
+	}
+}
