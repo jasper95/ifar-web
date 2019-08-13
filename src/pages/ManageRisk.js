@@ -96,7 +96,7 @@ function ManageRisk() {
             onClick={() => showDialog({
               type: 'Notifications',
               dialogTitle: 'Notifications',
-              dialogSize: 'lg',
+              dialogSize: 'sm',
             })}
           />
           <Button

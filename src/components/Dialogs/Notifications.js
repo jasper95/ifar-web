@@ -3,6 +3,8 @@ import useQuery from 'apollo/query';
 import flowRight from 'lodash/flowRight';
 import withDialog from 'lib/hocs/dialog';
 import gql from 'graphql-tag';
+import cn from 'classnames';
+import 'sass/components/notification/index.scss';
 
 const notificationQuery = gql`
   query getNotifications($user_id: jsonb, $business_unit_id: uuid) {
@@ -32,14 +34,23 @@ function Notifications(props) {
     data: { notification: notifications = [] },
     loading: listIsLoading,
   } = notificationReponse;
+
+  const isEmpty = notifications.length === 0 && !listIsLoading
+
   return (
-    <div>
+    <div className={cn('notification',{
+      'notification-isEmpty': isEmpty
+     })}>
       {listIsLoading ? (
-        <span>Loading...</span>
+        <span className="notification_loading">
+          Loading...
+        </span>
       ) : (
         <div>
-          {notifications.length === 0 && !listIsLoading && (
-            <span>No Records Found</span>
+          {isEmpty && (
+            <span className="notification_msg_empty">
+              No Records Found
+            </span>
           )}
           {notifications.map(e => (
             <NotificationItem key={e.id} data={e} />
@@ -52,17 +63,41 @@ function Notifications(props) {
 
 function NotificationItem(props) {
   const { data } = props;
+
   const {
     user, risk, details: { action },
   } = data;
+
   const actionDescription = {
     tag: 'tagged you',
     comment: 'commented',
   }[action];
-  const description = `${user.first_name} ${user.last_name} (${user.role}) ${actionDescription} on Risk Record: ${risk.name}`;
+
+
   return (
-    <div>
-      {description}
+    <div className="notification_item">
+      <div className="notification_item_avatar">
+        <div className="avatar">
+          <img src="https://i.pravatar.cc/300"/>
+        </div>
+        <div className={`role role-${user.role.toLowerCase()}`}>
+          {user.role}
+        </div>
+      </div>
+      <div className="notification_item_info">
+        <p className="notif">
+          <span className="emphasize">
+            {user.first_name} {user.last_name} 
+          </span>
+          {actionDescription} on Risk Record:
+          <span className="emphasize">
+            {risk.name}
+          </span>
+        </p>
+        <div className="time">
+          Just Now
+        </div>
+      </div>
     </div>
   );
 }
