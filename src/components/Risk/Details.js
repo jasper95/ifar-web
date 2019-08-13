@@ -2,7 +2,8 @@ import React from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
-import { getImpactDriver, getVulnerabilityLevel } from 'lib/tools';
+import { getImpactDriver, getVulnerabilityLevel, getRecentChanges } from 'lib/tools';
+import pick from 'lodash/pick';
 
 import { useDispatch } from 'react-redux';
 import RiskInfo from './Info';
@@ -72,8 +73,11 @@ function RiskDetails(props) {
           onValid: (data) => {
             const impactDriver = getImpactDriver(data.impact_details[key]);
             const rating = data.impact_details[key][impactDriver];
+            const { tracked_diff: trackedDiff } = data;
+            const recentChanges = getRecentChanges(trackedDiff, data, [key === 'residual' ? 'current_treatments' : 'future_treatments']);
             const newData = {
               ...data,
+              recent_changes: recentChanges,
               [`${key}_vulnerability`]: getVulnerabilityLevel(data[`${key}_likelihood`] * rating),
               [`${key}_impact_driver`]: impactDriver,
               [`${key}_rating`]: rating,
@@ -86,6 +90,7 @@ function RiskDetails(props) {
           initialFields: {
             ...risk,
             current_stage_impact_details: risk.impact_details && risk.impact_details[key],
+            tracked_diff: pick(risk, key === 'residual' ? 'current_treatments' : 'future_treatments'),
             previous_details: {
               ...previousDetails,
               [key]: {

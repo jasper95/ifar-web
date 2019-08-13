@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 import Pagination from 'rc-pagination';
 import { getImpactDriver } from 'lib/tools';
 import useQuery from 'apollo/query';
+import pick from 'lodash/pick';
 import QueryContext from './Context';
 import RiskItem from './Item';
 import 'sass/components/risk/index.scss';
@@ -174,6 +175,11 @@ function RiskList(props) {
                 ...data,
                 inherent_impact_driver: impactDriver,
                 inherent_rating: data.impact_details.inherent[impactDriver],
+                recent_changes: {
+                  ...pick(data, 'stakeholders', 'impacts', 'causes'),
+                  current_treatments: [],
+                  future_treatments: [],
+                },
               },
             });
           },

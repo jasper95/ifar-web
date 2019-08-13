@@ -5,7 +5,8 @@ import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import omit from 'lodash/omit';
 import { useDispatch } from 'react-redux';
-import { getImpactDriver } from 'lib/tools';
+import { getImpactDriver, getRecentChanges } from 'lib/tools';
+import pick from 'lodash/pick';
 import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
@@ -59,27 +60,10 @@ function RiskPreview(props) {
           props: {
             dialogId: 'InherentRisk',
             title: 'Inherent Risk',
-            onValid: (data) => {
-              const impactDriver = getImpactDriver(data.impact_details.inherent);
-              const newData = {
-                ...data,
-                inherent_impact_driver: impactDriver,
-                inherent_rating: data.impact_details.inherent[impactDriver],
-                previous_details: {
-                  ...data.previous_details,
-                  inherent: {
-                    likelihood: risk.inherent_likelihood,
-                    rating: risk.inherent_rating,
-                  },
-                },
-              };
-              onMutateRisk({
-                data: newData,
-                action: 'EDIT',
-              });
-            },
+            onValid: onValidInherentRisk,
             initialFields: {
               ...risk,
+              tracked_diff: pick(risk, 'causes', 'impacts', 'stakeholders'),
               current_stage_impact_details: risk.impact_details && { ...risk.impact_details.inherent },
               previous_details: {
                 ...previousDetails,
@@ -124,6 +108,28 @@ function RiskPreview(props) {
         },
       });
     }
+  }
+  function onValidInherentRisk(data) {
+    const impactDriver = getImpactDriver(data.impact_details.inherent);
+    const { tracked_diff: trackedDiff } = data;
+    const recentChanges = getRecentChanges(trackedDiff, data, ['impacts', 'causes', 'stakeholders']);
+    const newData = {
+      ...data,
+      recent_changes: recentChanges,
+      inherent_impact_driver: impactDriver,
+      inherent_rating: data.impact_details.inherent[impactDriver],
+      previous_details: {
+        ...data.previous_details,
+        inherent: {
+          likelihood: risk.inherent_likelihood,
+          rating: risk.inherent_rating,
+        },
+      },
+    };
+    onMutateRisk({
+      data: newData,
+      action: 'EDIT',
+    });
   }
 }
 

@@ -6,6 +6,7 @@ import orderBy from 'lodash/orderBy';
 import cookie from 'cookie';
 import day from 'dayjs';
 import capitalize from 'lodash/capitalize';
+import differenceBy from 'lodash/differenceBy';
 import camelCase from 'lodash/camelCase';
 // import queryString from 'query-string';
 
@@ -167,4 +168,21 @@ export function getVulnerabilityLevel(vulnerability) {
     level = 'critical';
   }
   return level;
+}
+
+export function getArrayDiff(original, updated) {
+  const removed = differenceBy(original, updated, 'id').map(e => ({ ...e, action: 'remove' }));
+  const added = differenceBy(updated, original, 'id').map(e => ({ ...e, action: 'add' }));
+  return removed.concat(added);
+}
+
+export function getRecentChanges(oldData, newData, keys) {
+  return keys
+    .reduce((acc, el) => {
+      acc = {
+        ...acc,
+        [el]: getArrayDiff(oldData[el], newData[el]),
+      };
+      return acc;
+    }, { ...newData.recent_changes });
 }
