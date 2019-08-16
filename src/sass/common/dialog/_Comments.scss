@@ -4,7 +4,18 @@
 	}
 
 	.commentForm_replies {
-		max-height: calc( 100vh - 30rem);
-		overflow-y: auto;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.reply_empty {
+			@extend %emptyStringMessage;
+		}
+
+		@media (min-height: 600px) {
+			overflow-y: auto;
+			max-height: calc( 100vh - 30rem);
+		}
 	}
 }

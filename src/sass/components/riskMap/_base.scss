@@ -12,7 +12,7 @@ $map-legend-width: 150px;
 	&_row {
 		width: 100%;
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
 		flex-direction: row;
 		flex-wrap: nowrap;
@@ -20,8 +20,8 @@ $map-legend-width: 150px;
 
 	// .riskMap_legend
 	&_legend {
-		position: fixed;
-		top: 30vh;
+		position: sticky;
+		top: $nav-height + 1;
 		left: 0;
 		flex-shrink: 0;
 		width: $map-legend-width;
@@ -31,7 +31,6 @@ $map-legend-width: 150px;
 	&_map {
 		flex-grow: 1;
 		flex-shrink: 1;
-		margin-left: $map-legend-width;
 		width: calc( 100% - #{$map-legend-width} );
 	}
 

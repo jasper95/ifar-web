@@ -15,6 +15,7 @@ import editorStyles from './editorStyles.css';
 import mentionsStyles from './mentionsStyles.css';
 import Comment from './Item';
 
+
 import 'sass/components/comments/_index.scss';
 
 const commentsQuery = gql`
@@ -61,12 +62,26 @@ function Comments(props) {
   const debounceSearch = useCallback(debounce(onSearch, 1000), []);
   return (
     <div className="commentForm">
-      <div className="commentForm_replies">
-        <ul className="reply">
-          {comments.map(comment => (
-            <Comment key={comment.id} comment={comment} className="reply_item" />
-          ))}
-        </ul>
+      <div className={cn('commentForm_replies', {
+        'commentForm_replies-empty': !comments.length
+      })}>
+        {comments.length
+          ? (
+            <ul className="reply">
+              {comments.map(comment => (
+                <Comment key={comment.id} comment={comment} className="reply_item" />
+              ))}
+            </ul>
+          )
+          : (
+            <h1 className="reply_empty">
+              No Comments. Be the first to comment
+            </h1>
+          )
+        }
+
+
+
       </div>
       <div className="commentForm_actions">
         {!showForm
@@ -120,6 +135,7 @@ function Comments(props) {
       </div>
     </div>
   );
+
 
   function onSuccess() {
     reset();

@@ -108,4 +108,9 @@
 			box-shadow: 0 0 1em 0 rgba(#000,.05);
 		}
 	}
+
+	// .notification_msg_empty
+	&_msg_empty {
+		@extend %emptyStringMessage;
+	}
 }

@@ -44,3 +44,15 @@
 	height: .15em;
 	border-radius: 1em;
 }
+
+%emptyStringMessage {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	font-size: 1rem;
+	font-style: italic;
+	font-family: $font-family;
+	color: $gray-200;
+}
