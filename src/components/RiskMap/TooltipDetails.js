@@ -61,14 +61,30 @@ function RatingInfo(props) {
     <div className="riskMapTooltip_info">
       <span className="label">{title}</span>
       <div className="md-grid">
-        <span className="md-cell md-cell--4">{likelihood || '-'}</span>
-        <span className="md-cell md-cell--4">{rating || '-'}</span>
-        <span className="md-cell md-cell--4">{vulnerability || '-'}</span>
-      </div>
-      <div className="md-grid">
-        <span className="md-cell md-cell--4">Likelihood</span>
-        <span className="md-cell md-cell--4">Impact</span>
-        <span className="md-cell md-cell--4">Vulnerability</span>
+        <span className="rating md-cell md-cell--4">
+          <div className="rating_number">
+            {likelihood || '-'}
+          </div>
+          <div className="rating_label">
+            Likelihood
+          </div>
+        </span>
+        <span className="rating md-cell md-cell--4">
+          <div className="rating_number">
+            {rating || '-'}
+          </div>
+          <div className="rating_label">
+            Impact
+          </div>
+        </span>
+        <span className="rating md-cell md-cell--4">
+          <div className="rating_number">
+            {vulnerability || '-'}
+          </div>
+          <div className="rating_label">
+            Vulnerability
+          </div>
+        </span>
       </div>
     </div>
   );

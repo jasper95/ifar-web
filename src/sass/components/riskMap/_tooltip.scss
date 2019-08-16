@@ -1,7 +1,7 @@
 .riskMapTooltip {
 	font-family: $font-family;
 	font-size: 1rem;
-	min-width: 15em;
+	min-width: 25em;
 
 	// .riskMapTooltip_info
 	&_info {
@@ -25,6 +25,28 @@
 			font-size: 1em;
 			color: $black;
 			font-weight: 700;
+		}
+
+		.rating {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			flex-direction: column;
+
+			// .rating_number
+			&_number {
+				text-align: center;
+				font-size: 2rem;
+				color: $primary-color;
+			}
+
+			// .rating_label
+			&_label {
+				font-size: .8em;
+				text-align: center;
+				font-weight: 600;
+				color: $gray-400;
+			}
 		}
 	}
 
