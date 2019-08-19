@@ -111,8 +111,28 @@ function RiskDetails(props) {
     });
   }
 
-  function onDelete() {
-
+  function onDelete(id, type) {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'Confirm',
+        props: {
+          title: 'Confirm Delete',
+          message: 'Do you want to delete this item?',
+          onValid: () => {
+            const key = type.toLowerCase() === 'residual' ? 'current_treatments' : 'future_treatments';
+            const { [key]: arr } = risk;
+            onMutateRisk({
+              data: {
+                ...risk,
+                [key]: arr.filter(e => e.id !== id),
+              },
+              action: 'EDIT',
+            });
+          },
+        },
+      },
+    });
   }
 
   function getColumns(type) {
@@ -141,7 +161,7 @@ function RiskDetails(props) {
             {
               icon: 'delete',
               label: 'Delete',
-              onClick: () => {},
+              onClick: row => onDelete(row.id, type),
             },
             {
               icon: 'rate_review',
@@ -186,7 +206,7 @@ function RiskDetails(props) {
             {
               icon: 'delete',
               label: 'Delete',
-              onClick: () => {},
+              onClick: row => onDelete(row.id, type),
             },
             {
               icon: 'check',
