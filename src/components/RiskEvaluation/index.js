@@ -67,7 +67,6 @@ function RiskEvaluation(props) {
     currentEvaluation,
     prevStageEvaluation,
   } = props;
-  console.log('props: ', props);
   const previousStage = {
     residual: 'inherent',
     target: 'residual',

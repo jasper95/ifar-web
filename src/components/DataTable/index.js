@@ -15,9 +15,12 @@ function DataTable(props) {
   } = props;
 
   return (
-    <Table plain className={cn(`iTable ${className}`,{
-        'iTable-empty' : rows.length === 0
-      })}>
+    <Table
+      plain
+      className={cn(`iTable ${className}`, {
+        'iTable-empty': rows.length === 0,
+      })}
+    >
       <TableHead>
         <TableRow>
           {columns.map(({ title, headProps = {} }, idx) => (
@@ -68,8 +71,13 @@ function Row(props) {
   let children;
   if (type === 'actions') {
     children = actions.map(({
-      label, className, icon, onClick, type: actionType, component: Action,
+      label,
+      className, icon, onClick, type: actionType, component: Action,
+      conditionalRendering = () => true,
     }) => {
+      if (!conditionalRendering(row)) {
+        return null;
+      }
       if (actionType === 'component') {
         return (
           <Action key={icon} row={row} label={label} icon={icon} onClick={onClick} />

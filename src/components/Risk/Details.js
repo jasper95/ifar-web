@@ -4,6 +4,7 @@ import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
 import { getImpactDriver, getVulnerabilityLevel, getRecentChanges } from 'lib/tools';
 import pick from 'lodash/pick';
+import omit from 'lodash/omit';
 
 import { useDispatch } from 'react-redux';
 import RiskInfo from './Info';
@@ -61,7 +62,11 @@ function RiskDetails(props) {
     });
   }
 
-  function showDialog({ type, dialogTitle }) {
+  function onRerate() {
+    showDialog({ type: 'Residual', dialogTitle: 'Residual Risk Evaluation', isRerate: true });
+  }
+
+  function showDialog({ type, dialogTitle, isRerate = false }) {
     const key = type.toLowerCase();
     const { previous_details: previousDetails = {} } = risk;
     dispatch({
@@ -69,6 +74,7 @@ function RiskDetails(props) {
       payload: {
         path: `${type}Risk`,
         props: {
+          isRerate,
           title: dialogTitle,
           onValid: (data) => {
             const impactDriver = getImpactDriver(data.impact_details[key]);
@@ -98,10 +104,15 @@ function RiskDetails(props) {
                 likelihood: risk[`${key}_likelihood`],
               },
             },
+            ...isRerate && { current_treatments: risk.current_treatments.map(e => omit(e, 'rerate')) },
           },
         },
       },
     });
+  }
+
+  function onDelete() {
+
   }
 
   function getColumns(type) {
@@ -131,6 +142,12 @@ function RiskDetails(props) {
               icon: 'delete',
               label: 'Delete',
               onClick: () => {},
+            },
+            {
+              icon: 'rate_review',
+              label: 'Rerate',
+              onClick: onRerate,
+              conditionalRendering: row => row.rerate,
             },
           ],
         },

@@ -1,16 +1,14 @@
 import React from 'react';
 import { Helmet as Head } from 'react-helmet';
-import JobPosts from 'components/JobPosts';
 
-function Index(props) {
-  const { user, posts } = props;
+function Index() {
   return (
     <>
       <Head>
-        <title>Job Search</title>
-        <meta name="description" content="description for indexing bots" />
+        <title>RAMONS</title>
+        <meta name="description" content="RAMONS Risk Management" />
       </Head>
-      <div className="dbContainer dbContainer-home"/>
+      <div className="dbContainer dbContainer-home" />
     </>
   );
 }

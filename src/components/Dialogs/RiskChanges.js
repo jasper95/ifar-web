@@ -9,6 +9,14 @@ import { VulnerabilityChange } from 'pages/RiskMap';
 
 function RiskChanges(props) {
   const { risk } = props;
+  const { recent_changes: recentChanges = {} } = risk;
+  const {
+    causes = [],
+    impacts = [],
+    stakeholders = [],
+    current_treatments: currrentTreatments = [],
+    future_treatments: futureTreatments = [],
+  } = recentChanges;
   const prevEvaluation = ['inherent', 'residual', 'target']
     .map(stage => ({
       stage,
@@ -35,11 +43,11 @@ function RiskChanges(props) {
       </Cell>
       <Cell size={10}>
         <Grid>
-          <RiskInfo colspan={6} title="Causes" list={risk.causes} />
-          <RiskInfo colspan={6} title="Impact" list={risk.impacts} />
-          <RiskInfo colspan={6} title="Stakeholders" list={risk.stakeholders} />
-          <RiskInfo colspan={6} title="Current Treatment" list={risk.current_treatments.map(e => ({ id: e.id, name: e.treatment }))} />
-          <RiskInfo colspan={6} title="Current Treatment" list={risk.future_treatments.map(e => ({ id: e.id, name: e.treatment }))} />
+          <RiskInfo colspan={6} title="Causes" list={causes} />
+          <RiskInfo colspan={6} title="Impact" list={impacts} />
+          <RiskInfo colspan={6} title="Stakeholders" list={stakeholders} />
+          <RiskInfo colspan={6} title="Current Treatment" list={currrentTreatments.map(e => ({ id: e.id, name: e.treatment }))} />
+          <RiskInfo colspan={6} title="Current Treatment" list={futureTreatments.map(e => ({ id: e.id, name: e.treatment }))} />
         </Grid>
       </Cell>
       <Cell size={2}>Previous Evaluation</Cell>

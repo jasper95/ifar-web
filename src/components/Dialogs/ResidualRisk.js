@@ -9,27 +9,29 @@ import * as yup from 'yup';
 import { impact } from './InherentRisk';
 
 function InherentRisk(props) {
-  const { formState, formHandlers } = props;
+  const { formState, formHandlers, isRerate } = props;
   const { fields, errors } = formState;
   const { onElementChange } = formHandlers;
   return (
     <>
-      <MultiFields
-        id="current_treatments"
-        fieldsRenderer={ResidualRiskFields}
-        value={fields.current_treatments || []}
-        label="Impact"
-        required
-        defaultItem={{
-          strategy: '',
-          treatment: '',
-          business_unit: '',
-          kpi: '',
-        }}
-        fieldLabels={[{ label: 'Risk Treatment Strategy' }, { label: 'Action Treatment' }, { label: 'Business Unit' }, { label: 'KPI' }]}
-        onChange={onElementChange}
-        errors={errors}
-      />
+      {!isRerate && (
+        <MultiFields
+          id="current_treatments"
+          fieldsRenderer={ResidualRiskFields}
+          value={fields.current_treatments || []}
+          label="Impact"
+          required
+          defaultItem={{
+            strategy: '',
+            treatment: '',
+            business_unit: '',
+            kpi: '',
+          }}
+          fieldLabels={[{ label: 'Risk Treatment Strategy' }, { label: 'Action Treatment' }, { label: 'Business Unit' }, { label: 'KPI' }]}
+          onChange={onElementChange}
+          errors={errors}
+        />
+      )}
       <RiskEvaluation
         type="residual"
         previousRating={fields.previous_details}

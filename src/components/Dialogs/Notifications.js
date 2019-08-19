@@ -4,6 +4,7 @@ import flowRight from 'lodash/flowRight';
 import withDialog from 'lib/hocs/dialog';
 import gql from 'graphql-tag';
 import cn from 'classnames';
+import { format as formatTime } from 'timeago.js';
 import 'sass/components/notification/index.scss';
 
 const notificationQuery = gql`
@@ -35,12 +36,13 @@ function Notifications(props) {
     loading: listIsLoading,
   } = notificationReponse;
 
-  const isEmpty = notifications.length === 0 && !listIsLoading
+  const isEmpty = notifications.length === 0 && !listIsLoading;
 
   return (
-    <div className={cn('notification',{
-      'notification-isEmpty': isEmpty
-     })}>
+    <div className={cn('notification', {
+      'notification-isEmpty': isEmpty,
+    })}
+    >
       {listIsLoading ? (
         <span className="notification_loading">
           Loading...
@@ -65,7 +67,7 @@ function NotificationItem(props) {
   const { data } = props;
 
   const {
-    user, risk, details: { action },
+    user, risk, details: { action }, created_date: createdDate,
   } = data;
 
   const actionDescription = {
@@ -78,7 +80,7 @@ function NotificationItem(props) {
     <div className="notification_item">
       <div className="notification_item_avatar">
         <div className="avatar">
-          <img src="https://i.pravatar.cc/300"/>
+          <img src="https://i.pravatar.cc/300" />
         </div>
         <div className={`role role-${user.role.toLowerCase()}`}>
           {user.role}
@@ -87,15 +89,19 @@ function NotificationItem(props) {
       <div className="notification_item_info">
         <p className="notif">
           <span className="emphasize">
-            {user.first_name} {user.last_name} 
+            {user.first_name}
+            {' '}
+            {user.last_name}
           </span>
-          {actionDescription} on Risk Record:
+          {actionDescription}
+          {' '}
+on Risk Record:
           <span className="emphasize">
             {risk.name}
           </span>
         </p>
         <div className="time">
-          Just Now
+          {formatTime(createdDate)}
         </div>
       </div>
     </div>
