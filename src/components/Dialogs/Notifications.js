@@ -80,7 +80,7 @@ function NotificationItem(props) {
     <div className="notification_item">
       <div className="notification_item_avatar">
         <div className="avatar">
-          <img src="https://i.pravatar.cc/300" />
+          <img src="/static/img/default-avatar.png" />
         </div>
         <div className={`role role-${user.role.toLowerCase()}`}>
           {user.role}
