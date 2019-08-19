@@ -77,7 +77,6 @@ function ManageRisk() {
       variables: requestNotifCountVars,
     },
   );
-  console.log('requestCount: ', requestCount);
   const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
   return (
     <div className="dbContainer">

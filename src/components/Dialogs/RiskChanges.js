@@ -10,6 +10,7 @@ import { VulnerabilityChange } from 'pages/RiskMap';
 function RiskChanges(props) {
   const { risk } = props;
   const { recent_changes: recentChanges = {} } = risk;
+  console.log('recentChanges: ', recentChanges);
   const {
     causes = [],
     impacts = [],

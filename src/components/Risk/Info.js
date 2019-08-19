@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 function RiskInfo(props) {
   const {
-    colspan, title, list, className,
+    colspan, title, list,
   } = props;
 
   const labelKey = title.toLowerCase().replace(/ /g, '-');
@@ -14,12 +14,12 @@ function RiskInfo(props) {
     <Cell size={colspan} className={`RiskInfo_info RiskInfo_cell ${uniqueItemClassName}`}>
       <h3 className="RiskInfo_info_label">{title}</h3>
       <ul className="RiskInfo_info_list">
-        {list.map(e => (
+        {list.map(({ action = '', id, name }) => (
           <li
-            key={e.id}
-            className="RiskInfo_info_list_item"
+            key={id}
+            className={`RiskInfo_info_list_item ${action}`}
           >
-            {e.name}
+            {name}
           </li>
         ))}
       </ul>

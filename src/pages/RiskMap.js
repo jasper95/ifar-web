@@ -39,6 +39,7 @@ const riskQuery = gql`
       inherent_likelihood
       inherent_rating
       inherent_impact_driver
+      recent_changes
       causes
       impacts
       ...RiskDetails
