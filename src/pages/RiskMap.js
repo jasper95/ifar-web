@@ -169,7 +169,12 @@ function RowIndex({ row }) {
 function RiskName({ row }) {
   const dispatch = useDispatch();
   return (
-    <span onClick={onClick}>{row.name}</span>
+    <span 
+      className="riskname"
+      onClick={onClick}
+    >
+      {row.name}
+    </span>
   );
 
   function onClick() {
