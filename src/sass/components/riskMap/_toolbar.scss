@@ -1,0 +1,52 @@
+.rafi .tableRiskMapToolbar {
+	width: 100%;
+	margin-bottom: 2rem;
+
+	position: sticky;
+	top: $nav-height;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	background-color: #fff;
+	padding: .5em;
+	box-shadow: 0 0 1em 0 rgba(#000,.15);
+
+
+	#tableRiskMapToolbar {
+		position: relative;
+		.tableRiskMapToolbar_menu {
+			box-shadow: none;
+			border-radius: 0;
+			.md-icon-separator {
+				padding: 0;
+			}
+
+			.md-icon-text {
+				font-weight: 600;
+			}
+
+			.md-icon {
+				color: #FFF;
+			}
+
+			// .tableRiskMapToolbar_menu_list
+			&_list {
+				position: absolute;
+				top: 100% !important;
+				left: 0 !important;
+				width: 100%;
+
+				.md-fake-btn {
+					font-family: $font-family;
+				}
+			}
+		}
+	}
+
+	// .tableRiskMapToolbar_export
+	&_export {
+		font-weight: 600;
+		margin-left: auto;
+	}
+}
