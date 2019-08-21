@@ -32,34 +32,47 @@ function RiskChanges(props) {
       prevDetails: risk.previous_details ? risk.previous_details[stage] : null,
     })).map(mapVulnerability);
   return (
-    <Grid>
-      <Cell size={2}>
-        Risk Name
-      </Cell>
-      <Cell size={10}>
-        {risk.name}
-      </Cell>
-      <Cell size={2}>
-        Key Changes
-      </Cell>
-      <Cell size={10}>
-        <Grid>
-          <RiskInfo colspan={6} title="Causes" list={causes} />
-          <RiskInfo colspan={6} title="Impact" list={impacts} />
-          <RiskInfo colspan={6} title="Stakeholders" list={stakeholders} />
-          <RiskInfo colspan={6} title="Current Treatment" list={currrentTreatments.map(e => ({ id: e.id, name: e.treatment }))} />
-          <RiskInfo colspan={6} title="Current Treatment" list={futureTreatments.map(e => ({ id: e.id, name: e.treatment }))} />
+    <div className='riskChangesForm'>
+      <div className="riskChangesForm_header">
+        <h1 className="title">
+          <span className="label">Risk Name</span>
+          <span className="text">
+            {risk.name}
+          </span>
+        </h1>
+      </div>
+
+      <div className="riskChangesForm_segment">
+        <div className="riskChangesForm_segment_head">
+          <h1 className="title"> Previous Evaluation </h1>
+        </div>
+        <Grid className="riskChangesForm_segment_body">
+          <RiskInfo colspan={4} title="Causes" list={causes} />
+          <RiskInfo colspan={4} title="Impact" list={impacts} />
+          <RiskInfo colspan={4} title="Stakeholders" list={stakeholders} />
+          <RiskInfo colspan={4} title="Current Treatment" list={currrentTreatments.map(e => ({ id: e.id, name: e.treatment }))} />
+          <RiskInfo colspan={4} title="Current Treatment" list={futureTreatments.map(e => ({ id: e.id, name: e.treatment }))} />
         </Grid>
-      </Cell>
-      <Cell size={2}>Previous Evaluation</Cell>
-      <Cell size={10}>
-        <DataTable rows={prevEvaluation} columns={getTableColumns('prev')} />
-      </Cell>
-      <Cell size={2}>New Evaluation</Cell>
-      <Cell size={10}>
-        <DataTable rows={newEvaluation} className="tableRiskMap" columns={getTableColumns('new')} />
-      </Cell>
-    </Grid>
+      </div>
+
+      <div className="riskChangesForm_segment">
+        <div className="riskChangesForm_segment_head">
+          <h1 className="title"> Key Changes </h1>
+        </div>
+        <div className="riskChangesForm_segment_body">
+          <DataTable rows={prevEvaluation} columns={getTableColumns('prev')} />
+        </div>
+      </div>
+
+      <div className="riskChangesForm_segment">
+        <div className="riskChangesForm_segment_head">
+          <h1 className="title"> New Evaluation </h1>
+        </div>
+        <div className="riskChangesForm_segment_body">
+          <DataTable rows={newEvaluation} className="tableRiskMap" columns={getTableColumns('new')} />
+        </div>
+      </div>
+    </div>
   );
 
   function getTableColumns(type) {

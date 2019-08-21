@@ -227,21 +227,28 @@ export function VulnerabilityChange({ row }) {
   }
   if (status === 'up') {
     return (
-      <div className="vcStatus-up" onClick={handleClick} role="presentation">
+      <div 
+        className="vcStatus vcStatus-up" 
+        onClick={handleClick} role="presentation"
+      >
         <span className="rafi-icon-arrow-up" />
       </div>
     );
   }
   if (status === 'stagnant') {
     return (
-      <div className="vcStatus-stagnant" onClick={handleClick} role="presentation">
+      <div className="vcStatus vcStatus-stagnant" 
+        onClick={handleClick} role="presentation">
         <span className="rafi-icon-arrow-sides" />
       </div>
     );
   }
   if (status === 'new') {
     return (
-      <div className="vcStatus-new" onClick={handleClick} role="presentation">
+      <div
+        className="vcStatus vcStatus-new" 
+        onClick={handleClick} role="presentation"
+      >
         <span className="text">
           new
         </span>
@@ -250,7 +257,7 @@ export function VulnerabilityChange({ row }) {
   }
   return (
     <div
-      className="vcStatus-down"
+      className="vcStatus vcStatus-down"
       onClick={handleClick}
       role="presentation"
     >
@@ -264,6 +271,7 @@ export function VulnerabilityChange({ row }) {
       payload: {
         path: 'RiskChanges',
         props: {
+          dialogId: 'RiskChanges',
           risk: row,
           dialogClassName: 'i_dialog_container--lg',
         },
