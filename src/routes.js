@@ -12,6 +12,8 @@ const ForgotPassword = loadable(() => import('pages/ForgotPassword'));
 const ResetPassword = loadable(() => import('pages/ResetPassword'));
 const ManageRisk = loadable(() => import('pages/ManageRisk'));
 const RiskMap = loadable(() => import('pages/RiskMap'));
+const User = loadable(() => import('pages/User'));
+
 
 export default [
   {
@@ -94,6 +96,16 @@ export default [
     },
   },
   {
+    key: 'manage-user',
+    component: User,
+    path: '/users',
+    exact: true,
+    pageProps: {
+      requireAuth: true,
+      pageTitle: 'Manage Users',
+    },
+  },
+  {
     key: 'risk-map',
     component: RiskMap,
     path: '/risk-map',
@@ -106,7 +118,7 @@ export default [
   {
     key: 'not-found',
     path: '*',
-    component: () => (<NotFound/>),
+    component: () => (<NotFound />),
     exact: true,
   },
 ];

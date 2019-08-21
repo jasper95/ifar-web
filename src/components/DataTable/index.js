@@ -11,20 +11,27 @@ import cn from 'classnames';
 
 function DataTable(props) {
   const {
-    rows, columns, onRowClick, className,
+    rows, columns, onRowClick, className, isSelectable, selected, onRowToggle,
   } = props;
 
   return (
     <Table
-      plain
+      plain={!isSelectable}
       className={cn(`iTable ${className}`, {
         'iTable-empty': rows.length === 0,
       })}
+      onRowToggle={onRowToggle}
     >
       <TableHead>
         <TableRow>
           {columns.map(({ title, headProps = {} }, idx) => (
-            <TableColumn key={idx} {...headProps}>{title}</TableColumn>
+            <TableColumn
+              key={idx}
+              {...headProps}
+            >
+              {title}
+
+            </TableColumn>
           ))}
         </TableRow>
       </TableHead>
@@ -39,6 +46,7 @@ function DataTable(props) {
               e.stopPropagation();
               onRowClick(row);
             }}
+            selected={selected.includes(row.id)}
           >
             {columns.map((column, idx) => (
               <Row index={rowIndex} key={idx} {...column} row={row} />
@@ -52,13 +60,21 @@ function DataTable(props) {
 }
 
 DataTable.propTypes = {
+  className: PropTypes.string,
   rows: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
   onRowClick: PropTypes.func,
+  selected: PropTypes.array,
+  isSelectable: PropTypes.bool,
+  onRowToggle: PropTypes.func,
 };
 
 DataTable.defaultProps = {
+  className: '',
   onRowClick: () => {},
+  onRowToggle: () => {},
+  selected: [],
+  isSelectable: false,
 };
 
 export default DataTable;
