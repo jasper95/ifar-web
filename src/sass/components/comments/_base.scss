@@ -9,11 +9,26 @@
 	&_replies {
 		flex-shrink: 0;
 		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+
+		.reply_empty {
+			@extend %emptyStringMessage;
+		}
 	}
 
 	// .commentForm_actions
 	&_actions {
 		flex-shrink: 0;
 		width: 100%;
+	}
+}
+
+@media (min-height: 600px) {
+	.commentForm_replies {
+		overflow-y: auto;
+		max-height: calc( 100vh - 30rem);
 	}
 }

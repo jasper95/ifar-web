@@ -67,14 +67,39 @@
 	}
 
 	&_risk-name {
-		span {
+		.riskname {
+			font-weight: 600;
+			color: $black;
 			width: 100%;
 			padding: 0 1em;
+			cursor: pointer;
+
+			&:hover {
+				color: $primary-color;
+			}
 		}
 	}
 
 	&_risk-vc {
 		@extend %squareCell;
+		[class*='vcStatus-'] {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			font-size: 1.5em;
+		}
+
+		.vcStatus-stagnant {
+			color: $primary-color;
+		}
+
+		.vcStatus-new .text {
+			color: darken($success, 15%);
+			font-size: .9rem;
+			font-weight: 700;
+		}
+
 	}
 
 }

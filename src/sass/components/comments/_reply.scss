@@ -3,6 +3,7 @@ $avatar-size: 3rem;
 
 .commentForm {
 	.reply {
+		width: 100%;
 		margin-top: 0;
 		margin-bottom: 0;
 		padding-left: 0;
@@ -45,7 +46,7 @@ $avatar-size: 3rem;
 				background-color: $primary-color-L600
 			}
 
-			// .reply_info
+			// .reply_item_info
 			&_info {
 				flex-grow: 1;
 
@@ -58,7 +59,7 @@ $avatar-size: 3rem;
 					padding: 0 1em;
 				}
 
-				// .reply_info_name
+				// .reply_item_info_name
 				&_name {
 					font-size: 1em;
 					color: $black;
@@ -70,15 +71,15 @@ $avatar-size: 3rem;
 					}
 				}
 
-				// .reply_info_timestamp
+				// .reply_item_info_timestamp
 				&_timestamp {
-					font-size: .6em;
+					font-size: .8rem;
 					font-style: italic;
 					color: $gray-400;
 					font-weight: 300;
 				}
 
-				// .reply_info_message
+				// .reply_item_info_message
 				&_message {
 					width: 100%;
 					text-align: left;
