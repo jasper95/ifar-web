@@ -71,7 +71,6 @@
 			font-weight: 600;
 			color: $black;
 			width: 100%;
-			padding: 0 1em;
 			cursor: pointer;
 
 			&:hover {
@@ -82,12 +81,21 @@
 
 	&_risk-vc {
 		@extend %squareCell;
-		[class*='vcStatus-'] {
+		.vcStatus {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			text-align: center;
 			font-size: 1.5em;
+			cursor: pointer;
+		}
+
+		.vcStatus-up {
+			color: $error;
+		}
+
+		.vcStatus-down {
+			color: $success;
 		}
 
 		.vcStatus-stagnant {
@@ -99,7 +107,5 @@
 			font-size: .9rem;
 			font-weight: 700;
 		}
-
 	}
-
 }
