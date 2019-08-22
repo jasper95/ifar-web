@@ -129,8 +129,12 @@ $dialog-easing : cubic-bezier(0.180, -0.020, 0.300, 1.020);
 
 	// .i_dialog_footer
 	&_footer {
-		padding: .5em;
 		background-color: #fff;
+		padding: .5em;
+
+		&:empty {
+			padding: 0;
+		}
 
 		> .md-btn {
 			margin-right: .25em;

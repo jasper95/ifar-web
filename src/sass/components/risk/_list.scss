@@ -269,6 +269,18 @@ $risklist-header-arrow-bg: $primary-color-400;
 				margin-bottom: .5em;
 				text-align: left;
 				font-family: $font-family;
+
+				&.add {
+					.status {
+						background-color: darken($success,15%);
+						color: #FFF;
+						padding: .25em 1em;
+						border-radius: .5rem;
+						font-size: .8rem;
+						font-weight: 600;
+						margin-left: 2ch;
+					}
+				}
 			}
 		}
 	}
