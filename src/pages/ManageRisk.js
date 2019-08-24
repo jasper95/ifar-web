@@ -16,6 +16,9 @@ import useQuery from 'apollo/query';
 import 'rc-pagination/assets/index.css';
 import 'sass/pages/manage-risk.scss';
 
+import { ChartSkeleton } from 'components/Skeletons';
+
+
 const riskListQuery = gql`
   subscription getList($id: uuid!, $offset:Int , $limit: Int =10){
     risk(where: {business_unit: {id: {_eq: $id }}}){
@@ -125,7 +128,7 @@ function ManageRisk() {
       <Grid className="row-riskCharts">
         <Cell size={4}>
           {loading ? (
-            <span>Loading...</span>
+            <ChartSkeleton/>
           ) : (
             <RiskStats
               filterFunc={classificationFilter}
@@ -141,7 +144,7 @@ function ManageRisk() {
         </Cell>
         <Cell size={4}>
           {loading ? (
-            <span>Loading...</span>
+            <ChartSkeleton/>
           ) : (
             <RiskStats
               filterFunc={impactDriverFilter}
@@ -157,7 +160,7 @@ function ManageRisk() {
         </Cell>
         <Cell size={4}>
           {loading ? (
-            <span>Loading...</span>
+            <ChartSkeleton/>
           ) : (
             <RiskStats
               filterFunc={vulnerabilityFilter}

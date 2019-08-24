@@ -6,6 +6,7 @@ import {
 } from 'recharts';
 import Legend from './Legend';
 
+
 import 'sass/components/chartCard/index.scss';
 
 function RiskStats(props) {

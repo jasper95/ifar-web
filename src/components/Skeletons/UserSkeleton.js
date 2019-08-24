@@ -3,7 +3,7 @@ import BaseSkeleton from './BaseSkeleton';
 
 const UserSkeleton = ()  => {
   return (
-    <div className="skeleton">
+    <div className="skeleton skeleton-user">
       <BaseSkeleton
         width="208"
         height="44"
