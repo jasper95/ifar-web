@@ -1,0 +1,64 @@
+%floatingSettings {
+	background-color: #fff;
+	box-shadow: 0 0 1em 0 rgba(#000,.05);
+	border-radius: .5rem;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+
+.dbContainer {
+	width: 100%;
+	min-height: 100vh;
+	padding: 0 1em;
+	background-color: $dbcontainer-bg;
+
+}
+
+
+.dbContainer .row-ToolbarHeader {
+	width: 100%;
+
+
+	// .row-ToolbarHeader-floating 
+	&-floating {
+		@extend %floatingSettings;
+		.ToolbarHeader {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			padding: 0 1rem;
+
+			// .ToolbarHeader_title
+			&_title {
+				font-size: 2rem;
+				font-weight: 700;
+				color: $primary-color-700;
+				.title {
+					@extend %inheritTextSettings;
+					margin-bottom: 0;
+				}
+			}
+
+			// .ToolbarHeader_toolbar
+			&_toolbar {
+				margin-left: auto;
+				.md-toolbar {
+					height: auto;
+				}
+				.iBttn:not(:last-child) {
+					margin-right: .5rem;
+				}
+			}
+		}
+	}
+}
+
+.dbContainer .row-Table {
+	width: 100%;
+	// .row-Table-floating
+	&-floating  {
+		@extend %floatingSettings;
+		padding: 1em;
+	}
+}
+

@@ -73,17 +73,15 @@ function User() {
   const [, onUpdateUser] = useUpdateNode({ node: 'user' });
   const [, onDelete] = useMutation({ url: '/user/bulk', method: 'DELETE', onSuccess: () => setSelected([]) });
   const dispatch = useDispatch();
+
   return (
     <div className="dbContainer">
+
       <div className="row-ToolbarHeader row-ToolbarHeader-floating">
-        <h1>
-          User Forms
-        </h1>
-        <Toolbar>
-          {getToolbarActions()}
-        </Toolbar>
+        <ToolbarHeader title="User Form" baseClass='ToolbarHeader' />
       </div>
-      <div className="row-Table">
+
+      <div className="row-Table row-Table-floating">
         <DataTable
           selected={selected}
           onRowToggle={onRowToggle}
@@ -95,26 +93,45 @@ function User() {
     </div>
   );
 
+  function ToolbarHeader({ title, baseClass }) {
+    return (
+      <div className={`${baseClass} row`}>
+        <div className={`${baseClass}_title`}>
+          <h1 className="title">{title}</h1>
+        </div>
+        <div className={`${baseClass}_toolbar`}>
+          <Toolbar>
+            {getToolbarActions()}
+          </Toolbar>
+        </div>
+      </div>
+    )
+  }
+
   function getToolbarActions() {
     return [
       <Button
+        flat
         children="New"
-        raised
         iconChildren="add"
+        className="iBttn iBttn-green"
         onClick={() => showDialog('Create')}
       />,
-      rows.length && (
+      rows.length && (  
         <Button
-          children="Export"
           flat
+          iconChildren="archive"
+          children="Export"
+          className="iBttn iBttn-primary"
           onClick={() => exportCsv(rows, ['email', 'full_name', 'role', 'srmp_role_name', 'srmp_units'], 'users.csv')}
         />
       ),
       selected.length && (
         <Button
+          flat
           children="Delete"
-          raised
           iconChildren="delete"
+          className="iBttn iBttn-error"
           onClick={() => confirmDelete(selected)}
         />
       ),

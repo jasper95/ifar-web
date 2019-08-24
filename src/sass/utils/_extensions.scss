@@ -56,3 +56,10 @@
 	font-family: $font-family;
 	color: $gray-200;
 }
+
+%inheritTextSettings {
+	font-size: inherit;
+	font-weight: inherit;
+	font-style: inherit;
+	color: inherit;
+}
