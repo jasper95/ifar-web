@@ -11,6 +11,8 @@ import useMutation from 'apollo/mutation';
 import cookie from 'js-cookie';
 import withRouter from 'react-router-dom/withRouter';
 
+import { UserSkeleton } from 'components/Skeletons'
+
 import 'sass/components/nav/index.scss';
 
 function Header(props) {
@@ -44,7 +46,7 @@ function Header(props) {
 
   function renderProfileNav() {
     if (authIsLoading) {
-      return (<div>Loading...</div>);
+      return (<UserSkeleton/>);
     }
     if (!isAuthenticated) {
       return (
