@@ -26,6 +26,8 @@ function create(initialState = {}, { getToken, fetchOptions }) {
     uri: `wss://${process.env.GRAPHQL_URL}`, // use wss for a secure endpoint
     options: {
       reconnect: true,
+      // lazy: true,
+      timeout: 60000,
     },
   });
   const authMiddleware = new ApolloLink((operation, forward) => {

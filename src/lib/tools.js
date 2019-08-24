@@ -7,7 +7,9 @@ import cookie from 'cookie';
 import day from 'dayjs';
 import capitalize from 'lodash/capitalize';
 import differenceBy from 'lodash/differenceBy';
-import camelCase from 'lodash/camelCase';
+import pick from 'lodash/pick';
+import jsonexport from 'jsonexport/dist';
+import fileSaver from 'file-saver';
 // import queryString from 'query-string';
 
 const barangayOptions = barangay.RECORDS;
@@ -185,4 +187,11 @@ export function getRecentChanges(oldData, newData, keys) {
       };
       return acc;
     }, { ...newData.recent_changes });
+}
+
+export function exportCsv(data, fields, filename) {
+  jsonexport(data.map(e => pick(e, fields)), (err, csv) => {
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    fileSaver.saveAs(blob, `${day().format('MM-DD-YYYY')}_${filename}`);
+  });
 }
