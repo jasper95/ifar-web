@@ -11,10 +11,11 @@ import { useDispatch } from 'react-redux';
 import { riskDetailsFragment } from 'components/Risk/List';
 import Button from 'react-md/lib/Buttons/Button';
 import gql from 'graphql-tag';
-import { getVulnerabilityLevel } from 'lib/tools';
+import { getVulnerabilityLevel, addClassTimeout } from 'lib/tools';
 import useQuery from 'apollo/query';
 import orderBy from 'lodash/orderBy';
 import generateRiskMapExcel from 'lib/generateRiskMapExcel';
+
 
 const businessUnitsQuery = gql`
   query {
@@ -52,6 +53,7 @@ export default function RiskMap() {
   const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const [currentImpact, setImpact] = useState('');
   const [currentStage, setStage] = useState('residual');
+
   const { data: { business_unit: businessUnits = [] } } = useQuery(businessUnitsQuery);
   let { data: { risk: riskItems = [] } } = useQuery(
     riskQuery, { variables: { id: currentBusinessUnit } },
@@ -71,6 +73,20 @@ export default function RiskMap() {
     ['vulnerability'], ['desc'],
   ).map((e, idx) => ({ ...e, order: idx + 1 })),
   [currentStage, riskItems, currentImpact]);
+
+  const handleSetStageWithAnimation = (setStageArgs) => {
+    const bodyel = document.getElementsByTagName('body')[0]
+    if (setStageArgs !== currentStage) {
+      addClassTimeout({ 
+        target: bodyel, 
+        classIn: 'animate_riskTables_exit',
+        classOut: 'animate_riskTables_enter',
+        timeout: 300, 
+        callback: () => setStage(setStageArgs)
+      })
+    }
+  }
+
   return (
     <div className="dbContainer">
       <Grid>
@@ -78,7 +94,7 @@ export default function RiskMap() {
           <Map
             risks={riskItems}
             currentStage={currentStage}
-            onChangeStage={setStage}
+            onChangeStage={handleSetStageWithAnimation}
             onChangeImpact={newVal => setImpact(prev => (prev !== newVal ? newVal : ''))}
             currentImpact={currentImpact}
           />
@@ -271,6 +287,7 @@ export function VulnerabilityChange({ row }) {
       payload: {
         path: 'RiskChanges',
         props: {
+          title: 'Vulnerability Changes',
           dialogId: 'RiskChanges',
           risk: row,
           dialogClassName: 'i_dialog_container--lg',

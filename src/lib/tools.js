@@ -195,3 +195,23 @@ export function exportCsv(data, fields, filename) {
     fileSaver.saveAs(blob, `${day().format('MM-DD-YYYY')}_${filename}`);
   });
 }
+
+
+export function addClassTimeout({ target, classIn,classOut,timeout, callback }){
+  debounce(() => {
+    target.classList.remove(classOut)
+    target.classList.add(classIn)
+    setTimeout(() => {
+      target.classList.add(classOut)
+      target.classList.remove(classIn)
+      callback()
+    }, timeout)
+  }, timeout)
+}
+
+
+let timer = 0
+export function debounce(callback, ms) {
+  clearTimeout(timer);
+  timer = setTimeout(callback, ms);
+}

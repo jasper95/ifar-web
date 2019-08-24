@@ -14,26 +14,34 @@ function UserDialog(props) {
   const { onElementChange } = formHandlers;
   return (
     <>
-      <TextField
-        id="first_name"
-        required
-        label="First Name"
-        onChange={onElementChange}
-        error={!!errors.first_name}
-        errorText={errors.first_name}
-        value={fields.first_name || ''}
-        className="iField"
-      />
-      <TextField
-        id="last_name"
-        required
-        label="Last Name"
-        onChange={onElementChange}
-        error={!!errors.last_name}
-        errorText={errors.last_name}
-        value={fields.last_name || ''}
-        className="iField"
-      />
+      <div className="row">
+        <div className="col-sm-6">
+          <TextField
+            id="first_name"
+            required
+            label="First Name"
+            onChange={onElementChange}
+            error={!!errors.first_name}
+            errorText={errors.first_name}
+            value={fields.first_name || ''}
+            className="iField"
+          />
+        </div>
+        <div className="col-sm-6">
+          <TextField
+            id="last_name"
+            required
+            label="Last Name"
+            onChange={onElementChange}
+            error={!!errors.last_name}
+            errorText={errors.last_name}
+            value={fields.last_name || ''}
+            className="iField"
+          />
+        </div>
+      </div>
+
+
       <TextField
         id="email"
         required

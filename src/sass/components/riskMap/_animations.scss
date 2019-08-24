@@ -1,0 +1,42 @@
+$classTrigger-enter : '.animate_riskTables_enter';
+$classTrigger-exit : '.animate_riskTables_exit';
+
+@keyframes enterTables {
+	from {
+		transform: translate(-200px,0);
+		opacity: 0,
+	}
+	to {
+		transform: translate(0,0);
+		opacity: 1,
+	}
+}
+
+@keyframes exitTables {
+	from {
+		transform: translate(0,0);
+		opacity: 1,
+	}
+	to {
+		transform: translate(200px,0);
+		opacity: 0
+	}
+}
+
+%animationSettings {
+	animation-fill-mode: both;
+	animation-duration: 300ms;
+}
+
+#{$classTrigger-enter} .mapTable {
+	@extend %animationSettings;
+	animation-name: enterTables;
+	animation-timing-function: ease-in;
+}
+
+#{$classTrigger-exit} .mapTable {
+	@extend %animationSettings;
+	animation-name: exitTables;
+	animation-timing-function: ease-out;
+}
+

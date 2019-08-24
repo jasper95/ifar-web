@@ -74,18 +74,25 @@ function User() {
   const [, onDelete] = useMutation({ url: '/user/bulk', method: 'DELETE', onSuccess: () => setSelected([]) });
   const dispatch = useDispatch();
   return (
-    <Paper>
-      <Toolbar>
-        {getToolbarActions()}
-      </Toolbar>
-      <DataTable
-        selected={selected}
-        onRowToggle={onRowToggle}
-        rows={rows}
-        columns={getColumns()}
-        isSelectable
-      />
-    </Paper>
+    <div className="dbContainer">
+      <div className="row-ToolbarHeader row-ToolbarHeader-floating">
+        <h1>
+          User Forms
+        </h1>
+        <Toolbar>
+          {getToolbarActions()}
+        </Toolbar>
+      </div>
+      <div className="row-Table">
+        <DataTable
+          selected={selected}
+          onRowToggle={onRowToggle}
+          rows={rows}
+          columns={getColumns()}
+          isSelectable
+        />
+      </div>
+    </div>
   );
 
   function getToolbarActions() {
