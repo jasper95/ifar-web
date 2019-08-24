@@ -24,8 +24,6 @@ $dialog-easing : cubic-bezier(0.180, -0.020, 0.300, 1.020);
 	}
 }
 
-
-
 .i_dialog {
 	position: fixed;
 	top: 0;
@@ -121,10 +119,12 @@ $dialog-easing : cubic-bezier(0.180, -0.020, 0.300, 1.020);
 	// .i_dialog_body
 	&_body {
 		height: auto;
-		padding: 2em 1em 4em 1em;
+		padding: 1rem;
+		padding-top: 1rem;
 		font-size: 1em;
 		max-height: unset !important;
 		font-family: $font-family;
+		overflow: visible;
 	}
 
 	// .i_dialog_footer
@@ -141,3 +141,9 @@ $dialog-easing : cubic-bezier(0.180, -0.020, 0.300, 1.020);
 		}
 	}
 }
+
+.md-no-scroll.md-no-scroll {
+	overflow: auto;
+	position: relative;
+}
+

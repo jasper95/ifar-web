@@ -95,6 +95,7 @@ function RiskPreview(props) {
         payload: {
           path: 'CopyRisk',
           props: {
+            dialogId: 'CopyRisk',
             title: 'Copy Risk',
             onValid: data => onMutateRisk({
               data: omit(data, 'id'),
