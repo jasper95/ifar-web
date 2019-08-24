@@ -19,7 +19,7 @@ function SelectAutocomplete(props) {
   return (
     <div className={`selectAutoComplete ${className}`}>
       {label && (
-        <span className='selectAutoComplete_label'>
+        <span className="selectAutoComplete_label">
           {label}
           {' '}
           {required && '*'}
@@ -42,7 +42,12 @@ function SelectAutocomplete(props) {
   );
 
   function handleChange(newVal) {
-    onChange(newVal.value, id, newVal);
+    const { isMulti } = props;
+    if (isMulti) {
+      onChange(newVal.map(e => e.value), id);
+    } else {
+      onChange(newVal.value, id, newVal);
+    }
   }
 }
 
