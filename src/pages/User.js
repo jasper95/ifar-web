@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import DataTable from 'components/DataTable';
 import Toolbar from 'react-md/lib/Toolbars/Toolbar';
-import Paper from 'react-md/lib/Papers/Paper';
 import useTableSelect from 'lib/hooks/useTableSelect';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
@@ -78,7 +77,7 @@ function User() {
     <div className="dbContainer">
 
       <div className="row-ToolbarHeader row-ToolbarHeader-floating">
-        <ToolbarHeader title="User Form" baseClass='ToolbarHeader' />
+        <ToolbarHeader title="User Form" baseClass="ToolbarHeader" />
       </div>
 
       <div className="row-Table row-Table-floating">
@@ -105,7 +104,7 @@ function User() {
           </Toolbar>
         </div>
       </div>
-    )
+    );
   }
 
   function getToolbarActions() {
@@ -117,7 +116,7 @@ function User() {
         className="iBttn iBttn-green"
         onClick={() => showDialog('Create')}
       />,
-      rows.length && (  
+      rows.length && (
         <Button
           flat
           iconChildren="archive"

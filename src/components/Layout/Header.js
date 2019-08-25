@@ -6,12 +6,10 @@ import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 import AuthContext from 'apollo/AuthContext';
-import useMutation from 'apollo/mutation';
-
+import useMutation, { useUpdateNode } from 'apollo/mutation';
 import cookie from 'js-cookie';
 import withRouter from 'react-router-dom/withRouter';
-
-import { UserSkeleton } from 'components/Skeletons'
+import { UserSkeleton } from 'components/Skeletons';
 
 import 'sass/components/nav/index.scss';
 
@@ -19,10 +17,12 @@ function Header(props) {
   const {
     avatarLink = '',
     match,
+    history,
   } = props;
   const dispatch = useDispatch();
   const { data: user, loading: authIsLoading } = useContext(AuthContext);
   const [, onLogout] = useMutation({ url: '/logout', onSuccess: onLogoutSucess });
+  const [, onUpdateUser] = useUpdateNode({ node: 'user', message: 'Profile successfully updated' });
   const isAuthenticated = Boolean(user);
   return (
     <nav className="nav">
@@ -46,7 +46,7 @@ function Header(props) {
 
   function renderProfileNav() {
     if (authIsLoading) {
-      return (<UserSkeleton/>);
+      return (<UserSkeleton />);
     }
     if (!isAuthenticated) {
       return (
@@ -59,41 +59,27 @@ function Header(props) {
     }
     return (
       <>
-        {/* <MenuButton
-          id="nav_profile_settings"
-          icon
-          menuItems={[
-            {
-              key: 1,
-              primaryText: 'Item One',
-            },
-            {
-              key: 2,
-              primaryText: 'Item Two',
-            },
-          ]}
-          className="nav_profile_settings"
-          anchor={{
-            x: MenuButton.HorizontalAnchors.INNER_LEFT,
-            y: MenuButton.VerticalAnchors.BOTTOM,
-          }}
-        >
-          build
-        </MenuButton> */}
         <MenuButton
           id="nav_profile_avatar"
           className="nav_profile_avatar"
           menuItems={[
             {
-              primaryText: 'View profile',
+              primaryText: 'Edit profile',
               leftIcon: <FontIcon>account_circle</FontIcon>,
+              onClick: editProfile,
+            },
+            user.role === 'ADMIN'
+            && {
+              primaryText: 'Manage Users',
+              leftIcon: <FontIcon>supervisor_account</FontIcon>,
+              onClick: () => history.push('/users'),
             },
             {
               primaryText: 'Logout',
               onClick: handleClickLogout,
               leftIcon: <FontIcon>exit_to_app</FontIcon>,
             },
-          ]}
+          ].filter(Boolean)}
           anchor={{
             x: MenuButton.HorizontalAnchors.INNER_LEFT,
             y: MenuButton.VerticalAnchors.BOTTOM,
@@ -121,6 +107,20 @@ function Header(props) {
           title: 'Confirm Logout',
           message: 'Do you really want to logout?',
           onValid: onLogout,
+        },
+      },
+    });
+  }
+
+  function editProfile() {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'User',
+        props: {
+          title: 'Edit Profile',
+          initialFields: user,
+          onValid: data => onUpdateUser({ data }),
         },
       },
     });

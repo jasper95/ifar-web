@@ -20,6 +20,7 @@ const sessionQuery = generateQueryById({
       last_name
       avatar
       email
+      role
     }`,
   ],
 });
