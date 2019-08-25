@@ -19,7 +19,14 @@ function RiskInfo(props) {
             key={id}
             className={`RiskInfo_info_list_item ${action}`}
           >
-            {name}
+            <span className="text">
+              {name}
+            </span>
+            { true && (
+              <span className="status">
+                new
+              </span>
+            )}
           </li>
         ))}
       </ul>
