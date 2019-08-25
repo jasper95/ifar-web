@@ -6,6 +6,7 @@ $table-header-text: $primary-color-200;
 	font-family: $font-family;
 	overflow: visible;
 	position: relative;
+	table-layout: fixed;
 
 
 	.md-data-table {
@@ -28,16 +29,31 @@ $table-header-text: $primary-color-200;
 		color: $black;
 		height: auto;
 
-		.md-table-column {
+		th {
 			font-weight: bold;
 			color: $table-header-text;
 			border-bottom: .15em solid $primary-color;
 		}
+
+
+
 	}
 	// body
 	.md-table-body {
 		.md-table-column {
 			padding: .25em 1em;
+		}
+	}
+
+	// table cell checkboxes
+	.md-table-checkbox {
+		width: 40px;
+		max-width: 40px;
+		min-width: 40px;
+		vertical-align: middle;
+		.md-selection-control-container {
+			margin-left: 0;
+			margin-right: 0;
 		}
 	}
 

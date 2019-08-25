@@ -2,6 +2,7 @@ import React from 'react';
 import Button from 'react-md/lib/Buttons/Button';
 import Map from './Map';
 import Categories from './Categories';
+import cn from 'classnames';
 
 import 'sass/components/riskMap/index.scss';
 // ================================
@@ -10,20 +11,20 @@ import 'sass/components/riskMap/index.scss';
 // line 98
 // ================================
 
-const Filters = ({ onChangeStage }) => (
+const Filters = ({ onChangeStage, currentStage }) => (
   <div className="riskMap_map_filter">
     <Button
-      className="iBttn"
+      className={cn(`iBttn`,{ 'active': currentStage === 'inherent' })}
       children="Inherent Risk Map"
       onClick={() => onChangeStage('inherent')}
     />
     <Button
-      className="iBttn"
+      className={cn(`iBttn`,{ 'active': currentStage === 'residual' })}
       children="Risidual Risk Map"
       onClick={() => onChangeStage('residual')}
     />
     <Button
-      className="iBttn"
+      className={cn(`iBttn`,{ 'active': currentStage === 'target' })}
       children="Target Risk Map"
       onClick={() => onChangeStage('target')}
     />

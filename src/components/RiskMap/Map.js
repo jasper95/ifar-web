@@ -6,12 +6,14 @@ import Column from './Column';
 
 function Map(props) {
   return (
-    <div className="mapTable">
-      <table cellPadding={0} cellSpacing={2}>
-        <tbody>
-          {range(0, 6).map(rowMapper)}
-        </tbody>
-      </table>
+    <div className="mapTableContainer">
+      <div className="mapTable">
+        <table cellPadding={0} cellSpacing={2}>
+          <tbody>
+            {range(0, 6).map(rowMapper)}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 

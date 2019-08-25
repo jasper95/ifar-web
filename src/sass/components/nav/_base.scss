@@ -133,6 +133,10 @@ $menu-text-color-active: $white;
 		padding: 0 1em;
 		position: relative;
 
+		> .skeleton {
+			width: 10rem;
+			height: 100%;
+		}
 
 		// nav_profile_settings
 		&_settings {

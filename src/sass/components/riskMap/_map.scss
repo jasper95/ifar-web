@@ -9,15 +9,30 @@
 		border-radius: 0;
 		border: none;
 		font-size: 1em;
+		color: $primary-color-L300;
 
 		&:hover {
+			color: $primary-color-600;
 			background-color: rgba(#000,.05);
 		}
 
 		&:not(:last-child) {
 			border-right: 2px solid rgba(#000,.05);
 		}
+
+		&.active {
+			font-weight: 700;
+			background-color: $primary-color-L800;
+			color: $primary-color-900;
+			border: none;
+		}
 	}
+}
+
+
+.riskMap_map .mapTableContainer {
+	width: 100%;
+	overflow: hidden;
 }
 
 .riskMap_map .mapTable {
@@ -25,6 +40,7 @@
 	box-shadow: 0 0 1em 0 rgba(#000,.1);
 	margin-bottom: 2em;
 	padding: 1em;
+
 	table {
 		width: 100%;
 	}
