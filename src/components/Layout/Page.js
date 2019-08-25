@@ -34,9 +34,9 @@ function Page(props) {
 
   let { pageTitle } = props;
   if (pageTitle) {
-    pageTitle = `RAFI - ${pageTitle}`;
+    pageTitle = `RAMONS - ${pageTitle}`;
   } else {
-    pageTitle = 'RAFI';
+    pageTitle = 'RAMONS';
   }
   return (
     <>
@@ -60,14 +60,14 @@ function Page(props) {
         <link rel="manifest" href="/static/manifest.json" />
         <link rel="shortcut icon" href="/static/icons/favicon.ico" />
 
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/favicons/apple-touch-icon.png"/>
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/favicons/favicon-32x32.png"/>
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/favicons/favicon-16x16.png"/>
-        <link rel="manifest" href="/site.webmanifest"/>
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"/>
-        <meta name="msapplication-TileColor" content="#ffc40d"/>
-        <meta name="msapplication-TileImage" content="/static/favicons/mstile-144x144.png"/>
-        <meta name="theme-color" content="#ffffff"/>
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/favicons/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/favicons/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/favicons/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#ffc40d" />
+        <meta name="msapplication-TileImage" content="/static/favicons/mstile-144x144.png" />
+        <meta name="theme-color" content="#ffffff" />
 
         <link rel="stylesheet" type="text/css" href="/static/css/react-md.indigo-pink.min.css" />
         <link rel="stylesheet" type="text/css" href="/static/css/Draft.css" />
