@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import flowRight from 'lodash/flowRight';
 import TextField from 'react-md/lib/TextFields/TextField';
 import SelectAutocomplete from 'components/SelectAutocomplete';
@@ -7,11 +7,14 @@ import businessUnits from 'lib/constants/riskManagement/businessUnits';
 import * as yup from 'yup';
 import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools';
 import { USER_ROLES, MANAGEMENT_ROLES } from 'pages/User';
+import AuthContext from 'apollo/AuthContext';
 
 function UserDialog(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
   const { onElementChange } = formHandlers;
+  const auth = useContext(AuthContext);
+  const { data: user } = auth;
   return (
     <>
       <div className="row">
@@ -40,8 +43,6 @@ function UserDialog(props) {
           />
         </div>
       </div>
-
-
       <TextField
         id="email"
         required
@@ -53,17 +54,19 @@ function UserDialog(props) {
         value={fields.email || ''}
         className="iField"
       />
-      <SelectAutocomplete
-        id="role"
-        required
-        placeholder="-Select-"
-        label="User Role"
-        onChange={onElementChange}
-        options={USER_ROLES}
-        value={fields.role || []}
-        error={errors.role}
-      />
-      {fields.role === 'USER' && (
+      {user.id !== fields.id && (
+        <SelectAutocomplete
+          id="role"
+          required
+          placeholder="-Select-"
+          label="User Role"
+          onChange={onElementChange}
+          options={USER_ROLES}
+          value={fields.role || []}
+          error={errors.role}
+        />
+      )}
+      {fields.role === 'USER' && fields.id !== user.id && (
         <>
           <SelectAutocomplete
             id="srmp_business_units"

@@ -84,13 +84,7 @@ function LoginPage() {
             children="Login"
             flat
           />
-          <Link 
-            to="/signup"
-            className="iBttn iBttn-second-prio"
-          >
-            Sign Up
-          </Link>
-          <Link 
+          <Link
             to="/forgot-password"
             className="authContainer_form_action_forget"
           >

@@ -18,7 +18,7 @@ function Verify() {
         </h1>
       )}
     >
-      <> 
+      <>
         <div>
           <div>
             Account successfully verified
