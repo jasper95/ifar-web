@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import TextFieldMessage from 'react-md/lib/TextFields/TextFieldMessage';
@@ -16,6 +16,7 @@ function SelectAutocomplete(props) {
     return options;
   },
   [options]);
+  const [currentValue, setCurrentValue] = useState(setInitialValue);
   return (
     <div className={`selectAutoComplete ${className}`}>
       {label && (
@@ -27,7 +28,7 @@ function SelectAutocomplete(props) {
       )}
       <Select
         id={id}
-        value={selectOptions.find(e => e.value === value)}
+        value={currentValue}
         options={selectOptions}
         onChange={handleChange}
         className="iField iField-rs"
@@ -41,6 +42,14 @@ function SelectAutocomplete(props) {
     </div>
   );
 
+  function setInitialValue() {
+    const { isMulti } = props;
+    if (isMulti) {
+      return value.map(i => selectOptions.find(j => j.value === i));
+    }
+    return selectOptions.find(i => i.value === value);
+  }
+
   function handleChange(newVal) {
     const { isMulti } = props;
     if (isMulti) {
@@ -48,6 +57,7 @@ function SelectAutocomplete(props) {
     } else {
       onChange(newVal.value, id, newVal);
     }
+    setCurrentValue(newVal);
   }
 }
 

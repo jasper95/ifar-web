@@ -2,13 +2,14 @@ import React, { useMemo } from 'react';
 import DataTable from 'components/DataTable';
 import Toolbar from 'react-md/lib/Toolbars/Toolbar';
 import useTableSelect from 'lib/hooks/useTableSelect';
+import useTableSort from 'lib/hooks/useTableSort';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
 import useMutation, { useCreateNode, useUpdateNode } from 'apollo/mutation';
 import gql from 'graphql-tag';
 import useQuery from 'apollo/query';
 import businessUnits from 'lib/constants/riskManagement/businessUnits';
-import { exportCsv } from 'lib/tools';
+import { exportCsv, getSortQuery } from 'lib/tools';
 
 export const USER_ROLES = [
   {
@@ -39,22 +40,21 @@ export const MANAGEMENT_ROLES = [
     label: 'View and Comment',
   },
 ];
-
-const usersQuery = gql`
-  subscription {
-    user {
-      id
-      first_name
-      last_name
-      role
-      srmp_role
-      srmp_business_units
-      email
-    }
-  }
-`;
-
 function User() {
+  const [sort, onSort] = useTableSort({ email: true });
+  const usersQuery = gql`
+    subscription{
+      user (order_by: ${getSortQuery(sort)}){
+        id
+        first_name
+        last_name
+        role
+        srmp_role
+        srmp_business_units
+        email
+      }
+    }
+  `;
   const usersResponse = useQuery(usersQuery, { ws: true });
   const { data: { user: users = [] }, loading: isLoading } = usersResponse;
   const rows = useMemo(() => users.map((e) => {
@@ -87,6 +87,9 @@ function User() {
           rows={rows}
           columns={getColumns()}
           isSelectable
+          sort={sort}
+          onSort={onSort}
+          processing={isLoading}
         />
       </div>
     </div>
@@ -173,12 +176,12 @@ function User() {
   function getColumns() {
     return [
       {
-        title: 'Full Name',
-        accessor: 'full_name',
-      },
-      {
         title: 'Email',
         accessor: 'email',
+      },
+      {
+        title: 'Full Name',
+        accessor: 'full_name',
       },
       {
         title: 'Role',

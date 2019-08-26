@@ -74,7 +74,6 @@ function ManageRisk() {
       variables: requestNotifCountVars,
     },
   );
-  console.log('notifCount', notifCount);
   const requestCount = useQuery(
     requestCountQuery,
     {

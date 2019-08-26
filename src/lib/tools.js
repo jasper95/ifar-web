@@ -196,21 +196,28 @@ export function exportCsv(data, fields, filename) {
   });
 }
 
+export function getSortQuery(sort) {
+  return `{${Object.entries(sort)
+    .map(([key, val]) => `${key}: ${val ? 'asc' : 'desc'}`)
+    .join(',')}}`;
+}
 
-export function addClassTimeout({ target, classIn,classOut,timeout, callback }){
+export function addClassTimeout({
+  target, classIn, classOut, timeout, callback,
+}) {
   debounce(() => {
-    target.classList.remove(classOut)
-    target.classList.add(classIn)
+    target.classList.remove(classOut);
+    target.classList.add(classIn);
     setTimeout(() => {
-      target.classList.add(classOut)
-      target.classList.remove(classIn)
-      callback()
-    }, timeout)
-  }, timeout)
+      target.classList.add(classOut);
+      target.classList.remove(classIn);
+      callback();
+    }, timeout);
+  }, timeout);
 }
 
 
-let timer = 0
+let timer = 0;
 export function debounce(callback, ms) {
   clearTimeout(timer);
   timer = setTimeout(callback, ms);

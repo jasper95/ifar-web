@@ -12,6 +12,7 @@ import cn from 'classnames';
 function DataTable(props) {
   const {
     rows, columns, onRowClick, className, isSelectable, selected, onRowToggle,
+    onSort, sort,
   } = props;
 
   return (
@@ -24,9 +25,11 @@ function DataTable(props) {
     >
       <TableHead>
         <TableRow>
-          {columns.map(({ title, headProps = {} }, idx) => (
+          {columns.map(({ title, accessor, headProps = {} }, idx) => (
             <TableColumn
               key={idx}
+              onClick={() => onSort(accessor)}
+              sorted={sort[accessor]}
               {...headProps}
             >
               {title}
@@ -67,6 +70,7 @@ DataTable.propTypes = {
   selected: PropTypes.array,
   isSelectable: PropTypes.bool,
   onRowToggle: PropTypes.func,
+  onSort: PropTypes.func,
 };
 
 DataTable.defaultProps = {
@@ -75,6 +79,7 @@ DataTable.defaultProps = {
   onRowToggle: () => {},
   selected: [],
   isSelectable: false,
+  onSort: () => {},
 };
 
 export default DataTable;
@@ -138,6 +143,7 @@ Row.propTypes = {
   component: PropTypes.func,
   fn: PropTypes.func,
   index: PropTypes.number.isRequired,
+  sort: PropTypes.object,
 };
 
 Row.defaultProps = {
@@ -147,4 +153,5 @@ Row.defaultProps = {
   accessor: '',
   fn: () => null,
   component: () => null,
+  sort: {},
 };

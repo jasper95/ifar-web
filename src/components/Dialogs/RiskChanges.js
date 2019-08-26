@@ -10,7 +10,6 @@ import { VulnerabilityChange } from 'pages/RiskMap';
 function RiskChanges(props) {
   const { risk } = props;
   const { recent_changes: recentChanges = {} } = risk;
-  console.log('recentChanges: ', recentChanges);
   const {
     causes = [],
     impacts = [],
@@ -32,7 +31,7 @@ function RiskChanges(props) {
       prevDetails: risk.previous_details ? risk.previous_details[stage] : null,
     })).map(mapVulnerability);
   return (
-    <div className='riskChangesForm'>
+    <div className="riskChangesForm">
       <div className="riskChangesForm_header">
         <h1 className="title">
           <span className="label">Risk Name</span>

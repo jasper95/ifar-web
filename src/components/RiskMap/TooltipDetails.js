@@ -2,7 +2,6 @@ import React from 'react';
 
 function TooltipDetails(props) {
   const { risk } = props;
-  console.log('risk: ', risk);
   return (
     <div className="riskMapTooltip">
 
