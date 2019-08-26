@@ -8,8 +8,8 @@ import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
 
 const requestQuery = gql`
-  subscription getRequests($user_id: jsonb, $business_unit_id: uuid) {
-    request(where: {business_unit_id: { _eq: $business_unit_id }}){
+  subscription getRequests($user_id: jsonb, $user_business_units: [uuid!]) {
+    request(where: {business_unit_id: { _in: $user_business_units }}){
       id
       user {
         first_name

@@ -7,14 +7,13 @@ import businessUnits from 'lib/constants/riskManagement/businessUnits';
 import * as yup from 'yup';
 import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools';
 import { USER_ROLES, MANAGEMENT_ROLES } from 'pages/User';
-import AuthContext from 'apollo/AuthContext';
+import { useSelector } from 'react-redux';
 
 function UserDialog(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
   const { onElementChange } = formHandlers;
-  const auth = useContext(AuthContext);
-  const { data: user } = auth;
+  const user = useSelector(state => state.auth);
   return (
     <>
       <div className="row">

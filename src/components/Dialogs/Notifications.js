@@ -8,8 +8,8 @@ import { format as formatTime } from 'timeago.js';
 import 'sass/components/notification/index.scss';
 
 const notificationQuery = gql`
-  query getNotifications($user_id: jsonb, $business_unit_id: uuid) {
-    notification(where: {receivers: {_contains: $user_id }, business_unit_id: { _eq: $business_unit_id }}) {
+  query getNotifications($user_id: jsonb, $user_business_units: [uuid!]) {
+    notification(where: {receivers: {_contains: $user_id }, business_unit_id: { _in: $user_business_units }}) {
       id
       details
       created_date

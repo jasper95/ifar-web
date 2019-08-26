@@ -15,16 +15,7 @@ import { getVulnerabilityLevel, addClassTimeout } from 'lib/tools';
 import useQuery from 'apollo/query';
 import orderBy from 'lodash/orderBy';
 import generateRiskMapExcel from 'lib/generateRiskMapExcel';
-
-
-const businessUnitsQuery = gql`
-  query {
-    business_unit(order_by: {order: asc}) {
-      id
-      name
-    }
-  }
-`;
+import useBusinessUnit from 'components/Risk/useBusinessUnit';
 
 const riskQuery = gql`
   query getList($id: uuid!) {
@@ -50,11 +41,14 @@ const riskQuery = gql`
 `;
 
 export default function RiskMap() {
-  const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
   const [currentImpact, setImpact] = useState('');
   const [currentStage, setStage] = useState('residual');
 
-  const { data: { business_unit: businessUnits = [] } } = useQuery(businessUnitsQuery);
+  const businessUnits = useBusinessUnit();
+  const [defaultBusinessUnit] = businessUnits;
+  const [currentBusinessUnit, setBusinessUnit] = useState(
+    defaultBusinessUnit ? defaultBusinessUnit.id : null,
+  );
   let { data: { risk: riskItems = [] } } = useQuery(
     riskQuery, { variables: { id: currentBusinessUnit } },
   );
@@ -75,17 +69,17 @@ export default function RiskMap() {
   [currentStage, riskItems, currentImpact]);
 
   const handleSetStageWithAnimation = (setStageArgs) => {
-    const bodyel = document.getElementsByTagName('body')[0]
+    const bodyel = document.getElementsByTagName('body')[0];
     if (setStageArgs !== currentStage) {
-      addClassTimeout({ 
-        target: bodyel, 
+      addClassTimeout({
+        target: bodyel,
         classIn: 'animate_riskTables_exit',
         classOut: 'animate_riskTables_enter',
-        timeout: 300, 
-        callback: () => setStage(setStageArgs)
-      })
+        timeout: 300,
+        callback: () => setStage(setStageArgs),
+      });
     }
-  }
+  };
 
   return (
     <div className="dbContainer">
@@ -191,7 +185,7 @@ function RowIndex({ row }) {
 function RiskName({ row }) {
   const dispatch = useDispatch();
   return (
-    <span 
+    <span
       className="riskname"
       onClick={onClick}
     >
@@ -243,9 +237,10 @@ export function VulnerabilityChange({ row }) {
   }
   if (status === 'up') {
     return (
-      <div 
-        className="vcStatus vcStatus-up" 
-        onClick={handleClick} role="presentation"
+      <div
+        className="vcStatus vcStatus-up"
+        onClick={handleClick}
+        role="presentation"
       >
         <span className="rafi-icon-arrow-up" />
       </div>
@@ -253,8 +248,11 @@ export function VulnerabilityChange({ row }) {
   }
   if (status === 'stagnant') {
     return (
-      <div className="vcStatus vcStatus-stagnant" 
-        onClick={handleClick} role="presentation">
+      <div
+        className="vcStatus vcStatus-stagnant"
+        onClick={handleClick}
+        role="presentation"
+      >
         <span className="rafi-icon-arrow-sides" />
       </div>
     );
@@ -262,8 +260,9 @@ export function VulnerabilityChange({ row }) {
   if (status === 'new') {
     return (
       <div
-        className="vcStatus vcStatus-new" 
-        onClick={handleClick} role="presentation"
+        className="vcStatus vcStatus-new"
+        onClick={handleClick}
+        role="presentation"
       >
         <span className="text">
           new

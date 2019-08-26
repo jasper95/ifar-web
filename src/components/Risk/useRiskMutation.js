@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import useMutation, { useCreateNode } from 'apollo/mutation';
-import AuthContext from 'apollo/AuthContext';
+import { useSelector } from 'react-redux';
 
 export default function useRiskMutation() {
-  const { data: user } = useContext(AuthContext);
+  const user = useSelector(state => state.auth);
 
   const [, onMutateRisk] = useMutation({ url: '/risk' });
   const [, onCreateRequest] = useCreateNode({ node: 'request' });
@@ -27,7 +27,7 @@ export default function useRiskMutation() {
         break;
       default:
     }
-    if (user.role !== 'ADMIN' && action !== 'COPY') {
+    if (userIsAdmin(user) && action !== 'COPY') {
       onCreateRequest({
         data: {
           type: `${action}_RISK`,
@@ -56,4 +56,8 @@ export default function useRiskMutation() {
     });
   }
   return [{}, onMutate];
+}
+
+function userIsAdmin(user) {
+  return user.role === 'ADMIN' || user.srmp_role === 'TEAM_LEADER';
 }

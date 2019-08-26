@@ -1,16 +1,16 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import RiskStats from 'components/Charts/RiskStats';
 import RiskList from 'components/Risk/List';
-import AuthContext from 'apollo/AuthContext';
+import useBusinessUnit from 'components/Risk/useBusinessUnit';
 import classificationLegend from 'lib/constants/riskManagement/classificationLegend';
 import impactDriverLegend from 'lib/constants/riskManagement/impactDriverLegend';
 import vulnerabilityLegend from 'lib/constants/riskManagement/vulnerabilityLegend';
 import colorMapping from 'lib/constants/riskManagement/colorMapping';
 import history from 'lib/history';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import gql from 'graphql-tag';
 import useQuery from 'apollo/query';
 import 'rc-pagination/assets/index.css';
@@ -35,8 +35,8 @@ const riskListQuery = gql`
 `;
 
 const notifCountQuery = gql`
-  subscription getRequestNotifCount($user_id: jsonb, $business_unit_id: uuid) {
-    notification_aggregate(where: {receivers: {_contains: $user_id }, business_unit_id: { _eq: $business_unit_id }}) {
+  subscription getRequestNotifCount($user_id: jsonb, $user_business_units: [uuid!]) {
+    notification_aggregate(where: {receivers: {_contains: $user_id }, business_unit_id: { _in: $user_business_units }}) {
       aggregate {
         count
       }
@@ -45,8 +45,8 @@ const notifCountQuery = gql`
 `;
 
 const requestCountQuery = gql`
-  subscription getRequestNotifCount($user_id: jsonb, $business_unit_id: uuid) {
-    request_aggregate(where: {business_unit_id: { _eq: $business_unit_id }}) {
+  subscription getRequestNotifCount($user_id: jsonb, $user_business_units: [uuid!]) {
+    request_aggregate(where: {business_unit_id: { _in: $user_business_units }}) {
       aggregate {
         count
       }
@@ -55,17 +55,18 @@ const requestCountQuery = gql`
 `;
 function ManageRisk() {
   const dispatch = useDispatch();
-  const { data: user } = useContext(AuthContext);
+  const user = useSelector(state => state.auth);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentBusinessUnit, setBusinessUnit] = useState('871637c4-5510-4500-8e78-984fce5001ff');
+  let userBusinessUnits = useBusinessUnit();
+  userBusinessUnits = userBusinessUnits.map(e => e.id);
+  const [defaultBusinessUnit = null] = userBusinessUnits;
+  const [currentBusinessUnit, setBusinessUnit] = useState(defaultBusinessUnit);
   const [currentClassification, setCurrentClassification] = useState(null);
   const [currentImpactDriver, setCurrentImpactDriver] = useState(null);
   const [currentVulnerability, setCurrentVulnerability] = useState();
   const riskListResponse = useQuery(riskListQuery,
     { ws: true, variables: { id: currentBusinessUnit, offset: currentPage - 1 } });
-  const requestNotifCountVars = {
-    ...user && !['ADMIN'].includes(user.role) && { business_unit_id: currentBusinessUnit, user_id: user.id },
-  };
+  const requestNotifCountVars = { user_business_units: userBusinessUnits, user_id: user.id };
   const notifCount = useQuery(
     notifCountQuery,
     {
@@ -73,6 +74,7 @@ function ManageRisk() {
       variables: requestNotifCountVars,
     },
   );
+  console.log('notifCount', notifCount);
   const requestCount = useQuery(
     requestCountQuery,
     {
@@ -128,7 +130,7 @@ function ManageRisk() {
       <Grid className="row-riskCharts">
         <Cell size={4}>
           {loading ? (
-            <ChartSkeleton/>
+            <ChartSkeleton />
           ) : (
             <RiskStats
               filterFunc={classificationFilter}
@@ -144,7 +146,7 @@ function ManageRisk() {
         </Cell>
         <Cell size={4}>
           {loading ? (
-            <ChartSkeleton/>
+            <ChartSkeleton />
           ) : (
             <RiskStats
               filterFunc={impactDriverFilter}
@@ -160,7 +162,7 @@ function ManageRisk() {
         </Cell>
         <Cell size={4}>
           {loading ? (
-            <ChartSkeleton/>
+            <ChartSkeleton />
           ) : (
             <RiskStats
               filterFunc={vulnerabilityFilter}
@@ -184,6 +186,7 @@ function ManageRisk() {
         classification={currentClassification}
         impactDriver={currentImpactDriver}
         residualVulnerability={currentVulnerability}
+        riskType="SRMP"
       />
     </div>
   );

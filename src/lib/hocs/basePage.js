@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import pick from 'lodash/pick';
 import useQuery, { useManualQuery } from 'apollo/query';
-import AuthContext from 'apollo/AuthContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useCreateNode, useUpdateNode, useDeleteNode } from 'apollo/mutation';
 
 
@@ -18,7 +17,7 @@ const withBasePage = params => (WrappedComponent) => {
   } = params;
   function BasePage(props) {
     const dispatch = useDispatch();
-    const { data: auth } = useContext(AuthContext);
+    const auth = useSelector(state => state.auth);
     const { data: listData, refetch } = useQuery(listQuery,
       { variables: { user_id: auth && auth.id } });
     const [, detailsHandler] = useManualQuery(detailsQuery);

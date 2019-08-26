@@ -1,8 +1,7 @@
 import { useContext } from 'react';
 import pick from 'lodash/pick';
 import useQuery, { useManualQuery } from 'apollo/query';
-import { useDispatch } from 'react-redux';
-import AuthContext from 'apollo/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
 import { useCreateNode, useUpdateNode, useDeleteNode } from 'apollo/mutation';
 
 
@@ -17,7 +16,8 @@ export default function useBasePage(params) {
     dialogProps = {},
   } = params;
   const dispatch = useDispatch();
-  const { data: auth } = useContext(AuthContext);
+  const auth = useSelector(state => state.auth);
+  // const { data: auth } = useContext(AuthContext);
   const { data: listData, refetch } = useQuery(listQuery,
     { variables: { user_id: auth && auth.id } });
   const [, detailsHandler] = useManualQuery(detailsQuery);

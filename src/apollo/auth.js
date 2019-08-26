@@ -3,7 +3,7 @@ import React, {
   useContext, useMemo, useEffect, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import useQuery from 'apollo/query';
 import { Redirect } from 'react-router';
 import jwt from 'jsonwebtoken';
@@ -21,6 +21,8 @@ const sessionQuery = generateQueryById({
       avatar
       email
       role
+      srmp_role
+      srmp_business_units
     }`,
   ],
 });
@@ -37,9 +39,12 @@ function getSessionId(token) {
 
 function AppWithAuth(props) {
   const { children } = props;
+  const dispatch = useDispatch();
   const token = useSelector(state => state.token);
   const sessionId = useMemo(() => getSessionId(token), [token]);
-  const authResponse = useQuery(sessionQuery, { skip: !sessionId, variables: { id: sessionId } });
+  const authResponse = useQuery(
+    sessionQuery, { skip: !sessionId, variables: { id: sessionId }, onCompleted },
+  );
   const {
     data: authData = {}, loading, error, refetch,
   } = authResponse;
@@ -56,6 +61,10 @@ function AppWithAuth(props) {
       {children}
     </AuthContext.Provider>
   );
+
+  function onCompleted() {
+    dispatch({ type: 'SET_STATE', payload: { auth } });
+  }
 }
 
 AppWithAuth.propTypes = {
@@ -71,7 +80,7 @@ export const withAuth = (WrappedComponent) => {
   function Auth(props) {
     const isMounted = useRef(false);
     const { requireAuth } = props;
-    const { data: auth, loading, error } = useContext(AuthContext);
+    const { loading, error, data: auth } = useContext(AuthContext);
     useEffect(() => {
       isMounted.current = true;
     }, []);
