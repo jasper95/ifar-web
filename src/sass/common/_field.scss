@@ -223,14 +223,36 @@ $fieldBorder: 1px solid $gray-200;
 
 	legend {
 		width: 100%;
+		font-size: 1rem;
 		text-align: left;
-		font-size: 1em;
 		color: $primary-color-400;
 		font-weight: 600;
 		padding: .5em;
 		margin-bottom: .5em;
 		padding: 0;
+
+		legend {
+			font-size: 1rem;
+			font-weight: 700;
+			color: $primary-color-400;
+		}
+
+		em {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			font-style: normal;
+			padding: .25rem;
+			color: darken($secondary-color, 05%);
+			font-weight: normal;
+			padding-left: 1rem;
+			width: 100%;
+			background-color: lighten($secondary-color, 45%);
+			border-left: .25rem solid $secondary-color;
+		}
 	}
+
+
 
 	.md-selection-control-container {
 		height: auto;

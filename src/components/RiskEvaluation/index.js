@@ -133,10 +133,12 @@ function RiskEvaluation(props) {
         label={(
           <>
             <legend>Management Action *</legend>
-            <em>
-              {currentEvaluation && `Previous Rating: ${currentEvaluation.management_action}; `}
-              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.management_action}`}
-            </em>
+            {currentEvaluation && (
+              <em>Previous Rating: {currentEvaluation.management_action}</em>
+            )}
+            {prevStageEvaluation && (
+              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.management_action}`} </em>
+            )}
           </>
         )}
         controls={managementActionOptions}
@@ -163,10 +165,12 @@ function RiskEvaluation(props) {
         label={(
           <>
             <legend>Reputation *</legend>
-            <em>
-              {currentEvaluation && `Previous Rating: ${currentEvaluation.reputation}; `}
-              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.reputation}`}
-            </em>
+            {currentEvaluation && (
+              <em>Previous Rating: {currentEvaluation.reputation}</em>
+            )}
+            {prevStageEvaluation && (
+              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.reputation}`} </em>
+            )}
           </>
         )}
         required
@@ -180,10 +184,12 @@ function RiskEvaluation(props) {
         label={(
           <>
             <legend>Financial *</legend>
-            <em>
-              {currentEvaluation && `Previous Rating: ${currentEvaluation.financial}; `}
-              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.financial}`}
-            </em>
+            {currentEvaluation && (
+              <em>Previous Rating: {currentEvaluation.financial}</em>
+            )}
+            {prevStageEvaluation && (
+              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.financial}`} </em>
+            )}
           </>
         )}
         id="impact.financial"
@@ -198,10 +204,12 @@ function RiskEvaluation(props) {
         label={(
           <>
             <legend>Health, Safety & Security *</legend>
-            <em>
-              {currentEvaluation && `Previous Rating: ${currentEvaluation.health_safety_security}; `}
-              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.health_safety_security}`}
-            </em>
+            {currentEvaluation && (
+              <em>Previous Rating: {currentEvaluation.health_safety_security}</em>
+            )}
+            {prevStageEvaluation && (
+              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.health_safety_security}`} </em>
+            )}
           </>
         )}
         id="impact.health_safety_security"
@@ -216,10 +224,12 @@ function RiskEvaluation(props) {
         label={(
           <>
             <legend>Operational *</legend>
-            <em>
-              {currentEvaluation && `Previous Rating: ${currentEvaluation.operational}; `}
-              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.operational}`}
-            </em>
+            {currentEvaluation && (
+              <em>Previous Rating: {currentEvaluation.operational}</em>
+            )}
+            {prevStageEvaluation && (
+              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.operational}`} </em>
+            )}
           </>
         )}
         id="impact.operational"
@@ -234,10 +244,12 @@ function RiskEvaluation(props) {
         label={(
           <>
             <legend>Legal and Compliance *</legend>
-            <em>
-              {currentEvaluation && `Previous Rating: ${currentEvaluation.legal_compliance}; `}
-              {prevStageEvaluation && `${capitalize(previousStage)} Rating: ${prevStageEvaluation.legal_compliance}`}
-            </em>
+            {currentEvaluation && (
+              <em>Previous Rating: {currentEvaluation.legal_compliance}</em>
+            )}
+            {prevStageEvaluation && (
+              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.legal_compliance}`} </em>
+            )}
           </>
         )}
         required
