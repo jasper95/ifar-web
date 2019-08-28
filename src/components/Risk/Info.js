@@ -22,9 +22,9 @@ function RiskInfo(props) {
             <span className="text">
               {name}
             </span>
-            { true && (
+            { action && (
               <span className="status">
-                new
+                {action}
               </span>
             )}
           </li>

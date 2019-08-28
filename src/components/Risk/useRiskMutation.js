@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import useMutation, { useCreateNode } from 'apollo/mutation';
 import { useSelector } from 'react-redux';
 
@@ -27,7 +26,7 @@ export default function useRiskMutation() {
         break;
       default:
     }
-    if (userIsAdmin(user) && action !== 'COPY') {
+    if (!userIsAdmin(user) && action !== 'COPY') {
       onCreateRequest({
         data: {
           type: `${action}_RISK`,

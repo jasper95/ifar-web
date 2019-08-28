@@ -14,7 +14,6 @@ function DataTable(props) {
     rows, columns, onRowClick, className, isSelectable, selected, onRowToggle,
     onSort, sort,
   } = props;
-
   return (
     <Table
       plain={!isSelectable}
@@ -71,6 +70,7 @@ DataTable.propTypes = {
   isSelectable: PropTypes.bool,
   onRowToggle: PropTypes.func,
   onSort: PropTypes.func,
+  sort: PropTypes.object,
 };
 
 DataTable.defaultProps = {
@@ -80,6 +80,7 @@ DataTable.defaultProps = {
   selected: [],
   isSelectable: false,
   onSort: () => {},
+  sort: {},
 };
 
 export default DataTable;
@@ -143,7 +144,6 @@ Row.propTypes = {
   component: PropTypes.func,
   fn: PropTypes.func,
   index: PropTypes.number.isRequired,
-  sort: PropTypes.object,
 };
 
 Row.defaultProps = {
@@ -153,5 +153,4 @@ Row.defaultProps = {
   accessor: '',
   fn: () => null,
   component: () => null,
-  sort: {},
 };

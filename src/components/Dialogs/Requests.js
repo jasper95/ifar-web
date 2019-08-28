@@ -6,6 +6,7 @@ import RiskItem from 'components/Risk/Item';
 import Preview from 'components/Request/Preview';
 import useQuery from 'apollo/query';
 import gql from 'graphql-tag';
+import { useSelector } from 'react-redux';
 
 const requestQuery = gql`
   subscription getRequests($user_id: jsonb, $user_business_units: [uuid!]) {
@@ -40,6 +41,7 @@ function Requests(props) {
   const { requestNotifCountVars } = props;
   const requestResponse = useQuery(requestQuery, { ws: true, variables: requestNotifCountVars });
   const { data: { request: requests = [] }, loading: listIsLoading } = requestResponse;
+  const user = useSelector(state => state.auth);
   return (
     <div>
       {listIsLoading ? (
@@ -54,7 +56,11 @@ function Requests(props) {
               <h2>{titleMapping[e.type]}</h2>
               <RiskItem
                 key={e.id}
-                previewProps={{ request: e, risk: e.type === 'EDIT_RISK' ? e.risk_details : e.risk }}
+                previewProps={{
+                  request: e,
+                  risk: e.type === 'EDIT_RISK' ? e.risk_details : e.risk,
+                  readOnly: user.role === 'USER' && ['VIEW_COMMENT', 'RISK_CHAMPION'].includes(user.srmp_role),
+                }}
                 detailsProps={{ risk: e.type === 'EDIT_RISK' ? e.risk_details : e.risk, readOnly: true }}
                 previewRenderer={Preview}
                 detailsRenderer={e.type === 'DONE_TREATMENT_RISK' ? () => null : undefined}

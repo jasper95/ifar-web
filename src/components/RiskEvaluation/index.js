@@ -72,6 +72,7 @@ function RiskEvaluation(props) {
     target: 'residual',
   }[type];
   const stagePrevRating = previousRating && previousRating[type];
+  console.log('previousRating: ', previousRating);
   const prevStageRating = previousRating && previousStage && previousRating[previousStage];
   useEffect(() => {
     if (!impact) {
@@ -94,13 +95,6 @@ function RiskEvaluation(props) {
       />
       <div className="riskEvaluation_header">
         <h3 className="riskEvaluation_header_title">Likelihood</h3>
-        {previousRating && (
-          <em>
-            {`Previous Basis: ${previousRating.basis}; `}
-            {stagePrevRating && `Rating: ${stagePrevRating.likelihood}; `}
-            {prevStageRating && `${capitalize(previousStage)} Basis: ${basis}; Rating: ${prevStageRating.likelihood}; `}
-          </em>
-        )}
       </div>
       <SelectionControlGroup
         className="iField iField-selectionGrp"
@@ -109,7 +103,17 @@ function RiskEvaluation(props) {
         controls={basisOptions}
         value={basis}
         onChange={newVal => onChange(newVal, 'basis')}
-        label="Basis *"
+        label={(
+          <>
+            <legend>Basis *</legend>
+            {previousRating && (
+              <em>{`Previous Basis: ${previousRating.basis}`}</em>
+            )}
+            {prevStageRating && (
+              <em>{`${capitalize(previousStage)} Basis: ${basis}`}</em>
+            )}
+          </>
+        )}
         type="radio"
         disabled={type !== 'inherent'}
       />
@@ -117,7 +121,17 @@ function RiskEvaluation(props) {
         className="iField iField-selectionGrp"
         id="likelihood.rating"
         name="likelihood.rating"
-        label="Rating *"
+        label={(
+          <>
+            <legend>Rating *</legend>
+            {stagePrevRating && (
+              <em>{`Previous Rating: ${stagePrevRating.likelihood};`}</em>
+            )}
+            {prevStageRating && (
+              <em>{`${capitalize(previousStage)} Rating: ${prevStageRating.likelihood}`}</em>
+            )}
+          </>
+        )}
         controls={basis === 'Frequency' ? frequencyOptions : probabilityOptions}
         type="radio"
         onChange={newVal => onChange(Number(newVal), `${type}_likelihood`)}
@@ -134,10 +148,12 @@ function RiskEvaluation(props) {
           <>
             <legend>Management Action *</legend>
             {currentEvaluation && (
-              <em>Previous Rating: {currentEvaluation.management_action}</em>
+              <em>{`Previous Rating: ${currentEvaluation.management_action}`}</em>
             )}
             {prevStageEvaluation && (
-              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.management_action}`} </em>
+              <em>
+                {`${capitalize(previousStage)} Rating: ${prevStageEvaluation.management_action}`}
+              </em>
             )}
           </>
         )}
@@ -166,10 +182,14 @@ function RiskEvaluation(props) {
           <>
             <legend>Reputation *</legend>
             {currentEvaluation && (
-              <em>Previous Rating: {currentEvaluation.reputation}</em>
+              <em>
+                {`Previous Rating: ${currentEvaluation.reputation}`}
+              </em>
             )}
             {prevStageEvaluation && (
-              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.reputation}`} </em>
+              <em>
+                {`${capitalize(previousStage)} Rating: ${prevStageEvaluation.reputation}`}
+              </em>
             )}
           </>
         )}
@@ -185,10 +205,14 @@ function RiskEvaluation(props) {
           <>
             <legend>Financial *</legend>
             {currentEvaluation && (
-              <em>Previous Rating: {currentEvaluation.financial}</em>
+              <em>
+                {`Previous Rating: ${currentEvaluation.financial}`}
+              </em>
             )}
             {prevStageEvaluation && (
-              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.financial}`} </em>
+              <em>
+                {`${capitalize(previousStage)} Rating: ${prevStageEvaluation.financial}`}
+              </em>
             )}
           </>
         )}
@@ -205,10 +229,14 @@ function RiskEvaluation(props) {
           <>
             <legend>Health, Safety & Security *</legend>
             {currentEvaluation && (
-              <em>Previous Rating: {currentEvaluation.health_safety_security}</em>
+              <em>
+                {`Previous Rating: ${currentEvaluation.health_safety_security}`}
+              </em>
             )}
             {prevStageEvaluation && (
-              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.health_safety_security}`} </em>
+              <em>
+                {`${capitalize(previousStage)} Rating: ${prevStageEvaluation.health_safety_security}`}
+              </em>
             )}
           </>
         )}
@@ -225,10 +253,14 @@ function RiskEvaluation(props) {
           <>
             <legend>Operational *</legend>
             {currentEvaluation && (
-              <em>Previous Rating: {currentEvaluation.operational}</em>
+              <em>
+                {`Previous Rating: ${currentEvaluation.operational}`}
+              </em>
             )}
             {prevStageEvaluation && (
-              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.operational}`} </em>
+              <em>
+                {`${capitalize(previousStage)} Rating: ${prevStageEvaluation.operational}`}
+              </em>
             )}
           </>
         )}
@@ -245,10 +277,14 @@ function RiskEvaluation(props) {
           <>
             <legend>Legal and Compliance *</legend>
             {currentEvaluation && (
-              <em>Previous Rating: {currentEvaluation.legal_compliance}</em>
+              <em>
+                {`Previous Rating: ${currentEvaluation.legal_compliance}`}
+              </em>
             )}
             {prevStageEvaluation && (
-              <em>{`${capitalize(previousStage)} Rating: ${prevStageEvaluation.legal_compliance}`} </em>
+              <em>
+                {`${capitalize(previousStage)} Rating: ${prevStageEvaluation.legal_compliance}`}
+              </em>
             )}
           </>
         )}

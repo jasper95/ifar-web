@@ -33,7 +33,9 @@ function Header(props) {
             alt=""
           />
         </Link>
-        <NavItems currentPath={match.path} />
+        {user && (
+          <NavItems currentPath={match.path} />
+        )}
         <div className="nav_actions">
 
           <div className="nav_profile">

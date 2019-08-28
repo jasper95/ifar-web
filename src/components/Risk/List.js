@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Button from 'react-md/lib/Buttons/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useCreateNode } from 'apollo/mutation';
 import gql from 'graphql-tag';
 import Pagination from 'rc-pagination';
-import { getImpactDriver } from 'lib/tools';
+import { getImpactDriver, getRecentChanges } from 'lib/tools';
 import useQuery from 'apollo/query';
 import pick from 'lodash/pick';
 import useBusinessUnit from './useBusinessUnit';
 import RiskItem from './Item';
 import 'sass/components/risk/index.scss';
+
 
 export const businessUnitQuery = gql`
   subscription getBusinessUnits($user_business_units: [uuid!]){
@@ -72,6 +73,7 @@ function RiskList(props) {
     onChangeBusinessUnit, businessUnit, classification, impactDriver, residualVulnerability,
   } = props;
   const [currentPage, setCurrentPage] = useState(1);
+  const user = useSelector(state => state.auth);
   const userBusinessUnits = useBusinessUnit();
   const variables = {
     business_unit_id: businessUnit,
@@ -148,8 +150,8 @@ function RiskList(props) {
             <span>Loading...</span>
           ) : list.map(risk => (
             <RiskItem
-              previewProps={{ risk }}
-              detailsProps={{ risk }}
+              previewProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT' }}
+              detailsProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT' }}
               key={risk.id}
               className="riskList_risk_content_item"
             />
@@ -177,7 +179,7 @@ function RiskList(props) {
                 inherent_impact_driver: impactDriver,
                 inherent_rating: data.impact_details.inherent[impactDriver],
                 recent_changes: {
-                  ...pick(data, 'stakeholders', 'impacts', 'causes'),
+                  ...getRecentChanges({}, data, ['stakeholders', 'impacts', 'causes']),
                   current_treatments: [],
                   future_treatments: [],
                 },

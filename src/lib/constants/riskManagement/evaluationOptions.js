@@ -10,11 +10,11 @@ export const frequencyOptions = [
   },
   {
     value: 3,
-    label: '1 - Above 35% - 65%',
+    label: '3 - Above 35% - 65%',
   },
   {
     value: 4,
-    label: '1 - Above 65% - 95%',
+    label: '4 - Above 65% - 95%',
   },
 ];
 export const probabilityOptions = [

@@ -183,7 +183,7 @@ export function getRecentChanges(oldData, newData, keys) {
     .reduce((acc, el) => {
       acc = {
         ...acc,
-        [el]: getArrayDiff(oldData[el], newData[el]),
+        [el]: getArrayDiff(oldData[el] || [], newData[el] || []),
       };
       return acc;
     }, { ...newData.recent_changes });

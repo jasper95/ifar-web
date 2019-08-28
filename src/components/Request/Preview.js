@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 
 function RequestPreview(props) {
   const {
-    request, className, risk,
+    request, className, risk, readOnly,
   } = props;
   const dispatch = useDispatch();
   const [, onMutateRequest] = useMutation({});
@@ -41,22 +41,26 @@ function RequestPreview(props) {
           >
             add
           </Button>
-          <Button
-            className="iBttn iBttn-success"
-            onClick={() => showDialog({ type: 'ACCEPT_REQUEST' })}
-            tooltipLabel="Accept Request"
-            icon
-          >
-            check
-          </Button>
-          <Button
-            className="iBttn iBttn-error"
-            onClick={() => showDialog({ type: 'DECLINE_REQUEST' })}
-            icon
-            tooltipLabel="Decline Request"
-          >
-            remove
-          </Button>
+          {!readOnly && (
+            <>
+              <Button
+                className="iBttn iBttn-success"
+                onClick={() => showDialog({ type: 'ACCEPT_REQUEST' })}
+                tooltipLabel="Accept Request"
+                icon
+              >
+                check
+              </Button>
+              <Button
+                className="iBttn iBttn-error"
+                onClick={() => showDialog({ type: 'DECLINE_REQUEST' })}
+                icon
+                tooltipLabel="Decline Request"
+              >
+                remove
+              </Button>
+            </>
+          )}
         </Cell>
       </Grid>
       <Grid>
