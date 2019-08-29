@@ -115,6 +115,9 @@ $chart-width: 250px;
 					font-weight: bold;
 					flex-shrink: 1;
 					word-break: break-all;
+					transition: 
+						color 300ms ease-out 100ms,
+						letter-spacing 300ms ease-out;
 				}
 
 				.md-icon-separator {
@@ -132,10 +135,37 @@ $chart-width: 250px;
 					line-height: 1;
 					flex-shrink: 0;
 					color: #FFF;
+					transition:
+						background-color 300ms ease-out;
 				}
 
 				&:hover {
 					background-color: darken($gray-100,5%);
+				}
+			}
+
+			// .chartCard_content_stats_item.active
+			&_item.active {
+				color: #FFF;
+				background-image: linear-gradient(
+					to left,
+					$primary-color ,
+					$primary-color-L100 ,
+					$primary-color-L300
+				);
+
+				.md-icon-text {
+					font-weight: 500 !important;
+					letter-spacing: .15em;
+				}
+
+				&:before {
+					background-color: $primary-color !important;
+				}
+
+				.chartCard_content_stats_item_badge {
+					background-color: #fff !important;
+					color: $primary-color !important;
 				}
 			}
 		}

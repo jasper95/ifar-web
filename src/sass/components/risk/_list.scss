@@ -238,6 +238,7 @@ $risklist-header-arrow-bg: $primary-color-400;
 // =============================
 // RISK INFO
 // =============================
+
 .rafi .RiskInfo {
 	font-size: 1rem;
 
@@ -263,25 +264,6 @@ $risklist-header-arrow-bg: $primary-color-400;
 			margin-bottom: 0;
 			padding-left: 2em;
 			font-size: 1em;
-
-			// .RiskInfo_info_list_item
-			&_item {
-				margin-bottom: .5em;
-				text-align: left;
-				font-family: $font-family;
-
-				&.add {
-					.status {
-						background-color: darken($success,15%);
-						color: #FFF;
-						padding: .25em 1em;
-						border-radius: .5rem;
-						font-size: .8rem;
-						font-weight: 600;
-						margin-left: 2ch;
-					}
-				}
-			}
 		}
 	}
 
@@ -307,5 +289,29 @@ $risklist-header-arrow-bg: $primary-color-400;
 				}
 			}
 		}
+	}
+}
+
+%additionalPillStatus {
+	color: #FFF;
+	padding: .25em 1em;
+	border-radius: .5rem;
+	font-size: .8rem;
+	font-weight: 600;
+	margin-left: 2ch;
+}
+.RiskInfo_info_list_item {
+	margin-bottom: .5em;
+	text-align: left;
+	font-family: $font-family;
+
+	&.add .status {
+		background-color: darken($success,15%);
+		@extend %additionalPillStatus;
+	}
+
+	&.remove .status {
+		background-color: darken($error, 5%);
+		@extend %additionalPillStatus;
 	}
 }
