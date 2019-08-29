@@ -18,7 +18,7 @@ import generateRiskMapExcel from 'lib/generateRiskMapExcel';
 import useBusinessUnit from 'components/Risk/useBusinessUnit';
 
 const riskQuery = gql`
-  query getList($id: uuid!) {
+  subscription getList($id: uuid!) {
     risk(where: {business_unit: {id: {_eq: $id }}}) {
       id
       name
@@ -50,7 +50,7 @@ export default function RiskMap() {
     defaultBusinessUnit ? defaultBusinessUnit.id : null,
   );
   let { data: { risk: riskItems = [] } } = useQuery(
-    riskQuery, { variables: { id: currentBusinessUnit } },
+    riskQuery, { variables: { id: currentBusinessUnit }, ws: true },
   );
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   riskItems = useMemo(() => orderBy(
