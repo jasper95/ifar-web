@@ -72,7 +72,6 @@ function RiskEvaluation(props) {
     target: 'residual',
   }[type];
   const stagePrevRating = previousRating && previousRating[type];
-  console.log('previousRating: ', previousRating);
   const prevStageRating = previousRating && previousStage && previousRating[previousStage];
   useEffect(() => {
     if (!impact) {

@@ -74,6 +74,7 @@ function RiskDetails(props) {
       payload: {
         path: `${type}Risk`,
         props: {
+          dialogClassName: 'i_dialog_container--lg',
           isRerate,
           title: dialogTitle,
           onValid: (data) => {
@@ -98,6 +99,7 @@ function RiskDetails(props) {
             current_stage_impact_details: risk.impact_details && risk.impact_details[key],
             tracked_diff: pick(risk, key === 'residual' ? 'current_treatments' : 'future_treatments'),
             previous_details: {
+              basis: risk.basis,
               ...previousDetails,
               [key]: {
                 rating: risk[`${key}_rating`],
