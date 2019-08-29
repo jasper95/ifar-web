@@ -82,6 +82,7 @@ function ManageRisk() {
     },
   );
   const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
+
   return (
     <div className="dbContainer">
       <Grid className="row-ToolbarHeader">
