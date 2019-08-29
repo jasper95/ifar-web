@@ -15,3 +15,9 @@ body {
 .md-text--theme-secondary {
 	color: $primary-color;
 }
+
+* ,
+*:before ,
+*:after {
+	box-sizing: border-box;
+}

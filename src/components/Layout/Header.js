@@ -10,6 +10,7 @@ import useMutation, { useUpdateNode } from 'apollo/mutation';
 import cookie from 'js-cookie';
 import withRouter from 'react-router-dom/withRouter';
 import { UserSkeleton } from 'components/Skeletons';
+import { NavSkeleton } from 'components/Skeletons';
 
 import 'sass/components/nav/index.scss';
 
@@ -24,6 +25,7 @@ function Header(props) {
   const [, onLogout] = useMutation({ url: '/logout', onSuccess: onLogoutSucess });
   const [, onUpdateUser] = useUpdateNode({ node: 'user', message: 'Profile successfully updated' });
   const isAuthenticated = Boolean(user);
+
   return (
     <nav className="nav">
       <div className="nav_container">

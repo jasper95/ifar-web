@@ -1,14 +1,19 @@
 import React from 'react';
 import BaseSkeleton from './BaseSkeleton';
 
-const UserSkeleton = ()  => {
+const UserSkeleton = (props) => {
+  const {
+    fillPrimary = '#676767',
+    fillSecondary = '#7E7E7E'
+  } = props
+
   return (
     <div className="skeleton skeleton-user">
       <BaseSkeleton
         width="208"
         height="44"
-        primaryColor='#252525'
-        secondaryColor='#3C3C3C'
+        primaryColor={fillPrimary}
+        secondaryColor={fillSecondary}
       >
         <path d="
           M4,30h140c2.2,0,4-1.8,4-4v-4c0-2.2-1.8-4-4-4H4c-2.2,

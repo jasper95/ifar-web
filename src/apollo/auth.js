@@ -9,6 +9,7 @@ import { Redirect } from 'react-router';
 import jwt from 'jsonwebtoken';
 import AuthContext from 'apollo/AuthContext';
 import { generateQueryById } from './query';
+import { NavSkeleton } from 'components/Skeletons';
 
 const sessionQuery = generateQueryById({
   node: 'user_session',
@@ -85,7 +86,7 @@ export const withAuth = (WrappedComponent) => {
       isMounted.current = true;
     }, []);
     if (!isMounted.current && loading && requireAuth !== 'optional') {
-      return (<span>Loading...</span>);
+      return (<NavSkeleton />);
     }
     if ((!auth || error) && requireAuth === true) {
       return (<Redirect to="/login" />);
