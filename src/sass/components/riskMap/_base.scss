@@ -52,3 +52,23 @@ $map-legend-width: 150px;
 }
 
 
+.tableRiskActions {
+	position: sticky;
+	top: $nav-height;
+	width: 100%;
+	height: calc(100vh - #{$nav-height} - 16px);
+
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-direction: column;
+
+	.tableRiskMapToolbar {
+		flex-shrink: 0;
+	}
+
+	.tableRiskMap {
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+}

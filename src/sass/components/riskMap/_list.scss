@@ -6,6 +6,8 @@
 }
 
 .tableRiskMap {
+	width: 100%;
+	overflow-y: auto !important;
 	table-layout: fixed;
 
 	.md-table-header {

@@ -93,46 +93,48 @@ export default function RiskMap() {
             currentImpact={currentImpact}
           />
         </Cell>
-        <Cell size={3}>
-          <div className="tableRiskMapToolbar">
-            <MenuButton
-              adjusted={false}
-              raised
-              primary
-              menuItems={businessUnits
-                .map(e => ({ primaryText: e.name, onClick: () => setBusinessUnit(e.id) }))
-              }
-              simplifiedMenu={false}
-              anchor={MenuButton.Positions.BOTTOM}
-              repositionOnScroll={false}
-              id="tableRiskMapToolbar"
-              className="tableRiskMapToolbar_menu iBttn iBttn-primary"
-              listClassName="tableRiskMapToolbar_menu_list"
-            >
-              <FakeButton
-                component={IconSeparator}
-                label={(
-                  <IconSeparator label={selected ? selected.name : ''}>
-                    <FontIcon>arrow_drop_down</FontIcon>
-                  </IconSeparator>
-              )}
-              />
-            </MenuButton>
-            <Button
-              flat
-              className="tableRiskMapToolbar_export"
-              onClick={() => {
-                generateRiskMapExcel(riskItems);
-              }}
-            >
-              Export as Excel
-            </Button>
+        <Cell size={3} >
+          <div className="tableRiskActions">
+            <div className="tableRiskMapToolbar">
+              <MenuButton
+                adjusted={false}
+                raised
+                primary
+                menuItems={businessUnits
+                  .map(e => ({ primaryText: e.name, onClick: () => setBusinessUnit(e.id) }))
+                }
+                simplifiedMenu={false}
+                anchor={MenuButton.Positions.BOTTOM}
+                repositionOnScroll={false}
+                id="tableRiskMapToolbar"
+                className="tableRiskMapToolbar_menu iBttn iBttn-primary"
+                listClassName="tableRiskMapToolbar_menu_list"
+              >
+                <FakeButton
+                  component={IconSeparator}
+                  label={(
+                    <IconSeparator label={selected ? selected.name : ''}>
+                      <FontIcon>arrow_drop_down</FontIcon>
+                    </IconSeparator>
+                )}
+                />
+              </MenuButton>
+              <Button
+                flat
+                className="tableRiskMapToolbar_export"
+                onClick={() => {
+                  generateRiskMapExcel(riskItems);
+                }}
+              >
+                Export as Excel
+              </Button>
+            </div>
+            <DataTable
+              rows={riskItems}
+              className="tableRiskMap"
+              columns={getTableColumns()}
+            />
           </div>
-          <DataTable
-            rows={riskItems}
-            className="tableRiskMap"
-            columns={getTableColumns()}
-          />
         </Cell>
       </Grid>
     </div>
