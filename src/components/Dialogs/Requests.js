@@ -31,10 +31,6 @@ const requestQuery = gql`
         target_rating
         residual_rating
         inherent_rating
-        business_unit {
-          id
-          name
-        }
       },
       risk_details
       treatment_details
