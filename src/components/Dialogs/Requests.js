@@ -1,7 +1,6 @@
 import React from 'react';
 import flowRight from 'lodash/flowRight';
 import withDialog from 'lib/hocs/dialog';
-import { riskDetailsFragment } from 'components/Risk/List';
 import RiskItem from 'components/Risk/Item';
 import Preview from 'components/Request/Preview';
 import useQuery from 'apollo/query';
@@ -10,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 const requestQuery = gql`
   subscription getRequests($user_id: jsonb, $user_business_units: [uuid!]) {
-    request(where: {business_unit_id: { _in: $user_business_units }}){
+    request(where: {business_unit_id: { _in: $user_business_units }}, order_by: { created_date: asc }){
       id
       user {
         first_name
@@ -18,7 +17,20 @@ const requestQuery = gql`
       }
       type
       risk {
-        ...RiskDetails
+        causes
+        business_unit_id
+        classification_id
+        current_treatments
+        definition
+        future_treatments
+        id
+        impacts
+        name
+        stakeholders
+        basis
+        target_rating
+        residual_rating
+        inherent_rating
         business_unit {
           id
           name
@@ -28,7 +40,6 @@ const requestQuery = gql`
       treatment_details
     }
   }
-  ${riskDetailsFragment}
 `;
 
 const titleMapping = {

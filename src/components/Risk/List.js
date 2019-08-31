@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 import Pagination from 'rc-pagination';
 import { getImpactDriver, getRecentChanges } from 'lib/tools';
 import useQuery from 'apollo/query';
-import pick from 'lodash/pick';
+// import pick from 'lodash/pick';
 import useBusinessUnit from './useBusinessUnit';
 import RiskItem from './Item';
 import 'sass/components/risk/index.scss';
@@ -28,11 +28,9 @@ export const businessUnitQuery = gql`
 `;
 
 export const riskDetailsFragment = gql`
-  fragment RiskDetails on risk {
+  fragment RiskDetails on risk_dashboard {
     causes
-    classification {
-      name
-    }
+    classification_name
     business_unit_id
     impact_details
     previous_details
@@ -57,12 +55,10 @@ export const riskDetailsFragment = gql`
 
 export const riskListQuery = gql`
   subscription getList($business_unit_id: uuid!, $classification_id: uuid, $residual_impact_driver: String, $residual_vulnerability: String, $offset:Int , $limit: Int =10){
-    risk(where: {business_unit_id: {_eq: $business_unit_id }, classification_id: { _eq: $classification_id }, residual_impact_driver: { _eq: $residual_impact_driver }, residual_vulnerability: { _eq: $residual_vulnerability } }, order_by: {created_date: desc}, offset: $offset, limit: $limit) {
+    risk_dashboard(where: {business_unit_id: {_eq: $business_unit_id }, classification_id: { _eq: $classification_id }, residual_impact_driver: { _eq: $residual_impact_driver }, residual_vulnerability: { _eq: $residual_vulnerability } }, order_by: {created_date: desc}, offset: $offset, limit: $limit) {
       ...RiskDetails
-      business_unit {
-        name
-        id
-      }
+      recent_changes
+      has_treatment_request
     }
   }
   ${riskDetailsFragment}
@@ -84,7 +80,7 @@ function RiskList(props) {
   };
   const riskListResponse = useQuery(riskListQuery,
     { ws: true, variables });
-  const { data: { risk: list = [] }, loading: listIsLoading } = riskListResponse;
+  const { data: { risk_dashboard: list = [] }, loading: listIsLoading } = riskListResponse;
   const dispatch = useDispatch();
   const businessUnitResponse = useQuery(
     businessUnitQuery,
@@ -151,7 +147,7 @@ function RiskList(props) {
           ) : list.map(risk => (
             <RiskItem
               previewProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT' }}
-              detailsProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT' }}
+              detailsProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT', residualReadOnly: risk.has_treatment_request }}
               key={risk.id}
               className="riskList_risk_content_item"
             />

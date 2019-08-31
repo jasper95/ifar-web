@@ -172,9 +172,9 @@ export function getVulnerabilityLevel(vulnerability) {
   return level;
 }
 
-export function getArrayDiff(original, updated) {
-  const removed = differenceBy(original, updated, 'id').map(e => ({ ...e, action: 'remove' }));
-  const added = differenceBy(updated, original, 'id').map(e => ({ ...e, action: 'add' }));
+export function getArrayDiff(old, updated) {
+  const removed = differenceBy(old, updated, 'id').map(e => ({ ...e, action: 'remove' }));
+  const added = differenceBy(updated, old, 'id').map(e => ({ ...e, action: 'add' }));
   return removed.concat(added);
 }
 

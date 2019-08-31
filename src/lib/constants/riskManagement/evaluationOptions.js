@@ -1,5 +1,5 @@
 export const basisOptions = ['Frequency', 'Probability'].map(e => ({ label: e, value: e }));
-export const frequencyOptions = [
+export const probabilityOptions = [
   {
     value: 1,
     label: '1 - Below 5%',
@@ -17,7 +17,7 @@ export const frequencyOptions = [
     label: '4 - Above 65% - 95%',
   },
 ];
-export const probabilityOptions = [
+export const frequencyOptions = [
   {
     value: 1,
     label: '1 - Similar events occur at least once every 1000 years',

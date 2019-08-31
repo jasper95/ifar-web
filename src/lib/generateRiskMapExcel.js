@@ -23,7 +23,7 @@ export default async function generateRiskMapExcel(data, filename = `PRMP_${day(
 function mapData(ws, risk, index) {
   const START_ROW = 6;
   const rowNumber = START_ROW + index;
-  setValueAndMerge(ws, risk.classification.name, `A${rowNumber}`);
+  setValueAndMerge(ws, risk.classification_name, `A${rowNumber}`);
   setValueAndMerge(ws, '', `B${rowNumber}`);
   setValueAndMerge(ws, risk.name, `C${rowNumber}`);
   setValueAndMerge(ws, risk.definition, `D${rowNumber}`);

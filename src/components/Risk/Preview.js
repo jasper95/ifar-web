@@ -7,6 +7,7 @@ import omit from 'lodash/omit';
 import { useDispatch } from 'react-redux';
 import { getImpactDriver, getRecentChanges } from 'lib/tools';
 import pick from 'lodash/pick';
+import classifications from 'lib/constants/riskManagement/classifications';
 import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
@@ -20,7 +21,7 @@ function RiskPreview(props) {
         <RiskPreviewInfo
           colspan={3}
           title="Classification"
-          info={risk.classification.name}
+          info={classifications.find(e => e.id === risk.classification_id).name}
         />
         <RiskPreviewInfo
           colspan={3}

@@ -1,5 +1,5 @@
 import 'react-datepicker/dist/react-datepicker.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import loadable from '@loadable/component';
 import PropTypes from 'prop-types';
 import { Helmet as Head } from 'react-helmet';
@@ -18,7 +18,9 @@ const pageSelector = createSelector(
   state => state.toast,
   state => state.dialog,
   state => state.temporaryClosedDialogs,
-  (toast, dialog, temporaryClosedDialogs) => ({ toast, dialog, hasTemporaryClosed: temporaryClosedDialogs.length > 0 }),
+  (toast, dialog, temporaryClosedDialogs) => (
+    { toast, dialog, hasTemporaryClosed: temporaryClosedDialogs.length > 0 }
+  ),
 );
 
 function Page(props) {
@@ -31,6 +33,7 @@ function Page(props) {
   const appData = useSelector(pageSelector);
   const dispatch = useDispatch();
   const { toast, dialog } = appData;
+  useEffect(() => willUnmount, []);
 
   let { pageTitle } = props;
   if (pageTitle) {
@@ -98,6 +101,9 @@ function Page(props) {
       )}
     </>
   );
+  function willUnmount() {
+    dispatch({ type: 'HIDE_NOTIFICATION' });
+  }
 }
 
 const EnhancedPage = flowRight(

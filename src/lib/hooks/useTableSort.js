@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-export default function useTableSort(initialSort = {}) {
-  const [sort, setSort] = useState(initialSort);
+export default function useTableSort({ initialSorted, sortable = [] }) {
+  const [sort, setSort] = useState(initialSorted ? { [initialSorted]: true } : {});
 
   function onSort(sortKey) {
     const { [sortKey]: sortValue } = sort;
-    if (sortValue !== undefined) {
-      setSort({ ...sort, [sortKey]: Boolean(!sortValue) });
+    if (sortable.includes(sortKey)) {
+      setSort({ [sortKey]: Boolean(!sortValue) });
     }
   }
 

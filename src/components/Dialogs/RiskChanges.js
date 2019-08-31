@@ -1,11 +1,10 @@
 import React from 'react';
-import Cell from 'react-md/lib/Grids/Cell';
 import Grid from 'react-md/lib/Grids/Grid';
 import DataTable from 'components/DataTable';
 import withDialog from 'lib/hocs/dialog';
 import flowRight from 'lodash/flowRight';
 import RiskInfo from 'components/Risk/Info';
-import { VulnerabilityChange } from 'pages/RiskMap';
+import VulnerabilityChange from 'components/RiskMap/VulnerabilityChange';
 
 function RiskChanges(props) {
   const { risk } = props;
@@ -49,8 +48,8 @@ function RiskChanges(props) {
           <RiskInfo colspan={4} title="Causes" list={causes} />
           <RiskInfo colspan={4} title="Impact" list={impacts} />
           <RiskInfo colspan={4} title="Stakeholders" list={stakeholders} />
-          <RiskInfo colspan={4} title="Current Treatment" list={currrentTreatments.map(e => ({ id: e.id, name: e.treatment }))} />
-          <RiskInfo colspan={4} title="Current Treatment" list={futureTreatments.map(e => ({ id: e.id, name: e.treatment }))} />
+          <RiskInfo colspan={4} title="Current Treatment" list={currrentTreatments.map(e => ({ id: e.id, name: e.treatment, action: e.action }))} />
+          <RiskInfo colspan={4} title="Future Treatment" list={futureTreatments.map(e => ({ id: e.id, name: e.treatment, action: e.action }))} />
         </Grid>
       </div>
 
@@ -106,6 +105,7 @@ function RiskChanges(props) {
         bodyProps: {
           className: 'tableRiskMap_risk-vc',
         },
+        componentProps: { isDisableClick: true },
       },
     ].filter(Boolean);
   }

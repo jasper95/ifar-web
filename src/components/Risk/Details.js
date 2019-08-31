@@ -13,7 +13,7 @@ import RiskTable from './Table';
 function RiskDetails(props) {
   const dispatch = useDispatch();
   const {
-    risk, className, readOnly, onMutateRisk,
+    risk, className, readOnly, onMutateRisk, residualReadOnly,
   } = props;
   return (
     <Grid className={`RiskDetails ${className}`}>
@@ -29,7 +29,7 @@ function RiskDetails(props) {
         rows={risk.current_treatments}
         columns={getColumns('Residual')}
         onClickAdd={() => showDialog({ type: 'Residual', dialogTitle: 'Current Risk Treatment' })}
-        readOnly={readOnly}
+        readOnly={readOnly || residualReadOnly}
       />
 
       <RiskTable
@@ -49,8 +49,8 @@ function RiskDetails(props) {
       payload: {
         path: 'Confirm',
         props: {
-          title: 'Request Done Treatment',
-          message: 'Send request to done this treatment?',
+          title: 'Confirm Done Treatment',
+          message: 'Do you want to done this treatment?',
           onValid: data => onMutateRisk({
             data: risk,
             treatment_details: data,
@@ -113,7 +113,7 @@ function RiskDetails(props) {
     });
   }
 
-  function onDelete(id, type) {
+  function onDelete(row, type) {
     dispatch({
       type: 'SHOW_DIALOG',
       payload: {
@@ -124,10 +124,13 @@ function RiskDetails(props) {
           onValid: () => {
             const key = type.toLowerCase() === 'residual' ? 'current_treatments' : 'future_treatments';
             const { [key]: arr } = risk;
+            const newArray = arr.filter(e => e.id !== row.id);
+            const recentChanges = getRecentChanges(risk, { ...risk, [key]: newArray }, [key]);
             onMutateRisk({
               data: {
                 ...risk,
-                [key]: arr.filter(e => e.id !== id),
+                [key]: newArray,
+                recent_changes: recentChanges,
               },
               action: 'EDIT',
             });
@@ -163,7 +166,7 @@ function RiskDetails(props) {
             {
               icon: 'delete',
               label: 'Delete',
-              onClick: row => onDelete(row.id, type),
+              onClick: row => onDelete(row, type),
             },
             {
               icon: 'rate_review',
@@ -208,7 +211,7 @@ function RiskDetails(props) {
             {
               icon: 'delete',
               label: 'Delete',
-              onClick: row => onDelete(row.id, type),
+              onClick: row => onDelete(row, type),
             },
             {
               icon: 'check',

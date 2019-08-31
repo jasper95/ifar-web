@@ -16,10 +16,11 @@ import useQuery from 'apollo/query';
 import orderBy from 'lodash/orderBy';
 import generateRiskMapExcel from 'lib/generateRiskMapExcel';
 import useBusinessUnit from 'components/Risk/useBusinessUnit';
+import VulnerabilityChange from 'components/RiskMap/VulnerabilityChange';
 
 const riskQuery = gql`
   subscription getList($id: uuid!) {
-    risk(where: {business_unit: {id: {_eq: $id }}}) {
+    risk_dashboard(where: {business_unit_id: {_eq: $id }}) {
       id
       name
       residual_likelihood
@@ -49,7 +50,7 @@ export default function RiskMap() {
   const [currentBusinessUnit, setBusinessUnit] = useState(
     defaultBusinessUnit ? defaultBusinessUnit.id : null,
   );
-  let { data: { risk: riskItems = [] } } = useQuery(
+  let { data: { risk_dashboard: riskItems = [] } } = useQuery(
     riskQuery, { variables: { id: currentBusinessUnit }, ws: true },
   );
   const selected = businessUnits.find(e => e.id === currentBusinessUnit);
@@ -93,7 +94,7 @@ export default function RiskMap() {
             currentImpact={currentImpact}
           />
         </Cell>
-        <Cell size={3} >
+        <Cell size={3}>
           <div className="tableRiskActions">
             <div className="tableRiskMapToolbar">
               <MenuButton
@@ -219,81 +220,4 @@ function RiskLevel({ row }) {
       {vulnerability}
     </span>
   );
-}
-
-export function VulnerabilityChange({ row }) {
-  const { prevDetails, vulnerability } = row;
-  const dispatch = useDispatch();
-
-  let status = 'new';
-
-  if (prevDetails && prevDetails.rating && prevDetails.likelihood) {
-    const oldVulnerability = (prevDetails.rating * prevDetails.likelihood);
-    if (oldVulnerability === vulnerability) {
-      status = 'stagnant';
-    } else if (vulnerability > oldVulnerability) {
-      status = 'up';
-    } else {
-      status = 'down';
-    }
-  }
-  if (status === 'up') {
-    return (
-      <div
-        className="vcStatus vcStatus-up"
-        onClick={handleClick}
-        role="presentation"
-      >
-        <span className="rafi-icon-arrow-up" />
-      </div>
-    );
-  }
-  if (status === 'stagnant') {
-    return (
-      <div
-        className="vcStatus vcStatus-stagnant"
-        onClick={handleClick}
-        role="presentation"
-      >
-        <span className="rafi-icon-arrow-sides" />
-      </div>
-    );
-  }
-  if (status === 'new') {
-    return (
-      <div
-        className="vcStatus vcStatus-new"
-        onClick={handleClick}
-        role="presentation"
-      >
-        <span className="text">
-          new
-        </span>
-      </div>
-    );
-  }
-  return (
-    <div
-      className="vcStatus vcStatus-down"
-      onClick={handleClick}
-      role="presentation"
-    >
-      <span className="rafi-icon-arrow-down" />
-    </div>
-  );
-
-  function handleClick() {
-    dispatch({
-      type: 'SHOW_DIALOG',
-      payload: {
-        path: 'RiskChanges',
-        props: {
-          title: 'Vulnerability Changes',
-          dialogId: 'RiskChanges',
-          risk: row,
-          dialogClassName: 'i_dialog_container--lg',
-        },
-      },
-    });
-  }
 }

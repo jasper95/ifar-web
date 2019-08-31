@@ -8,8 +8,8 @@ import useQuery from 'apollo/query';
 import { Redirect } from 'react-router';
 import jwt from 'jsonwebtoken';
 import AuthContext from 'apollo/AuthContext';
-import { generateQueryById } from './query';
 import { NavSkeleton } from 'components/Skeletons';
+import { generateQueryById } from './query';
 
 const sessionQuery = generateQueryById({
   node: 'user_session',

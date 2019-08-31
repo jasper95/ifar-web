@@ -11,6 +11,7 @@ import useQuery, { useManualQuery } from 'apollo/query';
 import useMutation from 'apollo/mutation';
 import gql from 'graphql-tag';
 import debounce from 'lodash/debounce';
+import PropTypes from 'prop-types';
 import editorStyles from './editorStyles.css';
 import mentionsStyles from './mentionsStyles.css';
 import Comment from './Item';
@@ -19,8 +20,8 @@ import Comment from './Item';
 import 'sass/components/comments/_index.scss';
 
 const commentsQuery = gql`
-  subscription getComments($id: uuid) {
-    comment(where: {risk_id: {_eq: $id}}, order_by: {created_date: desc}) {
+  subscription getComments($id: uuid, $type: String) {
+    comment(where: {risk_id: {_eq: $id}, type: {_eq: $type}}, order_by: {created_date: desc}) {
       id
       body
       user {
@@ -49,11 +50,14 @@ const plugins = [mentionPlugin];
 
 function Comments(props) {
   const [showForm, setShowForm] = useState(false);
-  const { risk } = props;
+  const { risk, commentType } = props;
   const [, onQueryUsers] = useManualQuery(userQuery);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [suggestions, setSuggestions] = useState([]);
-  const commentsResponse = useQuery(commentsQuery, { ws: true, variables: { id: risk.id } });
+  const commentsResponse = useQuery(
+    commentsQuery,
+    { ws: true, variables: { id: risk.id, type: commentType } },
+  );
   const { data: { comment: comments = [] } } = commentsResponse;
   const [mutationState, onMutate] = useMutation({ url: '/comment', onSuccess });
   const [formState, formHandlers] = useForm({ validator, onValid });
@@ -63,8 +67,9 @@ function Comments(props) {
   return (
     <div className="commentForm">
       <div className={cn('commentForm_replies', {
-        'commentForm_replies-empty': !comments.length
-      })}>
+        'commentForm_replies-empty': !comments.length,
+      })}
+      >
         {comments.length
           ? (
             <ul className="reply">
@@ -79,8 +84,6 @@ function Comments(props) {
             </h1>
           )
         }
-
-
 
       </div>
       <div className="commentForm_actions">
@@ -111,6 +114,7 @@ function Comments(props) {
                   <MentionSuggestions
                     onSearchChange={debounceSearch}
                     suggestions={suggestions}
+                    onAddMention={() => setSuggestions([])}
                   />
                 </div>
               </div>
@@ -144,7 +148,7 @@ function Comments(props) {
 
   function onValid(data) {
     onMutate({
-      data: { ...data, risk_id: risk.id },
+      data: { ...data, risk_id: risk.id, type: commentType },
       hideDialog: false,
       message: 'Comment successfully posted',
       onSuccess: () => {
@@ -156,20 +160,20 @@ function Comments(props) {
   }
 
   async function onSearch({ value }) {
-    if (value) {
-      const result = await onQueryUsers({ variables: { name: `%${value}%` } });
-      setSuggestions(
-        result.search_users
-          .map(e => ({
-            ...e,
-            name: `${e.first_name} ${e.last_name}`,
-            link: '#',
-            avatar: '/static/img/default-avatar.png',
-          })),
-      );
-      return;
-    }
-    setSuggestions([]);
+    const result = await onQueryUsers({ variables: { name: `%${value}%` } });
+    setSuggestions(
+      result.search_users
+        .map(e => ({
+          ...e,
+          name: `${e.first_name} ${e.last_name}`,
+          link: '#',
+          avatar: '/static/img/default-avatar.png',
+        })),
+    );
+    // if (value) {
+    //   return;
+    // }
+    // setSuggestions([]);
   }
 }
 
@@ -185,5 +189,14 @@ function validator(data) {
   });
   return getValidationResult(data, schema);
 }
+
+Comments.propTypes = {
+  commentType: PropTypes.string,
+  risk: PropTypes.object.isRequired,
+};
+
+Comments.defaultProps = {
+  commentType: 'risk',
+};
 
 export default Comments;

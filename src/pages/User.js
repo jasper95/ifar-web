@@ -1,15 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import DataTable from 'components/DataTable';
 import Toolbar from 'react-md/lib/Toolbars/Toolbar';
 import useTableSelect from 'lib/hooks/useTableSelect';
 import useTableSort from 'lib/hooks/useTableSort';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch } from 'react-redux';
+import TextField from 'react-md/lib/TextFields/TextField';
+import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import useMutation, { useCreateNode, useUpdateNode } from 'apollo/mutation';
 import gql from 'graphql-tag';
 import useQuery from 'apollo/query';
 import businessUnits from 'lib/constants/riskManagement/businessUnits';
 import { exportCsv, getSortQuery } from 'lib/tools';
+import debounce from 'lodash/debounce';
 
 export const USER_ROLES = [
   {
@@ -41,13 +44,15 @@ export const MANAGEMENT_ROLES = [
   },
 ];
 function User() {
-  const [sort, onSort] = useTableSort({ email: true });
+  const [search, setSearch] = useState('');
+  const [sort, onSort] = useTableSort({ initialSorted: 'email', sortable: ['email', 'full_name'] });
   const usersQuery = gql`
-    subscription{
-      user (order_by: ${getSortQuery(sort)}){
+    subscription ($keyword: String) {
+      user_dashboard (order_by: ${getSortQuery(sort)}, where: {_or: {full_name: {_ilike: $keyword}, email: {_ilike: $keyword}}}){
         id
         first_name
         last_name
+        full_name
         role
         srmp_role
         srmp_business_units
@@ -55,13 +60,12 @@ function User() {
       }
     }
   `;
-  const usersResponse = useQuery(usersQuery, { ws: true });
-  const { data: { user: users = [] }, loading: isLoading } = usersResponse;
+  const usersResponse = useQuery(usersQuery, { ws: true, variables: { keyword: search ? `%${search}%` : null } });
+  const { data: { user_dashboard: users = [] }, loading: isLoading } = usersResponse;
   const rows = useMemo(() => users.map((e) => {
     const srmpRole = MANAGEMENT_ROLES.find(i => i.value === e.srmp_role);
     return {
       ...e,
-      full_name: `${e.first_name} ${e.last_name}`,
       role_name: USER_ROLES.find(i => i.value === e.role).label,
       srmp_role_name: srmpRole ? srmpRole.label : '',
       srmp_units: e.srmp_business_units.map(i => businessUnits.find(j => i === j.id)).map(j => j.name).join(', '),
@@ -72,12 +76,12 @@ function User() {
   const [, onUpdateUser] = useUpdateNode({ node: 'user' });
   const [, onDelete] = useMutation({ url: '/user/bulk', method: 'DELETE', onSuccess: () => setSelected([]) });
   const dispatch = useDispatch();
-
+  const debounceSearch = useCallback(debounce(onSearch, 1000), []);
   return (
     <div className="dbContainer">
 
       <div className="row-ToolbarHeader row-ToolbarHeader-floating">
-        <ToolbarHeader title="User Form" baseClass="ToolbarHeader" />
+        {renderToolbarHeader({ title: 'User Form', baseClass: 'ToolbarHeader' })}
       </div>
 
       <div className="row-Table row-Table-floating">
@@ -95,11 +99,19 @@ function User() {
     </div>
   );
 
-  function ToolbarHeader({ title, baseClass }) {
+  function renderToolbarHeader({ title, baseClass }) {
     return (
       <div className={`${baseClass} row`}>
         <div className={`${baseClass}_title`}>
           <h1 className="title">{title}</h1>
+        </div>
+        <div>
+          <TextField
+            leftIcon={(
+              <FontIcon>search</FontIcon>
+            )}
+            onChange={debounceSearch}
+          />
         </div>
         <div className={`${baseClass}_toolbar`}>
           <Toolbar>
@@ -138,6 +150,10 @@ function User() {
         />
       ),
     ].filter(Boolean);
+  }
+
+  function onSearch(value) {
+    setSearch(value);
   }
 
   function showDialog(type, initialFields = {}) {

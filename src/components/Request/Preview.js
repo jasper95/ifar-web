@@ -6,6 +6,8 @@ import Button from 'react-md/lib/Buttons/Button';
 import RiskPreviewInfo from 'components/Risk/PreviewInfo';
 import useMutation from 'apollo/mutation';
 import RiskTable from 'components/Risk/Table';
+import classifications from 'lib/constants/riskManagement/classifications';
+import businessUnits from 'lib/constants/riskManagement/businessUnits';
 import { useDispatch } from 'react-redux';
 
 function RequestPreview(props) {
@@ -26,7 +28,7 @@ function RequestPreview(props) {
         <RiskPreviewInfo
           colspan={3}
           title="Unit"
-          info={risk.business_unit.name}
+          info={businessUnits.find(e => e.id === risk.business_unit_id).name}
         />
         <Cell
           size={1}
@@ -94,7 +96,7 @@ function RequestPreview(props) {
             <RiskPreviewInfo
               colspan={3}
               title="Classification"
-              info={risk.classification.name}
+              info={classifications.find(e => e.id === risk.classification_id).name}
             />
             <RiskPreviewInfo
               colspan={3}
@@ -154,6 +156,7 @@ function RequestPreview(props) {
           props: {
             title: 'Comments',
             dialogId: 'Comments',
+            commentType: 'treatment_request',
             risk,
           },
         },
