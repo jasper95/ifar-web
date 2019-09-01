@@ -105,9 +105,10 @@
 		}
 
 		.vcStatus-new .text {
-			color: darken($success, 15%);
+			color: $darkgray;
 			font-size: .9rem;
-			font-weight: 700;
+			font-weight: normal;
+			font-style: italic;
 		}
 	}
 }
