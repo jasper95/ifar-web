@@ -130,7 +130,7 @@ function RiskPreview(props) {
     };
     onMutateRisk({
       data: newData,
-      action: 'EDIT',
+      action: 'EDIT_INHERENT',
     });
   }
 }

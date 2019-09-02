@@ -91,7 +91,7 @@ function RiskDetails(props) {
             };
             onMutateRisk({
               data: newData,
-              action: 'EDIT',
+              action: `EDIT_${type.toUpperCase()}`,
             });
           },
           initialFields: {
@@ -114,6 +114,7 @@ function RiskDetails(props) {
   }
 
   function onDelete(row, type) {
+    const key = type.toLowerCase() === 'residual' ? 'current_treatments' : 'future_treatments';
     dispatch({
       type: 'SHOW_DIALOG',
       payload: {
@@ -122,7 +123,6 @@ function RiskDetails(props) {
           title: 'Confirm Delete',
           message: 'Do you want to delete this item?',
           onValid: () => {
-            const key = type.toLowerCase() === 'residual' ? 'current_treatments' : 'future_treatments';
             const { [key]: arr } = risk;
             const newArray = arr.filter(e => e.id !== row.id);
             const recentChanges = getRecentChanges(risk, { ...risk, [key]: newArray }, [key]);
@@ -132,7 +132,7 @@ function RiskDetails(props) {
                 [key]: newArray,
                 recent_changes: recentChanges,
               },
-              action: 'EDIT',
+              action: `EDIT_${type.toUpperCase()}`,
             });
           },
         },

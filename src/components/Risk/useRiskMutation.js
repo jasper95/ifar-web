@@ -11,7 +11,9 @@ export default function useRiskMutation() {
     let message;
     let method;
     switch (action) {
-      case 'EDIT':
+      case 'EDIT_RESIDUAL':
+      case 'EDIT_TARGET':
+      case 'EDIT_INHERENT':
       case 'DONE_TREATMENT':
         message = 'Risk successfully updated';
         method = 'PUT';
@@ -26,13 +28,13 @@ export default function useRiskMutation() {
         break;
       default:
     }
-    if (!userIsAdmin(user) && action !== 'COPY') {
+    if (!userIsAdmin(user) && !['COPY', 'EDIT_RISIDUAL', 'EDIT_TARGET'].includes(action)) {
       onCreateRequest({
         data: {
           type: `${action}_RISK`,
           risk_id: data.id,
           business_unit_id: data.business_unit_id,
-          ...action === 'EDIT' && { risk_details: data },
+          ...action.includes('EDIT') && { risk_details: data },
           ...action === 'DONE_TREATMENT' && { treatment_details: treatment },
         },
       });

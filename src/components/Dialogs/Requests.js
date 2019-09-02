@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 const requestQuery = gql`
   subscription getRequests($user_id: jsonb, $user_business_units: [uuid!]) {
-    request(where: {business_unit_id: { _in: $user_business_units }}, order_by: { created_date: asc }){
+    request(where: {business_unit_id: { _in: $user_business_units }}, order_by: { created_date: desc }){
       id
       user {
         first_name
