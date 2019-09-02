@@ -11,6 +11,8 @@ import useQuery from 'apollo/query';
 import useBusinessUnit from './useBusinessUnit';
 import RiskItem from './Item';
 import 'sass/components/risk/index.scss';
+import { RiskItemSkeleton } from 'components/Skeletons';
+
 
 
 export const businessUnitQuery = gql`
@@ -143,7 +145,13 @@ function RiskList(props) {
             hideOnSinglePage
           />
           {listIsLoading ? (
-            <span>Loading...</span>
+            <>
+              <RiskItemSkeleton/>
+              <RiskItemSkeleton 
+                fillPrimary='#E6EDF0'
+                fillSecondary='#E0E4E6'
+               />
+            </>
           ) : list.map(risk => (
             <RiskItem
               previewProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT' }}

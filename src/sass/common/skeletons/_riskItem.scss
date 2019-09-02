@@ -1,0 +1,59 @@
+.skeleton-risk-item {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-direction: column;
+	margin-bottom: 2rem;
+	border: 1px solid $gray-100;
+	border-radius: .5rem;
+	padding: 1rem;
+	.top {
+		width: 100%;
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+		flex-wrap: wrap;
+		margin-bottom: 1rem;
+
+		.left ,
+		.center ,
+		.right {
+			flex-shrink: 1;
+			flex-grow: 1;
+			padding: 1em;
+			display: flex;
+			align-items: center;
+		}
+
+		.left {
+			justify-content: flex-start;
+			svg {
+				width: 350px;
+			}
+		}
+		.center {
+			justify-content: center;
+			svg {
+				width: 320px;
+			}
+		}
+		.right {
+			justify-content: flex-end;
+			svg {
+				width: 130px;
+			}
+		}
+	}
+
+	.bottom {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		padding-left: .5rem;
+		svg {
+			width: 520px;
+		}
+	}
+}

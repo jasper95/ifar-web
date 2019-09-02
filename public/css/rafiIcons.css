@@ -18,5 +18,6 @@
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale
 }
-.rafi-icon-arrow-up:before{content:'\0041';}
+.rafi-icon-arrow-down:before{content:'\0041';}
 .rafi-icon-arrow-sides:before{content:'\0042';}
+.rafi-icon-arrow-up:before{content:'\0043';}

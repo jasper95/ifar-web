@@ -85,6 +85,9 @@ function User() {
       </div>
 
       <div className="row-Table row-Table-floating">
+        <div className="row-Table_header">
+          {renderSearchBar()}
+        </div>
         <DataTable
           selected={selected}
           onRowToggle={onRowToggle}
@@ -105,14 +108,6 @@ function User() {
         <div className={`${baseClass}_title`}>
           <h1 className="title">{title}</h1>
         </div>
-        <div>
-          <TextField
-            leftIcon={(
-              <FontIcon>search</FontIcon>
-            )}
-            onChange={debounceSearch}
-          />
-        </div>
         <div className={`${baseClass}_toolbar`}>
           <Toolbar>
             {getToolbarActions()}
@@ -120,6 +115,19 @@ function User() {
         </div>
       </div>
     );
+  }
+
+  function renderSearchBar() {
+    return (
+      <TextField
+        leftIcon={(
+          <FontIcon>search</FontIcon>
+        )}
+        className='iField iField-search'
+        placeholder='Type the full name to search for user'
+        onChange={debounceSearch}
+      />
+    )
   }
 
   function getToolbarActions() {

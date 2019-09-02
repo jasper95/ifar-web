@@ -4,9 +4,11 @@ $table-header-text: $primary-color-200;
 .iTable {
 	font-size: 1em;
 	font-family: $font-family;
-	overflow: visible;
+	// overflow: visible;
 	position: relative;
 	table-layout: fixed;
+	width: 100%;
+	overflow: auto;
 
 
 	.md-data-table {

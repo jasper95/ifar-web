@@ -417,3 +417,40 @@ $fieldBorder: 1px solid $gray-200;
 		padding: 0 .8em;
 	}
 }
+
+// ====================================
+// search
+// ====================================
+.iField-search {
+	.md-text-field-icon-container {
+		position: relative;
+	}
+
+	.md-text-field-icon--positioned {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 48px;
+		height: 100%;
+		line-height: 1;
+		font-size: 2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
+
+	.md-text-field-divider-container {
+		margin-left: 0;
+		.md-text-field {
+			padding-left: 48px;
+			border: none;
+			font-size: 1.25rem;
+			font-weight: 600;
+		}
+		.md-divider {
+			display: none;
+		}
+	}
+
+}
