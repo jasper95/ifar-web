@@ -7,12 +7,11 @@ import gql from 'graphql-tag';
 import Pagination from 'rc-pagination';
 import { getImpactDriver, getRecentChanges } from 'lib/tools';
 import useQuery from 'apollo/query';
-// import pick from 'lodash/pick';
+import SelectMenuButton from 'components/SelectMenuButton';
+import { RiskItemSkeleton } from 'components/Skeletons';
 import useBusinessUnit from './useBusinessUnit';
 import RiskItem from './Item';
 import 'sass/components/risk/index.scss';
-import { RiskItemSkeleton } from 'components/Skeletons';
-
 
 
 export const businessUnitQuery = gql`
@@ -68,7 +67,7 @@ export const riskListQuery = gql`
 
 function RiskList(props) {
   const {
-    onChangeBusinessUnit, businessUnit, classification, impactDriver, residualVulnerability,
+    onChangeBusinessUnit, businessUnit, classification, impactDriver, residualVulnerability, riskType,
   } = props;
   const [currentPage, setCurrentPage] = useState(1);
   const user = useSelector(state => state.auth);
@@ -90,7 +89,31 @@ function RiskList(props) {
   );
   const [, onCreateRisk] = useCreateNode({ node: 'risk' });
   const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
+  const businessUnitWithOp = userBusinessUnits.find(e => e.id === businessUnit);
   const selected = businessUnits.find(e => e.id === businessUnit);
+  const typeTitle = {
+    srmp: 'Strategic Risk Management Plan',
+    ormp: 'Operation Risk Management Plan',
+    prmp: 'Project Risk Management Plan',
+  }[riskType];
+  const operations = businessUnitWithOp ? businessUnitWithOp.operations || [] : [];
+  const [operation] = operations;
+  const crumbs = [
+    (<span>{typeTitle}</span>),
+    selected && (
+      <span>{selected.name}</span>
+    ),
+    operation && (
+      <div>
+        <span>{operation.name}</span>
+        <SelectMenuButton
+          options={operations.map(e => ({ value: e.id, label: e.name }))}
+          id="tableRiskMapToolbar"
+          value={operation.id}
+        />
+      </div>
+    ),
+  ].filter(Boolean);
   return (
     <Grid className="riskList">
       <div className="riskList_unitList">
@@ -146,11 +169,11 @@ function RiskList(props) {
           />
           {listIsLoading ? (
             <>
-              <RiskItemSkeleton/>
-              <RiskItemSkeleton 
-                fillPrimary='#E6EDF0'
-                fillSecondary='#E0E4E6'
-               />
+              <RiskItemSkeleton />
+              <RiskItemSkeleton
+                fillPrimary="#E6EDF0"
+                fillSecondary="#E0E4E6"
+              />
             </>
           ) : list.map(risk => (
             <RiskItem

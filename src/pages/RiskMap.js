@@ -2,10 +2,7 @@ import React, { useState, useMemo } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import Cell from 'react-md/lib/Grids/Cell';
 import DataTable from 'components/DataTable';
-import MenuButton from 'react-md/lib/Menus/MenuButton';
-import FakeButton from 'react-md/lib/Helpers/AccessibleFakeButton';
-import IconSeparator from 'react-md/lib/Helpers/IconSeparator';
-import FontIcon from 'react-md/lib/FontIcons/FontIcon';
+import SelectMenuButton from 'components/SelectMenuButton';
 import Map from 'components/RiskMap';
 import { useDispatch } from 'react-redux';
 import { riskDetailsFragment } from 'components/Risk/List';
@@ -99,29 +96,12 @@ export default function RiskMap() {
           <div className="tableRiskActions">
             <div className="tableRiskMapToolbar">
               <Button onClick={() => history.push('/risk-management')}>Strategic Risk Map</Button>
-              <MenuButton
-                adjusted={false}
-                raised
-                primary
-                menuItems={businessUnits
-                  .map(e => ({ primaryText: e.name, onClick: () => setBusinessUnit(e.id) }))
-                }
-                simplifiedMenu={false}
-                anchor={MenuButton.Positions.BOTTOM}
-                repositionOnScroll={false}
+              <SelectMenuButton
                 id="tableRiskMapToolbar"
                 className="tableRiskMapToolbar_menu iBttn iBttn-primary"
                 listClassName="tableRiskMapToolbar_menu_list"
-              >
-                <FakeButton
-                  component={IconSeparator}
-                  label={(
-                    <IconSeparator label={selected ? selected.name : ''}>
-                      <FontIcon>arrow_drop_down</FontIcon>
-                    </IconSeparator>
-                )}
-                />
-              </MenuButton>
+                onChange={setBusinessUnit}
+              />
               <Button
                 flat
                 className="tableRiskMapToolbar_export"

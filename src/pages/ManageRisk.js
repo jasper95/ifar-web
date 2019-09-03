@@ -186,7 +186,7 @@ function ManageRisk() {
         classification={currentClassification}
         impactDriver={currentImpactDriver}
         residualVulnerability={currentVulnerability}
-        riskType="SRMP"
+        riskType="srmp"
       />
     </div>
   );
