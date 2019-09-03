@@ -14,6 +14,8 @@ import {
   legalComplianceOptions,
   healthSafetySecurityOptions,
 } from 'lib/constants/riskManagement/evaluationOptions';
+import { useSelector } from 'react-redux';
+import { userIsAdmin } from 'components/Risk/useRiskMutation';
 import Header from './Header';
 
 import 'sass/components/riskEvaluation/index.scss';
@@ -67,6 +69,7 @@ function RiskEvaluation(props) {
     currentEvaluation,
     prevStageEvaluation,
   } = props;
+  const user = useSelector(state => state.auth);
   const previousStage = {
     residual: 'inherent',
     target: 'residual',
@@ -161,7 +164,7 @@ function RiskEvaluation(props) {
         onChange={newVal => onChangeImpact({ ...impact, management_action: Number(newVal) })}
         type="radio"
       />
-      {type === 'inherent' && (
+      {type === 'inherent' && user.role === 'ADMIN' && (
         <SelectionControlGroup
           className="iField iField-selectionGrp"
           label="Affected"

@@ -59,6 +59,6 @@ export default function useRiskMutation() {
   return [{}, onMutate];
 }
 
-function userIsAdmin(user) {
-  return user.role === 'ADMIN' || user.srmp_role === 'TEAM_LEADER';
+export function userIsAdmin(user, type = 'srmp') {
+  return user.role === 'ADMIN' || user[`${type}_role`] === 'TEAM_LEADER';
 }

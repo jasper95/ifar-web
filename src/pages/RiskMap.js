@@ -17,6 +17,7 @@ import orderBy from 'lodash/orderBy';
 import generateRiskMapExcel from 'lib/generateRiskMapExcel';
 import useBusinessUnit from 'components/Risk/useBusinessUnit';
 import VulnerabilityChange from 'components/RiskMap/VulnerabilityChange';
+import history from 'lib/history';
 
 const riskQuery = gql`
   subscription getList($id: uuid!) {
@@ -97,6 +98,7 @@ export default function RiskMap() {
         <Cell size={3}>
           <div className="tableRiskActions">
             <div className="tableRiskMapToolbar">
+              <Button onClick={() => history.push('/risk-management')}>Strategic Risk Map</Button>
               <MenuButton
                 adjusted={false}
                 raised
