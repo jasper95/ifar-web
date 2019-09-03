@@ -19,6 +19,8 @@ import useBusinessUnit from 'components/Risk/useBusinessUnit';
 import VulnerabilityChange from 'components/RiskMap/VulnerabilityChange';
 import history from 'lib/history';
 
+import 'sass/pages/riskmap.scss';
+
 const riskQuery = gql`
   subscription getList($id: uuid!) {
     risk_dashboard(where: {business_unit_id: {_eq: $id }}) {
@@ -85,6 +87,16 @@ export default function RiskMap() {
 
   return (
     <div className="dbContainer">
+      <Grid className="row-ToolbarHeader">
+        <Cell offset={6} size={6} className="col-actions">
+          <Button 
+            onClick={() => history.push('/risk-management')}
+            iconChildren="keyboard_arrow_left"
+            className="iBttn iBttn-primary"
+            children="Strategic Risk Map"
+          />
+        </Cell>
+      </Grid>
       <Grid>
         <Cell size={9}>
           <Map
@@ -98,7 +110,6 @@ export default function RiskMap() {
         <Cell size={3}>
           <div className="tableRiskActions">
             <div className="tableRiskMapToolbar">
-              <Button onClick={() => history.push('/risk-management')}>Strategic Risk Map</Button>
               <MenuButton
                 adjusted={false}
                 raised
