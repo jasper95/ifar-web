@@ -45,6 +45,12 @@ $table-header-text: $primary-color-200;
 		.md-table-column {
 			padding: .25em 1em;
 		}
+		.tableCell {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			min-height: 2rem;
+		}
 	}
 
 	// table cell checkboxes

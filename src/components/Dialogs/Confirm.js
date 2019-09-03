@@ -18,9 +18,8 @@ export function DialogActions(props) {
   return (
     <>
       <Button
-        className={cn('iBttn iBttn-primary', { processing: isProcessing })}
+        className={cn('iBttn iBttn-error', { processing: isProcessing })}
         flat
-        primary
         onClick={onContinue}
         children="Continue"
       />
