@@ -39,7 +39,7 @@ const requestQuery = gql`
 `;
 
 const titleMapping = {
-  EDIT_RISK: 'Edit Request',
+  EDIT_RESIDUAL_RISK: 'Edit Request',
   DELETE_RISK: 'Delete Request',
   DONE_TREATMENT_RISK: 'Treatment Request',
 };
@@ -65,10 +65,10 @@ function Requests(props) {
                 key={e.id}
                 previewProps={{
                   request: e,
-                  risk: e.type === 'EDIT_RISK' ? e.risk_details : e.risk,
+                  risk: e.type === 'EDIT_RESIDUAL_RISK' ? e.risk_details : e.risk,
                   readOnly: user.role === 'USER' && ['VIEW_COMMENT', 'RISK_CHAMPION'].includes(user.srmp_role),
                 }}
-                detailsProps={{ risk: e.type === 'EDIT_RISK' ? e.risk_details : e.risk, readOnly: true }}
+                detailsProps={{ risk: e.type === 'EDIT_RESIDUAL_RISK' ? e.risk_details : e.risk, readOnly: true }}
                 previewRenderer={Preview}
                 detailsRenderer={e.type === 'DONE_TREATMENT_RISK' ? () => null : undefined}
                 className="riskList_risk_content_item"

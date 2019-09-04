@@ -15,6 +15,7 @@ function RiskDetails(props) {
   const {
     risk, className, readOnly, onMutateRisk, residualReadOnly,
   } = props;
+  console.log('risk: ', risk);
   return (
     <Grid className={`RiskDetails ${className}`}>
       <Grid className="RiskDetails_row RiskDetails_row-infos">

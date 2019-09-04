@@ -15,6 +15,9 @@ function RiskPreview(props) {
     risk, className, readOnly, onMutateRisk,
   } = props;
   const dispatch = useDispatch();
+  const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
+  const residualCalc = risk.residual_rating * risk.residual_likelihood;
+  const targetCalc = risk.target_rating * risk.target_likelihood;
   return (
     <Grid className={`RiskPreview ${className}`}>
       <Grid>
@@ -29,9 +32,9 @@ function RiskPreview(props) {
           info={risk.name}
         />
         <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
-          <RiskPreviewInfo colspan={4} title="Inherent" info={risk.inherent_rating} />
-          <RiskPreviewInfo colspan={4} title="Residual" info={risk.residual_rating} />
-          <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
+          <RiskPreviewInfo colspan={4} title="Inherent" info={!Number.isNaN(inherentCalc) && inherentCalc ? inherentCalc : ''} />
+          <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) && residualCalc ? residualCalc : ''} />
+          <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) && targetCalc ? targetCalc : ''} />
         </Cell>
         {!readOnly && (
           <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
