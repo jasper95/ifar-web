@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
+import { components } from 'react-select';
+import MenuButton from 'react-md/lib/Menus/MenuButton';
+import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCreateNode } from 'apollo/mutation';
+import useMutation, { useCreateNode } from 'apollo/mutation';
 import gql from 'graphql-tag';
 import Pagination from 'rc-pagination';
 import { getImpactDriver, getRecentChanges } from 'lib/tools';
 import useQuery from 'apollo/query';
-import SelectMenuButton from 'components/SelectMenuButton';
+import SelectAutocomplete from 'components/SelectAutocomplete';
 import { RiskItemSkeleton } from 'components/Skeletons';
 import useBusinessUnit from './useBusinessUnit';
 import RiskItem from './Item';
@@ -54,9 +57,18 @@ export const riskDetailsFragment = gql`
   }
 `;
 
+const projectQuery = gql`
+  subscription($operation_id: uuid) {
+    project(where: { operation_id: {_eq: $operation_id} }, order_by: { name: asc }) {
+      id
+      name
+    }
+  }
+`;
+
 export const riskListQuery = gql`
-  subscription getList($business_unit_id: uuid!, $classification_id: uuid, $residual_impact_driver: String, $residual_vulnerability: String, $offset:Int , $limit: Int =10){
-    risk_dashboard(where: {business_unit_id: {_eq: $business_unit_id }, classification_id: { _eq: $classification_id }, residual_impact_driver: { _eq: $residual_impact_driver }, residual_vulnerability: { _eq: $residual_vulnerability } }, order_by: {created_date: desc}, offset: $offset, limit: $limit) {
+  subscription getList($risk_type: String, $business_unit_id: uuid!, $classification_id: uuid, $residual_impact_driver: String, $residual_vulnerability: String, $offset:Int , $limit: Int =10){
+    risk_dashboard(where: { type: { _eq: $risk_type },  business_unit_id: {_eq: $business_unit_id }, classification_id: { _eq: $classification_id }, residual_impact_driver: { _eq: $residual_impact_driver }, residual_vulnerability: { _eq: $residual_vulnerability } }, order_by: {created_date: desc}, offset: $offset, limit: $limit) {
       ...RiskDetails
       recent_changes
       has_treatment_request
@@ -67,12 +79,15 @@ export const riskListQuery = gql`
 
 function RiskList(props) {
   const {
-    onChangeBusinessUnit, businessUnit, classification, impactDriver, residualVulnerability, riskType,
+    onChangeBusinessUnit, businessUnit, classification,
+    impactDriver, residualVulnerability, riskType, operations, operation, onChangeOp,
   } = props;
   const [currentPage, setCurrentPage] = useState(1);
+  const [, onMutateProject] = useMutation({ url: '/project' });
   const user = useSelector(state => state.auth);
   const userBusinessUnits = useBusinessUnit();
   const variables = {
+    risk_type: riskType,
     business_unit_id: businessUnit,
     classification_id: classification,
     residual_impact_driver: impactDriver,
@@ -85,32 +100,50 @@ function RiskList(props) {
   const dispatch = useDispatch();
   const businessUnitResponse = useQuery(
     businessUnitQuery,
-    { ws: true, variables: { user_business_units: userBusinessUnits.map(e => e.id) } },
+    {
+      ws: true,
+      variables: { user_business_units: userBusinessUnits.map(e => e.id) },
+    },
   );
   const [, onCreateRisk] = useCreateNode({ node: 'risk' });
   const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
-  const businessUnitWithOp = userBusinessUnits.find(e => e.id === businessUnit);
   const selected = businessUnits.find(e => e.id === businessUnit);
   const typeTitle = {
     srmp: 'Strategic Risk Management Plan',
     ormp: 'Operation Risk Management Plan',
     prmp: 'Project Risk Management Plan',
   }[riskType];
-  const operations = businessUnitWithOp ? businessUnitWithOp.operations || [] : [];
-  const [operation] = operations;
+  const projectResponse = useQuery(
+    projectQuery,
+    {
+      ws: true,
+      variables: { operation_id: operation },
+      skip: riskType !== 'prmp' || !operation,
+    },
+  );
+  const { data: { project: projects = [] } } = projectResponse;
   const crumbs = [
     (<span>{typeTitle}</span>),
     selected && (
       <span>{selected.name}</span>
     ),
-    operation && (
+    riskType !== 'srmp' && (
       <div>
-        <span>{operation.name}</span>
-        <SelectMenuButton
+        <SelectAutocomplete
           options={operations.map(e => ({ value: e.id, label: e.name }))}
-          id="tableRiskMapToolbar"
-          value={operation.id}
+          onChange={onChangeOp}
+          value={operation}
         />
+      </div>
+    ),
+    riskType === 'prmp' && (
+      <div>
+        <SelectAutocomplete
+          options={projects}
+          onChange={() => {}}
+          components={{ Option: CustomProjectOption }}
+        />
+        <Button onClick={showProjectDialog}>Add Project</Button>
       </div>
     ),
   ].filter(Boolean);
@@ -137,16 +170,7 @@ function RiskList(props) {
       <div className="riskList_risk">
         <div className="riskList_risk_header">
           <div className="crumb">
-            <h1 className="crumb_main">
-              <div className="text">
-                  Strategic Risk Management Plan
-              </div>
-            </h1>
-            <h1 className="crumb_sub">
-              <div className="text">
-                {selected && selected.name}
-              </div>
-            </h1>
+            {crumbs}
           </div>
           <div className="actions">
             <Button
@@ -225,6 +249,48 @@ function RiskList(props) {
       type: 'SHOW_DIALOG',
     });
   }
+
+  function showProjectDialog(initialFields) {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'Project',
+        props: {
+          initialFields,
+          title: 'Create Project',
+          onValid: data => onMutateProject({
+            data: { ...data, operation_id: operation },
+            method: initialFields ? 'POST' : 'PUT',
+            message: `Project successfully ${initialFields ? 'updated' : 'created'}`,
+          }),
+        },
+      },
+    });
+  }
+}
+
+function CustomProjectOption(props) {
+  return (
+    <>
+      <components.Option {...props} />
+      <MenuButton
+        icon
+        menuItems={[
+          {
+            primaryText: 'Edit',
+            leftIcon: <FontIcon>Edit</FontIcon>,
+          },
+          {
+            primaryText: 'Delete',
+            leftIcon: <FontIcon>delete</FontIcon>,
+          },
+        ]}
+        anchor={MenuButton.Positions.BOTTOM}
+      >
+        more_vert
+      </MenuButton>
+    </>
+  );
 }
 
 

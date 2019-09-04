@@ -14,7 +14,6 @@ import orderBy from 'lodash/orderBy';
 import generateRiskMapExcel from 'lib/generateRiskMapExcel';
 import useBusinessUnit from 'components/Risk/useBusinessUnit';
 import VulnerabilityChange from 'components/RiskMap/VulnerabilityChange';
-import history from 'lib/history';
 
 const riskQuery = gql`
   subscription getList($id: uuid!) {
@@ -39,7 +38,8 @@ const riskQuery = gql`
   ${riskDetailsFragment}
 `;
 
-export default function RiskMap() {
+export default function RiskMap(props) {
+  const { onBack } = props;
   const [currentImpact, setImpact] = useState('');
   const [currentStage, setStage] = useState('residual');
 
@@ -51,7 +51,6 @@ export default function RiskMap() {
   let { data: { risk_dashboard: riskItems = [] } } = useQuery(
     riskQuery, { variables: { id: currentBusinessUnit }, ws: true },
   );
-  const selected = businessUnits.find(e => e.id === currentBusinessUnit);
   riskItems = useMemo(() => orderBy(
     riskItems
       .map(e => ({
@@ -95,12 +94,14 @@ export default function RiskMap() {
         <Cell size={3}>
           <div className="tableRiskActions">
             <div className="tableRiskMapToolbar">
-              <Button onClick={() => history.push('/risk-management')}>Strategic Risk Map</Button>
+              <Button onClick={onBack}>Strategic Risk Map</Button>
               <SelectMenuButton
                 id="tableRiskMapToolbar"
                 className="tableRiskMapToolbar_menu iBttn iBttn-primary"
                 listClassName="tableRiskMapToolbar_menu_list"
                 onChange={setBusinessUnit}
+                options={businessUnits.map(e => ({ value: e.id, label: e.name }))}
+                value={currentBusinessUnit}
               />
               <Button
                 flat

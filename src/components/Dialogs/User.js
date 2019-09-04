@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import flowRight from 'lodash/flowRight';
 import TextField from 'react-md/lib/TextFields/TextField';
 import SelectAutocomplete from 'components/SelectAutocomplete';

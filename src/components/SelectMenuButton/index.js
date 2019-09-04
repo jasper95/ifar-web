@@ -25,7 +25,7 @@ function SelectMenuButton(props) {
       <FakeButton
         component={IconSeparator}
         label={(
-          <IconSeparator label={selected ? selected.value : ''}>
+          <IconSeparator label={selected ? selected.label : ''}>
             <FontIcon>arrow_drop_down</FontIcon>
           </IconSeparator>
       )}

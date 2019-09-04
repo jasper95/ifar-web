@@ -9,8 +9,8 @@ import classificationLegend from 'lib/constants/riskManagement/classificationLeg
 import impactDriverLegend from 'lib/constants/riskManagement/impactDriverLegend';
 import vulnerabilityLegend from 'lib/constants/riskManagement/vulnerabilityLegend';
 import colorMapping from 'lib/constants/riskManagement/colorMapping';
-import history from 'lib/history';
 import { useDispatch, useSelector } from 'react-redux';
+import loadable from '@loadable/component';
 import gql from 'graphql-tag';
 import useQuery from 'apollo/query';
 import 'rc-pagination/assets/index.css';
@@ -18,10 +18,11 @@ import 'sass/pages/manage-risk.scss';
 
 import { ChartSkeleton } from 'components/Skeletons';
 
+const RiskMap = loadable(() => import('pages/RiskMap'));
 
 const riskListQuery = gql`
-  subscription getList($id: uuid!, $offset:Int , $limit: Int =10){
-    risk(where: {business_unit: {id: {_eq: $id }}}){
+  subscription getList($id: uuid!, $risk_type: String, $offset:Int , $limit: Int =10){
+    risk(where: {business_unit_id: {_eq: $id }, type: { _eq: $risk_type } }){
       classification_id
       residual_impact_driver
       residual_rating
@@ -53,19 +54,29 @@ const requestCountQuery = gql`
     }
   }
 `;
-function ManageRisk() {
+function ManageRisk(props) {
+  const { path } = props.match;
+  const riskType = path.replace(/\//g, '');
   const dispatch = useDispatch();
+  const [riskMapVisible, setRiskMapVisible] = useState(false);
   const user = useSelector(state => state.auth);
   const [currentPage, setCurrentPage] = useState(1);
   let userBusinessUnits = useBusinessUnit();
-  userBusinessUnits = userBusinessUnits.map(e => e.id);
   const [defaultBusinessUnit = null] = userBusinessUnits;
-  const [currentBusinessUnit, setBusinessUnit] = useState(defaultBusinessUnit);
+  const [currentBusinessUnit, setBusinessUnit] = useState(defaultBusinessUnit ? defaultBusinessUnit.id : null);
+  const businessUnitWithOp = userBusinessUnits.find(e => e.id === currentBusinessUnit);
+  const operations = businessUnitWithOp ? businessUnitWithOp.operations || [] : [];
+  userBusinessUnits = userBusinessUnits.map(e => e.id);
+  const [defaultOp = null] = operations;
+  const [currentOp, setOp] = useState(defaultOp ? defaultOp.id : null);
   const [currentClassification, setCurrentClassification] = useState(null);
   const [currentImpactDriver, setCurrentImpactDriver] = useState(null);
   const [currentVulnerability, setCurrentVulnerability] = useState();
   const riskListResponse = useQuery(riskListQuery,
-    { ws: true, variables: { id: currentBusinessUnit, offset: currentPage - 1 } });
+    {
+      ws: true,
+      variables: { risk_type: riskType, id: currentBusinessUnit, offset: currentPage - 1 },
+    });
   const requestNotifCountVars = { user_business_units: userBusinessUnits, user_id: user.id };
   const notifCount = useQuery(
     notifCountQuery,
@@ -82,7 +93,11 @@ function ManageRisk() {
     },
   );
   const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
-
+  if (riskMapVisible) {
+    return (
+      <RiskMap onBack={() => setRiskMapVisible(false)} />
+    );
+  }
   return (
     <div className="dbContainer">
       <Grid className="row-ToolbarHeader">
@@ -123,7 +138,7 @@ function ManageRisk() {
             flat
             className="iBttn iBttn-primary iBttn-counterBadge"
             children="View Strategic Map"
-            onClick={() => history.push('/risk-map')}
+            onClick={() => setRiskMapVisible(true)}
           />
         </Cell>
       </Grid>
@@ -186,7 +201,10 @@ function ManageRisk() {
         classification={currentClassification}
         impactDriver={currentImpactDriver}
         residualVulnerability={currentVulnerability}
-        riskType="srmp"
+        riskType={riskType}
+        operations={operations}
+        operation={currentOp}
+        onChangeOp={setOp}
       />
     </div>
   );

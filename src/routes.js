@@ -11,7 +11,7 @@ const Home = loadable(() => import('pages/Home'));
 const ForgotPassword = loadable(() => import('pages/ForgotPassword'));
 const ResetPassword = loadable(() => import('pages/ResetPassword'));
 const ManageRisk = loadable(() => import('pages/ManageRisk'));
-const RiskMap = loadable(() => import('pages/RiskMap'));
+// const RiskMap = loadable(() => import('pages/RiskMap'));
 const User = loadable(() => import('pages/User'));
 
 
@@ -74,9 +74,31 @@ export default [
   {
     key: 'manage-risk',
     component: ManageRisk,
-    path: '/risk-management',
+    path: '/srmp',
     exact: true,
     pageProps: {
+      requireAuth: true,
+      pageTitle: 'Manage Risk',
+    },
+  },
+  {
+    key: 'manage-risk1',
+    component: ManageRisk,
+    path: '/ormp',
+    exact: true,
+    pageProps: {
+      pageId: 'manage-risk',
+      requireAuth: true,
+      pageTitle: 'Manage Risk',
+    },
+  },
+  {
+    key: 'manage-risk2',
+    component: ManageRisk,
+    path: '/prmp',
+    exact: true,
+    pageProps: {
+      pageId: 'manage-risk',
       requireAuth: true,
       pageTitle: 'Manage Risk',
     },
@@ -91,16 +113,16 @@ export default [
       pageTitle: 'Manage Users',
     },
   },
-  {
-    key: 'risk-map',
-    component: RiskMap,
-    path: '/risk-map',
-    exact: true,
-    pageProps: {
-      requireAuth: true,
-      pageTitle: 'Risk Map',
-    },
-  },
+  // {
+  //   key: 'risk-map',
+  //   component: RiskMap,
+  //   path: '/risk-map',
+  //   exact: true,
+  //   pageProps: {
+  //     requireAuth: true,
+  //     pageTitle: 'Risk Map',
+  //   },
+  // },
   {
     key: 'not-found',
     path: '*',
