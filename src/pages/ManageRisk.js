@@ -10,8 +10,8 @@ import impactDriverLegend from 'lib/constants/riskManagement/impactDriverLegend'
 import vulnerabilityLegend from 'lib/constants/riskManagement/vulnerabilityLegend';
 import colorMapping from 'lib/constants/riskManagement/colorMapping';
 import { useDispatch, useSelector } from 'react-redux';
+import { chartQuery, notifCountQuery, requestCountQuery } from 'components/Risk/query';
 import loadable from '@loadable/component';
-import gql from 'graphql-tag';
 import useQuery from 'apollo/query';
 import 'rc-pagination/assets/index.css';
 import 'sass/pages/manage-risk.scss';
@@ -20,62 +20,29 @@ import { ChartSkeleton } from 'components/Skeletons';
 
 const RiskMap = loadable(() => import('pages/RiskMap'));
 
-const riskListQuery = gql`
-  subscription getList($id: uuid!, $risk_type: String, $offset:Int , $limit: Int =10){
-    risk(where: {business_unit_id: {_eq: $id }, type: { _eq: $risk_type } }){
-      classification_id
-      residual_impact_driver
-      residual_rating
-      residual_likelihood
-      business_unit {
-        name
-        id
-      }
-    }
-  }
-`;
-
-const notifCountQuery = gql`
-  subscription getRequestNotifCount($user_id: jsonb, $user_business_units: [uuid!]) {
-    notification_aggregate(where: {receivers: {_contains: $user_id }, business_unit_id: { _in: $user_business_units }}) {
-      aggregate {
-        count
-      }
-    }
-  }
-`;
-
-const requestCountQuery = gql`
-  subscription getRequestNotifCount($user_id: jsonb, $user_business_units: [uuid!]) {
-    request_aggregate(where: {business_unit_id: { _in: $user_business_units }}) {
-      aggregate {
-        count
-      }
-    }
-  }
-`;
 function ManageRisk(props) {
   const { path } = props.match;
   const riskType = path.replace(/\//g, '');
   const dispatch = useDispatch();
   const [riskMapVisible, setRiskMapVisible] = useState(false);
   const user = useSelector(state => state.auth);
-  const [currentPage, setCurrentPage] = useState(1);
   let userBusinessUnits = useBusinessUnit();
   const [defaultBusinessUnit = null] = userBusinessUnits;
-  const [currentBusinessUnit, setBusinessUnit] = useState(defaultBusinessUnit ? defaultBusinessUnit.id : null);
+  const [currentBusinessUnit, setBusinessUnit] = useState(
+    defaultBusinessUnit ? defaultBusinessUnit.id : null,
+  );
   const businessUnitWithOp = userBusinessUnits.find(e => e.id === currentBusinessUnit);
   const operations = businessUnitWithOp ? businessUnitWithOp.operations || [] : [];
   userBusinessUnits = userBusinessUnits.map(e => e.id);
   const [defaultOp = null] = operations;
-  const [currentOp, setOp] = useState(defaultOp ? defaultOp.id : null);
+  const [currentOp, setOp] = useState(defaultOp && riskType !== 'srmp' ? defaultOp.id : null);
   const [currentClassification, setCurrentClassification] = useState(null);
   const [currentImpactDriver, setCurrentImpactDriver] = useState(null);
   const [currentVulnerability, setCurrentVulnerability] = useState();
-  const riskListResponse = useQuery(riskListQuery,
+  const riskListResponse = useQuery(chartQuery,
     {
       ws: true,
-      variables: { risk_type: riskType, id: currentBusinessUnit, offset: currentPage - 1 },
+      variables: { risk_type: riskType, id: currentBusinessUnit },
     });
   const requestNotifCountVars = { user_business_units: userBusinessUnits, user_id: user.id };
   const notifCount = useQuery(
@@ -194,20 +161,35 @@ function ManageRisk(props) {
       </Grid>
       <RiskList
         riskListResponse={riskListResponse}
-        page={currentPage}
         businessUnit={currentBusinessUnit}
-        onChangePage={setCurrentPage}
-        onChangeBusinessUnit={setBusinessUnit}
         classification={currentClassification}
         impactDriver={currentImpactDriver}
         residualVulnerability={currentVulnerability}
         riskType={riskType}
         operations={operations}
         operation={currentOp}
-        onChangeOp={setOp}
+        onChange={handleChange}
       />
     </div>
   );
+
+  function handleChange(val, key) {
+    let func;
+    switch (key) {
+      case 'operation':
+        func = setOp;
+        break;
+      case 'businessUnit':
+        func = setBusinessUnit;
+        break;
+      case 'project':
+        break;
+      default:
+    }
+    if (func) {
+      func(val);
+    }
+  }
 
   function classificationFilter(data, legend) {
     return data.classification_id === legend.classification;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { components } from 'react-select';
 import MenuButton from 'react-md/lib/Menus/MenuButton';
@@ -14,79 +14,31 @@ import SelectAutocomplete from 'components/SelectAutocomplete';
 import { RiskItemSkeleton } from 'components/Skeletons';
 import useBusinessUnit from './useBusinessUnit';
 import RiskItem from './Item';
+import { riskListQuery, projectQuery } from './query';
 import 'sass/components/risk/index.scss';
-
-
-export const businessUnitQuery = gql`
-  subscription getBusinessUnits($user_business_units: [uuid!]){
-    business_unit(order_by: {order: asc}, where: { id: { _in: $user_business_units }}) {
-      id
-      name
-      risks_aggregate {
-        aggregate {
-          count
-        }
-      }
-    }
-  }
-`;
-
-export const riskDetailsFragment = gql`
-  fragment RiskDetails on risk_dashboard {
-    causes
-    classification_name
-    business_unit_id
-    impact_details
-    previous_details
-    classification_id
-    current_treatments
-    definition
-    future_treatments
-    id
-    impacts
-    name
-    stakeholders
-    basis
-    target_rating
-    residual_rating
-    inherent_rating
-    target_likelihood
-    residual_likelihood
-    inherent_likelihood
-    residual_impact_driver
-  }
-`;
-
-const projectQuery = gql`
-  subscription($operation_id: uuid) {
-    project(where: { operation_id: {_eq: $operation_id} }, order_by: { name: asc }) {
-      id
-      name
-    }
-  }
-`;
-
-export const riskListQuery = gql`
-  subscription getList($risk_type: String, $business_unit_id: uuid!, $classification_id: uuid, $residual_impact_driver: String, $residual_vulnerability: String, $offset:Int , $limit: Int =10){
-    risk_dashboard(where: { type: { _eq: $risk_type },  business_unit_id: {_eq: $business_unit_id }, classification_id: { _eq: $classification_id }, residual_impact_driver: { _eq: $residual_impact_driver }, residual_vulnerability: { _eq: $residual_vulnerability } }, order_by: {created_date: desc}, offset: $offset, limit: $limit) {
-      ...RiskDetails
-      recent_changes
-      has_treatment_request
-    }
-  }
-  ${riskDetailsFragment}
-`;
 
 function RiskList(props) {
   const {
-    onChangeBusinessUnit, businessUnit, classification,
-    impactDriver, residualVulnerability, riskType, operations, operation, onChangeOp,
+    businessUnit, classification,
+    impactDriver, residualVulnerability, riskType, operations, operation, onChange,
   } = props;
+  const businessUnitQuery = gql`
+    subscription getBusinessUnits($user_business_units: [uuid!]){
+      business_unit_${riskType}(order_by: {order: asc}, where: { id: { _in: $user_business_units }}) {
+        id
+        name
+        risk_count
+      }
+    }
+  `;
   const [currentPage, setCurrentPage] = useState(1);
+  const [project, setProject] = useState(null);
   const [, onMutateProject] = useMutation({ url: '/project' });
   const user = useSelector(state => state.auth);
   const userBusinessUnits = useBusinessUnit();
   const variables = {
+    operation_id: operation,
+    project_id: project,
     risk_type: riskType,
     business_unit_id: businessUnit,
     classification_id: classification,
@@ -106,7 +58,7 @@ function RiskList(props) {
     },
   );
   const [, onCreateRisk] = useCreateNode({ node: 'risk' });
-  const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
+  const { data: { [`business_unit_${riskType}`]: businessUnits = [] } } = businessUnitResponse;
   const selected = businessUnits.find(e => e.id === businessUnit);
   const typeTitle = {
     srmp: 'Strategic Risk Management Plan',
@@ -116,37 +68,45 @@ function RiskList(props) {
   const projectResponse = useQuery(
     projectQuery,
     {
-      ws: true,
       variables: { operation_id: operation },
       skip: riskType !== 'prmp' || !operation,
     },
   );
   const { data: { project: projects = [] } } = projectResponse;
+  useEffect(() => {
+    if (projects.length) {
+      setProject(projects[0].id);
+    }
+  }, [projects]);
   const crumbs = [
-    (<span>{typeTitle}</span>),
+    (<span key="1">{typeTitle}</span>),
     selected && (
-      <span>{selected.name}</span>
+      <span key="2">{selected.name}</span>
     ),
     riskType !== 'srmp' && (
-      <div>
+      <div key="3">
         <SelectAutocomplete
+          id="operation"
           options={operations.map(e => ({ value: e.id, label: e.name }))}
-          onChange={onChangeOp}
+          onChange={onChange}
           value={operation}
         />
       </div>
     ),
     riskType === 'prmp' && (
-      <div>
+      <div key="4">
         <SelectAutocomplete
-          options={projects}
-          onChange={() => {}}
+          id="project"
+          options={projects.map(e => ({ value: e.id, label: e.name }))}
+          onChange={onChange}
           components={{ Option: CustomProjectOption }}
+          value={project}
         />
-        <Button onClick={showProjectDialog}>Add Project</Button>
+        <Button onClick={() => showProjectDialog()}>Add Project</Button>
       </div>
     ),
   ].filter(Boolean);
+
   return (
     <Grid className="riskList">
       <div className="riskList_unitList">
@@ -154,13 +114,13 @@ function RiskList(props) {
           <Button
             flat
             className="riskList_unitList_item"
-            onClick={() => onChangeBusinessUnit(e.id)}
+            onClick={() => onChange('businessUnit', e.id)}
             iconBefore={false}
             children={e.name}
             key={e.id}
             iconEl={(
               <span className="riskList_unitList_item_badge">
-                {e.risks_aggregate.aggregate.count}
+                {e.risk_count}
               </span>
               )}
           />
@@ -188,7 +148,7 @@ function RiskList(props) {
             onChange={newPage => setCurrentPage(newPage)}
             current={currentPage}
             pageSize={10}
-            total={selected ? selected.risks_aggregate.aggregate.count : 0}
+            total={selected ? selected.risk_count : 0}
             hideOnSinglePage
           />
           {listIsLoading ? (
@@ -242,6 +202,9 @@ function RiskList(props) {
             inherent_likelihood: 1,
             impact_details: {},
             business_unit_id: businessUnit,
+            operation_id: operation,
+            project_id: project,
+            type: riskType,
           },
           dialogClassName: 'i_dialog_container--xl',
         },

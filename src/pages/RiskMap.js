@@ -5,7 +5,7 @@ import DataTable from 'components/DataTable';
 import SelectMenuButton from 'components/SelectMenuButton';
 import Map from 'components/RiskMap';
 import { useDispatch } from 'react-redux';
-import { riskDetailsFragment } from 'components/Risk/List';
+import { riskDetailsFragment } from 'components/Risk/query';
 import Button from 'react-md/lib/Buttons/Button';
 import gql from 'graphql-tag';
 import { getVulnerabilityLevel, addClassTimeout } from 'lib/tools';

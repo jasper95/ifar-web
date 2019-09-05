@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import TextFieldMessage from 'react-md/lib/TextFields/TextFieldMessage';
@@ -17,6 +17,16 @@ function SelectAutocomplete(props) {
   },
   [options]);
   const [currentValue, setCurrentValue] = useState(setInitialValue);
+  useEffect(() => {
+    if (value && !currentValue) {
+      if (props.isMulti) {
+        setCurrentValue(value.map(e => selectOptions.find(ee => ee.value === e)));
+      } else {
+        const newVal = selectOptions.find(e => e.value === value);
+        setCurrentValue(newVal ? { ...newVal } : newVal);
+      }
+    }
+  }, [value]);
   return (
     <div className={`selectAutoComplete ${className}`}>
       {label && (
@@ -43,21 +53,20 @@ function SelectAutocomplete(props) {
   );
 
   function setInitialValue() {
-    const { isMulti } = props;
-    if (isMulti) {
+    if (props.isMulti) {
       return value.map(i => selectOptions.find(j => j.value === i));
     }
     return selectOptions.find(i => i.value === value);
   }
 
   function handleChange(newVal) {
-    const { isMulti } = props;
-    if (isMulti) {
+    if (props.isMulti) {
       onChange(newVal.map(e => e.value), id);
+      setCurrentValue(newVal ? [...newVal] : newVal);
     } else {
       onChange(newVal.value, id, newVal);
+      setCurrentValue(newVal ? { ...newVal } : newVal);
     }
-    setCurrentValue(newVal);
   }
 }
 
