@@ -18,12 +18,11 @@ function SelectAutocomplete(props) {
   [options]);
   const [currentValue, setCurrentValue] = useState(setInitialValue);
   useEffect(() => {
-    if (value && !currentValue) {
+    if ((value && !currentValue) || (!value && currentValue)) {
       if (props.isMulti) {
-        setCurrentValue(value.map(e => selectOptions.find(ee => ee.value === e)));
+        setCurrentValue(value ? value.map(e => selectOptions.find(ee => ee.value === e)) : value);
       } else {
-        const newVal = selectOptions.find(e => e.value === value);
-        setCurrentValue(newVal ? { ...newVal } : newVal);
+        setCurrentValue(selectOptions.find(e => e.value === value));
       }
     }
   }, [value]);

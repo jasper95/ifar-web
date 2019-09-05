@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { components } from 'react-select';
 import MenuButton from 'react-md/lib/Menus/MenuButton';
@@ -76,8 +76,11 @@ function RiskList(props) {
   useEffect(() => {
     if (projects.length) {
       setProject(projects[0].id);
+    } else {
+      setProject(null);
     }
   }, [projects]);
+  const OptionComponent = useCallback(CustomProjectOption, [project]);
   const crumbs = [
     (<span key="1">{typeTitle}</span>),
     selected && (
@@ -99,7 +102,7 @@ function RiskList(props) {
           id="project"
           options={projects.map(e => ({ value: e.id, label: e.name }))}
           onChange={onChange}
-          components={{ Option: CustomProjectOption }}
+          components={{ Option: OptionComponent }}
           value={project}
         />
         <Button onClick={() => showProjectDialog()}>Add Project</Button>
@@ -230,30 +233,51 @@ function RiskList(props) {
       },
     });
   }
-}
 
-function CustomProjectOption(props) {
-  return (
-    <>
-      <components.Option {...props} />
-      <MenuButton
-        icon
-        menuItems={[
-          {
-            primaryText: 'Edit',
-            leftIcon: <FontIcon>Edit</FontIcon>,
-          },
-          {
-            primaryText: 'Delete',
-            leftIcon: <FontIcon>delete</FontIcon>,
-          },
-        ]}
-        anchor={MenuButton.Positions.BOTTOM}
-      >
-        more_vert
-      </MenuButton>
-    </>
-  );
+  function handleDelete(data) {
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'Confirm',
+        props: {
+          message: 'Do you want to delete this project?',
+          title: 'Create Project',
+          onValid: () => onMutateProject({
+            data,
+            method: 'DELETE',
+            message: 'Project successfully deleted',
+          }),
+        },
+      },
+    });
+  }
+
+  function CustomProjectOption(optionProps) {
+    const value = projects.find(e => e.id === optionProps.value);
+    return (
+      <>
+        <components.Option {...optionProps} />
+        <MenuButton
+          icon
+          menuItems={[
+            {
+              primaryText: 'Edit',
+              onClick: () => showProjectDialog(value),
+              leftIcon: <FontIcon>Edit</FontIcon>,
+            },
+            {
+              primaryText: 'Delete',
+              onClick: () => handleDelete(value),
+              leftIcon: <FontIcon>delete</FontIcon>,
+            },
+          ]}
+          anchor={MenuButton.Positions.BOTTOM}
+        >
+          more_vert
+        </MenuButton>
+      </>
+    );
+  }
 }
 
 
