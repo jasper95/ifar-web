@@ -52,7 +52,10 @@ function Row(props) {
   console.log('Row === ',props)
   return (
     <TableColumn {...bodyProps}>
-      <div data-header-title={title}>
+      <div 
+        className="tableCell" 
+        data-header-title={title}
+      >
         {children}
       </div>
     </TableColumn>
