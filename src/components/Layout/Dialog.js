@@ -42,7 +42,6 @@ function DefaultDialogActions(props) {
       <Button
         className={cn('iBttn iBttn-primary', { processing: isProcessing })}
         flat
-        primary
         onClick={onContinue}
         children="Save"
       />

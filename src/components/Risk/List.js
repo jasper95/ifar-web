@@ -82,33 +82,56 @@ function RiskList(props) {
   }, [projects]);
   const OptionComponent = useCallback(CustomProjectOption, [project]);
   const crumbs = [
-    (<span key="1">{typeTitle}</span>),
-    selected && (
-      <span key="2">{selected.name}</span>
+    (  
+      <span 
+        key="1"
+        className="crumb_main"
+      >
+        <div className="text">{typeTitle}</div>
+      </span>
     ),
-    riskType !== 'srmp' && (
-      <div key="3">
+    selected && (
+      <span className="crumb_sub" key="2">{selected.name}</span>
+    )
+  ].filter(Boolean);
+
+  const renderActions = () => {
+    if (riskType !== 'srmp') {
+      return (
         <SelectAutocomplete
           id="operation"
+          label="Filter by"
           options={operations.map(e => ({ value: e.id, label: e.name }))}
           onChange={onChange}
           value={operation}
+          required={false}
         />
-      </div>
-    ),
-    riskType === 'prmp' && (
-      <div key="4">
-        <SelectAutocomplete
-          id="project"
-          options={projects.map(e => ({ value: e.id, label: e.name }))}
-          onChange={onChange}
-          components={{ Option: OptionComponent }}
-          value={project}
-        />
-        <Button onClick={() => showProjectDialog()}>Add Project</Button>
-      </div>
-    ),
-  ].filter(Boolean);
+      )
+    }
+    if (riskType !== 'prmp') {
+      return (
+        <>
+          <SelectAutocomplete
+            id="project"
+            label="Filter by"
+            options={projects.map(e => ({ value: e.id, label: e.name }))}
+            onChange={onChange}
+            components={{ Option: OptionComponent }}
+            value={project}
+            required={false}
+          />
+          <Button
+            flat
+            className="actions_addRisk iBttn iBttn-primary"
+            iconChildren="add_circle"
+            onClick={() => showProjectDialog()}
+          >
+            Add Project
+          </Button>
+        </>
+      )
+    }
+  }
 
   return (
     <Grid className="riskList">
@@ -147,13 +170,20 @@ function RiskList(props) {
           </div>
         </div>
         <div className="riskList_risk_content">
-          <Pagination
-            onChange={newPage => setCurrentPage(newPage)}
-            current={currentPage}
-            pageSize={10}
-            total={selected ? selected.risk_count : 0}
-            hideOnSinglePage
-          />
+          <div className="row riskList_risk_content_header">
+            <div className="col-md-6 contentHeader_pagination">
+              <Pagination
+                onChange={newPage => setCurrentPage(newPage)}
+                current={currentPage}
+                pageSize={10}
+                total={selected ? selected.risk_count : 0}
+                hideOnSinglePage
+              />
+            </div>
+            <div className="col-md-6 contentHeader_actions">
+              {renderActions() }
+            </div>
+          </div>
           {listIsLoading ? (
             <>
               <RiskItemSkeleton />

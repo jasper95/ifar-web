@@ -45,6 +45,7 @@ $chart-width: 250px;
 		&_chart {
 			width: 100%;
 			max-width: $chart-width;
+			min-height: $chart-width;
 			display: flex;
 			align-items: center;
 			justify-content: center;
