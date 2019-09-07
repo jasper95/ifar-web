@@ -1,55 +1,45 @@
 
 import React, {
-  useContext, useMemo, useEffect, useRef,
+  useContext, useEffect, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import useQuery from 'apollo/query';
 import { Redirect } from 'react-router';
-import jwt from 'jsonwebtoken';
 import AuthContext from 'apollo/AuthContext';
 import { NavSkeleton } from 'components/Skeletons';
-import { generateQueryById } from './query';
+import gql from 'graphql-tag';
 
-const sessionQuery = generateQueryById({
-  node: 'user_session',
-  keys: [
-    'id',
-    `user {
+const sessionQuery = gql`
+  query {
+    user_session {
       id
-      first_name
-      last_name
-      avatar
-      email
-      role
-      srmp_role
-      srmp_business_units
-    }`,
-  ],
-});
-
-
-function getSessionId(token) {
-  try {
-    const { id } = jwt.verify(token, process.env.AUTH_SECRET);
-    return id;
-  } catch {
-    return null;
+      user {
+        id
+        first_name
+        last_name
+        avatar
+        email
+        role
+        srmp_role
+        srmp_business_units
+      }
+    }
   }
-}
+`;
 
 function AppWithAuth(props) {
   const { children } = props;
   const dispatch = useDispatch();
   const token = useSelector(state => state.token);
-  const sessionId = useMemo(() => getSessionId(token), [token]);
   const authResponse = useQuery(
-    sessionQuery, { skip: !sessionId, variables: { id: sessionId }, onCompleted },
+    sessionQuery, { skip: !token, onCompleted },
   );
   const {
     data: authData = {}, loading, error, refetch,
   } = authResponse;
-  const { user_session_by_pk: session = {} } = authData;
+  const { user_session: userSession = [] } = authData;
+  const [session = {}] = userSession;
   const { user: auth = null } = session;
   return (
     <AuthContext.Provider value={{

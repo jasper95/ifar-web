@@ -1,7 +1,7 @@
 import React from 'react';
 import Preview from 'components/Risk/Preview';
 import RiskDetails from 'components/Risk/Details';
-import Comments from 'components/Comments';
+// import Comments from 'components/Comments';
 import flowRight from 'lodash/flowRight';
 import withDialog from 'lib/hocs/dialog';
 

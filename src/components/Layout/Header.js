@@ -9,8 +9,8 @@ import AuthContext from 'apollo/AuthContext';
 import useMutation, { useUpdateNode } from 'apollo/mutation';
 import cookie from 'js-cookie';
 import withRouter from 'react-router-dom/withRouter';
-import { UserSkeleton } from 'components/Skeletons';
-import { NavSkeleton } from 'components/Skeletons';
+import { UserSkeleton, NavSkeleton } from 'components/Skeletons';
+
 
 import 'sass/components/nav/index.scss';
 
@@ -131,8 +131,8 @@ function Header(props) {
   }
 
   function onLogoutSucess() {
-    dispatch({ type: 'SET_STATE', payload: { token: '', dialog: null, dialogProcessing: false } });
     cookie.remove('token');
+    dispatch({ type: 'SET_STATE', payload: { token: '', dialog: null, dialogProcessing: false } });
   }
 }
 

@@ -102,8 +102,8 @@ function LoginPage() {
   }
 
   function onSuccess({ token }) {
-    dispatch({ type: 'SET_STATE', payload: { token } });
     cookie.set('token', token, { expires: 360000 });
+    dispatch({ type: 'SET_STATE', payload: { token } });
   }
 }
 export default LoginPage;

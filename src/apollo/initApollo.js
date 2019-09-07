@@ -1,11 +1,10 @@
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { WebSocketLink } from 'apollo-link-ws';
-import { ApolloLink, split, concat } from 'apollo-link';
+import { ApolloLink, split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import ApolloClient from 'apollo-client';
 import { onError } from 'apollo-link-error';
-import jwt from 'jsonwebtoken';
 import fetch from 'isomorphic-unfetch';
 
 let apolloClient = null;
@@ -28,15 +27,18 @@ function create(initialState = {}, { getToken, fetchOptions }) {
       reconnect: true,
       // lazy: true,
       timeout: 60000,
+      connectionParams: () => {
+        const token = getToken();
+        return {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
     },
   });
   const authMiddleware = new ApolloLink((operation, forward) => {
-    const token = getToken() || jwt.sign({
-      hasura_claims: {
-        'x-hasura-default-role': 'anonymous',
-        'x-hasura-allowed-roles': ['anonymous'],
-      },
-    }, process.env.AUTH_SECRET);
+    const token = getToken();
     operation.setContext({
       headers: {
         Authorization: `Bearer ${token}`,
