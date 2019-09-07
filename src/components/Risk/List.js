@@ -82,8 +82,8 @@ function RiskList(props) {
   }, [projects]);
   const OptionComponent = useCallback(CustomProjectOption, [project]);
   const crumbs = [
-    (  
-      <span 
+    (
+      <span
         key="1"
         className="crumb_main"
       >
@@ -92,46 +92,8 @@ function RiskList(props) {
     ),
     selected && (
       <span className="crumb_sub" key="2">{selected.name}</span>
-    )
+    ),
   ].filter(Boolean);
-
-  const renderActions = () => {
-    if (riskType !== 'srmp') {
-      return (
-        <SelectAutocomplete
-          id="operation"
-          label="Filter by"
-          options={operations.map(e => ({ value: e.id, label: e.name }))}
-          onChange={onChange}
-          value={operation}
-          required={false}
-        />
-      )
-    }
-    if (riskType !== 'prmp') {
-      return (
-        <>
-          <SelectAutocomplete
-            id="project"
-            label="Filter by"
-            options={projects.map(e => ({ value: e.id, label: e.name }))}
-            onChange={onChange}
-            components={{ Option: OptionComponent }}
-            value={project}
-            required={false}
-          />
-          <Button
-            flat
-            className="actions_addRisk iBttn iBttn-primary"
-            iconChildren="add_circle"
-            onClick={() => showProjectDialog()}
-          >
-            Add Project
-          </Button>
-        </>
-      )
-    }
-  }
 
   return (
     <Grid className="riskList">
@@ -207,6 +169,43 @@ function RiskList(props) {
       </div>
     </Grid>
   );
+
+  function renderActions() {
+    return (
+      <>
+        {riskType !== 'srmp' && (
+          <SelectAutocomplete
+            id="operation"
+            label="Filter by"
+            options={operations.map(e => ({ value: e.id, label: e.name }))}
+            onChange={onChange}
+            value={operation}
+            required={false}
+          />
+        )}
+        {riskType === 'prmp' && (
+          <>
+            <SelectAutocomplete
+              id="project"
+              options={projects.map(e => ({ value: e.id, label: e.name }))}
+              onChange={onChange}
+              components={{ Option: OptionComponent }}
+              value={project}
+              required={false}
+            />
+            <Button
+              flat
+              className="actions_addRisk iBttn iBttn-primary"
+              iconChildren="add_circle"
+              onClick={() => showProjectDialog()}
+            >
+              Add Project
+            </Button>
+          </>
+        )}
+      </>
+    );
+  }
 
   function showRiskDialog() {
     dispatch({
