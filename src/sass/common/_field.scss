@@ -134,13 +134,34 @@ $fieldBorder: 1px solid $gray-200;
 	&__menu {
 		margin-top: 0;
 		border-radius: 0;
-		top: calc(100% - 12px);
-		width: calc(100% - 24px);
+		top: 100%;
+		width: 100%;
 
 		// .iField-rs__menu-list
 		&-list {
 			padding: 0;
 			max-height: 12em;
+		}
+
+		// .iField-rs__menu__item
+		&__item {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			flex-wrap: nowrap;
+
+			.actions {
+				padding-right: .25rem;
+			}
+
+			&.selected {
+				background-color: $primary-color-L900;
+				.iField-rs__option {
+					color: darken($primary-color,10%);
+					font-weight: 600;
+					background-color: transparent !important;
+				}
+			}
 		}
 	}
 
@@ -153,6 +174,11 @@ $fieldBorder: 1px solid $gray-200;
 	// .iField-rs__indicator-separator
 	&__indicator-separator {
 		display: none;
+	}
+
+	// .iField-rs__option--is-focused
+	&__option--is-focused {
+
 	}
 }
 
@@ -401,6 +427,10 @@ $fieldBorder: 1px solid $gray-200;
 // ====================================
 .selectAutoComplete {
 	font-size: 1rem;
+	width: 100%;
+	max-width: 300px;
+
+	// .selectAutoComplete_label
 	&_label {
 		margin-bottom: .5em;
 		font-size: .8em;
@@ -416,7 +446,15 @@ $fieldBorder: 1px solid $gray-200;
 		margin-bottom: 0;
 		padding: 0 .8em;
 	}
+
+	
+
+	// .selectAutoComplete-sm
+	&-sm {
+		max-width: 150px;
+	}
 }
+
 
 // ====================================
 // search

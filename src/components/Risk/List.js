@@ -15,6 +15,7 @@ import { RiskItemSkeleton } from 'components/Skeletons';
 import useBusinessUnit from './useBusinessUnit';
 import RiskItem from './Item';
 import { riskListQuery, projectQuery } from './query';
+import cn from 'classnames';
 import 'sass/components/risk/index.scss';
 
 function RiskList(props) {
@@ -133,7 +134,7 @@ function RiskList(props) {
         </div>
         <div className="riskList_risk_content">
           <div className="row riskList_risk_content_header">
-            <div className="col-md-6 contentHeader_pagination">
+            <div className="col-md-3 contentHeader_pagination">
               <Pagination
                 onChange={newPage => setCurrentPage(newPage)}
                 current={currentPage}
@@ -142,7 +143,7 @@ function RiskList(props) {
                 hideOnSinglePage
               />
             </div>
-            <div className="col-md-6 contentHeader_actions">
+            <div className="col-md-9 contentHeader_actions">
               {renderActions() }
             </div>
           </div>
@@ -192,6 +193,7 @@ function RiskList(props) {
               components={{ Option: OptionComponent }}
               value={project}
               required={false}
+              className="selectAutoComplete-sm contentHeader_actions_projects"
             />
             <Button
               flat
@@ -283,28 +285,25 @@ function RiskList(props) {
 
   function CustomProjectOption(optionProps) {
     const value = projects.find(e => e.id === optionProps.value);
+    console.log('optionProps === ', optionProps)
     return (
-      <>
+      <div
+        className={cn("iField-rs__menu__item", {
+          "selected" : optionProps.isSelected
+        })}
+        onClick={() => showProjectDialog(value)}
+      >
         <components.Option {...optionProps} />
-        <MenuButton
-          icon
-          menuItems={[
-            {
-              primaryText: 'Edit',
-              onClick: () => showProjectDialog(value),
-              leftIcon: <FontIcon>Edit</FontIcon>,
-            },
-            {
-              primaryText: 'Delete',
-              onClick: () => handleDelete(value),
-              leftIcon: <FontIcon>delete</FontIcon>,
-            },
-          ]}
-          anchor={MenuButton.Positions.BOTTOM}
-        >
-          more_vert
-        </MenuButton>
-      </>
+        <div className="actions">
+          <Button
+            icon
+            onClick={() => handleDelete(value)}
+            className="iBttn iBttn-tc-error"
+          >
+            delete
+          </Button>
+        </div>
+      </div>
     );
   }
 }

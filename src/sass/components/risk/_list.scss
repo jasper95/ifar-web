@@ -179,7 +179,6 @@ $risklist-header-arrow-bg: $primary-color-400;
 					}
 
 					.selectAutoComplete {
-						width: 300px;
 						position: relative;
 
 						// .selectAutoComplete_label
@@ -193,6 +192,14 @@ $risklist-header-arrow-bg: $primary-color-400;
 						.iField-rs {
 							padding: 0;
 						}
+					}
+
+					// .contentHeader_actions_projects
+					&_projects {
+						.iField-rs__menu__item {
+							position: relative;
+						}
+
 					}
 				}
 			}

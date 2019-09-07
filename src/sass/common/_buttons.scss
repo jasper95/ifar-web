@@ -101,6 +101,15 @@ $btn-colors: (
 				border-color: $value
 			}
 		}
+
+		&-tc-#{$name} {
+			color: $value;
+			border: none !important;
+			&:hover {
+				background-color: rgba($value,.05);
+				border-color: darken($value,10);
+			}
+		}
 	}
 }
 
