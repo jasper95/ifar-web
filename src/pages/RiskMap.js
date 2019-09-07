@@ -18,8 +18,8 @@ import VulnerabilityChange from 'components/RiskMap/VulnerabilityChange';
 import 'sass/pages/riskmap.scss';
 
 const riskQuery = gql`
-  subscription getList($id: uuid!) {
-    risk_dashboard(where: {business_unit_id: {_eq: $id }}) {
+  subscription getList($id: uuid!, $risk_type: String!) {
+    risk_dashboard(where: {business_unit_id: {_eq: $id }, type: { _eq: $risk_type }}) {
       id
       name
       residual_likelihood
@@ -41,7 +41,8 @@ const riskQuery = gql`
 `;
 
 export default function RiskMap(props) {
-  const { onBack } = props;
+  const { onBack, typeTitle, riskType } = props;
+  console.log('riskType: ', riskType);
   const [currentImpact, setImpact] = useState('');
   const [currentStage, setStage] = useState('residual');
 
@@ -51,7 +52,7 @@ export default function RiskMap(props) {
     defaultBusinessUnit ? defaultBusinessUnit.id : null,
   );
   let { data: { risk_dashboard: riskItems = [] } } = useQuery(
-    riskQuery, { variables: { id: currentBusinessUnit }, ws: true },
+    riskQuery, { variables: { id: currentBusinessUnit, risk_type: riskType }, ws: true },
   );
   riskItems = useMemo(() => orderBy(
     riskItems
@@ -85,11 +86,11 @@ export default function RiskMap(props) {
     <div className="dbContainer">
       <Grid className="row-ToolbarHeader">
         <Cell offset={6} size={6} className="col-actions">
-          <Button 
-            onClick={() => history.push('/risk-management')}
+          <Button
+            onClick={onBack}
             iconChildren="keyboard_arrow_left"
             className="iBttn iBttn-primary"
-            children="Strategic Risk Map"
+            children={`${typeTitle} Risk Management`}
           />
         </Cell>
       </Grid>

@@ -52,8 +52,6 @@ function Map(props) {
       'Extreme',
     ];
 
-    // console.log(`column = ${column} row = ${row}`);
-    // console.log(`isLeftLabel = ${isLeftLabel} isBottomLabel = ${isBottomLabel}`);
 
     // if left label on bottom
     if (isLeftLabel && isBottomLabel) {

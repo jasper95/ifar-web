@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { components } from 'react-select';
-import MenuButton from 'react-md/lib/Menus/MenuButton';
-import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import useMutation, { useCreateNode } from 'apollo/mutation';
@@ -12,16 +10,16 @@ import { getImpactDriver, getRecentChanges } from 'lib/tools';
 import useQuery from 'apollo/query';
 import SelectAutocomplete from 'components/SelectAutocomplete';
 import { RiskItemSkeleton } from 'components/Skeletons';
+import cn from 'classnames';
 import useBusinessUnit from './useBusinessUnit';
 import RiskItem from './Item';
 import { riskListQuery, projectQuery } from './query';
-import cn from 'classnames';
 import 'sass/components/risk/index.scss';
 
 function RiskList(props) {
   const {
     businessUnit, classification,
-    impactDriver, residualVulnerability, riskType, operations, operation, onChange,
+    impactDriver, residualVulnerability, riskType, operations, operation, onChange, typeTitle,
   } = props;
   const businessUnitQuery = gql`
     subscription getBusinessUnits($user_business_units: [uuid!]){
@@ -34,7 +32,6 @@ function RiskList(props) {
   `;
   const [currentPage, setCurrentPage] = useState(1);
   const [project, setProject] = useState(null);
-  const [, onMutateProject] = useMutation({ url: '/project' });
   const user = useSelector(state => state.auth);
   const userBusinessUnits = useBusinessUnit();
   const variables = {
@@ -61,11 +58,6 @@ function RiskList(props) {
   const [, onCreateRisk] = useCreateNode({ node: 'risk' });
   const { data: { [`business_unit_${riskType}`]: businessUnits = [] } } = businessUnitResponse;
   const selected = businessUnits.find(e => e.id === businessUnit);
-  const typeTitle = {
-    srmp: 'Strategic Risk Management Plan',
-    ormp: 'Operation Risk Management Plan',
-    prmp: 'Project Risk Management Plan',
-  }[riskType];
   const projectResponse = useQuery(
     projectQuery,
     {
@@ -73,7 +65,8 @@ function RiskList(props) {
       skip: riskType !== 'prmp' || !operation,
     },
   );
-  const { data: { project: projects = [] } } = projectResponse;
+  const { data: { project_risks: projects = [] }, refetch } = projectResponse;
+  const [, onMutateProject] = useMutation({ url: '/project', onSuccess: () => refetch() });
   useEffect(() => {
     if (projects.length) {
       setProject(projects[0].id);
@@ -82,20 +75,6 @@ function RiskList(props) {
     }
   }, [projects]);
   const OptionComponent = useCallback(CustomProjectOption, [project]);
-  const crumbs = [
-    (
-      <span
-        key="1"
-        className="crumb_main"
-      >
-        <div className="text">{typeTitle}</div>
-      </span>
-    ),
-    selected && (
-      <span className="crumb_sub" key="2">{selected.name}</span>
-    ),
-  ].filter(Boolean);
-
   return (
     <Grid className="riskList">
       <div className="riskList_unitList">
@@ -103,7 +82,7 @@ function RiskList(props) {
           <Button
             flat
             className="riskList_unitList_item"
-            onClick={() => onChange('businessUnit', e.id)}
+            onClick={() => onChange(e.id, 'businessUnit')}
             iconBefore={false}
             children={e.name}
             key={e.id}
@@ -119,7 +98,15 @@ function RiskList(props) {
       <div className="riskList_risk">
         <div className="riskList_risk_header">
           <div className="crumb">
-            {crumbs}
+            <span
+              key="1"
+              className="crumb_main"
+            >
+              <div className="text">{`${typeTitle} Risk Management Plan`}</div>
+            </span>
+            {selected && (
+              <span className="crumb_sub" key="2">{selected.name}</span>
+            )}
           </div>
           <div className="actions">
             <Button
@@ -164,7 +151,7 @@ function RiskList(props) {
             />
           ))}
           {!listIsLoading && list.length === 0 && (
-          <span className="riskList_risk_content_empty">No Records Found</span>
+            <span className="riskList_risk_content_empty">No Records Found</span>
           )}
         </div>
       </div>
@@ -177,22 +164,25 @@ function RiskList(props) {
         {riskType !== 'srmp' && (
           <SelectAutocomplete
             id="operation"
-            label="Filter by"
+            label="Operation"
             options={operations.map(e => ({ value: e.id, label: e.name }))}
             onChange={onChange}
             value={operation}
             required={false}
+            key="1"
           />
         )}
         {riskType === 'prmp' && (
           <>
             <SelectAutocomplete
               id="project"
-              options={projects.map(e => ({ value: e.id, label: e.name }))}
-              onChange={onChange}
+              label="Project"
+              options={projects.map(e => ({ value: e.id, label: `${e.name} (${e.risk_count})`, risks: e.risk_count }))}
+              onChange={setProject}
               components={{ Option: OptionComponent }}
               value={project}
               required={false}
+              key="2"
               className="selectAutoComplete-sm contentHeader_actions_projects"
             />
             <Button
@@ -254,10 +244,10 @@ function RiskList(props) {
         path: 'Project',
         props: {
           initialFields,
-          title: 'Create Project',
+          title: `${initialFields ? 'Update' : 'Create'} Project`,
           onValid: data => onMutateProject({
             data: { ...data, operation_id: operation },
-            method: initialFields ? 'POST' : 'PUT',
+            method: initialFields ? 'PUT' : 'POST',
             message: `Project successfully ${initialFields ? 'updated' : 'created'}`,
           }),
         },
@@ -285,23 +275,31 @@ function RiskList(props) {
 
   function CustomProjectOption(optionProps) {
     const value = projects.find(e => e.id === optionProps.value);
-    console.log('optionProps === ', optionProps)
+    const { data } = optionProps;
     return (
       <div
-        className={cn("iField-rs__menu__item", {
-          "selected" : optionProps.isSelected
+        className={cn('iField-rs__menu__item', {
+          selected: optionProps.isSelected,
         })}
-        onClick={() => showProjectDialog(value)}
       >
         <components.Option {...optionProps} />
         <div className="actions">
           <Button
             icon
-            onClick={() => handleDelete(value)}
-            className="iBttn iBttn-tc-error"
+            onClick={() => showProjectDialog(value)}
+            className="iBttn iBttn-tc-primary"
           >
-            delete
+            edit
           </Button>
+          {!data.risks && (
+            <Button
+              icon
+              onClick={() => handleDelete(value)}
+              className="iBttn iBttn-tc-error"
+            >
+              delete
+            </Button>
+          )}
         </div>
       </div>
     );

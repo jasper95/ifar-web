@@ -8,7 +8,7 @@ function Row(props) {
   const {
     type, row, accessor, bodyProps, actions,
     component: Cell, fn, index, componentProps,
-    title
+    title,
   } = props;
   let children;
   if (type === 'actions') {
@@ -49,11 +49,10 @@ function Row(props) {
     children = get(row, accessor);
   }
 
-  console.log('Row === ',props)
   return (
     <TableColumn {...bodyProps}>
-      <div 
-        className="tableCell" 
+      <div
+        className="tableCell"
         data-header-title={title}
       >
         {children}

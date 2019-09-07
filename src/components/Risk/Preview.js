@@ -36,13 +36,16 @@ function RiskPreview(props) {
           <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) && residualCalc ? residualCalc : ''} />
           <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) && targetCalc ? targetCalc : ''} />
         </Cell>
-        {!readOnly && (
-          <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
-            <Button onClick={() => showDialog('copy')} tooltipLabel="Copy" icon>insert_drive_file</Button>
-            <Button onClick={() => showDialog('edit')} tooltipLabel="Edit" icon>edit</Button>
-            <Button onClick={() => showDialog('delete')} tooltipLabel="Delete" icon>delete</Button>
-          </Cell>
-        )}
+        <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
+          <Button onClick={() => showDialog('comments')} tooltipLabel="Discussions" icon>message</Button>
+          {!readOnly && (
+            <>
+              <Button onClick={() => showDialog('copy')} tooltipLabel="Copy" icon>insert_drive_file</Button>
+              <Button onClick={() => showDialog('edit')} tooltipLabel="Edit" icon>edit</Button>
+              <Button onClick={() => showDialog('delete')} tooltipLabel="Delete" icon>delete</Button>
+            </>
+          )}
+        </Cell>
       </Grid>
       <Grid>
         <RiskPreviewInfo
@@ -109,6 +112,18 @@ function RiskPreview(props) {
               ...risk,
               business_unit_id: '',
             },
+          },
+        },
+      });
+    } else if (action === 'comments') {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
+          path: 'Comments',
+          props: {
+            title: 'Comments',
+            dialogId: 'Comments',
+            risk,
           },
         },
       });

@@ -18,7 +18,7 @@ function SelectAutocomplete(props) {
   [options]);
   const [currentValue, setCurrentValue] = useState(setInitialValue);
   useEffect(() => {
-    if ((value && !currentValue) || (!value && currentValue)) {
+    if (isNotEqualValue()) {
       if (props.isMulti) {
         setCurrentValue(value ? value.map(e => selectOptions.find(ee => ee.value === e)) : value);
       } else {
@@ -66,6 +66,17 @@ function SelectAutocomplete(props) {
       onChange(newVal.value, id, newVal);
       setCurrentValue(newVal ? { ...newVal } : newVal);
     }
+  }
+
+  function isNotEqualValue() {
+    const result = (value && !currentValue) || (!value && currentValue);
+    if (value && currentValue) {
+      if (props.isMulti) {
+        return value.join(',') !== currentValue.map(e => e.value).join(',');
+      }
+      return value !== currentValue.value;
+    }
+    return result;
   }
 }
 

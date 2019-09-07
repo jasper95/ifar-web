@@ -9,7 +9,7 @@ import 'sass/components/notification/index.scss';
 
 const notificationQuery = gql`
   subscription getNotifications($user_id: jsonb, $user_business_units: [uuid!]) {
-    notification(where: {receivers: {_contains: $user_id }, business_unit_id: { _in: $user_business_units }}) {
+    notification(where: {receivers: {_contains: $user_id }, business_unit_id: { _in: $user_business_units }}, order_by: { created_date: desc }) {
       id
       details
       created_date

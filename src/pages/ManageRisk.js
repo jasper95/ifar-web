@@ -23,6 +23,11 @@ const RiskMap = loadable(() => import('pages/RiskMap'));
 function ManageRisk(props) {
   const { path } = props.match;
   const riskType = path.replace(/\//g, '');
+  const typeTitle = {
+    srmp: 'Strategic',
+    ormp: 'Operational',
+    prmp: 'Project',
+  }[riskType];
   const dispatch = useDispatch();
   const [riskMapVisible, setRiskMapVisible] = useState(false);
   const user = useSelector(state => state.auth);
@@ -62,7 +67,7 @@ function ManageRisk(props) {
   const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
   if (riskMapVisible) {
     return (
-      <RiskMap onBack={() => setRiskMapVisible(false)} />
+      <RiskMap onBack={() => setRiskMapVisible(false)} typeTitle={typeTitle} riskType={riskType} />
     );
   }
   return (
@@ -104,7 +109,7 @@ function ManageRisk(props) {
           <Button
             flat
             className="iBttn iBttn-primary iBttn-counterBadge"
-            children="View Strategic Map"
+            children={`View ${typeTitle} Risk Map`}
             onClick={() => setRiskMapVisible(true)}
           />
         </Cell>
@@ -169,6 +174,7 @@ function ManageRisk(props) {
         operations={operations}
         operation={currentOp}
         onChange={handleChange}
+        typeTitle={typeTitle}
       />
     </div>
   );
