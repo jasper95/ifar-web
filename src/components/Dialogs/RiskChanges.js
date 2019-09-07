@@ -42,7 +42,7 @@ function RiskChanges(props) {
 
       <div className="riskChangesForm_segment">
         <div className="riskChangesForm_segment_head">
-          <h1 className="title"> Previous Evaluation </h1>
+          <h1 className="title"> Key Changes </h1>
         </div>
         <Grid className="riskChangesForm_segment_body">
           <RiskInfo colspan={4} title="Causes" list={causes} />
@@ -55,7 +55,7 @@ function RiskChanges(props) {
 
       <div className="riskChangesForm_segment">
         <div className="riskChangesForm_segment_head">
-          <h1 className="title"> Key Changes </h1>
+          <h1 className="title"> Previous Evaluation </h1>
         </div>
         <div className="riskChangesForm_segment_body">
           <DataTable rows={prevEvaluation} columns={getTableColumns('prev')} />

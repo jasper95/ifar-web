@@ -5,13 +5,10 @@ import PageLayout from 'components/Layout/Page';
 import NotFound from 'pages/NotFound';
 
 const Login = loadable(() => import('pages/Login'));
-// const Verify = loadable(() => import('pages/Verify'));
-// const Signup = loadable(() => import('pages/Signup'));
 const Home = loadable(() => import('pages/Home'));
 const ForgotPassword = loadable(() => import('pages/ForgotPassword'));
 const ResetPassword = loadable(() => import('pages/ResetPassword'));
 const ManageRisk = loadable(() => import('pages/ManageRisk'));
-// const RiskMap = loadable(() => import('pages/RiskMap'));
 const User = loadable(() => import('pages/User'));
 
 

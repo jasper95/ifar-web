@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useQuery from 'apollo/query';
+import Pagination from 'rc-pagination';
 import flowRight from 'lodash/flowRight';
 import withDialog from 'lib/hocs/dialog';
 import gql from 'graphql-tag';
@@ -8,8 +9,12 @@ import { format as formatTime } from 'timeago.js';
 import 'sass/components/notification/index.scss';
 
 const notificationQuery = gql`
-  subscription getNotifications($user_id: jsonb, $user_business_units: [uuid!]) {
-    notification(where: {receivers: {_contains: $user_id }, business_unit_id: { _in: $user_business_units }}, order_by: { created_date: desc }) {
+  subscription getNotifications($user_id: jsonb, $user_business_units: [uuid!], $offset:Int , $limit: Int =10) {
+    notification(
+      where: {receivers: {_contains: $user_id }, business_unit_id: { _in: $user_business_units }},
+      order_by: { created_date: desc },
+      offset: $offset, limit: $limit
+    ) {
       id
       details
       created_date
@@ -27,10 +32,10 @@ const notificationQuery = gql`
   }
 `;
 function Notifications(props) {
-  const { requestNotifCountVars } = props;
-  const notificationReponse = useQuery(
-    notificationQuery, { ws: true, variables: requestNotifCountVars },
-  );
+  const { requestNotifCountVars, notifCount } = props;
+  const [currentPage, setCurrentPage] = useState(1);
+  const notificationReponse = useQuery(notificationQuery,
+    { ws: true, variables: { ...requestNotifCountVars, offset: (currentPage - 1) * 10 } });
   const {
     data: { notification: notifications = [] },
     loading: listIsLoading,
@@ -43,6 +48,13 @@ function Notifications(props) {
       'notification-isEmpty': isEmpty,
     })}
     >
+      <Pagination
+        onChange={newPage => setCurrentPage(newPage)}
+        current={currentPage}
+        pageSize={10}
+        total={notifCount}
+        hideOnSinglePage
+      />
       {listIsLoading ? (
         <span className="notification_loading">
           Loading...
@@ -89,13 +101,9 @@ function NotificationItem(props) {
       <div className="notification_item_info">
         <p className="notif">
           <span className="emphasize">
-            {user.first_name}
-            {' '}
-            {user.last_name}
+            {`${user.first_name} ${user.last_name}`}
           </span>
-          {actionDescription}
-          {' '}
-on Risk Record:
+          {`${actionDescription} on Risk Record:`}
           <span className="emphasize">
             {risk.name}
           </span>

@@ -7,10 +7,6 @@ export const chartQuery = gql`
       residual_impact_driver
       residual_rating
       residual_likelihood
-      business_unit {
-        name
-        id
-      }
     }
   }
 `;

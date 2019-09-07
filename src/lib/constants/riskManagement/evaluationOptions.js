@@ -16,6 +16,10 @@ export const probabilityOptions = [
     value: 4,
     label: '4 - Above 65% - 95%',
   },
+  {
+    value: 5,
+    label: '5 - Above 95%',
+  },
 ];
 export const frequencyOptions = [
   {

@@ -220,6 +220,10 @@ function ManageRisk(props) {
           onValid: () => {},
           dialogClassName: `i_dialog_container--${dialogSize}`,
           requestNotifCountVars,
+          requestCount: !requestCount.loading
+            ? requestCount.data.request_aggregate.aggregate.count : 0,
+          notifCount: !notifCount.loading
+            ? notifCount.data.notification_aggregate.aggregate.count : 0,
         },
       },
     });

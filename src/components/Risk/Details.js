@@ -13,7 +13,7 @@ import RiskTable from './Table';
 function RiskDetails(props) {
   const dispatch = useDispatch();
   const {
-    risk, className, readOnly, onMutateRisk, residualReadOnly,
+    risk, className, readOnly, onMutateRisk, residualReadOnly, isRequest,
   } = props;
   return (
     <Grid className={`RiskDetails ${className}`}>
@@ -23,23 +23,25 @@ function RiskDetails(props) {
         <RiskInfo colspan={4} title="Affected Stakeholders" list={risk.stakeholders} />
       </Grid>
 
-      <RiskTable
-        type="Residual"
-        title="Current Risk Treatment"
-        rows={risk.current_treatments}
-        columns={getColumns('Residual')}
-        onClickAdd={() => showDialog({ type: 'Residual', dialogTitle: 'Current Risk Treatment' })}
-        readOnly={readOnly || residualReadOnly}
-      />
-
-      <RiskTable
-        title="Future Risk Treatment"
-        rows={risk.future_treatments}
-        columns={getColumns('Target')}
-        onClickAdd={() => showDialog({ type: 'Target', dialogTitle: 'Future Risk Treatment' })}
-        readOnly={readOnly}
-      />
-
+      {!isRequest && (
+        <>
+          <RiskTable
+            type="Residual"
+            title="Current Risk Treatment"
+            rows={risk.current_treatments}
+            columns={getColumns('Residual')}
+            onClickAdd={() => showDialog({ type: 'Residual', dialogTitle: 'Current Risk Treatment' })}
+            readOnly={readOnly || residualReadOnly}
+          />
+          <RiskTable
+            title="Future Risk Treatment"
+            rows={risk.future_treatments}
+            columns={getColumns('Target')}
+            onClickAdd={() => showDialog({ type: 'Target', dialogTitle: 'Future Risk Treatment' })}
+            readOnly={readOnly}
+          />
+        </>
+      )}
     </Grid>
   );
 
@@ -156,7 +158,7 @@ function RiskDetails(props) {
           title: 'KPI',
         },
         {
-          accessor: 'team',
+          accessor: 'business_unit',
           title: 'Team',
         },
         !readOnly
@@ -191,7 +193,7 @@ function RiskDetails(props) {
           title: 'KPI',
         },
         {
-          accessor: 'team',
+          accessor: 'business_unit',
           title: 'Team',
         },
         {
@@ -234,10 +236,12 @@ RiskDetails.propTypes = {
     causes: PropTypes.array.isRequired,
   }).isRequired,
   readOnly: PropTypes.bool,
+  isRequest: PropTypes.bool,
 };
 
 RiskDetails.defaultProps = {
   readOnly: false,
+  isRequest: false,
 };
 
 export default RiskDetails;

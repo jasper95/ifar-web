@@ -17,6 +17,9 @@ function RequestPreview(props) {
   const dispatch = useDispatch();
   const [, onMutateRequest] = useMutation({});
   const { user } = request;
+  const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
+  const residualCalc = risk.residual_rating * risk.residual_likelihood;
+  const targetCalc = risk.target_rating * risk.target_likelihood;
   return (
     <Grid className={`RiskPreview ${className}`}>
       <Grid>
@@ -66,6 +69,16 @@ function RequestPreview(props) {
         </Cell>
       </Grid>
       <Grid>
+        <RiskPreviewInfo
+          colspan={3}
+          title="Classification"
+          info={classifications.find(e => e.id === risk.classification_id).name}
+        />
+        <RiskPreviewInfo
+          colspan={3}
+          title="Risk name"
+          info={risk.name}
+        />
         {request.type === 'DONE_TREATMENT_RISK' ? (
           <RiskTable
             title="Risk Treatment"
@@ -85,28 +98,17 @@ function RequestPreview(props) {
                 title: 'KPI',
               },
               {
-                accessor: 'team',
+                accessor: 'business_unit',
                 title: 'Team',
               },
             ]}
           />
         ) : (
           <>
-
-            <RiskPreviewInfo
-              colspan={3}
-              title="Classification"
-              info={classifications.find(e => e.id === risk.classification_id).name}
-            />
-            <RiskPreviewInfo
-              colspan={3}
-              title="Risk name"
-              info={risk.name}
-            />
             <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
-              <RiskPreviewInfo colspan={4} title="Inherent" info={risk.inherent_rating} />
-              <RiskPreviewInfo colspan={4} title="Residual" info={risk.residual_rating} />
-              <RiskPreviewInfo colspan={4} title="Target" info={risk.target_rating} />
+              <RiskPreviewInfo colspan={4} title="Inherent" info={!Number.isNaN(inherentCalc) && inherentCalc ? inherentCalc : ''} />
+              <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) && residualCalc ? residualCalc : ''} />
+              <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) && targetCalc ? targetCalc : ''} />
             </Cell>
           </>
         )}

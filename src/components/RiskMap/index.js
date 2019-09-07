@@ -20,7 +20,7 @@ const Filters = ({ onChangeStage, currentStage }) => (
     />
     <Button
       className={cn('iBttn', { active: currentStage === 'residual' })}
-      children="Risidual Risk Map"
+      children="Residual Risk Map"
       onClick={() => onChangeStage('residual')}
     />
     <Button
