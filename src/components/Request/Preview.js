@@ -158,7 +158,7 @@ function RequestPreview(props) {
           props: {
             title: 'Comments',
             dialogId: 'Comments',
-            commentType: 'treatment_request',
+            commentType: request.type === 'DONE_TREATMENT_RISK' ? 'treatment_request' : 'risk',
             risk,
           },
         },

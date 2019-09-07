@@ -40,16 +40,6 @@ export default function useRiskMutation() {
       });
       return;
     }
-    if (action === 'DONE_TREATMENT') {
-      data = {
-        ...data,
-        current_treatments: [
-          ...data.current_treatments,
-          { ...treatment, rerate: true },
-        ],
-        future_treatments: data.future_treatments.filter(e => e.id !== treatment.id),
-      };
-    }
     onMutateRisk({
       data,
       method,

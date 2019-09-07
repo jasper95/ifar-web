@@ -53,11 +53,24 @@ function RiskDetails(props) {
         props: {
           title: 'Confirm Done Treatment',
           message: 'Do you want to done this treatment?',
-          onValid: data => onMutateRisk({
-            data: risk,
-            treatment_details: data,
-            action: 'DONE_TREATMENT',
-          }),
+          onValid: (data) => {
+            const newRisk = {
+              ...risk,
+              current_treatments: [
+                ...risk.current_treatments,
+                { ...data, rerate: true },
+              ],
+              future_treatments: risk.future_treatments.filter(e => e.id !== data.id),
+            };
+            onMutateRisk({
+              data: {
+                ...newRisk,
+                recent_changes: getRecentChanges(risk, newRisk, ['current_treatments', 'future_treatments']),
+              },
+              treatment_details: data,
+              action: 'DONE_TREATMENT',
+            });
+          },
           initialFields: row,
         },
       },

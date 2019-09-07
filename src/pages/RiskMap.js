@@ -42,7 +42,6 @@ const riskQuery = gql`
 
 export default function RiskMap(props) {
   const { onBack, typeTitle, riskType } = props;
-  console.log('riskType: ', riskType);
   const [currentImpact, setImpact] = useState('');
   const [currentStage, setStage] = useState('residual');
 
@@ -207,6 +206,7 @@ function RiskName({ row }) {
         path: 'RiskMapItemDetails',
         props: {
           risk: row,
+          title: 'Risk Details',
           dialogClassName: 'i_dialog_container--lg',
         },
       },

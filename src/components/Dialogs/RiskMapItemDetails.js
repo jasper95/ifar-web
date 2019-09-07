@@ -22,7 +22,7 @@ function RiskMapItemDetails(props) {
         />
       </div>
       <hr />
-      <Comments risk={risk} />
+      {/* <Comments risk={risk} /> */}
     </div>
   );
 }

@@ -21,7 +21,7 @@ import 'sass/components/comments/_index.scss';
 
 const commentsQuery = gql`
   subscription getComments($id: uuid, $type: String) {
-    comment(where: {risk_id: {_eq: $id}, type: {_eq: $type}}, order_by: {created_date: desc}) {
+    comment(where: {risk_id: {_eq: $id}, type: {_eq: $type}}, order_by: {created_date: asc}) {
       id
       body
       user {

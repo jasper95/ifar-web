@@ -30,8 +30,11 @@ const requestQuery = gql`
         name
         stakeholders
         basis
+        target_likelihood
         target_rating
+        residual_likelihood
         residual_rating
+        inherent_likelihood
         inherent_rating
       },
       risk_details
@@ -54,6 +57,7 @@ function Requests(props) {
     { ws: true, variables: { ...requestNotifCountVars, offset: (currentPage - 1) * 10 } },
   );
   const { data: { request: requests = [] }, loading: listIsLoading } = requestResponse;
+  console.log('requests: ', requests);
   const user = useSelector(state => state.auth);
   return (
     <div className="riskList_risk_content">

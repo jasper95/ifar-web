@@ -86,7 +86,7 @@ function RiskChanges(props) {
       {
         title: 'Likelihood',
         type: 'function',
-        fn: displayOrBlank('likelihood'),
+        fn: displayOrBlank('likelihood', 'rating'),
       },
       {
         title: 'Impact',
@@ -124,9 +124,15 @@ function RiskChanges(props) {
     };
   }
 
-  function displayOrBlank(key) {
+  function displayOrBlank(key, key2) {
     return row => (
-      <span>{row[key] || '-'}</span>
+      <span>
+        {[key, key2]
+          .filter(Boolean)
+          .reduce((acc, el) => acc && Boolean(row[el]), true)
+          ? row[key] : '-'
+        }
+      </span>
     );
   }
 }
