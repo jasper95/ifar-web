@@ -171,7 +171,6 @@ function RiskList(props) {
   );
 
   function renderActions() {
-    console.log('projects', operations)
     return (
       <>
         {riskType !== 'srmp' && (
@@ -186,8 +185,14 @@ function RiskList(props) {
         )}
         {riskType === 'prmp' && (
           <>
-
-            <OptionComponent/> 
+            <SelectAutocomplete
+              id="project"
+              options={projects.map(e => ({ value: e.id, label: e.name }))}
+              onChange={onChange}
+              components={{ Option: OptionComponent }}
+              value={project}
+              required={false}
+            />
             <Button
               flat
               className="actions_addRisk iBttn iBttn-primary"
@@ -280,16 +285,14 @@ function RiskList(props) {
     const value = projects.find(e => e.id === optionProps.value);
     return (
       <>
+        <components.Option {...optionProps} />
         <MenuButton
-          flat
-          className="iBttn iBttn-menu iBttn-gray-100"
-          iconChildren="more_vert"
-          iconBefore={false}
+          icon
           menuItems={[
             {
               primaryText: 'Edit',
               onClick: () => showProjectDialog(value),
-              leftIcon: <FontIcon>edit</FontIcon>,
+              leftIcon: <FontIcon>Edit</FontIcon>,
             },
             {
               primaryText: 'Delete',
@@ -299,7 +302,7 @@ function RiskList(props) {
           ]}
           anchor={MenuButton.Positions.BOTTOM}
         >
-          Actions
+          more_vert
         </MenuButton>
       </>
     );
