@@ -169,10 +169,18 @@ $risklist-header-arrow-bg: $primary-color-400;
 					display: flex;
 					align-items: center;
 					justify-content: flex-end;
+
+					> .iBttn ,
+					> .selectAutoComplete ,
+					> .md-menu-container {
+						&:not(:last-child) {
+							margin-right: .5rem;
+						}
+					}
+
 					.selectAutoComplete {
 						width: 300px;
 						position: relative;
-						margin-right: .5rem;
 
 						// .selectAutoComplete_label
 						&_label {
