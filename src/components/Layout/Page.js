@@ -114,12 +114,14 @@ Page.propTypes = {
   pageId: PropTypes.string,
   hasFooter: PropTypes.bool,
   hasNavigation: PropTypes.bool,
+  requiredRoles: PropTypes.arrayOf(PropTypes.string)
 };
 
 Page.defaultProps = {
   hasNavigation: true,
   hasFooter: true,
   pageId: '',
+  requiredRoles: []
 };
 
 EnhancedPage.propTypes = Page.propTypes;

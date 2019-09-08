@@ -59,7 +59,7 @@ export const riskDetailsFragment = gql`
 
 export const projectQuery = gql`
   query($operation_id: uuid) {
-    project_risks(where: { operation_id: {_eq: $operation_id} }, order_by: { name: asc }) {
+    project_risk(where: { operation_id: {_eq: $operation_id} }, order_by: { name: asc }) {
       id
       name
       risk_count

@@ -8,6 +8,7 @@ import useQuery from 'apollo/query';
 import { Redirect } from 'react-router';
 import AuthContext from 'apollo/AuthContext';
 import { NavSkeleton } from 'components/Skeletons';
+import cookie from 'js-cookie'
 import gql from 'graphql-tag';
 
 const sessionQuery = gql`
@@ -70,7 +71,7 @@ export default AppWithAuth;
 export const withAuth = (WrappedComponent) => {
   function Auth(props) {
     const isMounted = useRef(false);
-    const { requireAuth } = props;
+    const { requireAuth, requiredRoles } = props;
     const { loading, error, data: auth } = useContext(AuthContext);
     useEffect(() => {
       isMounted.current = true;
@@ -80,7 +81,11 @@ export const withAuth = (WrappedComponent) => {
     }
     if ((!auth || error) && requireAuth === true) {
       return (<Redirect to="/login" />);
-    } if (auth && requireAuth === false) {
+    }
+    if(requiredRoles.length && auth && !requiredRoles.includes(auth.role)) {
+      return (<Redirect to="/" />);
+    }
+    if (auth && requireAuth === false) {
       return (<Redirect to="/" />);
     }
     return (

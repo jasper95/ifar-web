@@ -108,6 +108,7 @@ export default [
     pageProps: {
       requireAuth: true,
       pageTitle: 'Manage Users',
+      requiredRoles: ['ADMIN']
     },
   },
   // {
@@ -143,7 +144,7 @@ export function renderRoutes(routes, extraProps = {}, switchProps = {}) {
             const {
               title, hasNavigation,
               hasFooter, requireAuth,
-              pageId, pageDescription,
+              pageId, pageDescription, requiredRoles
             } = pageProps;
             return (
               <PageLayout
@@ -154,6 +155,7 @@ export function renderRoutes(routes, extraProps = {}, switchProps = {}) {
                 hasFooter={hasFooter}
                 requireAuth={requireAuth}
                 pageDescription={pageDescription}
+                requiredRoles={requiredRoles}
               >
                 <route.component {...props} {...extraProps} route={route} />
               </PageLayout>

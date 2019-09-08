@@ -65,7 +65,7 @@ function RiskList(props) {
       skip: riskType !== 'prmp' || !operation,
     },
   );
-  const { data: { project_risks: projects = [] }, refetch } = projectResponse;
+  const { data: { project_risk: projects = [] }, refetch } = projectResponse;
   const [, onMutateProject] = useMutation({ url: '/project', onSuccess: () => refetch() });
   useEffect(() => {
     if (projects.length) {
