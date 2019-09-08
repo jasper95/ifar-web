@@ -94,8 +94,11 @@ $menu-sub-bg: lighten($nav-bg,5%);
 					font-family: $font-family;
 					font-weight: normal;
 					flex-shrink: 0;
+					height: 100%;
 
-					&:hover, 
+					&:hover {
+						cursor: pointer;
+					}
 					&:visited {
 						color: inherit;
 					}

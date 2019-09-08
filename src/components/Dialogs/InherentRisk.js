@@ -50,7 +50,7 @@ function InherentRisk(props) {
         fieldsRenderer={SingleTextField}
         value={fields.causes || []}
         label="Cause"
-        required
+        required={false}
         defaultItem={{
           name: '',
         }}
@@ -64,7 +64,7 @@ function InherentRisk(props) {
         fieldsRenderer={SingleTextField}
         value={fields.impacts || []}
         label="Impact"
-        required
+        required={false}
         defaultItem={{
           name: '',
         }}
@@ -79,7 +79,7 @@ function InherentRisk(props) {
         defaultItem={{
           name: '',
         }}
-        required
+        required={false}
         onChange={onElementChange}
         value={fields.stakeholders || []}
         fieldLabels={[{ label: 'Stakeholder' }]}
