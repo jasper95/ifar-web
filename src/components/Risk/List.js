@@ -169,6 +169,7 @@ function RiskList(props) {
             onChange={onChange}
             value={operation}
             required={false}
+            className="col-sm-4"
             key="1"
           />
         )}
@@ -183,7 +184,7 @@ function RiskList(props) {
               value={project}
               required={false}
               key="2"
-              className="contentHeader_actions_projects"
+              className="contentHeader_actions_projects col-sm-3"
             />
             <Button
               flat

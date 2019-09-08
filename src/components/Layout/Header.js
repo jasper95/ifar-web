@@ -198,11 +198,18 @@ function NavItems(props) {
       <li
         key={e.id}
         className={cn('nav_menu_list_item',
-          { active: isActive }
+          { active: isActive },
+          { hasSubmenu: e.submenu }
         )}
       >
         {e.submenu
-          ? <span className="text">{e.label}</span>
+          ? (
+            <span 
+              onClick={() => showSubmenu(!isSubmenuActive)}
+              className="text">
+              {e.label}
+            </span>
+          )
           : <Link className="text" to={e.path}>{e.label}</Link>
         }
         

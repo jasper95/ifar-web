@@ -105,8 +105,12 @@ $fieldBorder: 1px solid $gray-200;
 // ====================================
 // react select
 // ====================================
+.iField-rsContainer {
+	padding: .8rem;
+}
+
 .iField-rs {
-	padding: .8em;
+	padding: 0;
 	position: relative;
 
 	// .iField-rs__control
@@ -447,7 +451,6 @@ $fieldBorder: 1px solid $gray-200;
 .selectAutoComplete {
 	font-size: 1rem;
 	width: 100%;
-	max-width: 300px;
 
 	// .selectAutoComplete_label
 	&_label {
@@ -466,12 +469,6 @@ $fieldBorder: 1px solid $gray-200;
 		padding: 0 .8em;
 	}
 
-	
-
-	// .selectAutoComplete-sm
-	&-sm {
-		max-width: 150px;
-	}
 }
 
 

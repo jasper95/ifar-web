@@ -35,19 +35,21 @@ function SelectAutocomplete(props) {
           {required && '*'}
         </span>
       )}
-      <Select
-        id={id}
-        value={currentValue}
-        options={selectOptions}
-        onChange={handleChange}
-        className="iField iField-rs"
-        classNamePrefix="iField-rs"
-        {...restProps}
-      />
-      <TextFieldMessage
-        errorText={error}
-        error={error}
-      />
+      <div className="iField-rsContainer">
+        <Select
+          id={id}
+          value={currentValue}
+          options={selectOptions}
+          onChange={handleChange}
+          className="iField iField-rs"
+          classNamePrefix="iField-rs"
+          {...restProps}
+        />
+        <TextFieldMessage
+          errorText={error}
+          error={error}
+        />
+      </div>
     </div>
   );
 

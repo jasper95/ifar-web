@@ -193,6 +193,12 @@ $menu-sub-bg: lighten($nav-bg,5%);
 						opacity: 1;
 					}
 				}
+
+				&.hasSubmenu {
+					.text {
+						cursor: pointer;
+					}
+				}
 			}
 		}
 	}
