@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Link from 'react-router-dom/Link';
 import ImageLoader from 'react-image';
+import Button from 'react-md/lib/Buttons/Button';
 import MenuButton from 'react-md/lib/Menus/MenuButton';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import { useDispatch } from 'react-redux';
@@ -39,7 +40,6 @@ function Header(props) {
           <NavItems currentPath={match.path} />
         )}
         <div className="nav_actions">
-
           <div className="nav_profile">
             {renderProfileNav()}
           </div>
@@ -166,21 +166,93 @@ function NavItems(props) {
     },
     {
       id: 6,
-      path: '/risk-management',
+      path: '/srmp',
       label: 'Risk Management',
+      submenu: [
+        {
+          id: 7,
+          path: '/srmp',
+          label: 'Strategic Risk Management',
+        },
+        {
+          id: 8,
+          path: '/ormp',
+          label: 'Operational Risk Management',
+        },
+        {
+          id: 9,
+          path: '/prmp',
+          label: 'Project Risk Management',
+        }
+      ]
     },
   ];
+
+
+  const renderMenuItems = (e) => {
+    const isActive = currentPath === e.path 
+      || e.submenu && e.submenu.find((i) => currentPath === i.path)
+    const [isSubmenuActive, showSubmenu] = useState(false)
+
+    return (
+      <li
+        key={e.id}
+        className={cn('nav_menu_list_item',
+          { active: isActive }
+        )}
+      >
+        {e.submenu
+          ? <span className="text">{e.label}</span>
+          : <Link className="text" to={e.path}>{e.label}</Link>
+        }
+        
+        {e.submenu && (
+          <>
+            <Button 
+              icon
+              flat
+              className={cn("iBttn-toggleSubmenu", { "active" : isSubmenuActive})}
+              onClick={() => showSubmenu(!isSubmenuActive)}
+              children="keyboard_arrow_down"
+            />
+            <SubMenu
+              menu={e.submenu}
+              currentPath={currentPath}
+              isActive={isSubmenuActive}
+            />
+          </>
+        )}
+      </li>
+    )
+  }
   return (
     <div className="nav_menu">
       <ul className="nav_menu_list">
-        {menus.map(e => (
-          <li key={e.id} className={cn('nav_menu_list_item', { active: currentPath === e.path })}>
-            <Link to={e.path}>{e.label}</Link>
-          </li>
-        ))}
+        {menus.map(renderMenuItems)}
       </ul>
     </div>
   );
+}
+
+function SubMenu({ menu, currentPath, isActive }) {
+  return (
+    <div className={cn("nav_menu_list_item_sub",
+      { "active" : isActive})
+    }>
+      <div className="nav_menu_list">
+        { menu.map((e) => (
+          <li
+            key={e.id}
+            className={cn('nav_menu_list_item',
+              { active: currentPath === e.path }
+            )}
+          >
+            <Link className="text" to={e.path}>{e.label}</Link>
+          </li>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export default withRouter(Header);

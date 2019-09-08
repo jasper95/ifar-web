@@ -1,7 +1,9 @@
 
-$menu-text-color: rgba($white,.5);
-$menu-text-color-hovered: $white;
+$menu-text-color: rgba($white,.35);
+$menu-text-color-hovered: rgba($white,.5);
 $menu-text-color-active: $white;
+
+$menu-sub-bg: lighten($nav-bg,5%);
 
 .nav {
 	position: fixed;
@@ -79,9 +81,11 @@ $menu-text-color-active: $white;
 				color: $menu-text-color;
 				padding: 0 1em;
 				background-color: transparent;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
 
-				// text
-				a {
+				.text {
 					position: relative;
 					display: flex;
 					align-items: center;
@@ -89,10 +93,76 @@ $menu-text-color-active: $white;
 					color: inherit;
 					font-family: $font-family;
 					font-weight: normal;
+					flex-shrink: 0;
 
 					&:hover, 
 					&:visited {
 						color: inherit;
+					}
+				}
+
+				.iBttn-toggleSubmenu {
+					min-width: 40px;
+					height: 40px;
+					padding-left: 0;
+					background-color: transparent !important;
+					color: $gray-200;
+
+					.md-icon {
+						transform: rotate(0deg);
+						transition: transform 300ms ease-out;
+					}
+
+					&.active {
+						.md-icon {
+							transform: rotate(180deg);
+						}
+					}
+				}
+
+				// .nav_menu_list_item_sub
+				&_sub {
+					position: absolute;
+					top: 100%;
+					left: 0;
+					width: 100%;
+					background-color: $menu-sub-bg;
+					transform: translateY(-10px);
+					opacity: 0;
+					visibility: hidden;
+					transition: 
+						transform 300ms ease-out,
+						opacity 300ms ease-out,
+						visibility 300ms ease-out;
+
+					.nav_menu_list {
+						align-items: flex-start;
+						flex-direction: column;
+						// nav_menu_list_item
+						&_item {
+							width: 100%;
+							padding : .25rem 1.25rem;
+
+							&.active {
+								color: $primary-color;
+								background-color: rgba(#FFF,.05);
+								&:before {
+									opacity: 0;
+								}
+							}
+
+							.text {
+								width: 100%;
+								text-align: center;
+								white-space: normal;
+							}
+						}
+					}
+
+					&.active {
+						transform: translateY(0);
+						opacity: 1;
+						visibility: visible;
 					}
 				}
 
@@ -110,11 +180,15 @@ $menu-text-color-active: $white;
 				}
 
 				&:hover {
-					color: $menu-text-color-hovered;
+					> .text {
+						color: $menu-text-color-hovered;
+					}
 				}
 
 				&.active {
-					color: $menu-text-color-active;
+					> .text {
+						color: $menu-text-color-active;
+					}
 					&:before {
 						opacity: 1;
 					}
