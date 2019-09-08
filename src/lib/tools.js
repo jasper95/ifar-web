@@ -1,8 +1,3 @@
-import { useMemo } from 'react';
-import barangay from 'lib/constants/address/barangay';
-import municipality from 'lib/constants/address/municipality';
-import province from 'lib/constants/address/province';
-import orderBy from 'lodash/orderBy';
 import cookie from 'cookie';
 import day from 'dayjs';
 import capitalize from 'lodash/capitalize';
@@ -10,56 +5,6 @@ import differenceBy from 'lodash/differenceBy';
 import pick from 'lodash/pick';
 import jsonexport from 'jsonexport/dist';
 import fileSaver from 'file-saver';
-// import queryString from 'query-string';
-
-const barangayOptions = barangay.RECORDS;
-const municipalityOptions = municipality.RECORDS;
-const provinceOptions = province.RECORDS;
-
-export function getAddressOptions(field, fields) {
-  if (field === 'barangay') {
-    return useMemo(() => orderBy(
-      barangayOptions.filter(e => e.citymunCode === fields.municipality),
-      'brgyDesc',
-    ),
-    [fields.municipality]);
-  }
-  if (field === 'municipality') {
-    return useMemo(() => orderBy(
-      municipalityOptions.filter(e => e.provCode === fields.province),
-      'citymunDesc',
-    ),
-    [fields.province]);
-  }
-  if (field === 'province') {
-    return orderBy(provinceOptions, 'provDesc');
-  }
-  return [];
-}
-
-export function getAddressDescription({ province, barangay, municipality }) {
-  const { citymunDesc = '' } = municipalityOptions.find(e => e.citymunCode === municipality) || {};
-  const { brgyDesc = '' } = barangayOptions.find(e => e.brgyCode === barangay) || {};
-  const { provDesc = '' } = provinceOptions.find(e => e.provCode === province) || {};
-  return {
-    barangay: brgyDesc,
-    municipality: citymunDesc,
-    province: provDesc,
-  };
-}
-
-export function getAddressValue(field, fields) {
-  if (field === 'province') {
-    return useMemo(() => (fields.province ? provinceOptions.find(e => e.provCode === fields.province) : ''), [fields[field]]);
-  }
-  if (field === 'municipality') {
-    return useMemo(() => (fields.municipality ? municipalityOptions.find(e => e.citymunCode === fields.municipality) : ''), [fields[field]]);
-  }
-  if (field === 'barangay') {
-    return useMemo(() => (fields.barangay ? barangayOptions.find(e => e.brgyCode === fields.barangay) : ''), [fields[field]]);
-  }
-  return '';
-}
 
 export function getValidationResult(data, schema) {
   try {

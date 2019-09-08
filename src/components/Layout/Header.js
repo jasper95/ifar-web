@@ -1,23 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext,
+} from 'react';
 import Link from 'react-router-dom/Link';
 import ImageLoader from 'react-image';
-import Button from 'react-md/lib/Buttons/Button';
 import MenuButton from 'react-md/lib/Menus/MenuButton';
 import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 import { useDispatch } from 'react-redux';
-import cn from 'classnames';
 import AuthContext from 'apollo/AuthContext';
 import useMutation, { useUpdateNode } from 'apollo/mutation';
 import cookie from 'js-cookie';
 import withRouter from 'react-router-dom/withRouter';
-import { UserSkeleton, NavSkeleton } from 'components/Skeletons';
-
-
+import { UserSkeleton } from 'components/Skeletons';
+import Navigation from 'components/Navigation';
 import 'sass/components/nav/index.scss';
 
 function Header(props) {
   const {
-    avatarLink = '',
     match,
     history,
   } = props;
@@ -26,7 +24,6 @@ function Header(props) {
   const [, onLogout] = useMutation({ url: '/logout', onSuccess: onLogoutSucess });
   const [, onUpdateUser] = useUpdateNode({ node: 'user', message: 'Profile successfully updated' });
   const isAuthenticated = Boolean(user);
-
   return (
     <nav className="nav">
       <div className="nav_container">
@@ -37,7 +34,7 @@ function Header(props) {
           />
         </Link>
         {user && (
-          <NavItems currentPath={match.path} />
+          <Navigation currentPath={match.path} />
         )}
         <div className="nav_actions">
           <div className="nav_profile">
@@ -134,132 +131,6 @@ function Header(props) {
     cookie.remove('token');
     dispatch({ type: 'SET_STATE', payload: { token: '', dialog: null, dialogProcessing: false } });
   }
-}
-
-function NavItems(props) {
-  const { currentPath } = props;
-  const menus = [
-    {
-      id: 1,
-      path: '/',
-      label: 'Home',
-    },
-    {
-      id: 2,
-      path: '/dashboard',
-      label: 'Dashboard',
-    },
-    {
-      id: 3,
-      path: '/discussion',
-      label: 'Discussion Board',
-    },
-    {
-      id: 4,
-      path: '/audit',
-      label: 'Audit Observations',
-    },
-    {
-      id: 5,
-      path: '/actions',
-      label: 'Manage Actions',
-    },
-    {
-      id: 6,
-      path: '/srmp',
-      label: 'Risk Management',
-      submenu: [
-        {
-          id: 7,
-          path: '/srmp',
-          label: 'Strategic Risk Management',
-        },
-        {
-          id: 8,
-          path: '/ormp',
-          label: 'Operational Risk Management',
-        },
-        {
-          id: 9,
-          path: '/prmp',
-          label: 'Project Risk Management',
-        }
-      ]
-    },
-  ];
-
-
-  const renderMenuItems = (e) => {
-    const isActive = currentPath === e.path 
-      || e.submenu && e.submenu.find((i) => currentPath === i.path)
-    const [isSubmenuActive, showSubmenu] = useState(false)
-
-    return (
-      <li
-        key={e.id}
-        className={cn('nav_menu_list_item',
-          { active: isActive },
-          { hasSubmenu: e.submenu }
-        )}
-      >
-        {e.submenu
-          ? (
-            <span 
-              onClick={() => showSubmenu(!isSubmenuActive)}
-              className="text">
-              {e.label}
-            </span>
-          )
-          : <Link className="text" to={e.path}>{e.label}</Link>
-        }
-        
-        {e.submenu && (
-          <>
-            <Button 
-              icon
-              flat
-              className={cn("iBttn-toggleSubmenu", { "active" : isSubmenuActive})}
-              onClick={() => showSubmenu(!isSubmenuActive)}
-              children="keyboard_arrow_down"
-            />
-            <SubMenu
-              menu={e.submenu}
-              currentPath={currentPath}
-              isActive={isSubmenuActive}
-            />
-          </>
-        )}
-      </li>
-    )
-  }
-  return (
-    <div className="nav_menu">
-      <ul className="nav_menu_list">
-        {menus.map(renderMenuItems)}
-      </ul>
-    </div>
-  );
-}
-
-function SubMenu({ menu, currentPath, isActive }) {
-  return (
-    <div className={cn("nav_menu_list_item_sub",
-      { "active" : isActive})
-    }>
-      <div className="nav_menu_list">
-        { menu.map((e) => (
-          <li
-            key={e.id}
-            className={cn('nav_menu_list_item',
-              { active: currentPath === e.path }
-            )}
-          >
-            <Link className="text" to={e.path}>{e.label}</Link>
-          </li>
-        ))}
-      </div>
-    </div>
-  )
 }
 
 export default withRouter(Header);
