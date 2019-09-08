@@ -152,6 +152,25 @@ $fieldBorder: 1px solid $gray-200;
 
 			.actions {
 				padding-right: .25rem;
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+
+				.iField-rs__option {
+					flex-shrink: 1;
+					white-space: nowrap;
+					display: block;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+
+				> button {
+					flex-shrink: 0;
+					margin-bottom: .25rem;
+					&:not(:last-child) {
+						margin-right: .25rem;
+					}
+				}
 			}
 
 			&.selected {

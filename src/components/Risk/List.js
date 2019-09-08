@@ -183,7 +183,7 @@ function RiskList(props) {
               value={project}
               required={false}
               key="2"
-              className="selectAutoComplete-sm contentHeader_actions_projects"
+              className="contentHeader_actions_projects"
             />
             <Button
               flat
