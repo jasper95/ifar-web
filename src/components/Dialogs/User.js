@@ -109,6 +109,27 @@ function UserDialog(props) {
             value={fields.ormp_role || []}
             error={errors.ormp_role}
           />
+          <SelectAutocomplete
+            id="prmp_business_units"
+            required
+            placeholder="-Select-"
+            label="PRMP Program"
+            onChange={onElementChange}
+            options={businessUnits.map(e => ({ value: e.id, label: e.name }))}
+            value={fields.prmp_business_units || []}
+            error={errors.prmp_business_units}
+            isMulti
+          />
+          <SelectAutocomplete
+            id="prmp_role"
+            required
+            placeholder="-Select-"
+            label="PRMP Role"
+            onChange={onElementChange}
+            options={MANAGEMENT_ROLES}
+            value={fields.prmp_role || []}
+            error={errors.prmp_role}
+          />
         </>
       )}
     </>
