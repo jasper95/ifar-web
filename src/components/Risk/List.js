@@ -57,7 +57,6 @@ function RiskList(props) {
   );
   const [, onCreateRisk] = useCreateNode({ node: 'risk' });
   const { data: { [`business_unit_${riskType}`]: businessUnits = [] } } = businessUnitResponse;
-  const selected = businessUnits.find(e => e.id === businessUnit);
   const projectResponse = useQuery(
     projectQuery,
     {
@@ -66,6 +65,9 @@ function RiskList(props) {
     },
   );
   const { data: { project_risk: projects = [] }, refetch } = projectResponse;
+  const selectedBusinessUnit = businessUnits.find(e => e.id === businessUnit);
+  const selectedProject = projects.find(e => e.id === project);
+  const selectedOperation = operations.find(e => e.id === operation);
   const [, onMutateProject] = useMutation({ url: '/project', onSuccess: () => refetch() });
   useEffect(() => {
     if (projects.length) {
@@ -75,6 +77,12 @@ function RiskList(props) {
     }
   }, [projects]);
   const OptionComponent = useCallback(CustomProjectOption, [project]);
+  const crumbs = [
+    `${typeTitle} Risk Management Plan`,
+    selectedBusinessUnit && selectedBusinessUnit.name,
+    selectedOperation && selectedOperation.name,
+    selectedProject && selectedProject.name,
+  ].filter(Boolean);
   return (
     <Grid className="riskList">
       <div className="riskList_unitList">
@@ -98,29 +106,14 @@ function RiskList(props) {
       <div className="riskList_risk">
         <div className="riskList_risk_header">
           <div className="crumb">
-            <span
-              key="1"
-              className="crumb_main"
-            >
-              <div className="text">{`${typeTitle} Risk Management Plan`}</div>
-            </span>
-            {selected && (
-              <span className="crumb_sub" key="2">
-                <div className="text">
-                  {selected.name}
-                </div>
+            {crumbs.map((crumb, idx) => (
+              <span
+                key={idx}
+                className={`crumb_${idx === 0 ? 'main' : 'sub'}`}
+              >
+                <div className="text">{crumb}</div>
               </span>
-            )}
-            <div className="crumb_sub">
-              <div className="text">
-                Operation
-              </div>
-            </div>
-            <div className="crumb_sub">
-              <div className="text">
-                Project
-              </div>
-            </div>
+            ))}
           </div>
           <div className="actions">
             <Button
@@ -140,7 +133,7 @@ function RiskList(props) {
                 onChange={newPage => setCurrentPage(newPage)}
                 current={currentPage}
                 pageSize={10}
-                total={selected ? selected.risk_count : 0}
+                total={selectedBusinessUnit ? selectedBusinessUnit.risk_count : 0}
                 hideOnSinglePage
               />
             </div>
