@@ -1,6 +1,6 @@
 // $unitlist-bg: $primary-color-L600;
 $unitlist-bg: #b9e1f7;
-$risklist-header-height: 4em;
+$risklist-header-height: 4rem;
 $risklist-header-bg: $primary-color-200;
 
 $risklist-header-arrow: $risklist-header-height;
@@ -112,6 +112,7 @@ $risklist-header-arrow-bg: $primary-color-400;
 				&_main {
 					position: relative;
 					overflow: hidden;
+					z-index: 15;
 					flex-shrink: 0;
 					display: flex;
 					align-items: center;
@@ -122,14 +123,14 @@ $risklist-header-arrow-bg: $primary-color-400;
 						justify-content: center;
 						position: relative;
 						height: 100%;
-						background-color: $risklist-header-arrow-bg;
+						background-color: darken($risklist-header-arrow-bg,10%);
 						z-index: 10;
 						padding: .5em;
 					}
 					&:after {
 						content: '';
 						border-top: $risklist-header-arrow / 2  solid transparent;
-						border-left: $risklist-header-arrow - 2 solid $risklist-header-arrow-bg;
+						border-left: $risklist-header-arrow - 2 solid darken($risklist-header-arrow-bg,10%);
 						border-bottom: $risklist-header-arrow / 2  solid transparent;
 						height: 100%;
 					}
@@ -137,7 +138,55 @@ $risklist-header-arrow-bg: $primary-color-400;
 
 				// .crumb_sub
 				&_sub {
-					padding: .5em;
+					position: relative;
+					padding: 0;
+					align-items: stretch;
+					margin-left: -($risklist-header-arrow - 2) ;
+
+					.text {
+						display: flex;
+						align-items: center;
+						justify-content: flex-start;
+						padding-left: $risklist-header-arrow - 1;
+					}
+
+					&:after {
+						content: '';
+						border-top: $risklist-header-arrow / 2  solid transparent;
+						border-left: $risklist-header-arrow - 2 solid $risklist-header-arrow-bg;
+						border-bottom: $risklist-header-arrow / 2  solid transparent;
+						height: 100%;
+					}
+
+					&:nth-child(2) {
+						z-index: 10;
+						.text {
+							background-color: $risklist-header-arrow-bg;
+						}
+						&:after {
+							border-left-color: $risklist-header-arrow-bg;
+						}
+					}
+
+					&:nth-child(3) {
+						z-index: 8;
+						.text {
+							background-color: lighten($risklist-header-arrow-bg,5%);
+						}
+						&:after {
+							border-left-color: lighten($risklist-header-arrow-bg,5%);
+						}
+					}
+
+					&:nth-child(4) {
+						z-index: 5;
+						.text {
+							background-color: lighten($risklist-header-arrow-bg,10%);
+						}
+						&:after {
+							border-left-color: lighten($risklist-header-arrow-bg,10%);
+						}
+					}
 				}
 			}
 

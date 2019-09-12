@@ -105,8 +105,22 @@ function RiskList(props) {
               <div className="text">{`${typeTitle} Risk Management Plan`}</div>
             </span>
             {selected && (
-              <span className="crumb_sub" key="2">{selected.name}</span>
+              <span className="crumb_sub" key="2">
+                <div className="text">
+                  {selected.name}
+                </div>
+              </span>
             )}
+            <div className="crumb_sub">
+              <div className="text">
+                Operation
+              </div>
+            </div>
+            <div className="crumb_sub">
+              <div className="text">
+                Project
+              </div>
+            </div>
           </div>
           <div className="actions">
             <Button
