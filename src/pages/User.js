@@ -123,11 +123,11 @@ function User() {
         leftIcon={(
           <FontIcon>search</FontIcon>
         )}
-        className='iField iField-search'
-        placeholder='Type the full name to search for user'
+        className="iField iField-search"
+        placeholder="Type the full name to search for user"
         onChange={debounceSearch}
       />
-    )
+    );
   }
 
   function getToolbarActions() {

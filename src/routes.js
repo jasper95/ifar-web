@@ -108,19 +108,9 @@ export default [
     pageProps: {
       requireAuth: true,
       pageTitle: 'Manage Users',
-      requiredRoles: ['ADMIN']
+      requiredRoles: ['ADMIN'],
     },
   },
-  // {
-  //   key: 'risk-map',
-  //   component: RiskMap,
-  //   path: '/risk-map',
-  //   exact: true,
-  //   pageProps: {
-  //     requireAuth: true,
-  //     pageTitle: 'Risk Map',
-  //   },
-  // },
   {
     key: 'not-found',
     path: '*',
@@ -144,7 +134,7 @@ export function renderRoutes(routes, extraProps = {}, switchProps = {}) {
             const {
               title, hasNavigation,
               hasFooter, requireAuth,
-              pageId, pageDescription, requiredRoles
+              pageId, pageDescription, requiredRoles,
             } = pageProps;
             return (
               <PageLayout
@@ -156,6 +146,7 @@ export function renderRoutes(routes, extraProps = {}, switchProps = {}) {
                 requireAuth={requireAuth}
                 pageDescription={pageDescription}
                 requiredRoles={requiredRoles}
+                {...props}
               >
                 <route.component {...props} {...extraProps} route={route} />
               </PageLayout>

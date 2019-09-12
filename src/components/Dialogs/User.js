@@ -66,7 +66,7 @@ function UserDialog(props) {
         />
       )}
       {fields.role === 'USER' && fields.id !== user.id && (
-        <>
+        <div className="row">
           <SelectAutocomplete
             id="srmp_business_units"
             required
@@ -76,6 +76,7 @@ function UserDialog(props) {
             options={businessUnits.map(e => ({ value: e.id, label: e.name }))}
             value={fields.srmp_business_units || []}
             error={errors.srmp_business_units}
+            className="col-sm-6"
             isMulti
           />
           <SelectAutocomplete
@@ -87,6 +88,7 @@ function UserDialog(props) {
             options={MANAGEMENT_ROLES}
             value={fields.srmp_role || []}
             error={errors.srmp_role}
+            className="col-sm-6"
           />
           <SelectAutocomplete
             id="ormp_business_units"
@@ -97,6 +99,7 @@ function UserDialog(props) {
             options={businessUnits.map(e => ({ value: e.id, label: e.name }))}
             value={fields.ormp_business_units || []}
             error={errors.ormp_business_units}
+            className="col-sm-6"
             isMulti
           />
           <SelectAutocomplete
@@ -107,6 +110,7 @@ function UserDialog(props) {
             onChange={onElementChange}
             options={MANAGEMENT_ROLES}
             value={fields.ormp_role || []}
+            className="col-sm-6"
             error={errors.ormp_role}
           />
           <SelectAutocomplete
@@ -118,6 +122,7 @@ function UserDialog(props) {
             options={businessUnits.map(e => ({ value: e.id, label: e.name }))}
             value={fields.prmp_business_units || []}
             error={errors.prmp_business_units}
+            className="col-sm-6"
             isMulti
           />
           <SelectAutocomplete
@@ -128,9 +133,10 @@ function UserDialog(props) {
             onChange={onElementChange}
             options={MANAGEMENT_ROLES}
             value={fields.prmp_role || []}
+            className="col-sm-6"
             error={errors.prmp_role}
           />
-        </>
+        </div>
       )}
     </>
   );

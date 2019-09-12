@@ -26,7 +26,6 @@ export default [
   },
   {
     id: 6,
-    path: '/srmp',
     label: 'Risk Management',
     submenu: [
       {

@@ -161,6 +161,13 @@ export function addClassTimeout({
   }, timeout);
 }
 
+export function filterRole(path, user) {
+  const key = path.replace(/\//g, '');
+  if (user.role === 'USER') {
+    return user[`${key}_role`] && user[`${key}_business_units`].length;
+  }
+  return true;
+}
 
 let timer = 0;
 export function debounce(callback, ms) {

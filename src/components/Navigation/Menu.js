@@ -28,17 +28,16 @@ function Menu(props) {
         { active: isActive },
         { hasSubmenu: submenu })}
     >
-      {menu.submenu
-        ? (
-          <span
-            onClick={toggle}
-            className="text"
-          >
-            {menu.label}
-          </span>
-        )
-        : <Link className="text" to={menu.path}>{menu.label}</Link>
-      }
+      {menu.submenu ? (
+        <span
+          onClick={toggle}
+          className="text"
+        >
+          {menu.label}
+        </span>
+      ) : (
+        <Link className="text" to={menu.path}>{menu.label}</Link>
+      )}
       {menu.submenu && (
         <>
           <Button

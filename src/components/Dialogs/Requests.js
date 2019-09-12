@@ -57,7 +57,6 @@ function Requests(props) {
     { ws: true, variables: { ...requestNotifCountVars, offset: (currentPage - 1) * 10 } },
   );
   const { data: { request: requests = [] }, loading: listIsLoading } = requestResponse;
-  console.log('requests: ', requests);
   const user = useSelector(state => state.auth);
   return (
     <div className="riskList_risk_content">

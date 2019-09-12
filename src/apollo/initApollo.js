@@ -21,29 +21,25 @@ function create(initialState = {}, { getToken, fetchOptions }) {
       console.log(`[Network error ${operation.operationName}]: ${networkError.message}`);
     }
   });
+  function getAuthHeaders() {
+    const token = getToken();
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  }
   const wsLink = new WebSocketLink({
     uri: `wss://${process.env.GRAPHQL_URL}`, // use wss for a secure endpoint
     options: {
       reconnect: true,
-      // lazy: true,
+      lazy: true,
       timeout: 60000,
-      connectionParams: () => {
-        const token = getToken();
-        return {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-      },
+      connectionParams: getAuthHeaders,
     },
   });
   const authMiddleware = new ApolloLink((operation, forward) => {
-    const token = getToken();
-    operation.setContext({
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    operation.setContext(getAuthHeaders());
     return forward(operation);
   });
   const httpLink = new HttpLink({
@@ -66,8 +62,8 @@ function create(initialState = {}, { getToken, fetchOptions }) {
     ssrMode: !isBrowser,
     cache: new InMemoryCache().restore(initialState),
     link: ApolloLink.from([
-      errorLink,
       authMiddleware,
+      // errorLink,
       link,
     ]),
     resolvers: {},

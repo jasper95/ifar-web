@@ -34,7 +34,7 @@ function Header(props) {
           />
         </Link>
         {user && (
-          <Navigation currentPath={match.path} />
+          <Navigation user={user} currentPath={match.path} />
         )}
         <div className="nav_actions">
           <div className="nav_profile">
