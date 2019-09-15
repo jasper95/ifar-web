@@ -24,15 +24,15 @@ export const probabilityOptions = [
 export const frequencyOptions = [
   {
     value: 1,
-    label: '1 - Similar events occur at least once every 1000 years',
+    label: '1 - Similar events occur at least once every 20 years',
   },
   {
     value: 2,
-    label: '2 - Similar events occur at least once every 30 years',
+    label: '2 - Similar events occur at least once every 10 years',
   },
   {
     value: 3,
-    label: '3 - Similar events occur at least once every 10 years',
+    label: '3 - Similar events occur at least once every 5 years',
   },
   {
     value: 4,

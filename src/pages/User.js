@@ -28,19 +28,19 @@ export const USER_ROLES = [
 export const MANAGEMENT_ROLES = [
   {
     value: 'RISK_CHAMPION',
-    label: 'Risk Champion',
+    label: 'RC',
   },
   {
     value: 'TEAM_LEADER',
-    label: 'Team Leader',
+    label: 'TL',
   },
   {
     value: 'TEAM_MANAGER',
-    label: 'Team Manager',
+    label: 'TM',
   },
   {
     value: 'VIEW_COMMENT',
-    label: 'View and Comment',
+    label: 'VC',
   },
 ];
 function User() {
@@ -56,6 +56,10 @@ function User() {
         role
         srmp_role
         srmp_business_units
+        prmp_role
+        prmp_business_units
+        ormp_role
+        ormp_business_units
         email
       }
     }
@@ -63,12 +67,17 @@ function User() {
   const usersResponse = useQuery(usersQuery, { ws: true, variables: { keyword: search ? `%${search}%` : null } });
   const { data: { user_dashboard: users = [] }, loading: isLoading } = usersResponse;
   const rows = useMemo(() => users.map((e) => {
-    const srmpRole = MANAGEMENT_ROLES.find(i => i.value === e.srmp_role);
+    // const srmpRole = MANAGEMENT_ROLES.find(i => i.value === e.srmp_role);
+    const additionalData = ['srmp', 'prmp', 'ormp'].reduce((acc, el) => {
+      const role = MANAGEMENT_ROLES.find(i => i.value === e.srmp_role);
+      acc[`${el}_role_name`] = role ? role.label : '';
+      acc[`${el}_units`] = e[`${el}_business_units`].map(i => businessUnits.find(j => i === j.id)).map(j => j.name).join(', ');
+      return acc;
+    }, {});
     return {
       ...e,
+      ...additionalData,
       role_name: USER_ROLES.find(i => i.value === e.role).label,
-      srmp_role_name: srmpRole ? srmpRole.label : '',
-      srmp_units: e.srmp_business_units.map(i => businessUnits.find(j => i === j.id)).map(j => j.name).join(', '),
     };
   }), [users]);
   const [selected, { onRowToggle, setSelected }] = useTableSelect(rows);
@@ -213,12 +222,31 @@ function User() {
       },
       {
         title: 'SRMP Role',
-        accessor: 'srmp_role_name',
+        fn: e => (e.role !== 'ADMIN' ? [e.srmp_role_name, e.srmp_units].filter(Boolean).join(' - ') : ''),
+        type: 'function',
       },
       {
-        title: 'SRMP Programs',
-        accessor: 'srmp_units',
+        title: 'ORMP Role',
+        fn: e => (e.role !== 'ADMIN' ? [e.ormp_role_name, e.ormp_units].filter(Boolean).join(' - ') : ''),
+        type: 'function',
       },
+      {
+        title: 'PRMP Role',
+        fn: e => (e.role !== 'ADMIN' ? [e.prmp_role_name, e.prmp_units].filter(Boolean).join(' - ') : ''),
+        type: 'function',
+      },
+      // {
+      //   title: 'SRMP Programs',
+      //   accessor: 'srmp_units',
+      // },
+      // {
+      //   title: 'SRMP Role',
+      //   accessor: 'srmp_role_name',
+      // },
+      // {
+      //   title: 'SRMP Programs',
+      //   accessor: 'srmp_units',
+      // },
       {
         type: 'actions',
         actions: [

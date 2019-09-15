@@ -22,6 +22,10 @@ const sessionQuery = gql`
         avatar
         email
         role
+        ormp_role
+        ormp_business_units
+        prmp_role
+        prmp_business_units
         srmp_role
         srmp_business_units
       }
@@ -34,7 +38,7 @@ function AppWithAuth(props) {
   const dispatch = useDispatch();
   const token = useSelector(state => state.token);
   const authResponse = useQuery(
-    sessionQuery, { skip: !token, onCompleted },
+    sessionQuery, { skip: !token, onCompleted, fetchPolicy: 'network-only' },
   );
   const {
     data: authData = {}, loading, error, refetch,

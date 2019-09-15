@@ -115,16 +115,18 @@ function RiskList(props) {
               </span>
             ))}
           </div>
-          <div className="actions">
-            <Button
-              flat
-              className="actions_addRisk iBttn iBttn-teal"
-              iconChildren="add_circle"
-              onClick={showRiskDialog}
-            >
-                Add Risk
-            </Button>
-          </div>
+          {user[`${riskType}_role`] !== 'VIEW_COMMENT' && (
+            <div className="actions">
+              <Button
+                flat
+                className="actions_addRisk iBttn iBttn-teal"
+                iconChildren="add_circle"
+                onClick={showRiskDialog}
+              >
+                  Add Risk
+              </Button>
+            </div>
+          )}
         </div>
         <div className="riskList_risk_content">
           <div className="row riskList_risk_content_header">

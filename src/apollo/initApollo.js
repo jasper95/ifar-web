@@ -62,8 +62,8 @@ function create(initialState = {}, { getToken, fetchOptions }) {
     ssrMode: !isBrowser,
     cache: new InMemoryCache().restore(initialState),
     link: ApolloLink.from([
+      errorLink,
       authMiddleware,
-      // errorLink,
       link,
     ]),
     resolvers: {},
