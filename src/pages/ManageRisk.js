@@ -4,7 +4,7 @@ import Cell from 'react-md/lib/Grids/Cell';
 import Button from 'react-md/lib/Buttons/Button';
 import RiskList from 'components/Risk/List';
 import RiskGraph from 'components/Risk/Graph';
-import useBusinessUnit from 'components/Risk/useBusinessUnit';
+import useRiskGroups from 'components/Risk/useRiskGroups';
 import { useDispatch, useSelector } from 'react-redux';
 import { notifCountQuery, requestCountQuery } from 'components/Risk/query';
 import loadable from '@loadable/component';
@@ -21,16 +21,16 @@ function ManageRisk(props) {
   const dispatch = useDispatch();
   const [riskMapVisible, setRiskMapVisible] = useState(false);
   const user = useSelector(state => state.auth);
-  let userBusinessUnits = useBusinessUnit();
-  const [defaultBusinessUnit = null] = userBusinessUnits;
-  const [currentBusinessUnit, setBusinessUnit] = useState(
-    defaultBusinessUnit ? defaultBusinessUnit.id : null,
-  );
-  const businessUnitWithOp = userBusinessUnits.find(e => e.id === currentBusinessUnit);
-  userBusinessUnits = userBusinessUnits.map(e => e.id);
-  const operations = businessUnitWithOp ? businessUnitWithOp.operations || [] : [];
-  const [defaultOp = null] = operations;
-  const [currentOp, setOp] = useState(defaultOp && riskType !== 'srmp' ? defaultOp.id : null);
+  const [riskGroupState, handleChange] = useRiskGroups({ riskType });
+  const {
+    currentOp,
+    project,
+    currentBusinessUnit,
+    userBusinessUnits,
+    operations,
+    projectResponse,
+    businessUnitResponse,
+  } = riskGroupState;
   const [currentClassification, setCurrentClassification] = useState(null);
   const [currentImpactDriver, setCurrentImpactDriver] = useState(null);
   const [currentVulnerability, setCurrentVulnerability] = useState();
@@ -45,7 +45,18 @@ function ManageRisk(props) {
   });
   if (riskMapVisible) {
     return (
-      <RiskMap onBack={() => setRiskMapVisible(false)} typeTitle={typeTitle} riskType={riskType} />
+      <RiskMap
+        onBack={() => setRiskMapVisible(false)}
+        typeTitle={typeTitle}
+        riskType={riskType}
+        onChange={handleChange}
+        businessUnitResponse={businessUnitResponse}
+        currentBusinessUnit={currentBusinessUnit}
+        operations={operations}
+        operation={currentOp}
+        project={project}
+        projectResponse={projectResponse}
+      />
     );
   }
   return (
@@ -112,31 +123,34 @@ function ManageRisk(props) {
         impactDriver={currentImpactDriver}
         residualVulnerability={currentVulnerability}
         riskType={riskType}
+        project={project}
         operations={operations}
         operation={currentOp}
         onChange={handleChange}
         typeTitle={typeTitle}
+        projectResponse={projectResponse}
+        businessUnitResponse={businessUnitResponse}
       />
     </div>
   );
 
-  function handleChange(val, key) {
-    let func;
-    switch (key) {
-      case 'operation':
-        func = setOp;
-        break;
-      case 'businessUnit':
-        func = setBusinessUnit;
-        break;
-      case 'project':
-        break;
-      default:
-    }
-    if (func) {
-      func(val);
-    }
-  }
+  // function handleChange(val, key) {
+  //   let func;
+  //   switch (key) {
+  //     case 'operation':
+  //       func = setOp;
+  //       break;
+  //     case 'businessUnit':
+  //       func = setBusinessUnit;
+  //       break;
+  //     case 'project':
+  //       break;
+  //     default:
+  //   }
+  //   if (func) {
+  //     func(val);
+  //   }
+  // }
 
   function showDialog({ type, dialogTitle, dialogSize = 'md' }) {
     dispatch({
@@ -145,6 +159,7 @@ function ManageRisk(props) {
         path: type,
         props: {
           title: dialogTitle,
+          riskType,
           onValid: () => {},
           dialogClassName: `i_dialog_container--${dialogSize}`,
           requestNotifCountVars,

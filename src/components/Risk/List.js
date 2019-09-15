@@ -4,36 +4,25 @@ import { components } from 'react-select';
 import Button from 'react-md/lib/Buttons/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import useMutation, { useCreateNode } from 'apollo/mutation';
-import gql from 'graphql-tag';
 import Pagination from 'rc-pagination';
 import { getImpactDriver, getRecentChanges } from 'lib/tools';
 import useQuery from 'apollo/query';
 import SelectAutocomplete from 'components/SelectAutocomplete';
 import { RiskItemSkeleton } from 'components/Skeletons';
 import cn from 'classnames';
-import useBusinessUnit from './useBusinessUnit';
 import RiskItem from './Item';
-import { riskListQuery, projectQuery } from './query';
+import { riskListQuery } from './query';
 import 'sass/components/risk/index.scss';
 
 function RiskList(props) {
   const {
     businessUnit, classification,
-    impactDriver, residualVulnerability, riskType, operations, operation, onChange, typeTitle,
+    impactDriver, residualVulnerability,
+    riskType, operations, operation, onChange, typeTitle,
+    businessUnitResponse, projectResponse, project,
   } = props;
-  const businessUnitQuery = gql`
-    subscription getBusinessUnits($user_business_units: [uuid!]){
-      business_unit_${riskType}(order_by: {order: asc}, where: { id: { _in: $user_business_units }}) {
-        id
-        name
-        risk_count
-      }
-    }
-  `;
   const [currentPage, setCurrentPage] = useState(1);
-  const [project, setProject] = useState(null);
   const user = useSelector(state => state.auth);
-  const userBusinessUnits = useBusinessUnit();
   const variables = {
     operation_id: operation,
     project_id: project,
@@ -48,34 +37,13 @@ function RiskList(props) {
     { ws: true, variables });
   const { data: { risk_dashboard: list = [] }, loading: listIsLoading } = riskListResponse;
   const dispatch = useDispatch();
-  const businessUnitResponse = useQuery(
-    businessUnitQuery,
-    {
-      ws: true,
-      variables: { user_business_units: userBusinessUnits.map(e => e.id) },
-    },
-  );
   const [, onCreateRisk] = useCreateNode({ node: 'risk' });
   const { data: { [`business_unit_${riskType}`]: businessUnits = [] } } = businessUnitResponse;
-  const projectResponse = useQuery(
-    projectQuery,
-    {
-      variables: { operation_id: operation },
-      skip: riskType !== 'prmp' || !operation,
-    },
-  );
   const { data: { project_risk: projects = [] }, refetch } = projectResponse;
   const selectedBusinessUnit = businessUnits.find(e => e.id === businessUnit);
   const selectedProject = projects.find(e => e.id === project);
   const selectedOperation = operations.find(e => e.id === operation);
   const [, onMutateProject] = useMutation({ url: '/project', onSuccess: () => refetch() });
-  useEffect(() => {
-    if (projects.length) {
-      setProject(projects[0].id);
-    } else {
-      setProject(null);
-    }
-  }, [projects]);
   const OptionComponent = useCallback(CustomProjectOption, [project]);
   const crumbs = [
     `${typeTitle} Risk Management Plan`,
@@ -188,7 +156,7 @@ function RiskList(props) {
               id="project"
               label="Project"
               options={projects.map(e => ({ value: e.id, label: `${e.name} (${e.risk_count})`, risks: e.risk_count }))}
-              onChange={setProject}
+              onChange={onChange}
               components={{ Option: OptionComponent }}
               value={project}
               required={false}

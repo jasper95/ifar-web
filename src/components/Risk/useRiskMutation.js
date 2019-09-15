@@ -28,7 +28,7 @@ export default function useRiskMutation() {
         break;
       default:
     }
-    if (!userIsAdmin(user) && !['COPY', 'EDIT_RESIDUAL', 'EDIT_TARGET'].includes(action)) {
+    if (user.role !== 'ADMIN' && !['COPY', 'EDIT_RESIDUAL', 'EDIT_TARGET'].includes(action)) {
       onCreateRequest({
         data: {
           type: `${action}_RISK`,

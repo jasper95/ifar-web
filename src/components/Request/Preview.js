@@ -8,15 +8,17 @@ import useMutation from 'apollo/mutation';
 import RiskTable from 'components/Risk/Table';
 import classifications from 'lib/constants/riskManagement/classifications';
 import businessUnits from 'lib/constants/riskManagement/businessUnits';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 function RequestPreview(props) {
   const {
-    request, className, risk, readOnly,
+    request, className, risk, readOnly, riskType,
   } = props;
   const dispatch = useDispatch();
   const [, onMutateRequest] = useMutation({});
   const { user } = request;
+  const auth = useSelector(state => state.auth);
+  const isTL = auth[`${riskType}_role`] === 'TEAM_LEADER';
   const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
   const residualCalc = risk.residual_rating * risk.residual_likelihood;
   const targetCalc = risk.target_rating * risk.target_likelihood;
@@ -48,14 +50,16 @@ function RequestPreview(props) {
           </Button>
           {!readOnly && (
             <>
-              <Button
-                className="iBttn iBttn-success"
-                onClick={() => showDialog({ type: 'ACCEPT_REQUEST' })}
-                tooltipLabel="Accept Request"
-                icon
-              >
-                check
-              </Button>
+              {(!isTL || (isTL && auth.id !== request.user_id)) && (
+                <Button
+                  className="iBttn iBttn-success"
+                  onClick={() => showDialog({ type: 'ACCEPT_REQUEST' })}
+                  tooltipLabel="Accept Request"
+                  icon
+                >
+                  check
+                </Button>
+              )}
               <Button
                 className="iBttn iBttn-error"
                 onClick={() => showDialog({ type: 'DECLINE_REQUEST' })}

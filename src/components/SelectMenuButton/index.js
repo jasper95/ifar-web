@@ -6,11 +6,12 @@ import FontIcon from 'react-md/lib/FontIcons/FontIcon';
 
 function SelectMenuButton(props) {
   const {
-    options, onChange, value, ...restProps
+    options, onChange, value, id, ...restProps
   } = props;
   const selected = options.find(e => e.value === value);
   return (
     <MenuButton
+      id={id}
       adjusted={false}
       raised
       primary
@@ -18,7 +19,7 @@ function SelectMenuButton(props) {
       anchor={MenuButton.Positions.BOTTOM}
       repositionOnScroll={false}
       menuItems={options
-        .map(e => ({ primaryText: e.label, onClick: () => onChange(e.value) }))
+        .map(e => ({ primaryText: e.label, onClick: () => onChange(e.value, id) }))
       }
       {...restProps}
     >

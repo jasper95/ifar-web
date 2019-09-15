@@ -17,6 +17,7 @@ const requestQuery = gql`
         first_name
         last_name
       }
+      user_id
       type
       risk {
         causes
@@ -50,7 +51,7 @@ const titleMapping = {
 };
 
 function Requests(props) {
-  const { requestNotifCountVars, requestCount } = props;
+  const { requestNotifCountVars, requestCount, riskType } = props;
   const [currentPage, setCurrentPage] = useState(1);
   const requestResponse = useQuery(
     requestQuery,
@@ -82,6 +83,7 @@ function Requests(props) {
           <RiskItem
             key={e.id}
             previewProps={{
+              riskType,
               request: e,
               risk: e.type === 'EDIT_INHERENT_RISK' ? e.risk_details : e.risk,
               readOnly: user.role === 'USER' && ['VIEW_COMMENT', 'RISK_CHAMPION'].includes(user.srmp_role),

@@ -15,7 +15,6 @@ import {
   healthSafetySecurityOptions,
 } from 'lib/constants/riskManagement/evaluationOptions';
 import { useSelector } from 'react-redux';
-import { userIsAdmin } from 'components/Risk/useRiskMutation';
 import Header from './Header';
 
 import 'sass/components/riskEvaluation/index.scss';
