@@ -6,13 +6,22 @@
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
+	flex-wrap: wrap;
 	background-color: #fff;
 	padding: .5em;
 	box-shadow: 0 0 1em 0 rgba(#000,.05);
 
 
-	#tableRiskMapToolbar {
+	.md-menu-container {
 		position: relative;
+		margin-top: .25rem;
+		margin-bottom: .25rem;
+
+		&:not(:last-child) {
+			margin-right: .5rem;
+		}
+
+
 		.tableRiskMapToolbar_menu {
 			box-shadow: none;
 			border-radius: 0;
@@ -24,8 +33,8 @@
 				font-weight: 600;
 			}
 
-			.md-icon {
-				color: #FFF;
+			&.iBttn-lightgray {
+				border: 1px solid #AAA;
 			}
 
 			// .tableRiskMapToolbar_menu_list
@@ -45,6 +54,9 @@
 	// .tableRiskMapToolbar_export
 	&_export {
 		font-weight: 600;
+	}
+
+	.md-menu-container:first-child + .tableRiskMapToolbar_export {
 		margin-left: auto;
 	}
 }
