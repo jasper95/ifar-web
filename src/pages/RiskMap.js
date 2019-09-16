@@ -105,68 +105,58 @@ export default function RiskMap(props) {
         <Cell size={3}>
           <div className="tableRiskActions">
             <div className="tableRiskMapToolbar">
-              <Grid>
-                <Cell size={6}>
-                  <SelectMenuButton
-                    adjusted={false}
-                    raised
-                    primary
-                    simplifiedMenu={false}
-                    repositionOnScroll={false}
-                    id="businessUnit"
-                    className="tableRiskMapToolbar_menu iBttn iBttn-primary"
-                    listClassName="tableRiskMapToolbar_menu_list"
-                    onChange={onChange}
-                    options={businessUnits.map(e => ({ value: e.id, label: e.name }))}
-                    value={currentBusinessUnit}
-                  />
-                </Cell>
-                {riskType !== 'srmp' && (
-                  <Cell size={6}>
-                    <SelectMenuButton
-                      adjusted={false}
-                      raised
-                      primary
-                      simplifiedMenu={false}
-                      repositionOnScroll={false}
-                      id="operation"
-                      className="tableRiskMapToolbar_menu iBttn iBttn-primary md-cell--6"
-                      listClassName="tableRiskMapToolbar_menu_list"
-                      onChange={onChange}
-                      options={operations.map(e => ({ value: e.id, label: e.name }))}
-                      value={operation}
-                    />
-                  </Cell>
-                )}
-                {riskType === 'prmp' && (
-                  <Cell size={6}>
-                    <SelectMenuButton
-                      adjusted={false}
-                      raised
-                      primary
-                      simplifiedMenu={false}
-                      repositionOnScroll={false}
-                      id="project"
-                      className="tableRiskMapToolbar_menu iBttn iBttn-primary md-cell--6"
-                      listClassName="tableRiskMapToolbar_menu_list"
-                      onChange={onChange}
-                      options={projects.map(e => ({ value: e.id, label: e.name }))}
-                      value={project}
-                    />
-                  </Cell>
-                )}
-                <Cell size={6}>
-                  <Button
-                    flat
-                    className="tableRiskMapToolbar_export md-cell--6"
-                    onClick={() => {
-                      generateRiskMapExcel(riskItems);
-                    }}
-                  >
-                    Export as Excel
-                  </Button>
-                </Cell>
-              </Grid>
+              <SelectMenuButton
+                adjusted={false}
+                raised
+                primary
+                simplifiedMenu={false}
+                repositionOnScroll={false}
+                id="businessUnit"
+                className="tableRiskMapToolbar_menu iBttn iBttn-primary"
+                listClassName="tableRiskMapToolbar_menu_list"
+                onChange={onChange}
+                options={businessUnits.map(e => ({ value: e.id, label: e.name }))}
+                value={currentBusinessUnit}
+              />
+              {riskType !== 'srmp' && (
+                <SelectMenuButton
+                  adjusted={false}
+                  raised
+                  primary
+                  simplifiedMenu={false}
+                  repositionOnScroll={false}
+                  id="operation"
+                  className="tableRiskMapToolbar_menu iBttn iBttn-lightgray "
+                  listClassName="tableRiskMapToolbar_menu_list"
+                  onChange={onChange}
+                  options={operations.map(e => ({ value: e.id, label: e.name }))}
+                  value={operation}
+                />
+              )}
+              {riskType === 'prmp' && (
+                <SelectMenuButton
+                  adjusted={false}
+                  raised
+                  primary
+                  simplifiedMenu={false}
+                  repositionOnScroll={false}
+                  id="project"
+                  className="tableRiskMapToolbar_menu iBttn iBttn-lightgray "
+                  listClassName="tableRiskMapToolbar_menu_list"
+                  onChange={onChange}
+                  options={projects.map(e => ({ value: e.id, label: e.name }))}
+                  value={project}
+                />
+              )}
+              <Button
+                flat
+                className="tableRiskMapToolbar_export md-cell--6"
+                onClick={() => {
+                  generateRiskMapExcel(riskItems);
+                }}
+              >
+                Export as Excel
+              </Button>
             </div>
             <DataTable
               rows={riskItems}
