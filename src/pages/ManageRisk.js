@@ -134,24 +134,6 @@ function ManageRisk(props) {
     </div>
   );
 
-  // function handleChange(val, key) {
-  //   let func;
-  //   switch (key) {
-  //     case 'operation':
-  //       func = setOp;
-  //       break;
-  //     case 'businessUnit':
-  //       func = setBusinessUnit;
-  //       break;
-  //     case 'project':
-  //       break;
-  //     default:
-  //   }
-  //   if (func) {
-  //     func(val);
-  //   }
-  // }
-
   function showDialog({ type, dialogTitle, dialogSize = 'md' }) {
     dispatch({
       type: 'SHOW_DIALOG',

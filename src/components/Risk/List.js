@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { components } from 'react-select';
 import Button from 'react-md/lib/Buttons/Button';

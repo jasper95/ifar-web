@@ -17,7 +17,7 @@ function RiskInfo(props) {
         {list.map(({ action = '', id, name }) => (
           <li
             key={id}
-            className={`RiskInfo_info_list_item ${action}`}
+            className={`RiskInfo_info_list_item ${action === 'remove' ? action : 'add'}`}
           >
             <span className="text">
               {name}

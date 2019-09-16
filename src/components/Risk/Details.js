@@ -65,7 +65,16 @@ function RiskDetails(props) {
             onMutateRisk({
               data: {
                 ...newRisk,
-                recent_changes: getRecentChanges(risk, newRisk, ['current_treatments', 'future_treatments']),
+                recent_changes: {
+                  ...risk.recent_changes,
+                  current_treatments: [
+                    { ...data, action: 'transfer' },
+                  ],
+                  future_treatments: [
+                    { ...data, action: 'remove' },
+                  ],
+                },
+                target_rating: newRisk.future_treatments.length > 0 ? newRisk.target_rating : 0,
               },
               treatment_details: data,
               action: 'DONE_TREATMENT',
@@ -182,6 +191,15 @@ function RiskDetails(props) {
               icon: 'delete',
               label: 'Delete',
               onClick: row => onDelete(row, type),
+              conditionalRendering: row => row.for_approval,
+              type: 'component',
+              component: () => (<>For Approval</>),
+            },
+            {
+              icon: 'delete',
+              label: 'Delete',
+              onClick: row => onDelete(row, type),
+              conditionalRendering: row => !row.for_approval,
             },
             {
               icon: 'rate_review',

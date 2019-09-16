@@ -110,9 +110,9 @@ function RequestPreview(props) {
         ) : (
           <>
             <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
-              <RiskPreviewInfo colspan={4} title="Inherent" info={!Number.isNaN(inherentCalc) && inherentCalc ? inherentCalc : ''} />
-              <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) && residualCalc ? residualCalc : ''} />
-              <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) && targetCalc ? targetCalc : ''} />
+              <RiskPreviewInfo colspan={4} title="Inherent" info={!Number.isNaN(inherentCalc) ? inherentCalc : ''} />
+              <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) ? residualCalc : ''} />
+              <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) ? targetCalc : ''} />
             </Cell>
           </>
         )}

@@ -18,6 +18,12 @@ function RiskPreview(props) {
   const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
   const residualCalc = risk.residual_rating * risk.residual_likelihood;
   const targetCalc = risk.target_rating * risk.target_likelihood;
+  console.log('targetCalc: ', targetCalc);
+  const status = [
+    risk.has_treatment_request && 'Treatment',
+    risk.has_inherent_request && 'Edit',
+    risk.has_delete_request && 'Delete',
+  ].filter(Boolean);
   return (
     <Grid className={`RiskPreview ${className}`}>
       <Grid>
@@ -32,27 +38,47 @@ function RiskPreview(props) {
           info={risk.name}
         />
         <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
-          <RiskPreviewInfo colspan={4} title="Inherent" info={!Number.isNaN(inherentCalc) && inherentCalc ? inherentCalc : ''} />
-          <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) && residualCalc ? residualCalc : ''} />
-          <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) && targetCalc ? targetCalc : ''} />
+          <RiskPreviewInfo colspan={4} title="Inherent" info={!Number.isNaN(inherentCalc) ? inherentCalc : ''} />
+          <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) ? residualCalc : ''} />
+          <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) ? targetCalc : ''} />
         </Cell>
         <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
           <Button onClick={() => showDialog('comments')} tooltipLabel="Discussions" icon>message</Button>
           {!readOnly && (
             <>
               <Button onClick={() => showDialog('copy')} tooltipLabel="Copy" icon>insert_drive_file</Button>
-              <Button onClick={() => showDialog('edit')} tooltipLabel="Edit" icon>edit</Button>
-              <Button onClick={() => showDialog('delete')} tooltipLabel="Delete" icon>delete</Button>
+              <Button
+                onClick={() => showDialog('edit')}
+                tooltipLabel={risk.has_inherent_request ? 'Edit Request Sent' : 'Edit'}
+                disabled={risk.has_inherent_request}
+                icon
+                children="edit"
+              />
+              <Button
+                onClick={() => showDialog('delete')}
+                tooltipLabel={risk.has_delete_request ? 'Delete Request Sent' : 'Delete'}
+                disabled={risk.has_delete_request}
+                tooltipLabel="Delete"
+                icon
+                children="delete"
+              />
             </>
           )}
         </Cell>
       </Grid>
       <Grid>
         <RiskPreviewInfo
-          colspan={12}
+          colspan={6}
           title="Definition"
           info={risk.definition}
         />
+        {(status.length > 0) && (
+          <RiskPreviewInfo
+            colspan={6}
+            title="Pending Requests"
+            info={status.join(', ')}
+          />
+        )}
       </Grid>
     </Grid>
   );

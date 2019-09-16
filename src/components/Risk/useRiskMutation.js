@@ -34,7 +34,7 @@ export default function useRiskMutation() {
           type: `${action}_RISK`,
           risk_id: data.id,
           business_unit_id: data.business_unit_id,
-          ...action.includes('EDIT') && { risk_details: data },
+          risk_details: data,
           ...action === 'DONE_TREATMENT' && { treatment_details: treatment },
         },
       });
