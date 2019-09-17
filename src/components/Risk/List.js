@@ -204,6 +204,7 @@ function RiskList(props) {
             inherent_likelihood: 1,
             impact_details: {},
             business_unit_id: businessUnit,
+            reason: {},
             operation_id: operation,
             project_id: project,
             type: riskType,

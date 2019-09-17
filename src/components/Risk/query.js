@@ -83,6 +83,7 @@ export const riskListQuery = gql`
     ) {
       ...RiskDetails
       recent_changes
+      reason
       has_treatment_request
       has_delete_request
       has_inherent_request

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
+import TextField from 'react-md/lib/TextFields/TextField';
 import SelectionControlGroup from 'react-md/lib/SelectionControls/SelectionControlGroup';
 import businessUnits from 'lib/constants/riskManagement/businessUnits';
 import {
@@ -67,6 +68,7 @@ function RiskEvaluation(props) {
     previousRating,
     currentEvaluation,
     prevStageEvaluation,
+    reason,
   } = props;
   const user = useSelector(state => state.auth);
   const previousStage = {
@@ -138,6 +140,12 @@ function RiskEvaluation(props) {
         onChange={newVal => onChange(Number(newVal), `${type}_likelihood`)}
         value={likelihood}
       />
+      <TextField
+        className="iField"
+        label="Reason"
+        onChange={val => onChangeReason(val, 'rating')}
+        value={reason.rating}
+      />
       <Header
         title="Impact"
       />
@@ -162,6 +170,12 @@ function RiskEvaluation(props) {
         value={impact.management_action}
         onChange={newVal => onChangeImpact({ ...impact, management_action: Number(newVal) })}
         type="radio"
+      />
+      <TextField
+        className="iField"
+        label="Reason"
+        onChange={val => onChangeReason(val, 'management_action')}
+        value={reason.management_action}
       />
       {type === 'inherent' && user.role === 'ADMIN' && (
         <SelectionControlGroup
@@ -200,6 +214,12 @@ function RiskEvaluation(props) {
         onChange={newVal => onChangeImpact({ ...impact, reputation: Number(newVal) })}
         type="radio"
       />
+      <TextField
+        className="iField"
+        label="Reason"
+        onChange={val => onChangeReason(val, 'reputation')}
+        value={reason.reputation}
+      />
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         label={(
@@ -223,6 +243,12 @@ function RiskEvaluation(props) {
         value={impact.financial}
         onChange={newVal => onChangeImpact({ ...impact, financial: Number(newVal) })}
         type="radio"
+      />
+      <TextField
+        className="iField"
+        label="Reason"
+        onChange={val => onChangeReason(val, 'financial')}
+        value={reason.financial}
       />
       <SelectionControlGroup
         className="iField iField-selectionGrp"
@@ -248,6 +274,12 @@ function RiskEvaluation(props) {
         onChange={newVal => onChangeImpact({ ...impact, health_safety_security: Number(newVal) })}
         type="radio"
       />
+      <TextField
+        className="iField"
+        label="Reason"
+        onChange={val => onChangeReason(val, 'health_safety_security')}
+        value={reason.health_safety_security}
+      />
       <SelectionControlGroup
         className="iField iField-selectionGrp"
         label={(
@@ -271,6 +303,12 @@ function RiskEvaluation(props) {
         value={impact.operational}
         onChange={newVal => onChangeImpact({ ...impact, operational: Number(newVal) })}
         type="radio"
+      />
+      <TextField
+        className="iField"
+        label="Reason"
+        onChange={val => onChangeReason(val, 'operational')}
+        value={reason.operational}
       />
       <SelectionControlGroup
         className="iField iField-selectionGrp"
@@ -297,8 +335,21 @@ function RiskEvaluation(props) {
         onChange={newVal => onChangeImpact({ ...impact, legal_compliance: Number(newVal) })}
         type="radio"
       />
+      <TextField
+        className="iField"
+        label="Reason"
+        onChange={val => onChangeReason(val, 'legal_compliance')}
+        value={reason.legal_compliance}
+      />
     </div>
   );
+
+  function onChangeReason(newVal, key) {
+    props.onChangeReason({
+      ...reason,
+      [key]: newVal,
+    });
+  }
 }
 
 RiskEvaluation.defaultProps = {
@@ -308,9 +359,12 @@ RiskEvaluation.defaultProps = {
   currentEvaluation: null,
   prevStageEvaluation: null,
   previousRating: null,
+  reason: {},
 };
 
 RiskEvaluation.propTypes = {
+  onChangeReason: PropTypes.func.isRequired,
+  reason: PropTypes.object,
   businessUnit: PropTypes.string.isRequired,
   likelihood: PropTypes.number.isRequired,
   basis: PropTypes.string.isRequired,

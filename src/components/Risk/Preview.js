@@ -18,7 +18,6 @@ function RiskPreview(props) {
   const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
   const residualCalc = risk.residual_rating * risk.residual_likelihood;
   const targetCalc = risk.target_rating * risk.target_likelihood;
-  console.log('targetCalc: ', targetCalc);
   const status = [
     risk.has_treatment_request && 'Treatment',
     risk.has_inherent_request && 'Edit',

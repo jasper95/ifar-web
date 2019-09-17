@@ -89,12 +89,14 @@ function InherentRisk(props) {
         type="inherent"
         onChange={onElementChange}
         basis={fields.basis}
+        reason={fields.reason.inherent}
         previousRating={fields.previous_details}
         currentEvaluation={fields.current_stage_impact_details}
         businessUnit={fields.business_unit_id}
         likelihood={fields.inherent_likelihood}
         impact={fields.impact_details.inherent}
         businessUnit={fields.business_unit_id}
+        onChangeReason={inherent => onElementChange({ ...fields.reason, inherent }, 'reason')}
         onChangeImpact={inherent => onElementChange({ ...fields.impact_details, inherent }, 'impact_details')}
       />
     </div>
