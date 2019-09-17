@@ -5,9 +5,8 @@ import DataTable from 'components/DataTable';
 import SelectMenuButton from 'components/SelectMenuButton';
 import Map from 'components/RiskMap';
 import { useDispatch } from 'react-redux';
-import { riskDetailsFragment } from 'components/Risk/query';
+import { riskMapQuery } from 'components/Risk/query';
 import Button from 'react-md/lib/Buttons/Button';
-import gql from 'graphql-tag';
 import { getVulnerabilityLevel, addClassTimeout } from 'lib/tools';
 import useQuery from 'apollo/query';
 import orderBy from 'lodash/orderBy';
@@ -15,29 +14,6 @@ import generateRiskMapExcel from 'lib/generateRiskMapExcel';
 import VulnerabilityChange from 'components/RiskMap/VulnerabilityChange';
 
 import 'sass/pages/riskmap.scss';
-
-const riskQuery = gql`
-  subscription getList($id: uuid!, $risk_type: String!) {
-    risk_dashboard(where: {business_unit_id: {_eq: $id }, type: { _eq: $risk_type }}) {
-      id
-      name
-      residual_likelihood
-      residual_rating
-      residual_impact_driver
-      target_likelihood
-      target_rating
-      target_impact_driver
-      inherent_likelihood
-      inherent_rating
-      inherent_impact_driver
-      recent_changes
-      causes
-      impacts
-      ...RiskDetails
-    }
-  }
-  ${riskDetailsFragment}
-`;
 
 export default function RiskMap(props) {
   const {
@@ -49,8 +25,14 @@ export default function RiskMap(props) {
   const [currentImpact, setImpact] = useState('');
   const [currentStage, setStage] = useState('residual');
   const { data: { [`business_unit_${riskType}`]: businessUnits = [] } } = businessUnitResponse;
+  const variables = {
+    business_unit_id: currentBusinessUnit,
+    risk_type: riskType,
+    operation_id: operation,
+    project_id: project,
+  };
   let { data: { risk_dashboard: riskItems = [] } } = useQuery(
-    riskQuery, { variables: { id: currentBusinessUnit, risk_type: riskType }, ws: true },
+    riskMapQuery, { variables, ws: true },
   );
   riskItems = useMemo(() => orderBy(
     riskItems

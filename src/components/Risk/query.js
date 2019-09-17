@@ -91,3 +91,31 @@ export const riskListQuery = gql`
   }
   ${riskDetailsFragment}
 `;
+
+export const riskMapQuery = gql`
+  subscription getList($risk_type: String, $operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!,) {
+    risk_dashboard(where: {
+      operation_id: { _eq: $operation_id },
+      project_id: { _eq: $project_id },
+      type: { _eq: $risk_type }, 
+      business_unit_id: {_eq: $business_unit_id },
+    }) {
+      id
+      name
+      residual_likelihood
+      residual_rating
+      residual_impact_driver
+      target_likelihood
+      target_rating
+      target_impact_driver
+      inherent_likelihood
+      inherent_rating
+      inherent_impact_driver
+      recent_changes
+      causes
+      impacts
+      ...RiskDetails
+    }
+  }
+  ${riskDetailsFragment}
+`;
