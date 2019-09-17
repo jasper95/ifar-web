@@ -109,6 +109,8 @@ function ManageRisk(props) {
           currentClassification,
           currentImpactDriver,
           currentVulnerability,
+          currentOperation: currentOp,
+          currentProject: project,
         }}
         handlers={{
           setCurrentImpactDriver,

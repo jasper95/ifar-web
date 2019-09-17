@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const chartQuery = gql`
-  subscription getChart($id: uuid!, $risk_type: String){
-    risk(where: {business_unit_id: {_eq: $id }, type: { _eq: $risk_type } }){
+  subscription getChart($risk_type: String, $operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!){
+    risk(where: {business_unit_id: {_eq: $business_unit_id }, type: { _eq: $risk_type }, operation_id: { _eq: $operation_id }, project_id: { _eq: $project_id } }){
       classification_id
       residual_impact_driver
       residual_rating
@@ -93,7 +93,7 @@ export const riskListQuery = gql`
 `;
 
 export const riskMapQuery = gql`
-  subscription getList($risk_type: String, $operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!,) {
+  subscription getList($risk_type: String, $operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!) {
     risk_dashboard(where: {
       operation_id: { _eq: $operation_id },
       project_id: { _eq: $project_id },
