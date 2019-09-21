@@ -19,14 +19,14 @@ function RiskGraph(props) {
   } = props;
   const {
     currentBusinessUnit, currentClassification, currentVulnerability,
-    currentImpactDriver, currentProject, currentOperation,
+    currentImpactDriver, currentProject, currentSubOperation,
   } = filters;
   const riskListResponse = useQuery(chartQuery, {
     ws: true,
     variables: {
       risk_type: riskType,
       business_unit_id: currentBusinessUnit,
-      operation_id: currentOperation,
+      sub_operation_id: currentSubOperation,
       project_id: currentProject,
     },
   });

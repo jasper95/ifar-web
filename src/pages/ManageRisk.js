@@ -23,6 +23,7 @@ function ManageRisk(props) {
   const user = useSelector(state => state.auth);
   const [riskGroupState, handleChange] = useRiskGroups({ riskType });
   const {
+    currentSubOp,
     currentOp,
     project,
     currentBusinessUnit,
@@ -30,6 +31,10 @@ function ManageRisk(props) {
     operations,
     projectResponse,
     businessUnitResponse,
+    subOperations,
+    operationResponse,
+    subOperationResponse,
+    projects,
   } = riskGroupState;
   const [currentClassification, setCurrentClassification] = useState(null);
   const [currentImpactDriver, setCurrentImpactDriver] = useState(null);
@@ -54,6 +59,7 @@ function ManageRisk(props) {
         currentBusinessUnit={currentBusinessUnit}
         operations={operations}
         operation={currentOp}
+        subOperation={currentSubOp}
         project={project}
         projectResponse={projectResponse}
       />
@@ -109,7 +115,7 @@ function ManageRisk(props) {
           currentClassification,
           currentImpactDriver,
           currentVulnerability,
-          currentOperation: currentOp,
+          currentSubOperation: currentSubOp,
           currentProject: project,
         }}
         handlers={{
@@ -131,7 +137,12 @@ function ManageRisk(props) {
         onChange={handleChange}
         typeTitle={typeTitle}
         projectResponse={projectResponse}
+        operationResponse={operationResponse}
+        subOperationResponse={subOperationResponse}
         businessUnitResponse={businessUnitResponse}
+        subOperation={currentSubOp}
+        subOperations={subOperations}
+        projects={projects}
       />
     </div>
   );

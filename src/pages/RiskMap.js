@@ -19,7 +19,7 @@ export default function RiskMap(props) {
   const {
     onBack, typeTitle, riskType, onChange,
     businessUnitResponse, currentBusinessUnit,
-    operations, operation, project, projectResponse,
+    operations, operation, project, projectResponse, subOperation,
   } = props;
   const { data: { project_risk: projects = [] } } = projectResponse;
   const [currentImpact, setImpact] = useState('');
@@ -28,7 +28,7 @@ export default function RiskMap(props) {
   const variables = {
     business_unit_id: currentBusinessUnit,
     risk_type: riskType,
-    operation_id: operation,
+    sub_operation_id: subOperation,
     project_id: project,
   };
   let { data: { risk_dashboard: riskItems = [] } } = useQuery(
