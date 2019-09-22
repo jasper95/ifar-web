@@ -248,7 +248,18 @@ $risklist-header-arrow-bg: $primary-color-400;
 						.iField-rs__menu__item {
 							position: relative;
 						}
+					}
 
+					.actions_addRisk {
+						padding: 0 1rem;
+						background-color: transparent !important;
+						.md-icon {
+							color: $primary-color-600;
+						}
+
+						&:hover {
+							background-color: $primary-color-L800 !important;
+						}
 					}
 				}
 			}

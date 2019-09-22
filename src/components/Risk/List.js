@@ -169,13 +169,15 @@ function RiskList(props) {
               required={false}
               className="col-sm-4"
               key="1"
-            />
-            <Button
-              icon
-              className="actions_addRisk iBttn iBttn-primary"
-              iconChildren="add_circle"
-              tooltipLabel="Add Operation"
-              onClick={() => showProjectDialog(undefined, 'operation')}
+              leftSibling={
+                <Button
+                  icon
+                  className="actions_addRisk iBttn"
+                  iconChildren="add_circle"
+                  tooltipLabel="Add Operation"
+                  onClick={() => showProjectDialog(undefined, 'operation')}
+                />
+              }
             />
             <SelectAutocomplete
               id="subOperation"
@@ -193,13 +195,15 @@ function RiskList(props) {
               required={false}
               className="col-sm-4"
               key="2"
-            />
-            <Button
-              icon
-              className="actions_addRisk iBttn iBttn-primary"
-              iconChildren="add_circle"
-              tooltipLabel="Add Operational Sub Unit"
-              onClick={() => showProjectDialog(undefined, 'subOperation')}
+              leftSibling={
+                <Button
+                  icon
+                  className="actions_addRisk iBttn"
+                  iconChildren="add_circle"
+                  tooltipLabel="Add Operational Sub Unit"
+                  onClick={() => showProjectDialog(undefined, 'subOperation')}
+                />
+              }
             />
           </>
         )}
@@ -217,13 +221,15 @@ function RiskList(props) {
               required={false}
               key="3"
               className="contentHeader_actions_projects col-sm-3"
-            />
-            <Button
-              icon
-              className="actions_addRisk iBttn iBttn-primary"
-              iconChildren="add_circle"
-              tooltipLabel="Add Project"
-              onClick={() => showProjectDialog(undefined, 'project')}
+              leftSibling={
+                <Button
+                  icon
+                  className="actions_addRisk iBttn"
+                  iconChildren="add_circle"
+                  tooltipLabel="Add Project"
+                  onClick={() => showProjectDialog(undefined, 'project')}
+                />
+              }
             />
           </>
         )}

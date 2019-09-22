@@ -23,6 +23,10 @@ function RiskPreview(props) {
     risk.has_inherent_request && 'Edit',
     risk.has_delete_request && 'Delete',
   ].filter(Boolean);
+
+  // para mu error migo
+  const isUrgent = true
+
   return (
     <Grid className={`RiskPreview ${className}`}>
       <Grid>
@@ -76,6 +80,7 @@ function RiskPreview(props) {
             colspan={6}
             title="Pending Requests"
             info={status.join(', ')}
+            className={cn('text-c-error',{'isUrgent': isUrgent })}
           />
         )}
       </Grid>
