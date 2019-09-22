@@ -27,7 +27,7 @@ function useRiskGroups(props) {
     projectQuery,
     {
       variables: { sub_operation_id: currentSubOp },
-      skip: !currentSubOp,
+      skip: !currentSubOp || riskType !== 'prmp',
     },
   );
   const businessUnitQuery = gql`
