@@ -9,6 +9,7 @@ import { getImpactDriver, getRecentChanges } from 'lib/tools';
 import pick from 'lodash/pick';
 import classifications from 'lib/constants/riskManagement/classifications';
 import RiskPreviewInfo from './PreviewInfo';
+import cn from 'classnames';
 
 function RiskPreview(props) {
   const {
