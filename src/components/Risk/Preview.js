@@ -26,7 +26,7 @@ function RiskPreview(props) {
   ].filter(Boolean);
 
   // para mu error migo
-  const isUrgent = true
+  const isPending = true
 
   return (
     <Grid className={`RiskPreview ${className}`}>
@@ -81,7 +81,7 @@ function RiskPreview(props) {
             colspan={6}
             title="Pending Requests"
             info={status.join(', ')}
-            className={cn('text-c-error',{'isUrgent': isUrgent })}
+            className={cn('text-c-error',{'isPending': isUrgent })}
           />
         )}
       </Grid>
