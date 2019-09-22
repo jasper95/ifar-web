@@ -4,6 +4,7 @@
 			display: flex;
 			align-items: stretch;
 			justify-content: flex-end;
+			flex-wrap: wrap;
 			.iBttn:not(:last-child) {
 				margin-right: .5em;
 			}
