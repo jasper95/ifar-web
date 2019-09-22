@@ -13,25 +13,21 @@ $map-legend-width: 150px;
 		width: 100%;
 		display: flex;
 		align-items: flex-start;
-		justify-content: center;
-		flex-direction: row;
-		flex-wrap: nowrap;
+		justify-content: flex-start;
+		flex-direction: column;
 	}
 
 	// .riskMap_legend
 	&_legend {
-		position: sticky;
-		top: $nav-height + 1;
-		left: 0;
 		flex-shrink: 0;
-		width: $map-legend-width;
+		width: 100%;
 	}
 
 	// .riskMap_map
 	&_map {
 		flex-grow: 1;
 		flex-shrink: 1;
-		width: calc( 100% - #{$map-legend-width} );
+		width: 100%;
 	}
 
 	// .riskMap_categories

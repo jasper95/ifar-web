@@ -1,6 +1,10 @@
 .riskMap_legend {
 	font-size: 1rem;
 	padding: 1em;
+	flex-direction: row;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 
 	.mapLegendHeader {
 		font-size: 1.5em;
@@ -13,11 +17,13 @@
 	.mapLegend {
 		font-size: 1em;
 		list-style-type: none;
-		padding-left: .5em;
+		padding-left: 2rem;
+		width: auto;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
 		margin: 0;
 
-		display: flex;
-		flex-direction: column;
 
 		// .mapLegend_item
 		&_item {
@@ -25,6 +31,7 @@
 			align-items: center;
 			justify-content: flex-start;
 			margin-bottom: .15em;
+			padding: 0 1rem;
 			.circle {
 				font-size: 1em;
 				width: 1em;
