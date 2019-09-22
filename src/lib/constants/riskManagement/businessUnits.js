@@ -126,15 +126,5 @@ export default [{
   name: 'AFO',
 }, {
   id: 'ac422fa3-e143-491a-ac01-a8a6093d6e6d',
-  name: 'INFRA',
-  operations: [
-    {
-      name: 'School Rehabilitation Projects',
-      id: 'afab3bbb-404d-488c-9ced-96dea3aee07c',
-      business_unit_id: 'ac422fa3-e143-491a-ac01-a8a6093d6e6d',
-    }, {
-      name: 'Daycare Centers',
-      id: '4eac7e8a-9949-403f-ab10-34e99bcd4b0c',
-      business_unit_id: 'ac422fa3-e143-491a-ac01-a8a6093d6e6d',
-    }],
+  name: 'DACF',
 }];

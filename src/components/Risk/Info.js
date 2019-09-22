@@ -17,14 +17,14 @@ function RiskInfo(props) {
         {list.map(({ action = '', id, name }) => (
           <li
             key={id}
-            className={`RiskInfo_info_list_item ${action === 'remove' ? action : 'add'}`}
+            className={`RiskInfo_info_list_item ${['remove', 'done'].includes(action) ? 'remove' : 'add'}`}
           >
             <span className="text">
               {name}
             </span>
             { action && (
               <span className="status">
-                {action}
+                {actionMapper(action)}
               </span>
             )}
           </li>
@@ -32,6 +32,17 @@ function RiskInfo(props) {
       </ul>
     </Cell>
   );
+
+  function actionMapper(action) {
+    return {
+      no_change: 'No Change',
+      remove: 'Deleted',
+      transfer: 'Transferred',
+      update: 'Edited',
+      done: 'Done',
+      add: 'New',
+    }[action];
+  }
 }
 
 RiskInfo.propTypes = {

@@ -134,10 +134,11 @@ function RiskList(props) {
             </>
           ) : list.map(risk => (
             <RiskItem
-              previewProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT' }}
-              detailsProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT', residualReadOnly: risk.has_treatment_request }}
+              previewProps={{ risk, readOnly: user[`${riskType}_role`] === 'VIEW_COMMENT' }}
+              detailsProps={{ risk, readOnly: user[`${riskType}_role`] === 'VIEW_COMMENT', residualReadOnly: risk.has_treatment_request }}
               key={risk.id}
               className="riskList_risk_content_item"
+              riskType={riskType}
             />
           ))}
           {!listIsLoading && list.length === 0 && (

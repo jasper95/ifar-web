@@ -70,7 +70,7 @@ function RiskMap(props) {
         </div>
         <div className="riskMap_map">
           <Filters onChangeStage={onChangeStage} currentStage={currentStage} />
-          <Map risks={risks} />
+          <Map risks={risks} currentStage={currentStage} />
         </div>
       </div>
       <div className="riskMap_categories">

@@ -4,10 +4,13 @@ import DataTable from 'components/DataTable';
 import withDialog from 'lib/hocs/dialog';
 import flowRight from 'lodash/flowRight';
 import RiskInfo from 'components/Risk/Info';
+import Button from 'react-md/lib/Buttons/Button';
+import { useDispatch } from 'react-redux';
 import VulnerabilityChange from 'components/RiskMap/VulnerabilityChange';
 
 function RiskChanges(props) {
   const { risk } = props;
+  const dispatch = useDispatch();
   const { recent_changes: recentChanges = {} } = risk;
   const {
     causes = [],
@@ -38,6 +41,7 @@ function RiskChanges(props) {
             {risk.name}
           </span>
         </h1>
+        <Button onClick={() => showDialog('comments')} tooltipLabel="Discussions" icon>message</Button>
       </div>
 
       <div className="riskChangesForm_segment">
@@ -108,6 +112,22 @@ function RiskChanges(props) {
         componentProps: { isDisableClick: true },
       },
     ].filter(Boolean);
+  }
+
+  function showDialog(action) {
+    if (action === 'comments') {
+      dispatch({
+        type: 'SHOW_DIALOG',
+        payload: {
+          path: 'Comments',
+          props: {
+            title: 'Comments',
+            dialogId: 'Comments',
+            risk,
+          },
+        },
+      });
+    }
   }
 
   function mapVulnerability(e) {

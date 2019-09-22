@@ -46,7 +46,7 @@ export default function RiskMap(props) {
         vulnerability: (e[`${currentStage}_rating`] || 0) * e[`${currentStage}_likelihood`],
       }))
       .filter(e => (currentImpact ? e.impact_driver === currentImpact : e.impact_driver)),
-    ['vulnerability'], ['desc'],
+    ['vulnerability', 'rating'], ['desc', 'desc'],
   ).map((e, idx) => ({ ...e, order: idx + 1 })),
   [currentStage, riskItems, currentImpact]);
 

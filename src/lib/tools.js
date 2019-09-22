@@ -2,7 +2,9 @@ import cookie from 'cookie';
 import day from 'dayjs';
 import capitalize from 'lodash/capitalize';
 import differenceBy from 'lodash/differenceBy';
+import interSectionBy from 'lodash/intersectionBy';
 import pick from 'lodash/pick';
+import isEqual from 'lodash/isEqual';
 import jsonexport from 'jsonexport/dist';
 import fileSaver from 'file-saver';
 
@@ -52,10 +54,6 @@ export function formatDateToISO(data, keys = ['start_date', 'end_date'], format 
     return acc;
   }, { ...data });
 }
-
-// export function getFileLink(data) {
-//   return `${process.env.API_URL}/file/download?${queryString.stringify(data)}`;
-// }
 
 export function getDownloadFilename(headers = {}) {
   const { 'content-disposition': disposition = '' } = headers;
@@ -120,7 +118,17 @@ export function getVulnerabilityLevel(vulnerability) {
 export function getArrayDiff(old, updated) {
   const removed = differenceBy(old, updated, 'id').map(e => ({ ...e, action: 'remove' }));
   const added = differenceBy(updated, old, 'id').map(e => ({ ...e, action: 'add' }));
-  return removed.concat(added);
+  const remained = interSectionBy(old, updated, 'id')
+    .map((e) => {
+      const oldData = old.find(ee => ee.id === e.id);
+      const newData = updated.find(ee => ee.id === e.id);
+      const action = isEqual(oldData, newData) ? 'no_change' : 'update';
+      return {
+        ...e,
+        action,
+      };
+    });
+  return [...remained, ...added, ...removed];
 }
 
 export function getRecentChanges(oldData, newData, keys) {

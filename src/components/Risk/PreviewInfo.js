@@ -6,7 +6,6 @@ function RiskPreviewInfo(props) {
   const {
     colspan, title, info, className,
   } = props;
-
   const labelKey = title.toLowerCase().replace(/ /g, '-');
   const uniqueItemClassName = `RiskInfo_cell-${labelKey}`;
 

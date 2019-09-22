@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { formatDate } from 'components/DataTable/CellFormatter';
 import PropTypes from 'prop-types';
@@ -15,12 +15,13 @@ function RiskDetails(props) {
   const {
     risk, className, readOnly, onMutateRisk, residualReadOnly, isRequest,
   } = props;
+  const inherentData = useMemo(getInherentData, [risk]);
   return (
     <Grid className={`RiskDetails ${className}`}>
       <Grid className="RiskDetails_row RiskDetails_row-infos">
-        <RiskInfo colspan={4} title="Causes" list={risk.causes} />
-        <RiskInfo colspan={4} title="Impact" list={risk.impacts} />
-        <RiskInfo colspan={4} title="Affected Stakeholders" list={risk.stakeholders} />
+        <RiskInfo colspan={4} title="Causes" list={inherentData.causes} />
+        <RiskInfo colspan={4} title="Impact" list={inherentData.impacts} />
+        <RiskInfo colspan={4} title="Affected Stakeholders" list={inherentData.stakeholders} />
       </Grid>
 
       {!isRequest && (
@@ -45,6 +46,25 @@ function RiskDetails(props) {
     </Grid>
   );
 
+  function getInherentData() {
+    let { causes, impacts, stakeholders } = risk;
+    if (isRequest) {
+      const { recent_changes: recentChanges = {} } = risk;
+      ({
+        causes: causes = [],
+        impacts: impacts = [], stakeholders: stakeholders = [],
+      } = recentChanges);
+      causes = causes.filter(e => e.action !== 'no_change');
+      impacts = impacts.filter(e => e.action !== 'no_change');
+      stakeholders = stakeholders.filter(e => e.action !== 'no_change');
+    }
+    return {
+      stakeholders,
+      causes,
+      impacts,
+    };
+  }
+
   function showDoneDialog(row) {
     dispatch({
       type: 'SHOW_DIALOG',
@@ -52,7 +72,7 @@ function RiskDetails(props) {
         path: 'Confirm',
         props: {
           title: 'Confirm Done Treatment',
-          message: 'Do you want to done this treatment?',
+          message: 'Do you want to mark this as done?',
           onValid: (data) => {
             const newRisk = {
               ...risk,
@@ -71,7 +91,7 @@ function RiskDetails(props) {
                     { ...data, action: 'transfer' },
                   ],
                   future_treatments: [
-                    { ...data, action: 'remove' },
+                    { ...data, action: 'done' },
                   ],
                 },
                 target_rating: newRisk.future_treatments.length > 0 ? newRisk.target_rating : 0,
