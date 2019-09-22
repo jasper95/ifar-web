@@ -60,6 +60,7 @@ function ManageRisk(props) {
         operations={operations}
         operation={currentOp}
         subOperation={currentSubOp}
+        subOperations={subOperations}
         project={project}
         projectResponse={projectResponse}
       />

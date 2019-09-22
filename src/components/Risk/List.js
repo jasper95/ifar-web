@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { components } from 'react-select';
 import Button from 'react-md/lib/Buttons/Button';
@@ -45,16 +45,25 @@ function RiskList(props) {
   const selectedBusinessUnit = businessUnits.find(e => e.id === businessUnit);
   const selectedProject = projects.find(e => e.id === project);
   const selectedOperation = operations.find(e => e.id === operation);
-  const [, onMutateProject] = useMutation({});
-  const ProjectOptionComponent = useCallback(CustomProjectOption, [project]);
-  const SubOperationOptionComponent = useCallback(CustomProjectOption, [subOperation]);
-  const OperationOptionComponent = useCallback(CustomProjectOption, [operation]);
+  const selectedSubOperation = subOperations.find(e => e.id === subOperation);
+  const [, onMutateUnit] = useMutation({});
+  const ProjectOptionComponent = useCallback(CustomGroupOption,
+    [project, projects]);
+  const SubOperationOptionComponent = useCallback(CustomGroupOption,
+    [subOperation, subOperations]);
+  const OperationOptionComponent = useCallback(CustomGroupOption,
+    [operation, operations]);
   const crumbs = [
     `${typeTitle} Risk Management Plan`,
     selectedBusinessUnit && selectedBusinessUnit.name,
     selectedOperation && selectedOperation.name,
+    selectedSubOperation && selectedSubOperation.name,
     selectedProject && selectedProject.name,
   ].filter(Boolean);
+  const hasRiskGroup = useMemo(checkRiskGroup, [
+    riskType, selectedProject, selectedOperation, selectedSubOperation,
+  ]);
+  const canCreateRisk = user[`${riskType}_role`] !== 'VIEW_COMMENT' && hasRiskGroup;
   return (
     <Grid className="riskList">
       <div className="riskList_unitList">
@@ -87,7 +96,7 @@ function RiskList(props) {
               </span>
             ))}
           </div>
-          {user[`${riskType}_role`] !== 'VIEW_COMMENT' && (
+          {canCreateRisk && (
             <div className="actions">
               <Button
                 flat
@@ -147,7 +156,12 @@ function RiskList(props) {
             <SelectAutocomplete
               id="operation"
               label="Operation"
-              options={operations.map(e => ({ value: e.id, label: e.name, type: 'operation' }))}
+              options={operations.map(e => ({
+                value: e.id,
+                label: e.name,
+                type: 'operation',
+                subOps: e.sub_operation_count,
+              }))}
               onChange={onChange}
               components={{ Option: OperationOptionComponent }}
               value={operation}
@@ -159,12 +173,19 @@ function RiskList(props) {
               icon
               className="actions_addRisk iBttn iBttn-primary"
               iconChildren="add_circle"
+              tooltipLabel="Add Operation"
               onClick={() => showProjectDialog(undefined, 'operation')}
             />
             <SelectAutocomplete
               id="subOperation"
               label="Operational Sub Unit"
-              options={subOperations.map(e => ({ value: e.id, label: e.name, type: 'subOperation' }))}
+              options={subOperations.map(e => ({
+                value: e.id,
+                label: e.name,
+                type: 'subOperation',
+                projects: e.project_count,
+                risks: e.risk_count,
+              }))}
               onChange={onChange}
               value={subOperation}
               components={{ Option: SubOperationOptionComponent }}
@@ -176,6 +197,7 @@ function RiskList(props) {
               icon
               className="actions_addRisk iBttn iBttn-primary"
               iconChildren="add_circle"
+              tooltipLabel="Add Operational Sub Unit"
               onClick={() => showProjectDialog(undefined, 'subOperation')}
             />
           </>
@@ -192,13 +214,14 @@ function RiskList(props) {
               components={{ Option: ProjectOptionComponent }}
               value={project}
               required={false}
-              key="2"
+              key="3"
               className="contentHeader_actions_projects col-sm-3"
             />
             <Button
               icon
               className="actions_addRisk iBttn iBttn-primary"
               iconChildren="add_circle"
+              tooltipLabel="Add Project"
               onClick={() => showProjectDialog(undefined, 'project')}
             />
           </>
@@ -249,7 +272,6 @@ function RiskList(props) {
   function showProjectDialog(initialFields, type) {
     const label = type === 'subOperation' ? 'operational sub unit' : type;
     const url = `/${snakeCase(type)}`;
-    const { refetch } = props[`${type}Response`];
     dispatch({
       type: 'SHOW_DIALOG',
       payload: {
@@ -257,7 +279,7 @@ function RiskList(props) {
         props: {
           initialFields,
           title: `${initialFields ? 'Update' : 'Create'} ${startCase(label)}`,
-          onValid: data => onMutateProject({
+          onValid: data => onMutateUnit({
             data: {
               ...data,
               sub_operation_id: subOperation,
@@ -265,7 +287,7 @@ function RiskList(props) {
               operation_id: operation,
             },
             url,
-            onSuccess: () => refetch(),
+            onSuccess: () => refetchOnChange(type),
             method: initialFields ? 'PUT' : 'POST',
             message: `${startCase(label)} successfully ${initialFields ? 'updated' : 'created'}`,
           }),
@@ -277,18 +299,17 @@ function RiskList(props) {
   function handleDelete(data, type) {
     const label = type === 'subOperation' ? 'operational sub unit' : type;
     const url = `/${snakeCase(type)}`;
-    const { refetch } = props[`${type}Response`];
     dispatch({
       type: 'SHOW_DIALOG',
       payload: {
         path: 'Confirm',
         props: {
           message: `Do you want to delete this ${label}?`,
-          title: `Craete ${label}`,
-          onValid: () => onMutateProject({
+          title: `Delete ${label}`,
+          onValid: () => onMutateUnit({
             data,
             url,
-            onSuccess: () => refetch(),
+            onSuccess: () => refetchOnChange(type),
             method: 'DELETE',
             message: `${label} successfully deleted`,
           }),
@@ -297,8 +318,7 @@ function RiskList(props) {
     });
   }
 
-  function CustomProjectOption(optionProps) {
-    // const arr =
+  function CustomGroupOption(optionProps) {
     const { data } = optionProps;
     let arr = [];
     switch (data.type) {
@@ -329,7 +349,7 @@ function RiskList(props) {
           >
             edit
           </Button>
-          {!data.risks && (
+          {(!data.risks && !data.projects && !data.subOps) && (
             <Button
               icon
               onClick={() => handleDelete(value, data.type)}
@@ -341,6 +361,32 @@ function RiskList(props) {
         </div>
       </div>
     );
+  }
+
+  function checkRiskGroup() {
+    if (riskType === 'ormp') {
+      return Boolean(selectedSubOperation && selectedOperation);
+    }
+    if (riskType === 'prmp') {
+      return Boolean(selectedSubOperation && selectedOperation && selectedProject);
+    }
+    return true;
+  }
+
+  function refetchOnChange(type) {
+    let { refetch } = props[`${type}Response`];
+    if (type === 'subOperation') {
+      refetch = () => {
+        props.operationResponse.refetch();
+        props.subOperationResponse.refetch();
+      };
+    } else if (type === 'project') {
+      refetch = () => {
+        props.subOperationResponse.refetch();
+        props.projectResponse.refetch();
+      };
+    }
+    refetch();
   }
 }
 

@@ -19,7 +19,8 @@ export default function RiskMap(props) {
   const {
     onBack, typeTitle, riskType, onChange,
     businessUnitResponse, currentBusinessUnit,
-    operations, operation, project, projectResponse, subOperation,
+    operations, operation, project,
+    projectResponse, subOperation, subOperations,
   } = props;
   const { data: { project_risk: projects = [] } } = projectResponse;
   const [currentImpact, setImpact] = useState('');
@@ -101,19 +102,34 @@ export default function RiskMap(props) {
                 value={currentBusinessUnit}
               />
               {riskType !== 'srmp' && (
-                <SelectMenuButton
-                  adjusted={false}
-                  raised
-                  primary
-                  simplifiedMenu={false}
-                  repositionOnScroll={false}
-                  id="operation"
-                  className="tableRiskMapToolbar_menu iBttn iBttn-lightgray "
-                  listClassName="tableRiskMapToolbar_menu_list"
-                  onChange={onChange}
-                  options={operations.map(e => ({ value: e.id, label: e.name }))}
-                  value={operation}
-                />
+                <>
+                  <SelectMenuButton
+                    adjusted={false}
+                    raised
+                    primary
+                    simplifiedMenu={false}
+                    repositionOnScroll={false}
+                    id="operation"
+                    className="tableRiskMapToolbar_menu iBttn iBttn-lightgray "
+                    listClassName="tableRiskMapToolbar_menu_list"
+                    onChange={onChange}
+                    options={operations.map(e => ({ value: e.id, label: e.name }))}
+                    value={operation}
+                  />
+                  <SelectMenuButton
+                    adjusted={false}
+                    raised
+                    primary
+                    simplifiedMenu={false}
+                    repositionOnScroll={false}
+                    id="subOperation"
+                    className="tableRiskMapToolbar_menu iBttn iBttn-lightgray "
+                    listClassName="tableRiskMapToolbar_menu_list"
+                    onChange={onChange}
+                    options={subOperations.map(e => ({ value: e.id, label: e.name }))}
+                    value={subOperation}
+                  />
+                </>
               )}
               {riskType === 'prmp' && (
                 <SelectMenuButton
@@ -137,7 +153,7 @@ export default function RiskMap(props) {
                   generateRiskMapExcel(riskItems);
                 }}
               >
-                Export as Excel
+                Export
               </Button>
             </div>
             <DataTable
