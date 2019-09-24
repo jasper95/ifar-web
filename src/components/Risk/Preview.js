@@ -13,7 +13,7 @@ import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
   const {
-    risk, className, readOnly, onMutateRisk, isPending,
+    risk, className, readOnly, onMutateRisk,
   } = props;
   const dispatch = useDispatch();
   const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
@@ -78,7 +78,7 @@ function RiskPreview(props) {
             colspan={6}
             title="Pending Requests"
             info={status.join(', ')}
-            className={cn('text-c-error', { isPending })}
+            className={cn('text-c-error', { isPending: true })}
           />
         )}
       </Grid>
