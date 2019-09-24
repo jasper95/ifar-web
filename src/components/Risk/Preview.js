@@ -8,12 +8,12 @@ import { useDispatch } from 'react-redux';
 import { getImpactDriver, getRecentChanges } from 'lib/tools';
 import pick from 'lodash/pick';
 import classifications from 'lib/constants/riskManagement/classifications';
-import RiskPreviewInfo from './PreviewInfo';
 import cn from 'classnames';
+import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
   const {
-    risk, className, readOnly, onMutateRisk,
+    risk, className, readOnly, onMutateRisk, isPending,
   } = props;
   const dispatch = useDispatch();
   const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
@@ -24,9 +24,6 @@ function RiskPreview(props) {
     risk.has_inherent_request && 'Edit',
     risk.has_delete_request && 'Delete',
   ].filter(Boolean);
-
-  // para mu error migo
-  const isPending = true
 
   return (
     <Grid className={`RiskPreview ${className}`}>
@@ -81,7 +78,7 @@ function RiskPreview(props) {
             colspan={6}
             title="Pending Requests"
             info={status.join(', ')}
-            className={cn('text-c-error',{'isPending': isUrgent })}
+            className={cn('text-c-error', { isPending })}
           />
         )}
       </Grid>
