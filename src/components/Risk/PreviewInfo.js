@@ -10,7 +10,7 @@ function RiskPreviewInfo(props) {
   const uniqueItemClassName = `RiskInfo_cell-${labelKey}`;
 
   return (
-    <Cell size={colspan} className={`RiskInfo_info RiskInfo_cell ${uniqueItemClassName}`}>
+    <Cell size={colspan} className={`RiskInfo_info RiskInfo_cell ${uniqueItemClassName} ${className || ''}`}>
       <h3 className="RiskInfo_info_label">{title}</h3>
       <span className="RiskInfo_info_info">{info}</span>
     </Cell>
