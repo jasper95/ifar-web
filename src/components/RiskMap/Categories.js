@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'react-md/lib/Buttons/Button';
 
-const impactDrivers = [
+export const impactDrivers = [
   {
     id: 1,
     icon: '',

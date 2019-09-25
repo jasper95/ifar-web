@@ -169,7 +169,7 @@ function RiskList(props) {
               required={false}
               className="col-sm-4"
               key="1"
-              leftSibling={
+              leftSibling={(
                 <Button
                   icon
                   className="actions_addRisk iBttn"
@@ -177,7 +177,7 @@ function RiskList(props) {
                   tooltipLabel="Add Operation"
                   onClick={() => showProjectDialog(undefined, 'operation')}
                 />
-              }
+              )}
             />
             <SelectAutocomplete
               id="subOperation"
@@ -195,7 +195,7 @@ function RiskList(props) {
               required={false}
               className="col-sm-4"
               key="2"
-              leftSibling={
+              leftSibling={(
                 <Button
                   icon
                   className="actions_addRisk iBttn"
@@ -203,7 +203,7 @@ function RiskList(props) {
                   tooltipLabel="Add Operational Sub Unit"
                   onClick={() => showProjectDialog(undefined, 'subOperation')}
                 />
-              }
+              )}
             />
           </>
         )}
@@ -221,7 +221,7 @@ function RiskList(props) {
               required={false}
               key="3"
               className="contentHeader_actions_projects col-sm-3"
-              leftSibling={
+              leftSibling={(
                 <Button
                   icon
                   className="actions_addRisk iBttn"
@@ -229,7 +229,7 @@ function RiskList(props) {
                   tooltipLabel="Add Project"
                   onClick={() => showProjectDialog(undefined, 'project')}
                 />
-              }
+)}
             />
           </>
         )}

@@ -39,9 +39,9 @@ function RiskPreview(props) {
           info={risk.name}
         />
         <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
-          <RiskPreviewInfo colspan={4} title="Inherent" info={!Number.isNaN(inherentCalc) ? inherentCalc : ''} />
-          <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) ? residualCalc : ''} />
-          <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) ? targetCalc : ''} />
+          <RiskPreviewInfo onClick={() => !Number.isNaN(inherentCalc) && showRatingDialog('inherent')} colspan={4} title="Inherent" info={!Number.isNaN(inherentCalc) ? inherentCalc : ''} />
+          <RiskPreviewInfo onClick={() => !Number.isNaN(residualCalc) && showRatingDialog('residual')} colspan={4} title="Residual" info={!Number.isNaN(residualCalc) ? residualCalc : ''} />
+          <RiskPreviewInfo onClick={() => !Number.isNaN(targetCalc) && showRatingDialog('target')} colspan={4} title="Target" info={!Number.isNaN(targetCalc) ? targetCalc : ''} />
         </Cell>
         <Cell size={1} className="RiskInfo_cell RiskInfo_cell-actions">
           <Button onClick={() => showDialog('comments')} tooltipLabel="Discussions" icon>message</Button>
@@ -84,6 +84,21 @@ function RiskPreview(props) {
       </Grid>
     </Grid>
   );
+
+  function showRatingDialog(stage) {
+    console.log('risk', risk)
+    dispatch({
+      type: 'SHOW_DIALOG',
+      payload: {
+        path: 'RatingDetails',
+        props: {
+          title: 'Rating Details',
+          risk,
+          stage,
+        },
+      },
+    });
+  }
 
   function showDialog(action) {
     const { previous_details: previousDetails = {} } = risk;
