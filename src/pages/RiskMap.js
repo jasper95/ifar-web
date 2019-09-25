@@ -5,9 +5,8 @@ import DataTable from 'components/DataTable';
 import SelectMenuButton from 'components/SelectMenuButton';
 import Map from 'components/RiskMap';
 import { useDispatch } from 'react-redux';
-import { riskDetailsFragment } from 'components/Risk/query';
+import { riskMapQuery } from 'components/Risk/query';
 import Button from 'react-md/lib/Buttons/Button';
-import gql from 'graphql-tag';
 import { getVulnerabilityLevel, addClassTimeout } from 'lib/tools';
 import useQuery from 'apollo/query';
 import orderBy from 'lodash/orderBy';
@@ -16,41 +15,25 @@ import VulnerabilityChange from 'components/RiskMap/VulnerabilityChange';
 
 import 'sass/pages/riskmap.scss';
 
-const riskQuery = gql`
-  subscription getList($id: uuid!, $risk_type: String!) {
-    risk_dashboard(where: {business_unit_id: {_eq: $id }, type: { _eq: $risk_type }}) {
-      id
-      name
-      residual_likelihood
-      residual_rating
-      residual_impact_driver
-      target_likelihood
-      target_rating
-      target_impact_driver
-      inherent_likelihood
-      inherent_rating
-      inherent_impact_driver
-      recent_changes
-      causes
-      impacts
-      ...RiskDetails
-    }
-  }
-  ${riskDetailsFragment}
-`;
-
 export default function RiskMap(props) {
   const {
     onBack, typeTitle, riskType, onChange,
     businessUnitResponse, currentBusinessUnit,
-    operations, operation, project, projectResponse,
+    operations, operation, project,
+    projectResponse, subOperation, subOperations,
   } = props;
   const { data: { project_risk: projects = [] } } = projectResponse;
   const [currentImpact, setImpact] = useState('');
   const [currentStage, setStage] = useState('residual');
   const { data: { [`business_unit_${riskType}`]: businessUnits = [] } } = businessUnitResponse;
+  const variables = {
+    business_unit_id: currentBusinessUnit,
+    risk_type: riskType,
+    sub_operation_id: subOperation,
+    project_id: project,
+  };
   let { data: { risk_dashboard: riskItems = [] } } = useQuery(
-    riskQuery, { variables: { id: currentBusinessUnit, risk_type: riskType }, ws: true },
+    riskMapQuery, { variables, ws: true },
   );
   riskItems = useMemo(() => orderBy(
     riskItems
@@ -62,11 +45,10 @@ export default function RiskMap(props) {
         rating: e[`${currentStage}_rating`],
         vulnerability: (e[`${currentStage}_rating`] || 0) * e[`${currentStage}_likelihood`],
       }))
-      .filter(e => (currentImpact ? e.impact_driver === currentImpact : e.impact_driver)),
-    ['vulnerability'], ['desc'],
-  ).map((e, idx) => ({ ...e, order: idx + 1 })),
-  [currentStage, riskItems, currentImpact]);
-
+      .filter(e => (currentImpact ? e.impact_driver === currentImpact : e.impact_driver))
+      .filter(e => e.rating),
+    ['vulnerability', 'rating'], ['desc', 'desc'],
+  ).map((e, idx) => ({ ...e, order: idx + 1 })), [currentStage, riskItems, currentImpact]);
   const handleSetStageWithAnimation = (setStageArgs) => {
     const bodyel = document.getElementsByTagName('body')[0];
     if (setStageArgs !== currentStage) {
@@ -119,19 +101,34 @@ export default function RiskMap(props) {
                 value={currentBusinessUnit}
               />
               {riskType !== 'srmp' && (
-                <SelectMenuButton
-                  adjusted={false}
-                  raised
-                  primary
-                  simplifiedMenu={false}
-                  repositionOnScroll={false}
-                  id="operation"
-                  className="tableRiskMapToolbar_menu iBttn iBttn-lightgray "
-                  listClassName="tableRiskMapToolbar_menu_list"
-                  onChange={onChange}
-                  options={operations.map(e => ({ value: e.id, label: e.name }))}
-                  value={operation}
-                />
+                <>
+                  <SelectMenuButton
+                    adjusted={false}
+                    raised
+                    primary
+                    simplifiedMenu={false}
+                    repositionOnScroll={false}
+                    id="operation"
+                    className="tableRiskMapToolbar_menu iBttn iBttn-lightgray "
+                    listClassName="tableRiskMapToolbar_menu_list"
+                    onChange={onChange}
+                    options={operations.map(e => ({ value: e.id, label: e.name }))}
+                    value={operation}
+                  />
+                  <SelectMenuButton
+                    adjusted={false}
+                    raised
+                    primary
+                    simplifiedMenu={false}
+                    repositionOnScroll={false}
+                    id="subOperation"
+                    className="tableRiskMapToolbar_menu iBttn iBttn-lightgray "
+                    listClassName="tableRiskMapToolbar_menu_list"
+                    onChange={onChange}
+                    options={subOperations.map(e => ({ value: e.id, label: e.name }))}
+                    value={subOperation}
+                  />
+                </>
               )}
               {riskType === 'prmp' && (
                 <SelectMenuButton
@@ -155,7 +152,7 @@ export default function RiskMap(props) {
                   generateRiskMapExcel(riskItems);
                 }}
               >
-                Export as Excel
+                Export
               </Button>
             </div>
             <DataTable

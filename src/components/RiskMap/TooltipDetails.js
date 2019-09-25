@@ -1,7 +1,7 @@
 import React from 'react';
 
 function TooltipDetails(props) {
-  const { risk } = props;
+  const { risk, currentStage } = props;
   return (
     <div className="riskMapTooltip">
 
@@ -12,7 +12,7 @@ function TooltipDetails(props) {
 
       <div className="riskMapTooltip_info">
         <span className="label">Risk Definition :</span>
-        <span className="name">{name}</span>
+        <span className="name">{risk.definition}</span>
       </div>
 
       <div className="riskMapTooltip_infoList">
@@ -44,8 +44,15 @@ function TooltipDetails(props) {
       </div>
 
       <div className="riskMapTooltip_divider" />
-      <RatingInfo title="Inherent Evaluation" likelihood={risk.inherent_likelihood} rating={risk.inherent_rating} />
-      <RatingInfo title="Target Evaluation" likelihood={risk.target_likelihood} rating={risk.target_rating} />
+      {currentStage !== 'inherent' && (
+        <RatingInfo title="Inherent Evaluation" likelihood={risk.inherent_likelihood} rating={risk.inherent_rating} />
+      )}
+      {currentStage !== 'residual' && (
+        <RatingInfo title="Residual Evaluation" likelihood={risk.residual_likelihood} rating={risk.residual_rating} />
+      )}
+      {currentStage !== 'target' && (
+        <RatingInfo title="Target Evaluation" likelihood={risk.target_likelihood} rating={risk.target_rating} />
+      )}
     </div>
   );
 }

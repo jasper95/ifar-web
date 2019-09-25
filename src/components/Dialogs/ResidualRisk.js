@@ -37,11 +37,13 @@ function InherentRisk(props) {
         previousRating={fields.previous_details}
         onChange={onElementChange}
         basis={fields.basis}
+        reason={fields.reason.residual}
         currentEvaluation={fields.current_stage_impact_details}
         prevStageEvaluation={fields.impact_details && fields.impact_details.inherent}
         likelihood={fields.residual_likelihood}
         businessUnit={fields.business_unit_id}
         impact={fields.impact_details.residual}
+        onChangeReason={residual => onElementChange({ ...fields.reason, residual }, 'reason')}
         onChangeImpact={residual => onElementChange({ ...fields.impact_details, residual }, 'impact_details')}
       />
     </>

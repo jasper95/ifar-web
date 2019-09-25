@@ -28,6 +28,7 @@ function Map(props) {
   function columnMapper(column, row) {
     const {
       risks,
+      currentStage,
     } = props;
 
     const isLeftLabel = column === 0;
@@ -112,6 +113,7 @@ function Map(props) {
         >
           {risks.filter(e => e.likelihood === rowIndex && e.rating === column).map(risk => (
             <MapItem
+              currentStage={currentStage}
               impactDriver={risk.impact_driver}
               risk={risk}
               children={risk.order}

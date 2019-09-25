@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import Grid from 'react-md/lib/Grids/Grid';
 import { components } from 'react-select';
 import Button from 'react-md/lib/Buttons/Button';
@@ -10,6 +10,8 @@ import useQuery from 'apollo/query';
 import SelectAutocomplete from 'components/SelectAutocomplete';
 import { RiskItemSkeleton } from 'components/Skeletons';
 import cn from 'classnames';
+import startCase from 'lodash/startCase';
+import snakeCase from 'lodash/snakeCase';
 import RiskItem from './Item';
 import { riskListQuery } from './query';
 import 'sass/components/risk/index.scss';
@@ -19,12 +21,13 @@ function RiskList(props) {
     businessUnit, classification,
     impactDriver, residualVulnerability,
     riskType, operations, operation, onChange, typeTitle,
-    businessUnitResponse, projectResponse, project,
+    businessUnitResponse, project, subOperation, subOperations,
+    projects,
   } = props;
   const [currentPage, setCurrentPage] = useState(1);
   const user = useSelector(state => state.auth);
   const variables = {
-    operation_id: operation,
+    sub_operation_id: subOperation,
     project_id: project,
     risk_type: riskType,
     business_unit_id: businessUnit,
@@ -39,18 +42,28 @@ function RiskList(props) {
   const dispatch = useDispatch();
   const [, onCreateRisk] = useCreateNode({ node: 'risk' });
   const { data: { [`business_unit_${riskType}`]: businessUnits = [] } } = businessUnitResponse;
-  const { data: { project_risk: projects = [] }, refetch } = projectResponse;
   const selectedBusinessUnit = businessUnits.find(e => e.id === businessUnit);
   const selectedProject = projects.find(e => e.id === project);
   const selectedOperation = operations.find(e => e.id === operation);
-  const [, onMutateProject] = useMutation({ url: '/project', onSuccess: () => refetch() });
-  const OptionComponent = useCallback(CustomProjectOption, [project]);
+  const selectedSubOperation = subOperations.find(e => e.id === subOperation);
+  const [, onMutateUnit] = useMutation({});
+  const ProjectOptionComponent = useCallback(CustomGroupOption,
+    [project, projects]);
+  const SubOperationOptionComponent = useCallback(CustomGroupOption,
+    [subOperation, subOperations]);
+  const OperationOptionComponent = useCallback(CustomGroupOption,
+    [operation, operations]);
   const crumbs = [
     `${typeTitle} Risk Management Plan`,
     selectedBusinessUnit && selectedBusinessUnit.name,
     selectedOperation && selectedOperation.name,
+    selectedSubOperation && selectedSubOperation.name,
     selectedProject && selectedProject.name,
   ].filter(Boolean);
+  const hasRiskGroup = useMemo(checkRiskGroup, [
+    riskType, selectedProject, selectedOperation, selectedSubOperation,
+  ]);
+  const canCreateRisk = user[`${riskType}_role`] !== 'VIEW_COMMENT' && hasRiskGroup;
   return (
     <Grid className="riskList">
       <div className="riskList_unitList">
@@ -83,7 +96,7 @@ function RiskList(props) {
               </span>
             ))}
           </div>
-          {user[`${riskType}_role`] !== 'VIEW_COMMENT' && (
+          {canCreateRisk && (
             <div className="actions">
               <Button
                 flat
@@ -121,10 +134,11 @@ function RiskList(props) {
             </>
           ) : list.map(risk => (
             <RiskItem
-              previewProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT' }}
-              detailsProps={{ risk, readOnly: user.srmp_role === 'VIEW_COMMENT', residualReadOnly: risk.has_treatment_request }}
+              previewProps={{ risk, readOnly: user[`${riskType}_role`] === 'VIEW_COMMENT' }}
+              detailsProps={{ risk, readOnly: user[`${riskType}_role`] === 'VIEW_COMMENT', residualReadOnly: risk.has_treatment_request }}
               key={risk.id}
               className="riskList_risk_content_item"
+              riskType={riskType}
             />
           ))}
           {!listIsLoading && list.length === 0 && (
@@ -139,38 +153,84 @@ function RiskList(props) {
     return (
       <>
         {riskType !== 'srmp' && (
-          <SelectAutocomplete
-            id="operation"
-            label="Operation"
-            options={operations.map(e => ({ value: e.id, label: e.name }))}
-            onChange={onChange}
-            value={operation}
-            required={false}
-            className="col-sm-4"
-            key="1"
-          />
+          <>
+            <SelectAutocomplete
+              id="operation"
+              label="Operation"
+              options={operations.map(e => ({
+                value: e.id,
+                label: e.name,
+                type: 'operation',
+                subOps: e.sub_operation_count,
+              }))}
+              onChange={onChange}
+              components={{ Option: OperationOptionComponent }}
+              value={operation}
+              required={false}
+              className="col-sm-4"
+              key="1"
+              leftSibling={
+                <Button
+                  icon
+                  className="actions_addRisk iBttn"
+                  iconChildren="add_circle"
+                  tooltipLabel="Add Operation"
+                  onClick={() => showProjectDialog(undefined, 'operation')}
+                />
+              }
+            />
+            <SelectAutocomplete
+              id="subOperation"
+              label="Operational Sub Unit"
+              options={subOperations.map(e => ({
+                value: e.id,
+                label: e.name,
+                type: 'subOperation',
+                projects: e.project_count,
+                risks: e.risk_count,
+              }))}
+              onChange={onChange}
+              value={subOperation}
+              components={{ Option: SubOperationOptionComponent }}
+              required={false}
+              className="col-sm-4"
+              key="2"
+              leftSibling={
+                <Button
+                  icon
+                  className="actions_addRisk iBttn"
+                  iconChildren="add_circle"
+                  tooltipLabel="Add Operational Sub Unit"
+                  onClick={() => showProjectDialog(undefined, 'subOperation')}
+                />
+              }
+            />
+          </>
         )}
         {riskType === 'prmp' && (
           <>
             <SelectAutocomplete
               id="project"
               label="Project"
-              options={projects.map(e => ({ value: e.id, label: `${e.name} (${e.risk_count})`, risks: e.risk_count }))}
+              options={projects.map(e => ({
+                value: e.id, label: `${e.name} (${e.risk_count})`, risks: e.risk_count, type: 'project',
+              }))}
               onChange={onChange}
-              components={{ Option: OptionComponent }}
+              components={{ Option: ProjectOptionComponent }}
               value={project}
               required={false}
-              key="2"
+              key="3"
               className="contentHeader_actions_projects col-sm-3"
+              leftSibling={
+                <Button
+                  icon
+                  className="actions_addRisk iBttn"
+                  iconChildren="add_circle"
+                  tooltipLabel="Add Project"
+                  onClick={() => showProjectDialog(undefined, 'project')}
+                />
+              }
             />
-            <Button
-              flat
-              className="actions_addRisk iBttn iBttn-primary"
-              iconChildren="add_circle"
-              onClick={() => showProjectDialog()}
-            >
-              Add Project
-            </Button>
           </>
         )}
       </>
@@ -204,7 +264,8 @@ function RiskList(props) {
             inherent_likelihood: 1,
             impact_details: {},
             business_unit_id: businessUnit,
-            operation_id: operation,
+            reason: {},
+            sub_operation_id: subOperation,
             project_id: project,
             type: riskType,
           },
@@ -215,45 +276,71 @@ function RiskList(props) {
     });
   }
 
-  function showProjectDialog(initialFields) {
+  function showProjectDialog(initialFields, type) {
+    const label = type === 'subOperation' ? 'operational sub unit' : type;
+    const url = `/${snakeCase(type)}`;
     dispatch({
       type: 'SHOW_DIALOG',
       payload: {
         path: 'Project',
         props: {
           initialFields,
-          title: `${initialFields ? 'Update' : 'Create'} Project`,
-          onValid: data => onMutateProject({
-            data: { ...data, operation_id: operation },
+          title: `${initialFields ? 'Update' : 'Create'} ${startCase(label)}`,
+          onValid: data => onMutateUnit({
+            data: {
+              ...data,
+              sub_operation_id: subOperation,
+              business_unit_id: businessUnit,
+              operation_id: operation,
+            },
+            url,
+            onSuccess: () => refetchOnChange(type),
             method: initialFields ? 'PUT' : 'POST',
-            message: `Project successfully ${initialFields ? 'updated' : 'created'}`,
+            message: `${startCase(label)} successfully ${initialFields ? 'updated' : 'created'}`,
           }),
         },
       },
     });
   }
 
-  function handleDelete(data) {
+  function handleDelete(data, type) {
+    const label = type === 'subOperation' ? 'operational sub unit' : type;
+    const url = `/${snakeCase(type)}`;
     dispatch({
       type: 'SHOW_DIALOG',
       payload: {
         path: 'Confirm',
         props: {
-          message: 'Do you want to delete this project?',
-          title: 'Create Project',
-          onValid: () => onMutateProject({
+          message: `Do you want to delete this ${label}?`,
+          title: `Delete ${label}`,
+          onValid: () => onMutateUnit({
             data,
+            url,
+            onSuccess: () => refetchOnChange(type),
             method: 'DELETE',
-            message: 'Project successfully deleted',
+            message: `${label} successfully deleted`,
           }),
         },
       },
     });
   }
 
-  function CustomProjectOption(optionProps) {
-    const value = projects.find(e => e.id === optionProps.value);
+  function CustomGroupOption(optionProps) {
     const { data } = optionProps;
+    let arr = [];
+    switch (data.type) {
+      case 'subOperation':
+        arr = subOperations;
+        break;
+      case 'project':
+        arr = projects;
+        break;
+      case 'operation':
+        arr = operations;
+        break;
+      default:
+    }
+    const value = arr.find(e => e.id === optionProps.value);
     return (
       <div
         className={cn('iField-rs__menu__item', {
@@ -264,15 +351,15 @@ function RiskList(props) {
         <div className="actions">
           <Button
             icon
-            onClick={() => showProjectDialog(value)}
+            onClick={() => showProjectDialog(value, data.type)}
             className="iBttn iBttn-tc-primary"
           >
             edit
           </Button>
-          {!data.risks && (
+          {(!data.risks && !data.projects && !data.subOps) && (
             <Button
               icon
-              onClick={() => handleDelete(value)}
+              onClick={() => handleDelete(value, data.type)}
               className="iBttn iBttn-tc-error"
             >
               delete
@@ -281,6 +368,32 @@ function RiskList(props) {
         </div>
       </div>
     );
+  }
+
+  function checkRiskGroup() {
+    if (riskType === 'ormp') {
+      return Boolean(selectedSubOperation && selectedOperation);
+    }
+    if (riskType === 'prmp') {
+      return Boolean(selectedSubOperation && selectedOperation && selectedProject);
+    }
+    return true;
+  }
+
+  function refetchOnChange(type) {
+    let { refetch } = props[`${type}Response`];
+    if (type === 'subOperation') {
+      refetch = () => {
+        props.operationResponse.refetch();
+        props.subOperationResponse.refetch();
+      };
+    } else if (type === 'project') {
+      refetch = () => {
+        props.subOperationResponse.refetch();
+        props.projectResponse.refetch();
+      };
+    }
+    refetch();
   }
 }
 

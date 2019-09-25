@@ -9,10 +9,10 @@ import RiskDetails from './Details';
 function RiskItem(props) {
   const {
     className, previewRenderer: Preview, detailsRenderer: Details,
-    previewProps, detailsProps, style,
+    previewProps, detailsProps, style, riskType,
   } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [, onMutateRisk] = useRiskMutation();
+  const [, onMutateRisk] = useRiskMutation(riskType);
   return (
     <div className={className} style={style}>
       <Button

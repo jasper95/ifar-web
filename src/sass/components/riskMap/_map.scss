@@ -148,18 +148,22 @@
 			font-weight: bold;
 		}
 
+		// .mapTable_col-low
 		&-low {
 			background-color: $rafi-riskLegend-low;
 		}
 
+		// .mapTable_col-moderate
 		&-moderate {
 			background-color: $rafi-riskLegend-moderate;
 		}
 
+		// .mapTable_col-high
 		&-high {
 			background-color: $rafi-riskLegend-high;
 		}
 
+		// .mapTable_col-critical
 		&-critical {
 			background-color: $rafi-riskLegend-critical;
 		}

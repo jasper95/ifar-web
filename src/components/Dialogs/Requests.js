@@ -86,12 +86,13 @@ function Requests(props) {
               riskType,
               request: e,
               risk: e.type === 'EDIT_INHERENT_RISK' ? e.risk_details : e.risk,
-              readOnly: user.role === 'USER' && ['VIEW_COMMENT', 'RISK_CHAMPION'].includes(user.srmp_role),
+              readOnly: user.role === 'USER' && ['VIEW_COMMENT', 'RISK_CHAMPION'].includes(user[`${riskType}_role`]),
             }}
             detailsProps={{ risk: e.type === 'EDIT_INHERENT_RISK' ? e.risk_details : e.risk, readOnly: true, isRequest: true }}
             previewRenderer={Preview}
             detailsRenderer={e.type === 'DONE_TREATMENT_RISK' ? () => null : undefined}
             className="riskList_risk_content_item"
+            riskType={riskType}
           />
         </div>
       ))}

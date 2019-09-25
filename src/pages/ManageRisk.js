@@ -23,6 +23,7 @@ function ManageRisk(props) {
   const user = useSelector(state => state.auth);
   const [riskGroupState, handleChange] = useRiskGroups({ riskType });
   const {
+    currentSubOp,
     currentOp,
     project,
     currentBusinessUnit,
@@ -30,6 +31,10 @@ function ManageRisk(props) {
     operations,
     projectResponse,
     businessUnitResponse,
+    subOperations,
+    operationResponse,
+    subOperationResponse,
+    projects,
   } = riskGroupState;
   const [currentClassification, setCurrentClassification] = useState(null);
   const [currentImpactDriver, setCurrentImpactDriver] = useState(null);
@@ -54,6 +59,8 @@ function ManageRisk(props) {
         currentBusinessUnit={currentBusinessUnit}
         operations={operations}
         operation={currentOp}
+        subOperation={currentSubOp}
+        subOperations={subOperations}
         project={project}
         projectResponse={projectResponse}
       />
@@ -109,6 +116,8 @@ function ManageRisk(props) {
           currentClassification,
           currentImpactDriver,
           currentVulnerability,
+          currentSubOperation: currentSubOp,
+          currentProject: project,
         }}
         handlers={{
           setCurrentImpactDriver,
@@ -129,28 +138,15 @@ function ManageRisk(props) {
         onChange={handleChange}
         typeTitle={typeTitle}
         projectResponse={projectResponse}
+        operationResponse={operationResponse}
+        subOperationResponse={subOperationResponse}
         businessUnitResponse={businessUnitResponse}
+        subOperation={currentSubOp}
+        subOperations={subOperations}
+        projects={projects}
       />
     </div>
   );
-
-  // function handleChange(val, key) {
-  //   let func;
-  //   switch (key) {
-  //     case 'operation':
-  //       func = setOp;
-  //       break;
-  //     case 'businessUnit':
-  //       func = setBusinessUnit;
-  //       break;
-  //     case 'project':
-  //       break;
-  //     default:
-  //   }
-  //   if (func) {
-  //     func(val);
-  //   }
-  // }
 
   function showDialog({ type, dialogTitle, dialogSize = 'md' }) {
     dispatch({

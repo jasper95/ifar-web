@@ -8,6 +8,7 @@ import useMutation from 'apollo/mutation';
 import RiskTable from 'components/Risk/Table';
 import classifications from 'lib/constants/riskManagement/classifications';
 import businessUnits from 'lib/constants/riskManagement/businessUnits';
+import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
 function RequestPreview(props) {
@@ -19,6 +20,7 @@ function RequestPreview(props) {
   const { user } = request;
   const auth = useSelector(state => state.auth);
   const isTL = auth[`${riskType}_role`] === 'TEAM_LEADER';
+  const currentInherent = request.risk.inherent_rating * request.risk.inherent_likelihood;
   const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
   const residualCalc = risk.residual_rating * risk.residual_likelihood;
   const targetCalc = risk.target_rating * risk.target_likelihood;
@@ -76,11 +78,13 @@ function RequestPreview(props) {
         <RiskPreviewInfo
           colspan={3}
           title="Classification"
+          className={cn({ updated: risk.classification_id !== request.risk.classification_id })}
           info={classifications.find(e => e.id === risk.classification_id).name}
         />
         <RiskPreviewInfo
           colspan={3}
           title="Risk name"
+          className={cn({ updated: risk.name !== request.risk.name })}
           info={risk.name}
         />
         {request.type === 'DONE_TREATMENT_RISK' ? (
@@ -110,12 +114,23 @@ function RequestPreview(props) {
         ) : (
           <>
             <Cell size={5} className="RiskInfo_cell RiskInfo_cell-ratings">
-              <RiskPreviewInfo colspan={4} title="Inherent" info={!Number.isNaN(inherentCalc) && inherentCalc ? inherentCalc : ''} />
-              <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) && residualCalc ? residualCalc : ''} />
-              <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) && targetCalc ? targetCalc : ''} />
+              <RiskPreviewInfo
+                colspan={4}
+                title="Inherent"
+                info={!Number.isNaN(inherentCalc) ? inherentCalc : ''}
+                className={cn({ updated: inherentCalc !== currentInherent })}
+              />
+              <RiskPreviewInfo colspan={4} title="Residual" info={!Number.isNaN(residualCalc) ? residualCalc : ''} />
+              <RiskPreviewInfo colspan={4} title="Target" info={!Number.isNaN(targetCalc) ? targetCalc : ''} />
             </Cell>
           </>
         )}
+        <RiskPreviewInfo
+          colspan={3}
+          title="Definition"
+          className={cn({ updated: risk.definition !== request.risk.definition })}
+          info={risk.definition}
+        />
       </Grid>
     </Grid>
   );

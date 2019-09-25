@@ -1,11 +1,13 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 import TextFieldMessage from 'react-md/lib/TextFields/TextFieldMessage';
 
 function SelectAutocomplete(props) {
   const {
     label, error, required, className, id, value, options, onChange,
+    leftSibling, rightSibling,
     ...restProps
   } = props;
   const selectOptions = useMemo(() => {
@@ -27,7 +29,10 @@ function SelectAutocomplete(props) {
     }
   }, [value]);
   return (
-    <div className={`selectAutoComplete ${className}`}>
+    <div className={cn(`selectAutoComplete ${className}`, {
+      'selectAutoComplete-hasLeftSibling' : !!leftSibling,
+      'selectAutoComplete-hasRightSibling' : !!rightSibling,
+    })}>
       {label && (
         <span className="selectAutoComplete_label">
           {label}
@@ -36,15 +41,19 @@ function SelectAutocomplete(props) {
         </span>
       )}
       <div className="iField-rsContainer">
-        <Select
-          id={id}
-          value={currentValue}
-          options={selectOptions}
-          onChange={handleChange}
-          className="iField iField-rs"
-          classNamePrefix="iField-rs"
-          {...restProps}
-        />
+        <div className="iField-rsContainer_field">
+          {leftSibling && leftSibling}
+          <Select
+            id={id}
+            value={currentValue}
+            options={selectOptions}
+            onChange={handleChange}
+            className="iField iField-rs"
+            classNamePrefix="iField-rs"
+            {...restProps}
+          />
+          {rightSibling && rightSibling}
+        </div>
         <TextFieldMessage
           errorText={error}
           error={error}

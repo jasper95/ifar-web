@@ -31,6 +31,7 @@ $risklist-header-arrow-bg: $primary-color-400;
 			flex-shrink: 0;
 			font-size: 1em;
 			padding: 0 1em;
+			max-width: 200px;
 	
 			&:not(:last-child) {
 				border-right: 1px solid rgba(#000,.10);
@@ -123,14 +124,14 @@ $risklist-header-arrow-bg: $primary-color-400;
 						justify-content: center;
 						position: relative;
 						height: 100%;
-						background-color: darken($risklist-header-arrow-bg,10%);
+						background-color: darken($risklist-header-bg,20%);
 						z-index: 10;
 						padding: .5em;
 					}
 					&:after {
 						content: '';
 						border-top: $risklist-header-arrow / 2  solid transparent;
-						border-left: $risklist-header-arrow - 2 solid darken($risklist-header-arrow-bg,10%);
+						border-left: $risklist-header-arrow - 2 solid darken($risklist-header-bg,20%);
 						border-bottom: $risklist-header-arrow / 2  solid transparent;
 						height: 100%;
 					}
@@ -161,30 +162,40 @@ $risklist-header-arrow-bg: $primary-color-400;
 					&:nth-child(2) {
 						z-index: 10;
 						.text {
-							background-color: $risklist-header-arrow-bg;
+							background-color: darken($risklist-header-bg, 16%);
 						}
 						&:after {
-							border-left-color: $risklist-header-arrow-bg;
+							border-left-color: darken($risklist-header-bg, 16%);
 						}
 					}
 
 					&:nth-child(3) {
 						z-index: 8;
 						.text {
-							background-color: lighten($risklist-header-arrow-bg,5%);
+							background-color: darken($risklist-header-bg, 12%);
 						}
 						&:after {
-							border-left-color: lighten($risklist-header-arrow-bg,5%);
+							border-left-color: darken($risklist-header-bg, 12%);
 						}
 					}
 
 					&:nth-child(4) {
 						z-index: 5;
 						.text {
-							background-color: lighten($risklist-header-arrow-bg,10%);
+							background-color: darken($risklist-header-bg, 8%);
 						}
 						&:after {
-							border-left-color: lighten($risklist-header-arrow-bg,10%);
+							border-left-color: darken($risklist-header-bg, 8%);
+						}
+					}
+
+					&:nth-child(5) {
+						z-index: 3;
+						.text {
+							background-color: darken($risklist-header-bg,4%);
+						}
+						&:after {
+							border-left-color: darken($risklist-header-bg,4%);
 						}
 					}
 				}
@@ -248,7 +259,18 @@ $risklist-header-arrow-bg: $primary-color-400;
 						.iField-rs__menu__item {
 							position: relative;
 						}
+					}
 
+					.actions_addRisk {
+						padding: 0 1rem;
+						background-color: transparent !important;
+						.md-icon {
+							color: $primary-color-600;
+						}
+
+						&:hover {
+							background-color: $primary-color-L800 !important;
+						}
 					}
 				}
 			}
@@ -375,6 +397,7 @@ $risklist-header-arrow-bg: $primary-color-400;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			flex-wrap: wrap;
 			.md-btn {
 				&:not(:last-child) {
 					margin-right: .5em;

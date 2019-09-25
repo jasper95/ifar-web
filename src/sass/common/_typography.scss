@@ -26,3 +26,58 @@ a {
 .md-text--theme-primary {
 	color: $primary-color;
 }
+
+
+
+// ========================
+// BUTTON COLORS
+// ========================
+$text-colors: (
+	'red': $red,
+	'orange': $orange,
+	'yellow': $yellow,
+	'green': $green,
+	'jade': $jade,
+	'teal': $teal,
+	'blue': $blue,
+	'indigo': $indigo,
+	'purple': $purple,
+	'violet': $violet,
+	'white': $white,
+	'error': #F93B3B,
+	'success': $success,
+	'primary': $primary-color,
+	'primary-100': $primary-color-100,
+	'secondary': $secondary-color,
+	'secondary-2': $secondary-color-2,
+	'secondary-3': $secondary-color-3,
+	'secondary-4': $secondary-color-4,
+	'tertiary': $tertiary-color,
+	'tertiary-2': $tertiary-color-2,
+	'tertiary-3': $tertiary-color-3,
+	'tertiary-4': $tertiary-color-4,
+	'highlight': $highlight-color,
+	'highlight-2': $highlight-color-2, 
+	'highlight-3': $highlight-color-3,
+	'highlight-4': $highlight-color-4,
+	'black': $black,
+	'gray': $gray,
+	'gray-400': $gray-400,
+	'gray-300': $gray-300,
+	'gray-200': $gray-200,
+	'gray-100': $gray-100,
+	'lightgray': $lightgray,
+	'darkgray': $darkgray,
+	'rafi-legal': $rafi-cat-legal,
+	'rafi-health-safety-security': $rafi-cat-health-safety-security,
+	'rafi-finance': $rafi-cat-finance,
+	'rafi-reputation': $rafi-cat-reputation,
+	'rafi-management-action': $rafi-cat-management-action,
+	'rafi-operations': $rafi-cat-operations
+);
+
+@each $name,$value in $text-colors {
+	.text-c-#{$name} {
+		color: $value !important;
+	}
+}

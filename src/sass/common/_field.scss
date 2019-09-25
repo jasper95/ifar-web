@@ -107,6 +107,14 @@ $fieldBorder: 1px solid $gray-200;
 // ====================================
 .iField-rsContainer {
 	padding: .8rem;
+	// .iField-rsContainer_field
+	&_field {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		flex-wrap: nowrap;
+	}
 }
 
 .iField-rs {
@@ -469,6 +477,22 @@ $fieldBorder: 1px solid $gray-200;
 		padding: 0 .8em;
 	}
 
+
+	// .selectAutoComplete-hasLeftSibling
+	&-hasLeftSibling {
+		.iField-rsContainer_field {
+			align-items: stretch;
+			> .md-btn:first-child {
+				border-radius: 0;
+				border: 1px solid #CCCCCC;
+				border-right: none;
+
+				& + .iField .iField-rs__control {
+					border-left: none;
+				}
+			}
+		}
+	}
 }
 
 
