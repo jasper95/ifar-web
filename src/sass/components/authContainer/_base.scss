@@ -114,3 +114,32 @@
 		}
 	}
 }
+
+
+@media (max-width: 1441px) {
+	.authContainer {
+		// .authContainer_content
+		&_content {
+			width: 60%;
+		}
+
+		// .authContainer_bg
+		.authContainer_bg {
+			width: 40%;
+		}
+	}
+}
+
+@media (max-width: 1025px) {
+	.authContainer {
+		// .authContainer_content
+		&_content {
+			width: 100%;
+		}
+
+		// .authContainer_bg
+		.authContainer_bg {
+			display: none;
+		}
+	}
+}
