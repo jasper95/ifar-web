@@ -27,7 +27,7 @@ const impactDrivers = [
     id: 4,
     icon: '',
     cssColorKey: 'operations',
-    impact: 'operations',
+    impact: 'operational',
     label: 'Operation',
   },
   {

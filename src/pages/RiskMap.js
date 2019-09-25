@@ -48,9 +48,7 @@ export default function RiskMap(props) {
       .filter(e => (currentImpact ? e.impact_driver === currentImpact : e.impact_driver))
       .filter(e => e.rating),
     ['vulnerability', 'rating'], ['desc', 'desc'],
-  ).map((e, idx) => ({ ...e, order: idx + 1 })),
-  [currentStage, riskItems, currentImpact]);
-
+  ).map((e, idx) => ({ ...e, order: idx + 1 })), [currentStage, riskItems, currentImpact]);
   const handleSetStageWithAnimation = (setStageArgs) => {
     const bodyel = document.getElementsByTagName('body')[0];
     if (setStageArgs !== currentStage) {
