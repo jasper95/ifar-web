@@ -68,3 +68,9 @@ $map-legend-width: 150px;
 		flex-shrink: 1;
 	}
 }
+
+@media (max-width: 737px) {
+	.rafi .riskMap_legend {
+		flex-direction: column;
+	}
+}

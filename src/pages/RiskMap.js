@@ -75,7 +75,7 @@ export default function RiskMap(props) {
         </Cell>
       </Grid>
       <Grid>
-        <Cell size={9}>
+        <Cell size={9} className="riskMapContainer">
           <Map
             risks={riskItems}
             currentStage={currentStage}
@@ -84,7 +84,7 @@ export default function RiskMap(props) {
             currentImpact={currentImpact}
           />
         </Cell>
-        <Cell size={3}>
+        <Cell size={3} className="tableRiskActionsContainer">
           <div className="tableRiskActions">
             <div className="tableRiskMapToolbar">
               <SelectMenuButton

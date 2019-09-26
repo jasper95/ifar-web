@@ -67,3 +67,13 @@
 	}
 }
 
+
+@media (max-width: 1025px) {
+	.riskMapContainer {
+		width: calc(100% - 16px);
+	}
+
+	.tableRiskActionsContainer {
+		width: calc(100% - 16px);
+	}
+}

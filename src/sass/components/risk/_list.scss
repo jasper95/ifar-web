@@ -390,6 +390,25 @@ $risklist-header-arrow-bg: $primary-color-400;
 			display: flex;
 			align-items: flex-start;
 			justify-content: center;
+
+			.RiskInfo_info_label {
+				text-align: center;
+			}
+
+			.RiskInfo_info_info {
+				width: 100%;
+				padding: .25em;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: bold;
+				cursor: pointer;
+				border-radius: .5em;
+
+				&:hover {
+					background-color: rgba(#000,.05);
+				}
+			}
 		}
 
 		// .RiskInfo_cell-actions
@@ -428,5 +447,73 @@ $risklist-header-arrow-bg: $primary-color-400;
 	&.remove .status {
 		background-color: darken($error, 5%);
 		@extend %additionalPillStatus;
+	}
+}
+
+
+@media (max-width: 1025px) {
+	.rafi {
+		.RiskInfo_cell-classification {
+			width: calc(50% - 16px);
+		}
+
+		.RiskInfo_cell-risk-name {
+			width: calc(50% - 16px);
+		}
+
+		.RiskInfo_cell-ratings {
+			width: calc(#{percentage(8/12)} - 16px);
+		}
+		.RiskInfo_cell-actions {
+			width: calc(#{percentage(8/12)} - 16px);
+			justify-content: flex-start;
+		}
+	}
+
+	.rafi {
+		.riskList_risk_header {
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			height: auto;
+
+			.crumb {
+				width: 100%;
+				align-items: flex-start;
+				flex-direction: column;
+
+				.crumb_main ,
+				.crumb_sub {
+					height: 4rem;
+					width: 100%;
+					margin-left: 0;
+					.text {
+						width: 100%;
+					}
+					&:after {
+						display: none;
+					}
+				}
+			}
+
+			.actions {
+				margin-left: 0;
+				width: 100%;
+				.actions_addRisk  {
+					width: 100%;
+				}
+			}
+		}
+
+		.riskList_risk_content_header {
+			flex-direction: column;
+			.contentHeader_actions {
+				flex-wrap: wrap;
+				> .selectAutoComplete {
+					margin-right: 0 !important;
+					margin-bottom: 1rem;
+				}
+			}
+		}
 	}
 }

@@ -167,7 +167,7 @@ function RiskList(props) {
               components={{ Option: OperationOptionComponent }}
               value={operation}
               required={false}
-              className="col-sm-4"
+              className="col-md-4"
               key="1"
               leftSibling={(
                 <Button
@@ -193,7 +193,7 @@ function RiskList(props) {
               value={subOperation}
               components={{ Option: SubOperationOptionComponent }}
               required={false}
-              className="col-sm-4"
+              className="col-md-4"
               key="2"
               leftSibling={(
                 <Button
@@ -220,7 +220,7 @@ function RiskList(props) {
               value={project}
               required={false}
               key="3"
-              className="contentHeader_actions_projects col-sm-3"
+              className="contentHeader_actions_projects col-md-3"
               leftSibling={(
                 <Button
                   icon

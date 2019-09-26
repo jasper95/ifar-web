@@ -218,3 +218,18 @@
 		background-color: $rafi-impact-operation;
 	}
 }
+
+@media (max-width: 737px) {
+	.riskMap_map_filter {
+		flex-direction: column;
+		.iBttn {
+			width: 100%;
+
+			&.active {
+				box-shadow: none;
+			}
+		}
+	}
+
+
+}
