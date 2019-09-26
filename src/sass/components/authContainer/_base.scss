@@ -134,6 +134,21 @@
 	.authContainer {
 		// .authContainer_content
 		&_content {
+			width: 70%;
+		}
+
+		// .authContainer_bg
+		.authContainer_bg {
+			display: 30%;
+		}
+	}
+}
+
+
+@media (max-width: 800px) {
+	.authContainer {
+		// .authContainer_content
+		&_content {
 			width: 100%;
 		}
 
@@ -141,5 +156,12 @@
 		.authContainer_bg {
 			display: none;
 		}
+	}
+}
+
+
+@media (max-width: 737px) {
+	.authContainer_content {
+		padding: 5rem 1rem;
 	}
 }
