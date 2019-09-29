@@ -29,7 +29,6 @@ function Page(props) {
     hasNavigation, hasFooter,
     pageId, className, pageDescription,
   } = props;
-  console.log('props: ', props);
 
   const appData = useSelector(pageSelector);
   const dispatch = useDispatch();

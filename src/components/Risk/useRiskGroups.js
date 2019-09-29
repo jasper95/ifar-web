@@ -1,50 +1,54 @@
 import { useState, useEffect } from 'react';
-import gql from 'graphql-tag';
 import useQuery from 'apollo/query';
+import { useSelector } from 'react-redux';
 import useBusinessUnit from './useBusinessUnit';
-import { projectQuery, operationQuery, subOperationQuery } from './query';
+import {
+  projectQuery, operationQuery, subOperationQuery, businessUnitQuery,
+} from './query';
+
 
 function useRiskGroups(props) {
   const { riskType } = props;
   let userBusinessUnits = useBusinessUnit();
+  const user = useSelector(state => state.auth);
+  const isCustomSubOps = ['TEAM_LEADER', 'RISK_CHAMPION'].includes(user.ormp_role);
+  const isCustomProjects = ['TEAM_LEADER', 'RISK_CHAMPION'].includes(user.prmp_role);
   const [defaultBusinessUnit = null] = userBusinessUnits;
-  const [currentOp, setOp] = useState(null);
+  const [currentOp, setCurrentOp] = useState(null);
   const [project, setProject] = useState(null);
-  const [currentSubOp, setSubOp] = useState(null);
+  const [currentSubOp, setCurrentSubOp] = useState(null);
   const [currentBusinessUnit, setBusinessUnit] = useState(
     defaultBusinessUnit ? defaultBusinessUnit.id : null,
   );
   userBusinessUnits = userBusinessUnits.map(e => e.id);
   const operationResponse = useQuery(operationQuery, {
-    variables: { business_unit_id: currentBusinessUnit },
+    variables: {
+      business_unit_id: currentBusinessUnit,
+      ...isCustomSubOps && { ids: [currentOp].filter(Boolean) },
+    },
     skip: riskType === 'srmp',
   });
   const subOperationResponse = useQuery(subOperationQuery, {
-    variables: { operation_id: currentOp },
-    skip: !currentOp,
+    variables: isCustomSubOps ? { ids: user.sub_operations } : { operation_id: currentOp },
+    skip: riskType === 'srmp',
   });
-  console.log('subOperationResponse: ', subOperationResponse);
   const projectResponse = useQuery(
     projectQuery,
     {
-      variables: { sub_operation_id: currentSubOp },
-      skip: !currentSubOp || riskType !== 'prmp',
+      variables: isCustomProjects ? { ids: user.projects } : { sub_operation_id: currentSubOp },
+      skip: riskType !== 'prmp',
     },
   );
-  const businessUnitQuery = gql`
-    subscription getBusinessUnits($user_business_units: [uuid!]){
-      business_unit_${riskType}(order_by: {order: asc}, where: { id: { _in: $user_business_units }}) {
-        id
-        name
-        risk_count
-      }
-    }
-  `;
   const businessUnitResponse = useQuery(
     businessUnitQuery,
     {
       ws: true,
-      variables: { user_business_units: userBusinessUnits },
+      variables: {
+        user_business_units: userBusinessUnits,
+        riskType,
+        ...isCustomSubOps && riskType === 'ormp' && { sub_operations: user.sub_operations },
+        ...isCustomProjects && riskType === 'prmp' && { projects: user.projects },
+      },
     },
   );
   const { data: { project_risk: projects = [] } } = projectResponse;
@@ -53,22 +57,18 @@ function useRiskGroups(props) {
   useEffect(() => {
     if (projects.length) {
       setProject(projects[0].id);
-    } else {
-      setProject(null);
     }
   }, [projects]);
   useEffect(() => {
     if (subOperations.length) {
-      setSubOp(subOperations[0].id);
-    } else {
-      setSubOp(null);
+      const [first] = subOperations;
+      setCurrentSubOp(first.id);
+      setCurrentOp(first.operation_id);
     }
   }, [subOperations]);
   useEffect(() => {
     if (operations.length) {
-      setOp(operations[0].id);
-    } else {
-      setOp(null);
+      setCurrentOp(operations[0].id);
     }
   }, [operations]);
   const state = {
@@ -84,6 +84,8 @@ function useRiskGroups(props) {
     operationResponse,
     projects,
     subOperations,
+    isCustomProjects,
+    isCustomSubOps,
   };
   return [state, handleChange];
 
@@ -91,10 +93,10 @@ function useRiskGroups(props) {
     let func;
     switch (key) {
       case 'operation':
-        func = setOp;
+        func = setCurrentOp;
         break;
       case 'subOperation':
-        func = setSubOp;
+        func = setCurrentSubOp;
         break;
       case 'businessUnit':
         func = setBusinessUnit;

@@ -61,6 +61,8 @@ function User() {
         ormp_role
         ormp_business_units
         email
+        projects
+        sub_operations
       }
     }
   `;
@@ -185,6 +187,14 @@ function User() {
             onSave({
               data,
             });
+          },
+          customChangeHandler: {
+            sub_operations(val) {
+              return {
+                sub_operations: val.length > 1 ? val.slice(1, 2) : val,
+                projects: [],
+              };
+            },
           },
           dialogClassName: 'i_dialog_container--l',
         },

@@ -41,7 +41,7 @@ function RiskList(props) {
   const { data: { risk_dashboard: list = [] }, loading: listIsLoading } = riskListResponse;
   const dispatch = useDispatch();
   const [, onCreateRisk] = useCreateNode({ node: 'risk' });
-  const { data: { [`business_unit_${riskType}`]: businessUnits = [] } } = businessUnitResponse;
+  const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
   const selectedBusinessUnit = businessUnits.find(e => e.id === businessUnit);
   const selectedProject = projects.find(e => e.id === project);
   const selectedOperation = operations.find(e => e.id === operation);
@@ -77,9 +77,9 @@ function RiskList(props) {
             key={e.id}
             iconEl={(
               <span className="riskList_unitList_item_badge">
-                {e.risk_count}
+                {e.risks_aggregate.aggregate.count}
               </span>
-              )}
+            )}
           />
         ))}
       </div>
@@ -169,7 +169,7 @@ function RiskList(props) {
               required={false}
               className="col-md-4"
               key="1"
-              leftSibling={(
+              leftSibling={user.role === 'ADMIN' && (
                 <Button
                   icon
                   className="actions_addRisk iBttn"
@@ -195,7 +195,7 @@ function RiskList(props) {
               required={false}
               className="col-md-4"
               key="2"
-              leftSibling={(
+              leftSibling={user.role === 'ADMIN' && (
                 <Button
                   icon
                   className="actions_addRisk iBttn"
@@ -221,7 +221,7 @@ function RiskList(props) {
               required={false}
               key="3"
               className="contentHeader_actions_projects col-md-3"
-              leftSibling={(
+              leftSibling={user.role === 'ADMIN' && (
                 <Button
                   icon
                   className="actions_addRisk iBttn"
@@ -229,7 +229,7 @@ function RiskList(props) {
                   tooltipLabel="Add Project"
                   onClick={() => showProjectDialog(undefined, 'project')}
                 />
-)}
+              )}
             />
           </>
         )}
@@ -356,7 +356,7 @@ function RiskList(props) {
           >
             edit
           </Button>
-          {(!data.risks && !data.projects && !data.subOps) && (
+          {(!data.risks && !data.projects && !data.subOps && user.role === 'ADMIN') && (
             <Button
               icon
               onClick={() => handleDelete(value, data.type)}

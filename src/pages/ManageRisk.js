@@ -35,6 +35,8 @@ function ManageRisk(props) {
     operationResponse,
     subOperationResponse,
     projects,
+    isCustomProjects,
+    isCustomSubOps,
   } = riskGroupState;
   const [currentClassification, setCurrentClassification] = useState(null);
   const [currentImpactDriver, setCurrentImpactDriver] = useState(null);
@@ -144,6 +146,8 @@ function ManageRisk(props) {
         subOperation={currentSubOp}
         subOperations={subOperations}
         projects={projects}
+        isCustomProjects={isCustomProjects}
+        isCustomSubOps={isCustomSubOps}
       />
     </div>
   );

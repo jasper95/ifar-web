@@ -1,5 +1,19 @@
 import gql from 'graphql-tag';
 
+export const businessUnitQuery = gql`
+  subscription getBusinessUnits($user_business_units: [uuid!], $riskType: String!, $projects: [uuid!], $sub_operations: [uuid!]) {
+    business_unit(where: {id: {_in: $user_business_units}}) {
+      risks_aggregate(where: {type: {_eq: $riskType}, project_id: {_in: $projects }, sub_operation_id: {_in: $sub_operations}}) {
+        aggregate {
+          count(columns: id)
+        }
+      }
+      name
+      id
+    }
+  }
+`;
+
 export const chartQuery = gql`
   subscription getChart($risk_type: String, $sub_operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!){
     risk(where: {business_unit_id: {_eq: $business_unit_id }, type: { _eq: $risk_type }, sub_operation_id: { _eq: $sub_operation_id }, project_id: { _eq: $project_id } }){
@@ -58,8 +72,8 @@ export const riskDetailsFragment = gql`
 `;
 
 export const operationQuery = gql`
-  query($business_unit_id: uuid) {
-    operation_sub_operation(where: { business_unit_id: {_eq: $business_unit_id} }, order_by: { name: asc }) {
+  query($business_unit_id: uuid, $ids: [uuid!]) {
+    operation_sub_operation(where: { business_unit_id: {_eq: $business_unit_id}, id: { _in: $ids } }, order_by: { name: asc }) {
       id
       name
       sub_operation_count
@@ -68,24 +82,26 @@ export const operationQuery = gql`
 `;
 
 export const subOperationQuery = gql`
-  query($operation_id: uuid) {
-    sub_operation_project(where: { operation_id: {_eq: $operation_id} }, order_by: { name: asc }) {
+  query($operation_id: uuid, $ids: [uuid!]) {
+    sub_operation_project(where: { operation_id: {_eq: $operation_id }, id: { _in: $ids } }, order_by: { name: asc }) {
       id
       name
       project_count
       risk_count
       operation_name
+      operation_id
     }
   }
 `;
 
 export const projectQuery = gql`
-  query($sub_operation_id: uuid) {
-    project_risk(where: { sub_operation_id: {_eq: $sub_operation_id} }, order_by: { name: asc }) {
+  query($sub_operation_id: uuid, $ids: [uuid!]) {
+    project_risk(where: { sub_operation_id: {_eq: $sub_operation_id}, id: { _in: $ids } }, order_by: { name: asc }) {
       id
       name
       risk_count
       sub_operation_name
+      sub_operation_id
     }
   }
 `;

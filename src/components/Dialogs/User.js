@@ -14,7 +14,7 @@ import useQuery from 'apollo/query';
 function UserDialog(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
-  const { onElementChange, onChange } = formHandlers;
+  const { onElementChange } = formHandlers;
   const user = useSelector(state => state.auth);
   const [first] = fields.sub_operations || [];
   const subOperationResponse = useQuery(
@@ -160,10 +160,7 @@ function UserDialog(props) {
               required
               placeholder="-Select-"
               label="Operational Sub-unit"
-              onChange={(val) => {
-                console.log('val: ', val);
-                onElementChange(val.length > 1 ? val.slice(1, 2) : val, 'sub_operations');
-              }}
+              onChange={onElementChange}
               options={subOperations.map(e => ({ value: e.id, label: `${e.name} (${e.operation_name})` }))}
               value={fields.sub_operations || []}
               className="col-sm-6"
@@ -182,6 +179,7 @@ function UserDialog(props) {
               value={fields.projects || []}
               className="col-sm-6"
               error={errors.projects}
+              isMulti
             />
           )}
         </div>

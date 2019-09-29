@@ -86,7 +86,6 @@ function RiskPreview(props) {
   );
 
   function showRatingDialog(stage) {
-    console.log('risk', risk)
     dispatch({
       type: 'SHOW_DIALOG',
       payload: {

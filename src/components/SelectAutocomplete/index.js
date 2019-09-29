@@ -27,12 +27,13 @@ function SelectAutocomplete(props) {
         setCurrentValue(selectOptions.find(e => e.value === value));
       }
     }
-  }, [value]);
+  }, [value, selectOptions]);
   return (
     <div className={cn(`selectAutoComplete ${className}`, {
-      'selectAutoComplete-hasLeftSibling' : !!leftSibling,
-      'selectAutoComplete-hasRightSibling' : !!rightSibling,
-    })}>
+      'selectAutoComplete-hasLeftSibling': !!leftSibling,
+      'selectAutoComplete-hasRightSibling': !!rightSibling,
+    })}
+    >
       {label && (
         <span className="selectAutoComplete_label">
           {label}
@@ -83,7 +84,7 @@ function SelectAutocomplete(props) {
     const result = (value && !currentValue) || (!value && currentValue);
     if (value && currentValue) {
       if (props.isMulti) {
-        return value.join(',') !== currentValue.map(e => e.value).join(',');
+        return value.join(',') !== currentValue.map(e => (typeof e === 'object' ? e.value : e)).join(',');
       }
       return value !== currentValue.value;
     }

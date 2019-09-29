@@ -28,6 +28,8 @@ const sessionQuery = gql`
         prmp_business_units
         srmp_role
         srmp_business_units
+        projects
+        sub_operations
       }
     }
   }
