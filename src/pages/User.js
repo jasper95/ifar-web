@@ -186,6 +186,7 @@ function User() {
               data,
             });
           },
+          dialogClassName: 'i_dialog_container--l',
         },
       },
     });

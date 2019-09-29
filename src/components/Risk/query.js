@@ -74,6 +74,7 @@ export const subOperationQuery = gql`
       name
       project_count
       risk_count
+      operation_name
     }
   }
 `;
@@ -84,6 +85,7 @@ export const projectQuery = gql`
       id
       name
       risk_count
+      sub_operation_name
     }
   }
 `;

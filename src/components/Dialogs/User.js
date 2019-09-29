@@ -8,12 +8,26 @@ import * as yup from 'yup';
 import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools';
 import { USER_ROLES, MANAGEMENT_ROLES } from 'pages/User';
 import { useSelector } from 'react-redux';
+import { subOperationQuery, projectQuery } from 'components/Risk/query';
+import useQuery from 'apollo/query';
 
 function UserDialog(props) {
   const { formState, formHandlers } = props;
   const { fields, errors } = formState;
-  const { onElementChange } = formHandlers;
+  const { onElementChange, onChange } = formHandlers;
   const user = useSelector(state => state.auth);
+  const [first] = fields.sub_operations || [];
+  const subOperationResponse = useQuery(
+    subOperationQuery, { ws: false, variables: { operation_id: null } },
+  );
+  const projectResponse = useQuery(projectQuery,
+    { ws: false, variables: { sub_operation_id: first }, skip: Boolean(!first) });
+  const { data: { sub_operation_project: subOperations = [] } } = subOperationResponse;
+  const { data: { project_risk: projects = [] } } = projectResponse;
+  const showSubOpField = fields.ormp_role
+    && ['RISK_CHAMPION', 'TEAM_LEADER'].includes(fields.ormp_role);
+  const showProjectField = fields.prmp_role
+    && ['RISK_CHAMPION', 'TEAM_LEADER'].includes(fields.ormp_role);
   return (
     <>
       <div className="row">
@@ -41,30 +55,34 @@ function UserDialog(props) {
             className="iField"
           />
         </div>
+        <div className="col-sm-6">
+          <TextField
+            id="email"
+            required
+            label="Email"
+            type="email"
+            onChange={onElementChange}
+            error={!!errors.email}
+            errorText={errors.email}
+            value={fields.email || ''}
+            className="iField"
+          />
+        </div>
+        <div className="col-sm-6">
+          {user.id !== fields.id && (
+            <SelectAutocomplete
+              id="role"
+              required
+              placeholder="-Select-"
+              label="User Role"
+              onChange={onElementChange}
+              options={USER_ROLES}
+              value={fields.role || []}
+              error={errors.role}
+            />
+          )}
+        </div>
       </div>
-      <TextField
-        id="email"
-        required
-        label="Email"
-        type="email"
-        onChange={onElementChange}
-        error={!!errors.email}
-        errorText={errors.email}
-        value={fields.email || ''}
-        className="iField"
-      />
-      {user.id !== fields.id && (
-        <SelectAutocomplete
-          id="role"
-          required
-          placeholder="-Select-"
-          label="User Role"
-          onChange={onElementChange}
-          options={USER_ROLES}
-          value={fields.role || []}
-          error={errors.role}
-        />
-      )}
       {fields.role === 'USER' && fields.id !== user.id && (
         <div className="row">
           <SelectAutocomplete
@@ -136,6 +154,36 @@ function UserDialog(props) {
             className="col-sm-6"
             error={errors.prmp_role}
           />
+          {showSubOpField && (
+            <SelectAutocomplete
+              id="sub_operations"
+              required
+              placeholder="-Select-"
+              label="Operational Sub-unit"
+              onChange={(val) => {
+                console.log('val: ', val);
+                onElementChange(val.length > 1 ? val.slice(1, 2) : val, 'sub_operations');
+              }}
+              options={subOperations.map(e => ({ value: e.id, label: `${e.name} (${e.operation_name})` }))}
+              value={fields.sub_operations || []}
+              className="col-sm-6"
+              error={errors.sub_operations}
+              isMulti
+            />
+          )}
+          {showProjectField && (
+            <SelectAutocomplete
+              id="projects"
+              required
+              placeholder="-Select-"
+              label="Projects"
+              onChange={onElementChange}
+              options={projects.map(e => ({ value: e.id, label: `${e.name} (${e.sub_operation_name})` }))}
+              value={fields.projects || []}
+              className="col-sm-6"
+              error={errors.projects}
+            />
+          )}
         </div>
       )}
     </>

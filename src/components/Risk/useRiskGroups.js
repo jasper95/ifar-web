@@ -23,6 +23,7 @@ function useRiskGroups(props) {
     variables: { operation_id: currentOp },
     skip: !currentOp,
   });
+  console.log('subOperationResponse: ', subOperationResponse);
   const projectResponse = useQuery(
     projectQuery,
     {
