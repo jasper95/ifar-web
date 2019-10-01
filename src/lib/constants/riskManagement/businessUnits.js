@@ -102,7 +102,7 @@ export default [{
     }],
 }, {
   id: 'eaea63b5-fb13-4cee-b328-3fcc76447cd7',
-  name: 'KAC',
+  name: 'CFL',
   operations: [
     {
       name: 'KAC Operations',
