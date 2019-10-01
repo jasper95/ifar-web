@@ -13,7 +13,14 @@ import RiskPreviewInfo from './PreviewInfo';
 
 function RiskPreview(props) {
   const {
-    risk, className, readOnly, onMutateRisk,
+    risk,
+    className,
+    readOnly,
+    onMutateRisk,
+    projects,
+    subOperations,
+    businessUnits,
+    operations,
   } = props;
   const dispatch = useDispatch();
   const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
@@ -146,6 +153,10 @@ function RiskPreview(props) {
           props: {
             dialogId: 'CopyRisk',
             title: 'Copy Risk',
+            projects,
+            subOperations,
+            operations,
+            businessUnits,
             onValid: data => onMutateRisk({
               data: omit(data, 'id'),
               action: 'COPY',

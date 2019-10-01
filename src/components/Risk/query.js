@@ -68,6 +68,7 @@ export const riskDetailsFragment = gql`
     residual_likelihood
     inherent_likelihood
     residual_impact_driver
+    type
   }
 `;
 
@@ -77,6 +78,7 @@ export const operationQuery = gql`
       id
       name
       sub_operation_count
+      business_unit_id
     }
   }
 `;
