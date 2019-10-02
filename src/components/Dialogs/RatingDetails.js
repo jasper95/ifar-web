@@ -10,17 +10,19 @@ function RatingDetails(props) {
   ({ [stage]: reason = {} } = reason);
   ({ [stage]: impact = {} } = impact);
   return (
-    <div>
+    <div className='RatingDetails'>
       {impactDrivers.map(({ label, impact: key }) => (
-        <div>
-          <h3>{label}</h3>
-          <div>
-            <span>Rating:</span>
-            <span>{impact[key]}</span>
-          </div>
-          <div>
-            <span>Reason:</span>
-            <span>{reason[key]}</span>
+        <div className='RatingDetails_item'>
+          <h3 className='RatingDetails_item_header'>{label}</h3>
+          <div className="row">
+            <div className='col col-md-2 RatingDetails_item_rating'>
+              <span className='label'>Rating</span>
+              <span className='value'>{ impact[key] ? impact[key] : '0'  }</span>
+            </div>
+            <div className='col col-md-10 RatingDetails_item_reason'>
+              <span className='label'>Reason:</span>
+              <span className='value'>{reason[key] ? reason[key] : 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dolores, praesentium voluptate aliquid quos maxime autem laboriosam sed vitae voluptatum eaque repellendus similique omnis dolorum?' }</span>
+            </div>
           </div>
         </div>
       ))}

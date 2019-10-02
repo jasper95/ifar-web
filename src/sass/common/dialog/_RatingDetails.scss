@@ -1,0 +1,59 @@
+.RatingDetails {
+	font-size: 1rem;
+
+	// .RatingDetails_item
+	&_item {
+		font-size: 1em;
+
+		// .RatingDetails_item_header
+		&_header {
+			font-size: 1.25em;
+			width: 100%;
+			font-weight: bold;
+			color: $primary-color-600;
+			text-align: left;
+			margin-bottom: 0;
+			border-bottom: 2px solid $c_gray-200;
+			margin-bottom: 1rem;
+		}
+
+		// .RatingDetails_item_rating
+		&_rating {
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+			flex-direction: column;
+			background-color: $primary-color-L900;
+			border-radius: .5rem;
+			padding: 1rem;
+			.label {
+				width: 100%;
+				text-align: center;
+			}
+
+			.value {
+				width: 100%;
+				font-size: 2em;
+				text-align: center;
+				font-weight: bold;
+			}
+		}
+
+		// .RatingDetails_item_reason
+		&_reason {
+			padding: 1em;
+		}
+
+		.row {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.label {
+			font-size: .9em;
+			font-weight: bold;
+			color: $primary-color-600;
+		}
+	}
+}

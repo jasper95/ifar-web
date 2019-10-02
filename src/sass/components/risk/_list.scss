@@ -423,7 +423,18 @@ $risklist-header-arrow-bg: $primary-color-400;
 				}
 			}
 		}
+
+		&.updated {
+			.RiskInfo_info_info {
+				background-color: $teal;
+				padding: .5em 1em;
+				border-radius: .25em;
+				font-weight: 600;
+				color: #FFF;
+			}
+		}
 	}
+
 }
 
 %additionalPillStatus {
