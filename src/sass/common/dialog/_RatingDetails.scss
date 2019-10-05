@@ -47,13 +47,14 @@
 		.row {
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			justify-content: flex-start;
 		}
 
 		.label {
 			font-size: .9em;
 			font-weight: bold;
 			color: $primary-color-600;
+			padding-right: 10px;
 		}
 	}
 }
