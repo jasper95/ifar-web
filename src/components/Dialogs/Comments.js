@@ -8,6 +8,7 @@ const Dialog = flowRight(
 
 Dialog.defaultProps = {
   dialogActionsRenderer: () => null,
+  dialogClassName: 'i_dialog_container--l',
 };
 
 export default Dialog;
