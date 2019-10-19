@@ -25,7 +25,7 @@ export default function RiskMap(props) {
   const { data: { project_risk: projects = [] } } = projectResponse;
   const [currentImpact, setImpact] = useState('');
   const [currentStage, setStage] = useState('residual');
-  const { data: { [`business_unit_${riskType}`]: businessUnits = [] } } = businessUnitResponse;
+  const { data: { business_unit: businessUnits = [] } } = businessUnitResponse;
   const variables = {
     business_unit_id: currentBusinessUnit,
     risk_type: riskType,
