@@ -87,3 +87,25 @@
 		}
 	}
 }
+
+.footer-simple {
+	.container {
+		max-width: 100%;
+		padding: 0 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		white-space: nowrap;
+	}
+
+	.footer_colItem-brand_logo {
+		width: 7rem;
+	}
+
+	.footer_colItem-copyright {
+		margin-left: auto;
+		color: rgba($text-color-white, .5);
+		font-size: 1rem;
+		font-family: $font-family;
+	}
+}

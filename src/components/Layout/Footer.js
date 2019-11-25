@@ -7,7 +7,8 @@ import Link from 'react-router-dom/Link';
 import 'sass/components/footer/index.scss';
 
 
-export default function Footer() {
+function Footer(props) {
+  const { isSimple } = props
   const informationMenu = [
     {
       name: 'About Us',
@@ -56,6 +57,25 @@ export default function Footer() {
       </Link>
     </li>
   ));
+
+  if (isSimple) {
+    return (
+      <footer className="footer footer-simple">
+        <div className="container">
+          <Link to="/" className="footer_colItem-brand_logo">
+            <img
+              src="/static/img/logo.png"
+              alt=""
+            />
+          </Link>
+          <div className="footer_colItem-copyright">
+            Copyright © 2019 RAMONS.
+          </div>
+        </div>
+      </footer>
+    )
+  }
+
 
   return (
     <footer className="footer">
@@ -122,3 +142,9 @@ export default function Footer() {
     </footer>
   );
 }
+
+Footer.defaultProps = {
+  isSimple: true,
+};
+
+export default Footer;
