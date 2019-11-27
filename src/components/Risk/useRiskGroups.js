@@ -30,12 +30,14 @@ function useRiskGroups(props) {
   });
   const subOperationResponse = useQuery(subOperationQuery, {
     variables: isCustomSubOps ? { ids: user.sub_operations } : { operation_id: currentOp },
+    business_unit_id: currentBusinessUnit,
     skip: riskType === 'srmp',
   });
   const projectResponse = useQuery(
     projectQuery,
     {
       variables: isCustomProjects ? { ids: user.projects } : { sub_operation_id: currentSubOp },
+      business_unit_id: currentBusinessUnit,
       skip: riskType !== 'prmp',
     },
   );

@@ -4,26 +4,26 @@ export default [
     path: '/',
     label: 'Home',
   },
-  {
-    id: 2,
-    path: '/dashboard',
-    label: 'Dashboard',
-  },
-  {
-    id: 3,
-    path: '/discussion',
-    label: 'Discussion Board',
-  },
-  {
-    id: 4,
-    path: '/audit',
-    label: 'Audit Observations',
-  },
-  {
-    id: 5,
-    path: '/actions',
-    label: 'Manage Actions',
-  },
+  // {
+  //   id: 2,
+  //   path: '/dashboard',
+  //   label: 'Dashboard',
+  // },
+  // {
+  //   id: 3,
+  //   path: '/discussion',
+  //   label: 'Discussion Board',
+  // },
+  // {
+  //   id: 4,
+  //   path: '/audit',
+  //   label: 'Audit Observations',
+  // },
+  // {
+  //   id: 5,
+  //   path: '/actions',
+  //   label: 'Manage Actions',
+  // },
   {
     id: 6,
     label: 'Risk Management',

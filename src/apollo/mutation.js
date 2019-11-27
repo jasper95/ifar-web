@@ -38,7 +38,7 @@ export default function useMutation(params = {}) {
       },
       body: JSON.stringify(body),
     };
-    let response = await fetch(`/api${url}`, options);
+    let response = await fetch(`${process.env.API_URL}${url}`, options);
     const { status } = response;
     response = await response.json();
     setLoading(false);

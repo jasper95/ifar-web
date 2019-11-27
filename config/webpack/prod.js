@@ -13,9 +13,9 @@ const { baseConfig } = require('./base');
 module.exports = baseConfig({
   mode: 'production',
   output: {
-    publicPath: '/static/',
-    filename: 'js/[name].[chunkhash].js',
-    chunkFilename: 'js/[name].[chunkhash].js',
+    publicPath: '/',
+    filename: 'static/js/[name].[chunkhash].js',
+    chunkFilename: 'static/js/[name].[chunkhash].js',
   },
   optimization: {
     minimize: true,
@@ -69,8 +69,8 @@ module.exports = baseConfig({
       dry: false,
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash:8].css',
-      chunkFilename: 'css/[name].[contenthash:8].css',
+      filename: 'static/css/[name].[contenthash:8].css',
+      chunkFilename: 'static/css/[name].[contenthash:8].css',
     }),
     new WorkboxWebpackPlugin.GenerateSW({
       clientsClaim: true,
@@ -85,7 +85,7 @@ module.exports = baseConfig({
       ],
     }),
     new CopyPlugin([
-      { from: 'public', to: '' },
+      { from: 'public', to: 'static' },
     ]),
     new CompressionPlugin({
       test: /\.js$|\.css$/,

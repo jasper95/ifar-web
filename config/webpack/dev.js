@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const express = require('express');
 const { baseConfig, resolvePath } = require('./base');
 
-require('dotenv').config({ path: resolvePath('config/.env') });
 
 const result = baseConfig({
   mode: 'development',

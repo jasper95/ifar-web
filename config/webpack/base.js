@@ -5,6 +5,8 @@ const LoadableWebpackPlugin = require('@loadable/webpack-plugin');
 const DotEnv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+require('dotenv').config({ path: resolvePath('config/.env') });
+
 const configs = {
   development: {
     styleLoader: require.resolve('style-loader'),

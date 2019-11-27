@@ -16,16 +16,13 @@ function SelectAutocomplete(props) {
       return options.map(e => ({ label: e, value: e }));
     }
     return options;
-  },
-  [options]);
+  }, [options]);
   const [currentValue, setCurrentValue] = useState(setInitialValue);
   useEffect(() => {
-    if (isNotEqualValue()) {
-      if (props.isMulti) {
-        setCurrentValue(value ? value.map(e => selectOptions.find(ee => ee.value === e)) : value);
-      } else {
-        setCurrentValue(selectOptions.find(e => e.value === value));
-      }
+    if (props.isMulti) {
+      setCurrentValue(value ? value.map(e => selectOptions.find(ee => ee.value === e)) : value);
+    } else {
+      setCurrentValue(selectOptions.find(e => e.value === value));
     }
   }, [value, selectOptions]);
   return (
@@ -78,17 +75,6 @@ function SelectAutocomplete(props) {
       onChange(newVal.value, id, newVal);
       setCurrentValue(newVal ? { ...newVal } : newVal);
     }
-  }
-
-  function isNotEqualValue() {
-    const result = (value && !currentValue) || (!value && currentValue);
-    if (value && currentValue) {
-      if (props.isMulti) {
-        return value.join(',') !== currentValue.map(e => (typeof e === 'object' ? e.value : e)).join(',');
-      }
-      return value !== currentValue.value;
-    }
-    return result;
   }
 }
 
