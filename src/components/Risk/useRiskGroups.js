@@ -29,15 +29,25 @@ function useRiskGroups(props) {
     skip: riskType === 'srmp',
   });
   const subOperationResponse = useQuery(subOperationQuery, {
-    variables: isCustomSubOps ? { ids: user.sub_operations } : { operation_id: currentOp },
-    business_unit_id: currentBusinessUnit,
+    variables: isCustomSubOps ? {
+      ids: user.sub_operations,
+      business_unit_id: currentBusinessUnit,
+    } : {
+      operation_id: currentOp,
+      business_unit_id: currentBusinessUnit,
+    },
     skip: riskType === 'srmp',
   });
   const projectResponse = useQuery(
     projectQuery,
     {
-      variables: isCustomProjects ? { ids: user.projects } : { sub_operation_id: currentSubOp },
-      business_unit_id: currentBusinessUnit,
+      variables: isCustomProjects ? {
+        ids: user.projects,
+        business_unit_id: currentBusinessUnit,
+      } : {
+        sub_operation_id: currentSubOp,
+        business_unit_id: currentBusinessUnit,
+      },
       skip: riskType !== 'prmp',
     },
   );
