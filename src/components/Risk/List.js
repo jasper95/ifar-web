@@ -116,7 +116,7 @@ function RiskList(props) {
                 onChange={newPage => setCurrentPage(newPage)}
                 current={currentPage}
                 pageSize={10}
-                total={selectedBusinessUnit ? selectedBusinessUnit.risk_count : 0}
+                total={selectedBusinessUnit ? selectedBusinessUnit.risks_aggregate.aggregate.count : 0}
                 hideOnSinglePage
               />
             </div>
