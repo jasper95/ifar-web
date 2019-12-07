@@ -6,7 +6,7 @@ export default {
     '3ee4a7e0-c500-4378-a3d5-bba012e0ebb5': '#7B76E4',
   },
   impact: {
-    operation: '#4197C0',
+    operational: '#4197C0',
     management_action: '#0C5597',
     reputation: '#7C76E5',
     financial: '#FF4B3E',

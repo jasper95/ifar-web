@@ -127,4 +127,7 @@ export default [{
 }, {
   id: 'ac422fa3-e143-491a-ac01-a8a6093d6e6d',
   name: 'DACF',
+}, {
+  id: 'd3feba87-39b7-4cf6-86d4-ce1bbed2c9c0',
+  name: 'INFRA',
 }];

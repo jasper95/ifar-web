@@ -1,6 +1,6 @@
 export default [
   {
-    impact: 'operations',
+    impact: 'operational',
     label: 'Operations',
   },
   {
