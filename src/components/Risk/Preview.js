@@ -21,6 +21,7 @@ function RiskPreview(props) {
     subOperations,
     businessUnits,
     operations,
+    riskType,
   } = props;
   const dispatch = useDispatch();
   const inherentCalc = risk.inherent_rating * risk.inherent_likelihood;
@@ -116,6 +117,7 @@ function RiskPreview(props) {
           props: {
             dialogId: 'InherentRisk',
             title: 'Inherent Risk',
+            riskType,
             onValid: onValidInherentRisk,
             initialFields: {
               ...risk,

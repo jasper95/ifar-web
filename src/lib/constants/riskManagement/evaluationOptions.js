@@ -314,3 +314,36 @@ export const legalComplianceOptions = [
     label: '5 - Lititaion involving company dissoluton or closure; Ciminal Prosection involving the Board or officer, imprisonment < 6 months may be imposed; Changes in laws/regulations that require a change in strategy',
   },
 ];
+
+export const prmpOptions = {
+  financial: [
+    'Additional Spend up to 5% of original budget',
+    'Additional Spend >5% up to 15% of original budget',
+    'Additional Spend >15% up to 25% of original budget',
+    'Additional Spend >25% to 30% of original budget',
+    'Additional Spend > 30% of original budget',
+  ].map((e, index) => ({
+    value: index + 1,
+    label: e,
+  })),
+  hse: [
+    'Minor injury, minimum environmental damage or Impact',
+    'Major injury to 1 individual, moderate environmental damage or impact',
+    'Major injuries to multiple  individuals, major environmental damage or impact',
+    '1 fatality, Massive environmental damage or impact',
+    'More than 1 fatality, Massive environmental damage or impact',
+  ].map((e, index) => ({
+    value: index + 1,
+    label: e,
+  })),
+  operational: [
+    'A total delay of less than 3 month',
+    'A total delay of between 3-9 months',
+    'A total delay of between 9-18 months',
+    'A total delay of between 18-24 months',
+    'A total delay of more than 24 months',
+  ].map((e, index) => ({
+    value: index + 1,
+    label: e,
+  })),
+};

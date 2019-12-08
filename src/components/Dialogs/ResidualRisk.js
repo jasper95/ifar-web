@@ -8,8 +8,10 @@ import { getValidationResult, fieldIsRequired } from 'lib/tools';
 import * as yup from 'yup';
 import { impact } from './InherentRisk';
 
-function InherentRisk(props) {
-  const { formState, formHandlers, isRerate } = props;
+function ResidualRisk(props) {
+  const {
+    formState, formHandlers, isRerate, riskType,
+  } = props;
   const { fields, errors } = formState;
   const { onElementChange } = formHandlers;
   return (
@@ -34,6 +36,7 @@ function InherentRisk(props) {
       )}
       <RiskEvaluation
         type="residual"
+        riskType={riskType}
         previousRating={fields.previous_details}
         onChange={onElementChange}
         basis={fields.basis}
@@ -52,7 +55,7 @@ function InherentRisk(props) {
 
 const Dialog = flowRight(
   withDialog(),
-)(InherentRisk);
+)(ResidualRisk);
 
 Dialog.defaultProps = {
   validator,

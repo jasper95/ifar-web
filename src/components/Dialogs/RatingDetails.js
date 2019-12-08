@@ -3,10 +3,6 @@ import withDialog from 'lib/hocs/dialog';
 import flowRight from 'lodash/flowRight';
 import { impactDrivers } from 'components/RiskMap/Categories';
 import {
-  basisOptions,
-  reputionOptions,
-  frequencyOptions,
-  probabilityOptions,
   managementActionOptions,
   financialOptions,
   operationalOptions,

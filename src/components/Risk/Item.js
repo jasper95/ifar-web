@@ -30,6 +30,7 @@ function RiskItem(props) {
       <Preview
         className={`${className}_preview`}
         onMutateRisk={onMutateRisk}
+        riskType
         {...previewProps}
       />
       <ExpansionPanel

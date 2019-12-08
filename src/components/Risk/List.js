@@ -250,6 +250,7 @@ function RiskList(props) {
         path: 'InherentRisk',
         props: {
           dialogId: 'InherentRisk',
+          riskType,
           title: 'Inherent Risk',
           onValid: (data) => {
             const impactDriver = getImpactDriver(data.impact_details.inherent);

@@ -8,8 +8,8 @@ import { getValidationResult, fieldIsRequired, fieldIsInvalid } from 'lib/tools'
 import * as yup from 'yup';
 import { impact } from './InherentRisk';
 
-function InherentRisk(props) {
-  const { formState, formHandlers } = props;
+function TargetRisk(props) {
+  const { formState, formHandlers, riskType } = props;
   const { fields, errors } = formState;
   const { onElementChange } = formHandlers;
   return (
@@ -34,6 +34,7 @@ function InherentRisk(props) {
       />
       <RiskEvaluation
         type="target"
+        riskType={riskType}
         onChange={onElementChange}
         reason={fields.reason.target}
         currentEvaluation={fields.current_stage_impact_details}
@@ -52,7 +53,7 @@ function InherentRisk(props) {
 
 const Dialog = flowRight(
   withDialog(),
-)(InherentRisk);
+)(TargetRisk);
 
 Dialog.defaultProps = {
   validator,

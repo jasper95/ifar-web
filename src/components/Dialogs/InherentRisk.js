@@ -10,7 +10,7 @@ import classifications from 'lib/constants/riskManagement/classifications';
 import * as yup from 'yup';
 
 function InherentRisk(props) {
-  const { formState, formHandlers } = props;
+  const { formState, formHandlers, riskType } = props;
   const { fields, errors } = formState;
   const { onElementChange } = formHandlers;
   return (
@@ -87,6 +87,7 @@ function InherentRisk(props) {
       />
       <RiskEvaluation
         type="inherent"
+        riskType={riskType}
         onChange={onElementChange}
         basis={fields.basis}
         reason={fields.reason.inherent}

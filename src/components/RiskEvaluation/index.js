@@ -14,6 +14,7 @@ import {
   operationalOptions,
   legalComplianceOptions,
   healthSafetySecurityOptions,
+  prmpOptions,
 } from 'lib/constants/riskManagement/evaluationOptions';
 import { useSelector } from 'react-redux';
 import Header from './Header';
@@ -69,6 +70,7 @@ function RiskEvaluation(props) {
     currentEvaluation,
     prevStageEvaluation,
     reason,
+    riskType,
   } = props;
   const user = useSelector(state => state.auth);
   const previousStage = {
@@ -239,7 +241,7 @@ function RiskEvaluation(props) {
         )}
         id="impact.financial"
         name="impact.financial"
-        controls={financialOptions[businessUnit] || []}
+        controls={riskType === 'prmp' ? prmpOptions.financial : financialOptions[businessUnit] || []}
         value={impact.financial}
         onChange={newVal => onChangeImpact({ ...impact, financial: Number(newVal) })}
         type="radio"
@@ -270,7 +272,7 @@ function RiskEvaluation(props) {
         id="impact.health_safety_security"
         name="impact.health_safety_security"
         value={impact.health_safety_security}
-        controls={healthSafetySecurityOptions}
+        controls={riskType === 'prmp' ? prmpOptions.hse : healthSafetySecurityOptions}
         onChange={newVal => onChangeImpact({ ...impact, health_safety_security: Number(newVal) })}
         type="radio"
       />
@@ -299,7 +301,7 @@ function RiskEvaluation(props) {
         )}
         id="impact.operational"
         name="impact.operational"
-        controls={operationalOptions}
+        controls={riskType === 'prmp' ? prmpOptions.operational : operationalOptions}
         value={impact.operational}
         onChange={newVal => onChangeImpact({ ...impact, operational: Number(newVal) })}
         type="radio"
