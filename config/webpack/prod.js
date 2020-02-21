@@ -86,6 +86,7 @@ module.exports = baseConfig({
     }),
     new CopyPlugin([
       { from: 'public', to: 'static' },
+      { from: 'src/web.config', to: '' },
     ]),
     new CompressionPlugin({
       test: /\.js$|\.css$/,
