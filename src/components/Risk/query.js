@@ -15,8 +15,8 @@ export const businessUnitQuery = gql`
 `;
 
 export const chartQuery = gql`
-  subscription getChart($risk_type: String, $sub_operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!){
-    risk(where: {business_unit_id: {_eq: $business_unit_id }, type: { _eq: $risk_type }, sub_operation_id: { _eq: $sub_operation_id }, project_id: { _eq: $project_id } }){
+  subscription getChart($risk_type: String, $sub_operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!, $operation_id: uuid){
+    risk_dashboard(where: {business_unit_id: {_eq: $business_unit_id }, type: { _eq: $risk_type }, sub_operation_id: { _eq: $sub_operation_id }, project_id: { _eq: $project_id }, operation_id: { _eq: $operation_id} }){
       classification_id
       residual_impact_driver
       residual_rating
@@ -109,9 +109,10 @@ export const projectQuery = gql`
 `;
 
 export const riskListQuery = gql`
-  subscription getList($risk_type: String, $sub_operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!, $classification_id: uuid, $residual_impact_driver: String, $residual_vulnerability: String, $offset:Int , $limit: Int =10){
+  subscription getList($risk_type: String, $sub_operation_id: uuid, $operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!, $classification_id: uuid, $residual_impact_driver: String, $residual_vulnerability: String, $offset:Int , $limit: Int =10){
     risk_dashboard(
       where: {
+        operation_id: { _eq: $operation_id },
         sub_operation_id: { _eq: $sub_operation_id },
         project_id: { _eq: $project_id },
         type: { _eq: $risk_type }, 
@@ -133,10 +134,31 @@ export const riskListQuery = gql`
   ${riskDetailsFragment}
 `;
 
+export const riskListCountQuery = gql`
+  subscription getList($risk_type: String, $sub_operation_id: uuid, $operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!, $classification_id: uuid, $residual_impact_driver: String, $residual_vulnerability: String){
+    risk_dashboard_aggregate(
+      where: {
+        operation_id: { _eq: $operation_id },
+        sub_operation_id: { _eq: $sub_operation_id },
+        project_id: { _eq: $project_id },
+        type: { _eq: $risk_type }, 
+        business_unit_id: {_eq: $business_unit_id },
+        classification_id: { _eq: $classification_id },
+        residual_impact_driver: { _eq: $residual_impact_driver },
+        residual_vulnerability: { _eq: $residual_vulnerability }
+      }
+    ) {
+      aggregate {
+        count
+      }
+    }
+  }
+`;
 export const riskMapQuery = gql`
-  subscription getList($risk_type: String, $sub_operation_id: uuid, $project_id: uuid, $business_unit_id: uuid!) {
+  subscription getList($risk_type: String, $sub_operation_id: uuid, $project_id: uuid, $operation_id: uuid, $business_unit_id: uuid!) {
     risk_dashboard(where: {
       sub_operation_id: { _eq: $sub_operation_id },
+      operation_id: { _eq: $operation_id },
       project_id: { _eq: $project_id },
       type: { _eq: $risk_type }, 
       business_unit_id: {_eq: $business_unit_id },

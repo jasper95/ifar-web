@@ -24,7 +24,6 @@ function useRiskGroups(props) {
   const operationResponse = useQuery(operationQuery, {
     variables: {
       business_unit_id: currentBusinessUnit,
-      ...isCustomSubOps && { ids: [currentOp].filter(Boolean) },
     },
     skip: riskType === 'srmp',
   });
@@ -32,6 +31,7 @@ function useRiskGroups(props) {
     variables: isCustomSubOps ? {
       ids: user.sub_operations,
       business_unit_id: currentBusinessUnit,
+      operation_id: currentOp,
     } : {
       operation_id: currentOp,
       business_unit_id: currentBusinessUnit,
@@ -76,6 +76,8 @@ function useRiskGroups(props) {
       const [first] = subOperations;
       setCurrentSubOp(first.id);
       setCurrentOp(first.operation_id);
+    } else {
+      setCurrentSubOp(null);
     }
   }, [subOperations]);
   useEffect(() => {

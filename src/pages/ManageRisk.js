@@ -120,6 +120,7 @@ function ManageRisk(props) {
           currentVulnerability,
           currentSubOperation: currentSubOp,
           currentProject: project,
+          currentOp,
         }}
         handlers={{
           setCurrentImpactDriver,

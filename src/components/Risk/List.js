@@ -12,8 +12,9 @@ import { RiskItemSkeleton } from 'components/Skeletons';
 import cn from 'classnames';
 import startCase from 'lodash/startCase';
 import snakeCase from 'lodash/snakeCase';
+import omit from 'lodash/omit';
 import RiskItem from './Item';
-import { riskListQuery } from './query';
+import { riskListQuery, riskListCountQuery } from './query';
 import 'sass/components/risk/index.scss';
 
 function RiskList(props) {
@@ -27,6 +28,7 @@ function RiskList(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const user = useSelector(state => state.auth);
   const variables = {
+    operation_id: operation,
     sub_operation_id: subOperation,
     project_id: project,
     risk_type: riskType,
@@ -36,6 +38,11 @@ function RiskList(props) {
     residual_vulnerability: residualVulnerability,
     offset: (currentPage - 1) * 10,
   };
+  const riskCountResponse = useQuery(riskListCountQuery, {
+    ws: true,
+    variables: omit(variables, ['offset']),
+  });
+  const { data: { risk_dashboard_aggregate: riskCountData } } = riskCountResponse;
   const riskListResponse = useQuery(riskListQuery,
     { ws: true, variables });
   const { data: { risk_dashboard: list = [] }, loading: listIsLoading } = riskListResponse;
@@ -116,7 +123,7 @@ function RiskList(props) {
                 onChange={newPage => setCurrentPage(newPage)}
                 current={currentPage}
                 pageSize={10}
-                total={selectedBusinessUnit ? selectedBusinessUnit.risks_aggregate.aggregate.count : 0}
+                total={riskCountData ? riskCountData.aggregate.count : 0}
                 hideOnSinglePage
               />
             </div>

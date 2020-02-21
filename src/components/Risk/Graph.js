@@ -10,6 +10,7 @@ import { ChartSkeleton } from 'components/Skeletons';
 import useQuery from 'apollo/query';
 import upperFirst from 'lodash/upperFirst';
 import { chartQuery } from 'components/Risk/query';
+import { useSelector } from 'react-redux';
 
 function RiskGraph(props) {
   const {
@@ -19,8 +20,10 @@ function RiskGraph(props) {
   } = props;
   const {
     currentBusinessUnit, currentClassification, currentVulnerability,
-    currentImpactDriver, currentProject, currentSubOperation,
+    currentImpactDriver, currentProject, currentSubOperation, currentOp,
   } = filters;
+  const user = useSelector(state => state.auth);
+  const isCustomOperation = ['TEAM_LEADER', 'RISK_CHAMPION'].includes(user.ormp_role) || ['TEAM_LEADER', 'RISK_CHAMPION'].includes(user.prmp_role);
   const riskListResponse = useQuery(chartQuery, {
     ws: true,
     variables: {
@@ -28,9 +31,10 @@ function RiskGraph(props) {
       business_unit_id: currentBusinessUnit,
       sub_operation_id: currentSubOperation,
       project_id: currentProject,
+      ...isCustomOperation && { operation_id: currentOp },
     },
   });
-  const { data: { risk: dashboardData = [] }, loading } = riskListResponse;
+  const { data: { risk_dashboard: dashboardData = [] }, loading } = riskListResponse;
   return (
     <Grid className="row-riskCharts">
       <Cell size={4}>
