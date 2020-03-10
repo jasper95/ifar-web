@@ -2,6 +2,7 @@
 import React, {
   useContext, useEffect, useRef,
 } from 'react';
+import cookie from 'js-cookie';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import useQuery from 'apollo/query';
@@ -48,6 +49,11 @@ function AppWithAuth(props) {
   const { user_session: userSession = [] } = authData;
   const [session = {}] = userSession;
   const { user: auth = null } = session;
+  useEffect(() => {
+    if (error) {
+      cookie.remove('token');
+    }
+  }, [error]);
   return (
     <AuthContext.Provider value={{
       loading,
